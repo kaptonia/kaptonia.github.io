@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Forks and independent implementations · Developer guide</title>
+<meta name="description" content="The code is released under MIT and the law texts are open to all. Forks are welcome, and so are implementations in any language. There is one request: keep differences visible.">
+<meta property="og:title" content="Forks and independent implementations · Developer guide">
+<meta property="og:description" content="The code is released under MIT and the law texts are open to all. Forks are welcome, and so are implementations in any language. There is one request: keep differences visible.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/fork.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/fork.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Forks and independent implementations</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html">Releasing</a><a href="fork.html" class=on aria-current=page>Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="fork" data-prev="release.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>Forks and independent implementations</h1><p class="lede">The code is released under MIT and the law texts are open to all. Forks are welcome, and so are implementations in any language. There is one request: keep differences visible.</p>
+<h2 id="license">Licence</h2>
+<p>Code and documents are under the MIT licence: you may use, modify, redistribute and sell them, keeping the licence text. The registry contract’s source is under CC0, and the embedded fonts are each under SIL OFL 1.1.</p>
+<h2 id="impl">An implementation of your own</h2>
+<p>The law text is self-contained: every judgment verification needs is stated in it. Write an implementation from the text in the language you choose, then validate it with the conformance suite; with zero divergences against the frozen core it is a conforming implementation, on the same footing as the one in this repository.</p>
+<p>The more independent implementations, the sturdier the law: each one written from the text alone is one more chance to find an ambiguity in it. When you find two implementations diverging outside the corpus, open an issue.</p>
+<h2 id="fork">Forking the app</h2>
+<p>Changing the interface, adding features and changing defaults all belong to the tooling layer, and you are free to do them. Please attend to three points:</p>
+<dl>
+<div><dt>Take another name</dt><dd>So that users can tell the two programs apart.</dd></div>
+<div><dt>Take another machine folder</dt><dd>So that the two programs keep their key stores and data apart.</dd></div>
+<div><dt>Stay conforming to the law</dt><dd>The original can read ledgers your fork writes, and your fork can read ledgers the original writes.</dd></div>
+</dl>
+<h2 id="rules">Changing the rules</h2>
+<p>A change to the rules has to be visible to every reader: start a new spec name and a new signing-domain literal. Signatures under the two sets of rules are then independent, and a reader sees at a glance which set an entry belongs to.</p>
+<ul>
+<li>Choose a spec name and domain literal wholly distinct from the existing ones; the literal <code>zikaron/1</code> always means the present law.</li>
+<li>Publish your law text and core, and state the digest.</li>
+<li>Write ledgers under the new rules with a new key.</li>
+</ul>
+<h2 id="registry">The registry contract</h2>
+<p>The contract is shared by everyone. Anyone can deploy the same bytes on any EVM chain that has passed the Shanghai upgrade and get the same code hash. A verifier states in its scan range which addresses it accepts; a contract you deploy and one someone else deploys stand equal before the law.</p>
+<h2 id="govern">Who decides</h2>
+<dl>
+<div><dt>The law</dt><dd>The frozen core decides. Maintainers, like everyone else, can only start a new version.</dd></div>
+<div><dt>The contract</dt><dd>The deployed bytes decide.</dd></div>
+<div><dt>This repository</dt><dd>The maintainers decide which pull requests to merge. When you disagree with a choice, forking is a legitimate way out.</dd></div>
+<div><dt>Users’ data and keys</dt><dd>The users decide; the project holds source code alone.</dd></div>
+<div><dt>The weight of evidence</dt><dd>The reader of the evidence decides.</dd></div>
+</dl>
+<h2 id="words">Stating it plainly</h2>
+<p>When you present your fork or implementation, state which version of the law it conforms to, which registry contract it uses and which nodes it connects to by default. Users rely on these to judge whether records written by the two programs can verify each other.</p>
+<div class="pn"><a href="release.html"><span>Previous</span>Releasing</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#license">Licence</a><a href="#impl">An implementation of your own</a><a href="#fork">Forking the app</a><a href="#rules">Changing the rules</a><a href="#registry">The registry contract</a><a href="#govern">Who decides</a><a href="#words">Stating it plainly</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

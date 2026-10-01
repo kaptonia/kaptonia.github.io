@@ -1,0 +1,43 @@
+<!--
+title: 仓库结构与分层
+-->
+<p class="lede">判断由核做出，界面负责呈现。先弄清各层的职责，再确定改动的位置。</p>
+<h2 id="tree">目录</h2>
+<div class="tw"><table>
+<thead><tr><th>路径</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td><code>crates/zikaron</code></td><td>zikaron/1 的核：规范字节、条目、签名、审计。</td></tr>
+<tr><td><code>crates/zikaron-kit</code></td><td>zikaron.kit/1 的核：文书、凭证载荷、记录包、读数、授权六项核验。</td></tr>
+<tr><td><code>crates/zikaron-store</code></td><td>账本的磁盘读写，仅用标准库。</td></tr>
+<tr><td><code>crates/zikaron-anchor</code></td><td>链上操作：扫描上链记录、JSON-RPC、发送上链交易。</td></tr>
+<tr><td><code>crates/zikaron-cli</code></td><td>命令行 <code>zikaron</code>。</td></tr>
+<tr><td><code>crates/zikaron-glue</code></td><td>记录包导出与各处共用的约定。</td></tr>
+<tr><td><code>crates/zikaron-ui</code></td><td>控件库与外观。</td></tr>
+<tr><td><code>crates/app</code></td><td>桌面应用。</td></tr>
+<tr><td><code>base/</code></td><td>冻结的两部法文及其参照实现、一致性语料、登记合约。</td></tr>
+<tr><td><code>contracts/</code></td><td>测试上链路径所用的合约变体。</td></tr>
+<tr><td><code>packaging/</code></td><td>macOS 与 Linux 的打包脚本、图标。</td></tr>
+<tr><td><code>docs/manual/</code></td><td>使用手册，中英文各一份。</td></tr>
+<tr><td><code>CLI-SCHEMA.md</code></td><td>命令行的输出格式、退出码、拒绝原因与参数。</td></tr>
+</tbody></table></div>
+<h2 id="stack">四层结构</h2>
+<ol>
+<li><b>基底</b>(<code>base/</code>)。法文、冻结核、语料、合约、链面夹具，作为其余一切的参照。其中冻结核由法文写明的摘要钉住，合约由代码哈希钉住；其余是工装，可以重建、替换或删除。</li>
+<li><b>核与存取</b>(<code>zikaron</code>、<code>zikaron-kit</code>、<code>zikaron-store</code>、<code>zikaron-anchor</code>)。全部判断在此做出。</li>
+<li><b>对接</b>(<code>zikaron-cli</code>、<code>zikaron-glue</code>)。组装输入、调用核、原样传出结果。</li>
+<li><b>界面</b>(<code>zikaron-ui</code>、<code>app</code>)。呈现与交互。</li>
+</ol>
+<p>依赖自上而下：上层调用下层的公开接口，下层独立于上层。各 crate 都依据法文独立写成，与 <code>base/</code> 之间零路径依赖。</p>
+<h2 id="rules">五条规则</h2>
+<dl>
+<div><dt>界面只呈现</dt><dd>条目是否合法、授权是否有效，由核给出结论，界面负责呈现。界面中出现自行判断语法的代码，应移入核。</dd></div>
+<div><dt>对接层只组装</dt><dd>命令行与胶水代码把参数组装成输入、调用核、选定退出码；核写出的字节原样传出，键名与取值保持不变。</dd></div>
+<div><dt>判据原样</dt><dd>两个冻结核由法文里的摘要钉住，登记合约由代码哈希钉住，这些字节保持原样。对其有异议，请提交议题，见<a href="compat.html">兼容与演进</a>。</dd></div>
+<div><dt>核验页只读</dt><dd>核验授权与核验记录两页，权限限于读取输入与链上数据。</dd></div>
+<div><dt>身份密钥只签账本</dt><dd>应用里的密钥只用于签署条目、为导入连署，以及发送上链交易；付款、钱包、委托等功能交由其他软件。</dd></div>
+</dl>
+<h2 id="one">一处实现，处处复用</h2>
+<p>同一判断只实现一次。授权的六项核验由 <code>zikaron-kit</code> 提供，核验页、命令行与「我的授权」的定期复核共用这一实现，读数亦然。因此同一输入在任何入口都得到同一结论。</p>
+<p>每一种账本条目都有对应的写入子命令。为应用新增操作时，先在命令行中跑通，再做界面。</p>
+<h2 id="cite">注释中的法条引用</h2>
+<p>代码注释以 <code>law §N</code> 指 zikaron/1 的条文(kit 一侧的代码里也写作 <code>parent law §N</code>)，以 <code>kit law §N</code> 指 zikaron.kit/1 的条文。修改一段实现之前，先读它所引的条文。</p>

@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>上手 · Wiki</title>
+<meta name="description" content="从安装到第一条存证上链，约需十分钟，其中一半用于抄写助记词。">
+<meta property="og:title" content="上手 · Wiki">
+<meta property="og:description" content="从安装到第一条存证上链，约需十分钟，其中一半用于抄写助记词。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/wiki/start.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/wiki/start.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>上手</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html" class=on aria-current=page>上手</a><a href="ledger.html">账本与条目</a><a href="anchoring.html">上链与网络</a><a href="grants.html">授权</a><a href="kits.html">记录包</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html">身份与密钥</a><a href="data.html">本机数据与备份</a><a href="alerts.html">提醒与设置</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="start" data-prev="zikaron.html" data-next="ledger.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>上手</h1><p class="lede">从安装到第一条存证上链，约需十分钟，其中一半用于抄写助记词。</p>
+<h2 id="install">安装</h2>
+<p>0.1.0 提供 Apple 芯片 Mac 的两种安装包，在<a href="../../download.html">下载页</a>取得：</p>
+<dl>
+<div><dt><code>.dmg</code></dt><dd>打开后把 <code>ZIKARON.app</code> 拖进「应用程序」。命令行 <code>zikaron</code> 在应用包内的 <code>ZIKARON.app/Contents/MacOS/zikaron</code>。</dd></div>
+<div><dt><code>.pkg</code></dt><dd>安装程序，把应用装进 <code>/Applications</code>，把命令行装到 <code>/usr/local/bin/zikaron</code>。</dd></div>
+</dl>
+<p>应用用 Kaptonia 的自签证书签名，在 Apple 公证之外发出。从浏览器下载的文件带着 macOS 的隔离标记，系统会拒绝打开；在较新的 macOS 上，「系统设置 › 隐私与安全性」里的「仍要打开」时常失灵。稳妥的做法是先核对文件，再在「终端」里去掉隔离标记：</p>
+<ol>
+<li><b>核对 SHA-256。</b>结果应与下载页列出的一致：<div class="cmd"><code>shasum -a 256 ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg</code><button class="cp" type="button" data-copy="shasum -a 256 ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div></li>
+<li><b>用 dmg：</b>打开 dmg 之前先运行下面这条，再打开 dmg，把 <code>ZIKARON.app</code> 拖进「应用程序」：<div class="cmd"><code>xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg</code><button class="cp" type="button" data-copy="xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>已经拖进去了的，改为运行：<div class="cmd"><code>xattr -dr com.apple.quarantine /Applications/ZIKARON.app</code><button class="cp" type="button" data-copy="xattr -dr com.apple.quarantine /Applications/ZIKARON.app" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div></li>
+<li><b>用 pkg：</b>先运行下面这条，再双击安装：<div class="cmd"><code>xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.pkg</code><button class="cp" type="button" data-copy="xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.pkg" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div></li>
+</ol>
+<p>命令里的路径按你实际下载的位置改。</p>
+<h2 id="wizard">首次启动</h2>
+<p>第一次打开时，向导自动弹出，左边竖列六步，右边是当前这一步。每一步是否完成，按实际状态判断。</p>
+<ol>
+<li><b>设置口令。</b>8 位字母或数字，区分大小写，输入两遍。过于简单的口令当场退回：八位全同，或纯数字成连号、像日期。口令排在建身份之前，因为密钥要放进由口令开启的密钥库。</li>
+<li><b>创建身份。</b>三选一：生成 12 个助记词，抄在纸上，再填回随机抽的三个词；导入已有密钥；从整机备份恢复。这台机器上建成的第一个身份就是主身份。</li>
+<li><b>网络。</b>「以太坊主网」已默认选中；也可以选「自定义」，自己填链号、登记合约与节点。在主网上锚定要花真实的 ETH 付 gas。</li>
+<li><b>创建账本。</b>写一句账本说明（可留空），按「创建账本」，在确认卡上再按一次。这一步免费，只写入本地。</li>
+<li><b>充值 gas。</b>页面显示密钥地址和付款二维码。从你的钱包转入少量 ETH，按「我已转账」；向导读一次链上余额，大于零即完成。可以「以后再说」。</li>
+<li><b>整机备份。</b>导出一个带密码的备份文件，一个文件恢复全部。可以「以后再做」，宜尽早完成。</li>
+</ol>
+<p>设好口令和身份之后，竖列底部的「退出向导」或 Esc 回到原来的页面，做完的步骤照旧算完。其余步骤，可从「设置 › 关于」的「重新运行向导」接着做。</p>
+<p class="call">助记词抄在纸上，存放在只有你能取到的地方。助记词找回的是密钥；本机的账本、收到的授权与设置，靠整机备份找回；原文件请自己保留。</p>
+<h2 id="recorder">记录者的一条完整走法</h2>
+<p>左栏顶上选「记录者」。</p>
+<ol>
+<li><b>存证。</b>把作品文件拖进首页的拖放区，写「记录名称」，按「加入账本」，在确认卡上再按「加入账本」。</li>
+<li><b>上链。</b>点首页的「待上链」卡，或到「记录存证」的「待上链」分段按「全部上链」，在「上链」卡上按「确认上链」。几分钟后状态变为「已确认」。</li>
+<li><b>授权。</b>到「授权」按「新建授权」：填被授权方地址，选一件已上链的记录，拖入条款文件，选有效期，按「加入账本」并在确认卡上再按一次，再像第 2 步一样上链。</li>
+<li><b>交付。</b>在授权详情里按「复制授权码」，或「导出授权文件…」，发给对方。授权文件带着你的账本，对方能做完整核验。</li>
+<li><b>日常。</b>看「提醒」页；需要时在授权详情里按「撤销授权…」。</li>
+</ol>
+<p>存证一经写入即成定稿，需要补充时追加注记。原文件请妥善保管：日后举证，要出示与指纹逐字节一致的原件。</p>
+<h2 id="user">使用方的一条完整走法</h2>
+<ol>
+<li>在左栏顶上切到「使用方」。使用方的账本只在转授权时才需要，到时在转授权页按「开账…」即可。</li>
+<li>在首页「核验一份授权」卡里贴入对方发来的授权码，按「开始核验」，看结果。</li>
+<li>到「我的授权」按「添加授权」，贴授权码或拖入授权文件，按「核验并添加」，把它收进库里。</li>
+<li>收到作品文件后，到「核验 › 核验授权」，把授权、文件和条款文件一起放进去，按一次「核验」，三件一起核对。</li>
+<li>看「提醒」页：授权快到期、被撤销、签发者账本被移交，都会在这里出现。</li>
+</ol>
+<h2 id="window">窗口</h2>
+<p>左边是左栏，右边是页面。左栏从上到下：身份牌（当前身份的名字与种类，点开可切换或新建身份）、角色切换「记录者」|「使用方」、这一种角色的页面列表，底部是「设置」「锁定」和状态行。状态行右端的小图标是「同步」，点它在后台读一次链。</p>
+<div class="tw"><table>
+<thead><tr><th>记录者</th><th>使用方</th></tr></thead>
+<tbody>
+<tr><td>首页</td><td>首页</td></tr>
+<tr><td><b>记录</b>：记录存证、授权</td><td><b>授权</b>：我的授权</td></tr>
+<tr><td><b>查看</b>：核验、账本、提醒</td><td><b>查看</b>：核验、提醒</td></tr>
+</tbody></table></div>
+<p>凡是写入账本或上链的动作，都先出一张确认卡，逐行写出要写什么、写到哪里、费用多少；在卡上按红色实心键才真正写入，按「取消」或 Esc 即作罢。快捷键与其余设置见<a href="alerts.html">提醒与设置</a>。</p>
+<div class="pn"><a href="zikaron.html"><span>上一页</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>下一页</span>账本与条目</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#install">安装</a><a href="#wizard">首次启动</a><a href="#recorder">记录者的一条完整走法</a><a href="#user">使用方的一条完整走法</a><a href="#window">窗口</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

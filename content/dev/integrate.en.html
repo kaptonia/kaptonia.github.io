@@ -1,0 +1,49 @@
+<!--
+title: Integration
+-->
+<p class="lede">Let your app read {{Z}} records: verify grants, read record kits, or prompt users to keep evidence within your flow.</p>
+<h2 id="shape">How integration works</h2>
+<p>Your app is a reader. The ledger is always written by the user, in {{Z}}; the reader receives what the user exports: a grant code, a grant file, a record kit. This way a ledger always has a single writer, and a key always lives in one place.</p>
+<h2 id="cli">Verifying with the command line</h2>
+<p>The simplest integration calls <code>zikaron</code> as a subprocess and reads its exit code and standard output.</p>
+{{code:
+zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
+  --fragment fragment.json --now $(date +%s)
+}}
+<div class="tw"><table>
+<thead><tr><th>Exit code</th><th>What your app does</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Proceed</td></tr>
+<tr><td>1</td><td>Refuse. When checks failed, list the failed checks; when the ledger or input is at fault, show the reason</td></tr>
+<tr><td>3</td><td>Hold. Tell the user which check has yet to return a result, and retry later</td></tr>
+<tr><td>4</td><td>Answer absent: <code>scan</code> or <code>anchor</code> failed to read the chain, or <code>keygen</code> failed to get randomness; retry, or change nodes</td></tr>
+<tr><td>2</td><td>Your call is wrong; check the arguments</td></tr>
+</tbody></table></div>
+<p><code>--grant</code> takes an entry file. Each segment of a grant code is an entry’s bytes in base64url (padding left off); decode it and save it as a file; check a multi-segment grant code (a sublicense chain) hop by hop with <code>chain-check --hop</code>. An issuer ledger folder can be made from a ledger mirror; see <a href="cli.html#sealed">Command line</a>. A <code>.zkgrant</code> grant file is a container; how to unpack it is in <a href="formats.html#zkgrant">Files and formats</a>. The command line reads the chain through <code>http://</code> nodes alone; point it at a local node or a local proxy.</p>
+<p>Handle 3 as a level of its own: “no result yet”, “passed” and “failed” are three states, and your interface shows them in three styles.</p>
+<h2 id="lib">Calling the cores directly</h2>
+<p>A Rust project can depend on the two crates <code>zikaron</code> and <code>zikaron-kit</code>. They only judge: your code reads the chain and hands the bytes to the cores; a record kit folder can go to <code>zikaron_kit::kitdir::verify_kit</code>, which reads and checks it from disk. In another language, implement the law text yourself and validate it with the conformance suite; see <a href="law.html#run">Testing an implementation</a>.</p>
+<h2 id="kits">Reading the record kits a user has exported</h2>
+<p>An app on the same machine can list the record kits the user has exported and let the user choose one to submit. Find the machine folder in the app’s own order:</p>
+<ol>
+<li>The directory the user set in your app’s settings.</li>
+<li>The path written in the pointer file <code>~/.zikaron-desk</code>. When the pointer exists it decides: if its target fails to read, tell the user plainly that the {{Z}} data has moved, and ask them to point to it again.</li>
+<li>With no pointer, the earlier location <code>~/Library/Application Support/ZIKARON</code> when it exists, then the default location <code>~/.zikaron-desk.d/</code>.</li>
+</ol>
+<p>The single test for “valid”: <code>kits/index.json</code> there can be read, and its format name is <code>zikaron.kits-index/1</code>.</p>
+<p>Your app’s permission on {{Z}} data is limited to reading: <code>kits/index.json</code> in the machine folder, and the record kit folders that the index rows’ <code>path</code> points to (they sit under each data folder’s <code>kits/</code>). Once you have a record kit, verify it yourself before using the files inside.</p>
+<h2 id="for">Pointing a record at your transaction</h2>
+<p>When a user keeps evidence for a transaction in your app, they can fill in “Recorded for (optional)” with your app’s name, the other party’s identity, their reference and optionally their role; these are written as given into the entry’s <code>for</code> member (the role as <code>seat</code>), and the identity must be <code>0x</code> followed by 40 hexadecimal digits. Whoever reads the record later can match it to the transaction.</p>
+<p>Show these values in your interface for the user to copy: a fixed short string for the app name, and the transaction’s ID in your system for the reference.</p>
+<h2 id="remind">Reminding at the right moment</h2>
+<p>Records made beforehand weigh the most. Find those moments in your flow and remind the user to keep evidence: when a file is delivered, when receipt is confirmed, when both sides agree on terms.</p>
+<h2 id="sign">Signing requests</h2>
+<p>When you need a signature from the user, ask for it from their trading key. The identity key is reserved for the ledger; the {{Z}} interface is designed accordingly, and signing happens within writes the user starts.</p>
+<h2 id="types">Agreeing on a new entry type</h2>
+<p>Entry types are open. You may agree on a new type, state its type name, body members and reading, and publish the convention. Other readers that meet it list it under “Unrecognized types”, and the verdict under the law stays as it was; ZIKARON Desk’s ledger status line counts it as a problem.</p>
+<ul>
+<li>Choose a type name with your project’s prefix, distinct from existing types.</li>
+<li>To refer to another entry in the body, use its entry ID.</li>
+<li>Write the reading as rules defined over every input: how it reads when the format fits, and how it is shown when the format is wrong.</li>
+<li>Register the convention in the repository’s discussions, so other implementations can adopt it.</li>
+</ul>

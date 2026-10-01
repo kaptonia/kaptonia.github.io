@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>本机数据与备份 · Wiki</title>
+<meta name="description" content="账本、设置与收到的授权，都加密存在你的机器上。换了或丢了电脑之后能找回多少，取决于事先做了哪些备份。">
+<meta property="og:title" content="本机数据与备份 · Wiki">
+<meta property="og:description" content="账本、设置与收到的授权，都加密存在你的机器上。换了或丢了电脑之后能找回多少，取决于事先做了哪些备份。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/wiki/data.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/wiki/data.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>本机数据与备份</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html">上手</a><a href="ledger.html">账本与条目</a><a href="anchoring.html">上链与网络</a><a href="grants.html">授权</a><a href="kits.html">记录包</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html">身份与密钥</a><a href="data.html" class=on aria-current=page>本机数据与备份</a><a href="alerts.html">提醒与设置</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="data" data-prev="keys.html" data-next="alerts.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>本机数据与备份</h1><p class="lede">账本、设置与收到的授权，都加密存在你的机器上。换了或丢了电脑之后能找回多少，取决于事先做了哪些备份。</p>
+<h2 id="sealed">本机数据始终加密</h2>
+<p>本机的全部数据由一枚主钥加密，主钥由口令开启。账本条目、设置、待上链队列、身份登记、记录索引、收到的授权与条款文件，都用主钥派生的本机数据钥加密（XChaCha20-Poly1305）。锁着时全部封存；拿到这台机器文件的人，要有口令才读得到。</p>
+<p>三类文件在主钥加密之外，因为它们本来就要给别人读，或要在开锁前读：</p>
+<ul>
+<li>开锁前就要读的：密钥库本身（另有加密）、机器设置 <code>machine.json</code>、数据目录指针。</li>
+<li>给别人看的导出件：记录包与记录包索引、授权文件、凭证、账本镜像、密钥文件、整机备份（整机备份用备份密码加密）。</li>
+<li>别人交来的外来文件。</li>
+</ul>
+<h2 id="where">文件放在哪里</h2>
+<dl>
+<div><dt>机器目录</dt><dd>存放密钥库、身份登记、机器设置与记录包索引。默认位置是 <code>~/.zikaron-desk.d/</code>；指针文件 <code>~/.zikaron-desk</code>（一行绝对路径）可以把它指到别处。</dd></div>
+<div><dt>数据目录</dt><dd>每个身份的每种角色一个，存放账本、设置、待上链队列、收到的授权等。</dd></div>
+</dl>
+<h2 id="backup">整机备份</h2>
+<p>一份备份文件恢复全部：这台机器上的所有身份和密钥、全部本机数据和设置。主钥、口令和错误次数只留在本机。</p>
+<ol>
+<li>「设置 › 本机数据」的「导出备份…」：输入本机口令，设备份密码（至少 8 位）并再输一次，选保存位置，按「导出」。</li>
+<li>文件名为 <code>zikaron-backup-年-月-日.zikaron</code>，同一天再导出即往后编号，旧的照旧保留。</li>
+<li>写出后应用读回并打开一次核对，通过才提示「已导出备份：…」。</li>
+</ol>
+<p>备份用 scrypt（N=262144、r=8、p=1）从备份密码派生密钥，再以 XChaCha20-Poly1305 加密。备份密码是打开备份的唯一钥匙，请另处记牢。</p>
+<p><b>从备份恢复。</b>「从备份恢复…」：选备份文件，填备份密码和本机口令，按「恢复」。本机的身份、密钥和数据整份换成备份里的，口令照旧；本机多出备份的内容随之被替换。这一步要么全部完成，要么保持原状。恢复后仍解读失败的旧文件，原样挪到机器目录的 <code>set-aside</code> 文件夹保存。</p>
+<p>上次备份之后又多了账本条目或收到的授权时，提醒页显示「N 条未备份」，请再导出一次。</p>
+<h2 id="words">只剩助记词时</h2>
+<p>助记词找回的是密钥。条目文件存在本机，链上只有它们的指纹；所以只凭助记词，能找回的是链上读得到的数据；条目本身要靠整机备份，原文件要你自己保留。</p>
+<h2 id="retrieve">取回账本</h2>
+<p>凭助记词、私钥或密钥文件重新导入一个身份时，「本机数据」页顶上出现红框「这个身份是还原来的：账本还没取回」；取回之前这个身份能读，写入暂停。取回方法：选一份整机备份，填备份密码，按「取回账本」。应用从备份里取出这个身份的账本，再与链上这把密钥的锚核对：</p>
+<dl>
+<div><dt>全部对上</dt><dd>链上的上链记录都在账本里，恢复写入。</dd></div>
+<div><dt>链上有更新的条目</dt><dd>链上有几条上链记录是取回的账本里缺的，仍然只读。请找更新的那份备份再取一次。</dd></div>
+<div><dt>与本机条目冲突</dt><dd>出冲突卡；按「取回并替换」后，本机原有的数据保留为「旧数据」，可以只读查看。</dd></div>
+</dl>
+<p>这样可以确保接着写下去的，始终是最新的那本账。</p>
+<h2 id="mirror">账本镜像</h2>
+<p>记录者的「本机数据」页有「导出账本镜像…」：把账本导出一份到指定文件夹，按 <code>ZIKARON-backup/&lt;地址&gt;/&lt;角色&gt;</code> 分层；同一文件夹里已有较早的镜像时，只补上新增的条目。镜像是给别的工具读的导出件，交给命令行 <code>zikaron</code> 的条目就从这里取，见<a href="../dev/cli.html#sealed">命令行</a>；恢复本机请用整机备份。</p>
+<h2 id="folder">数据目录</h2>
+<dl>
+<div><dt>更换数据目录…</dt><dd>只对这一次运行生效，下次启动回到这个身份自己的数据目录。</dd></div>
+<div><dt>迁移到空文件夹</dt><dd>把数据目录搬过去，并改为这个身份的数据目录；旧处的文件原样保留，何时清理由你决定。</dd></div>
+<div><dt>导入授权文件夹…</dt><dd>使用方批量导入一个文件夹里的授权条目文件。</dd></div>
+<div><dt>对账</dt><dd>「高级选项」里的「立即对账」离线核一遍本机账本，通过即恢复写入。</dd></div>
+</dl>
+<p>同一个数据目录同一时间只有一个窗口写入，后打开的只能读，页顶显示只读提示条。</p>
+<h2 id="readonly">转为只读的几种情形</h2>
+<dl>
+<div><dt>账本已移交</dt><dd>账本已交给新密钥，本机只能读。</dd></div>
+<div><dt>账本已断链</dt><dd>账本检查发现断链。点「去恢复」，从整机备份恢复，或在「高级选项」里对账。</dd></div>
+<div><dt>另一窗口正在写入</dt><dd>关掉另一个窗口后，重新打开这个数据目录（锁定再解锁，或重启应用）即可写入；也可以在这里继续只读。</dd></div>
+<div><dt>还原的身份</dt><dd>取回账本之前只读，见上文。</dd></div>
+</dl>
+<h2 id="habit">备份要点</h2>
+<ol>
+<li>助记词抄在纸上，与电脑分开存放。</li>
+<li>整机备份存在另一块磁盘上，备份密码另处记录。</li>
+<li>原文件自己保留。账本记的是指纹，日后举证要出示字节一致的原件。</li>
+</ol>
+<div class="pn"><a href="keys.html"><span>上一页</span>身份与密钥</a><a class="nx" href="alerts.html"><span>下一页</span>提醒与设置</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#sealed">本机数据始终加密</a><a href="#where">文件放在哪里</a><a href="#backup">整机备份</a><a href="#words">只剩助记词时</a><a href="#retrieve">取回账本</a><a href="#mirror">账本镜像</a><a href="#folder">数据目录</a><a href="#readonly">转为只读的几种情形</a><a href="#habit">备份要点</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

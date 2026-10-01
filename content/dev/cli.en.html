@@ -1,0 +1,89 @@
+<!--
+title: Command line
+-->
+<p class="lede"><code>zikaron</code> offers the same ledger operations as the window, one subcommand per action. It is built for scripts: the output is a single JSON value, and the verdict is in the exit code. The full output shapes, exit codes, refusal reasons and flags are in <code>CLI-SCHEMA.md</code> in the source.</p>
+<h2 id="where">Where it is</h2>
+<dl>
+<div><dt>Installed from the dmg</dt><dd><code>/Applications/ZIKARON.app/Contents/MacOS/zikaron</code></dd></div>
+<div><dt>Installed from the pkg</dt><dd><code>/usr/local/bin/zikaron</code></dd></div>
+<div><dt>Built from source</dt><dd><code>target/release/zikaron</code></dd></div>
+</dl>
+<h2 id="contract">Three conventions</h2>
+<dl>
+<div><dt>Standard output is one canonical JSON value</dt><dd>Each call prints one value, ending at the value’s last character. The byte format follows law §3.4: compact, members sorted by bytes.</dd></div>
+<div><dt>Misuse leaves standard output empty</dt><dd>For wrong arguments or an unreadable path, the exit code is 2, standard output has zero bytes, and the first line of standard error reads <code>&lt;reason&gt; &lt;subject&gt;</code>, as in <code>E_UNREADABLE /nowhere/at/all</code>. Whether standard output holds any bytes tells a caller an answer from a misuse.</dd></div>
+<div><dt>Status words pass through unchanged</dt><dd><code>GREEN</code>, <code>PARTIAL</code>, <code>FAIL</code>, <code>COMPLETE</code>, <code>GAPS</code> and the like are written by the cores and passed on by the command line as they are.</dd></div>
+</dl>
+<p>Files are written one way: <code>--out</code> first writes a whole temporary file alongside, syncs it to disk, then renames it into place; when a file of that name already exists, the write stops and the existing file keeps every byte.</p>
+<h2 id="exit">Exit codes</h2>
+<div class="tw"><table>
+<thead><tr><th>Code</th><th>Meaning</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Answered, affirmative</td><td><code>GREEN</code>, <code>COMPLETE</code></td></tr>
+<tr><td>1</td><td>Answered, negative</td><td>The entry was refused, or the verdict is <code>FAIL</code>, <code>BROKEN_CHAIN</code> or <code>NO_LABEL</code></td></tr>
+<tr><td>2</td><td>Misuse</td><td>Wrong arguments or an unreadable path; standard output is empty</td></tr>
+<tr><td>3</td><td>Answered, in between</td><td><code>PARTIAL</code>, <code>GAPS</code>, <code>UNAVAILABLE</code></td></tr>
+<tr><td>4</td><td>Answer absent</td><td>Node unreachable, nodes disagreeing, scan refused</td></tr>
+</tbody></table></div>
+<p>The weight of this table is that 3 and 4 each have a code of their own. Fold “not yet on chain” into 0, and a buyer takes an unanchored grant as cleared; fold it into 1, and a passing “not yet known” reads as “forged”. Fold “node unreachable” into 1, and a network fault reads as “this chain is fake”. A failed scan is an absent answer, and the caller retries or changes nodes.</p>
+<h2 id="verbs">Twenty-one subcommands</h2>
+<div class="tw"><table>
+<thead><tr><th>Subcommand</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><code>keygen</code></td><td>Generate a key and print its address and private key</td></tr>
+<tr><td><code>init</code></td><td>Write the ledger’s creation entry into an empty ledger</td></tr>
+<tr><td><code>history</code></td><td>Append an anchored record</td></tr>
+<tr><td><code>grant</code></td><td>Sign a grant and write it to the ledger</td></tr>
+<tr><td><code>revoke</code></td><td>Sign a revocation and write it to the ledger (ruling file digest optional)</td></tr>
+<tr><td><code>adopt</code></td><td>Write an adoption entry</td></tr>
+<tr><td><code>attest</code></td><td>Produce a co-signature with an outside key</td></tr>
+<tr><td><code>succeed</code></td><td>Write a key change or handover entry</td></tr>
+<tr><td><code>annotate</code></td><td>Write a note</td></tr>
+<tr><td><code>retract</code></td><td>Write a deletion entry (the target must be a record in this ledger that is still undeleted)</td></tr>
+<tr><td><code>anchor</code></td><td>Anchor a hash on chain, through the registry contract or as a bare self-transfer</td></tr>
+<tr><td><code>scan</code></td><td>Scan for anchors using the chain settings</td></tr>
+<tr><td><code>audit</code></td><td>Audit a ledger against scan results and print a report and verdict</td></tr>
+<tr><td><code>check-grant</code></td><td>Run the six checks on a grant</td></tr>
+<tr><td><code>chain-check</code></td><td>Check a sublicense chain hop by hop (<code>--hop &lt;grant file&gt;[=&lt;audit input file&gt;]</code>, repeatable)</td></tr>
+<tr><td><code>depth</code></td><td>Depth readings for a record</td></tr>
+<tr><td><code>fpm-sign</code></td><td>Sign a fingerprint manifest</td></tr>
+<tr><td><code>ack-sign</code></td><td>Sign an acknowledgement</td></tr>
+<tr><td><code>badge</code></td><td>Encode or decode a credential (exactly one of <code>--encode</code> and <code>--decode</code>)</td></tr>
+<tr><td><code>kit-export</code></td><td>Export a record kit, written once it passes its self-check</td></tr>
+<tr><td><code>show</code></td><td>Show an entry’s author, ID, type, previous entry, sequence and content</td></tr>
+</tbody></table></div>
+<p>Any other first word counts as misuse, with exit code 2.</p>
+<h2 id="flags">Flags</h2>
+<p>All fifty-three flags are long flags, and each takes a value; every subcommand has its own table of flags, and a flag outside it counts as misuse. Members the law requires in an entry’s body may all be left off the command line; the core then refuses the entry under the law, and the command line checks the few items it needs for its own work. That way each rule of judgment exists once, in the core.</p>
+<h2 id="walk">Example</h2>
+<p>Generate a key, create a ledger, record a file, anchor it, audit:</p>
+{{code:
+zikaron keygen
+# {"address":"0x…","ok":true,"privkey":"0x…"}
+
+zikaron init --ledger ./ledger --key <private key> --statement "Records of my work"
+
+zikaron history --ledger ./ledger --key <private key> \
+  --content 0x$(shasum -a 256 manuscript.pdf | cut -d' ' -f1) \
+  --mark bytes-sha256/1 \
+  --toolchain 0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d
+# {"entryId":"0x…","ledger":"…","ok":true,"seq":1,"written":true}
+
+zikaron anchor --key <private key> --endpoint <chain-id>=<node> \
+  --form registry --registry <contract address> --hash <entryId>
+
+zikaron scan --endpoint <chain-id>=<node one> --endpoint <chain-id>=<node two> \
+  --basis basis.json > fragment.json
+
+zikaron audit --ledger ./ledger --fragment fragment.json
+echo $?
+}}
+<p>The value of <code>--toolchain</code> is the SHA-256 of the literal <code>bytes-sha256/1</code>, meaning “the content fingerprint is the SHA-256 of a run of bytes”. The command line’s chain layer accepts node addresses of the form <code>http://host:port</code> alone, so point it at a local node or a local proxy; <code>anchor</code> takes exactly one <code>--endpoint</code>. <code>basis.json</code> states the scan range: which chains, which registry contract, which senders, and the start and end blocks; the format is in law §9.4.</p>
+<h2 id="now">Time is injected by the caller</h2>
+<p>Deadlines and periods are judged by chain time and the moment injected with <code>--now</code>; when <code>--now</code> is left off, chain time alone applies. Every moment comes from the caller, so the same input always reaches the same verdict.</p>
+<h2 id="sealed">Reading the app’s own ledger</h2>
+<p>A ledger in ZIKARON Desk’s data folder is encrypted and the passcode lives in the app, so the command line refuses to read one, with exit code 2 and this line on standard error (“locked: this is ZIKARON Desk’s sealed local data; the command line does not read it”):</p>
+{{code:
+E_UNREADABLE 已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读
+}}
+<p>To hand a ledger to the command line, export a “Ledger mirror” in the app first: each file in the mirror’s <code>entries/</code> is one entry’s bytes, named with exactly its 64 hexadecimal digits. A single entry can be read by file with <code>show --path</code>; to use them as a <code>--ledger</code> folder, copy the files into an empty folder and add <code>.entry</code> to each file name.</p>

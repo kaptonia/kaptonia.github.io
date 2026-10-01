@@ -1,0 +1,37 @@
+<!--
+title: 概览
+-->
+<p class="lede">本指南面向需要自行核对、构建、接入或维护本项目的开发者。</p>
+<h2 id="truth">判据</h2>
+<p>判据有三：仓库中的法文与代码、发布包的字节、链上的合约。本指南、Wiki 与网站均为转述与说明，与判据有出入时，以判据为准。</p>
+<h2 id="layers">两层</h2>
+<p>每个产品都分为两层，修改规则截然不同。</p>
+<dl>
+<div><dt>法</dt><dd>产品的法文及其冻结核。一经写定只增新版，旧版永久有效；任何人一条命令即可算出其摘要。</dd></div>
+<div><dt>工具</dt><dd>其余一切：应用、命令行、测试、文档与本站。可以随时修改、重写或弃用，前提是与法的核逐字节一致。</dd></div>
+</dl>
+<p>动手前先确认改动属于哪一层。修改工具，请提交合并请求；对法有异议，请提交议题，其归宿是下一版法。</p>
+<h2 id="map">按任务查找</h2>
+<div class="proj"><section data-p="zikaron">
+<div class="g3">开发</div>
+<div class="cards">
+<a href="verify.html"><b>校验</b></a>
+<a href="build.html"><b>从源码构建</b></a>
+<a href="layout.html"><b>仓库结构与分层</b></a>
+<a href="cli.html"><b>命令行</b></a>
+<a href="law.html"><b>法文与一致性套件</b></a>
+<a href="contract.html"><b>登记合约与上链</b></a>
+<a href="formats.html"><b>文件与格式</b></a>
+<a href="integrate.html"><b>接入</b></a>
+</div>
+<div class="g3">维护</div>
+<div class="cards">
+<a href="contributing.html"><b>参与贡献</b></a>
+<a href="compat.html"><b>兼容与演进</b></a>
+<a href="security.html"><b>安全</b></a>
+<a href="release.html"><b>发布</b></a>
+<a href="fork.html"><b>分叉与另起实现</b></a>
+</div>
+</section></div><!--/proj-->
+<h2 id="site">本站</h2>
+<p>本站是仓库中的静态文件。如需镜像，克隆仓库后放到任意静态托管处即可。页面只发出两类请求：本站的静态文件，以及 Google Fonts 的字体。</p>

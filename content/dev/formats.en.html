@@ -1,0 +1,107 @@
+<!--
+title: Files and formats
+-->
+<p class="lede">The kinds of file the app and the command line read and write. Versioned formats carry their version inside the file.</p>
+<h2 id="entry">Entries</h2>
+<p>An entry is a canonical JSON object with exactly seven members:</p>
+<div class="tw"><table>
+<thead><tr><th>Member</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td><code>spec</code></td><td>The spec name, <code>zikaron/1</code></td></tr>
+<tr><td><code>entryType</code></td><td>The type: <code>genesis</code>, <code>history</code>, <code>grant</code>, <code>revocation</code>, <code>adoption</code>, <code>succession</code>, <code>annotation</code>, or any agreed new type</td></tr>
+<tr><td><code>author</code></td><td>The author’s address, in lowercase hexadecimal</td></tr>
+<tr><td><code>seq</code></td><td>The sequence number, from 0</td></tr>
+<tr><td><code>prev</code></td><td>The ID of the entry before; <code>null</code> for the first</td></tr>
+<tr><td><code>body</code></td><td>The body, by type</td></tr>
+<tr><td><code>sig</code></td><td>A 65-byte EIP-191 signature</td></tr>
+</tbody></table></div>
+<p>An entry’s ID is the SHA-256 of all its bytes. The canonical form: compact, members sorted by bytes, integers in decimal, hexadecimal always lowercase. See law §3 and §4.</p>
+<h2 id="ledgerdir">The command line’s ledger folder</h2>
+<p>A plain folder with one file per entry, each named with the entry ID’s 64 hexadecimal digits plus <code>.entry</code>. This is the folder <code>zikaron</code> reads and writes.</p>
+<h2 id="machine">The machine folder</h2>
+<p>One per machine. Its default location is <code>~/.zikaron-desk.d/</code>; the pointer file <code>~/.zikaron-desk</code> can point it elsewhere: one line holding an absolute path, ending in a newline, with mode 0600. Where an earlier version kept it at <code>~/Library/Application Support/ZIKARON</code>, the app keeps using that folder and migrates once.</p>
+<div class="tw"><table>
+<thead><tr><th>File</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td><code>keys-anchor.json</code></td><td>The key store, format <code>zikaron-desk/keybox/3</code>, mode 0600; the wrong-try count is kept here too</td></tr>
+<tr><td><code>identities-anchor.json</code></td><td>The identity registry, encrypted</td></tr>
+<tr><td><code>machine.json</code></td><td>Machine settings, format <code>zikaron-desk/machine/1</code>, plain, read before unlocking</td></tr>
+<tr><td><code>kits/index.json</code></td><td>The record kit index, plain; see below</td></tr>
+<tr><td><code>records/index.json</code></td><td>File names and locations at signing, encrypted</td></tr>
+<tr><td><code>set-aside/</code></td><td>Sealed files whose master key is gone, closed for good, kept byte for byte and numbered flat 1, 2, 3; when the folder exists, <code>set-aside-2</code>, <code>-3</code></td></tr>
+</tbody></table></div>
+<p>The machine folder is found from <code>HOME</code>. The app uses its own key store alone and leaves the system keychain as it is.</p>
+<h2 id="folder">Data folders</h2>
+<p>One for each role of each identity, by default inside the machine folder, with the role subfolder <code>author</code> (Recorder) or <code>grantee</code> (User). Inside are four subfolders:</p>
+<dl>
+<div><dt><code>ledger/</code></dt><dd>The ledger, one encrypted file per entry.</dd></div>
+<div><dt><code>kits/</code></dt><dd>Exported record kits, grant files, credentials and snapshots, and the terms files kept at signing (<code>kits/terms/</code>).</dd></div>
+<div><dt><code>grants-held/</code></dt><dd>Received grants, each with the verdict of its last re-verification; grant files received are in <code>grants-held/files/</code>.</dd></div>
+<div><dt><code>settings/</code></dt><dd>Settings <code>desk.json</code>, the pending queue <code>queue.json</code>, the last ledger check <code>last-audit.json</code>, and the lock <code>writer.lock</code> that lets one window write.</dd></div>
+</dl>
+<p>Data folder names and the file names in the ledger are rewritten under a local names key, which keeps addresses and entry IDs out of the file names; contents are encrypted file by file. To let another tool read a ledger, export a ledger mirror.</p>
+<h2 id="local">Encryption of local data</h2>
+<p>The local data key is derived from the master key with HKDF-SHA256 (info string <code>zikaron/local/v1</code>), and the names key uses the info string <code>zikaron/names/v1</code>. Each file is encrypted on its own with XChaCha20-Poly1305:</p>
+{{code:
+"zikaron-local/1\n" · kind length (1 byte) · kind · version (u16 big-endian) · nonce (24 bytes) · ciphertext and tag
+}}
+<p>Everything before the nonce is associated data, so a file is bound to its kind and format version. Writes go to a temporary file first, then rename into place.</p>
+<h2 id="keybox">The key store</h2>
+<p>The master key and each identity’s keys are sealed in <code>keys-anchor.json</code>: the passcode derives a key through scrypt (N=262144, r=8, p=1), encryption is AES-128-CTR, and a keccak MAC checks it. The passcode is 8 ASCII letters or digits; after 5 wrong tries in a row it locks, and recovery is the way on.</p>
+<h2 id="backup">Whole-machine backups</h2>
+<p>File name <code>zikaron-backup-YYYY-MM-DD.zikaron</code> (UTC date); a second export on the same day is numbered <code>-2</code>, <code>-3</code>. The first line is <code>zikaron-backup/1</code>, and the second is a canonical JSON header: <code>app</code>, <code>created</code>, <code>format</code>, <code>kdf</code> (scrypt’s N, r, p and a 32-byte salt) and <code>nonce</code>. The body’s key is derived from the backup password with scrypt (N=262144, r=8, p=1), and the body is encrypted with XChaCha20-Poly1305, with the two header lines as associated data.</p>
+<p>A backup holds the identity registry, each identity’s keys, every encrypted local file (opened, then placed inside), the record of the primary identity and <code>machine.json</code>. The master key, the passcode and the wrong-try count stay on the machine; plain exports (record kits, the index, credentials, grant files, mirrors, key files) stay outside the backup too.</p>
+<h2 id="keyfile">Key files</h2>
+<p>A standard Ethereum keystore (V3): scrypt (N=262144, r=8, p=1) and aes-128-ctr, named <code>UTC--&lt;time&gt;--&lt;40-hex address&gt;</code>, mode 0600, encrypted with the file password set at export (at least 8 characters). After writing, the app reads it back and checks its format and address, and the export counts once they match.</p>
+<h2 id="kit">Record kits</h2>
+<p>A folder whose format is set by zikaron.kit/1 §7:</p>
+{{code:
+kit-3fa9c2e1/
+  manifest.json              the manifest
+  entries/<64 hex>.zk1       entries, one file each
+  files/<path>               original files and attachments
+  files/verify.md            verification notes for the receiver
+  proofs/<path>              on-chain proofs
+}}
+<p>The manifest lists every entry’s ID, every file’s path, size and SHA-256, and the transaction behind each proof; a file in the kit outside the manifest fails the check. The kit ID is the SHA-256 of the manifest’s bytes. Paths inside a kit use <code>a-z</code>, <code>0-9</code>, <code>.</code>, <code>_</code> and <code>-</code> alone; when attachments were renamed, <code>files/zikaron-names.json</code> maps original names to kit names, and the rename rule is <code>&lt;rewritten name&gt;-&lt;first eight of the original name’s SHA-256&gt;.&lt;extension&gt;</code>.</p>
+<p>The exported folder is named <code>kit-</code> plus the first eight characters of the content fingerprint of the chosen record with the lowest sequence number; when the choice holds other entries alone it is <code>kit</code>, and a taken name is numbered <code>-2</code>, <code>-3</code>.</p>
+<h2 id="index">The record kit index</h2>
+<p><code>kits/index.json</code> in the machine folder, format name <code>zikaron.kits-index/1</code>, kept plain so that other apps on the same machine can read it; see <a href="integrate.html#kits">Integration</a>. Each exported kit gets one row, and exporting again to the same path replaces that row:</p>
+<div class="tw"><table>
+<thead><tr><th>Field</th><th>Content</th></tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>The kit ID</td></tr>
+<tr><td><code>created</code></td><td>The moment of export, in Unix seconds</td></tr>
+<tr><td><code>root</code></td><td>The ID of the ledger’s creation entry</td></tr>
+<tr><td><code>path</code></td><td>The kit’s absolute path</td></tr>
+<tr><td><code>contents</code></td><td>The content fingerprints of the originals in the kit</td></tr>
+<tr><td><code>note_md</code></td><td>The note</td></tr>
+<tr><td><code>link</code></td><td>The fetch address (the kit’s https address online), optional</td></tr>
+</tbody></table></div>
+<h2 id="code">Grant codes and credentials</h2>
+<p>The text <code>zikaron-grant:</code> followed by one or more segments joined by <code>.</code>. Each segment is a grant entry’s canonical bytes in base64url, padding left off; with several segments, they run from the original author’s grant to the current one. The whole is capped at 2,953 bytes, exactly the capacity of one QR code (version 40, byte mode, error correction level L). The format is in zikaron.kit/1 §6.</p>
+<p>A credential folder is named <code>badge-</code> plus the first ten characters of the grant ID; inside, <code>badge.txt</code> is the text as it is, and <code>badge.svg</code> is its QR code.</p>
+<h2 id="zkgrant">Grant files</h2>
+<p>Extension <code>.zkgrant</code>, named <code>grant-</code> plus the first ten characters of the grant ID. It is a container: the first line is <code>zikaron-kit-file/1</code>, and each item after it is written as “path in the kit, newline, decimal length, newline, bytes, newline”, the manifest first and the rest in byte order. It is capped at 64 MiB in all and 4096 items. Inside are:</p>
+<ul>
+<li><code>manifest.json</code>;</li>
+<li><code>entries/*.zk1</code>: the entries of every hop in the grant chain, together with the issuer’s ledger when the grant is in this role’s ledger;</li>
+<li><code>files/zikaron-grant.txt</code> (the grant code), <code>files/terms/…</code> (the terms files), <code>files/verify.md</code>, and optionally <code>files/publish.txt</code> (the published address set in the data folder that exported the grant file).</li>
+</ul>
+<h2 id="mirror">Ledger mirrors</h2>
+{{code:
+<chosen folder>/ZIKARON-backup/<40-hex address>/<author|grantee>/
+  mirror.json                kind desk-mirror, version 1
+  entries/<64 hex>           entry bytes, named by ID alone
+  held/<path>                received grants and so on
+}}
+<p>When the folder already holds an older mirror, only the new entries are added. To use it as the command line’s <code>--ledger</code> folder, copy the files in <code>entries/</code> into an empty folder and add <code>.entry</code> to each file name.</p>
+<h2 id="derive">Derivation paths</h2>
+<div class="kv"><div><span class="k">Recorder</span><span class="hash">m/44'/60'/0'/0/0</span></div><div><span class="k">User</span><span class="hash">m/44'/60'/0'/0/1</span></div></div>
+<h2 id="conv">Agreed literals</h2>
+<dl>
+<div><dt><code>bytes-sha256/1</code></dt><dd>The mark of how a record was made, one for files, folders and Git repositories alike, meaning the content fingerprint is the SHA-256 of a run of bytes. For a file, the bytes are the whole file; for a folder, the canonical JSON <code>{"files":[{"path":…,"sha256":…}…]}</code> sorted by relative path (symbolic links and special files are skipped and counted, and an empty folder is refused); for a Git repository, the current commit object’s bytes without the <code>commit &lt;length&gt;\0</code> header, the same as <code>git cat-file commit HEAD | shasum -a 256</code>. The <code>toolchain</code> paired with it is the SHA-256 of this literal itself: <code>0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d</code>.</dd></div>
+<div id="retraction"><dt><code>retraction</code></dt><dd>The type name of a deletion entry. In the body, <code>subject</code> is required: the ID of a record in this ledger, <code>0x</code> followed by 64 lowercase hexadecimal digits; <code>note_md</code> is optional. Other tools list it as an unknown type (<code>UNKNOWN_TYPE</code>) and the ledger’s verdict stays as it was; this app’s reading lives in <code>zikaron_glue::retraction</code>, shared by the app and the command line.</dd></div>
+<div><dt><code>for</code></dt><dd>An extra member in a record’s body: <code>app</code>, <code>identity</code> (hex20) and <code>ref</code>, with an optional <code>seat</code>. Once any of them is filled in, the first three are required.</dd></div>
+<div><dt><code>upstream</code></dt><dd>An extra member in a grant’s body, holding the ID of the upstream grant; zikaron.kit/1 reads it as a sublicense.</dd></div>
+</dl>

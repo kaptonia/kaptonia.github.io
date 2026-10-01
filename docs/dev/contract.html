@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>登记合约与上链 · 开发者指南</title>
+<meta name="description" content="登记合约只做一件事：收到指纹，发出一条事件。法读取的是事件的格式。">
+<meta property="og:title" content="登记合约与上链 · 开发者指南">
+<meta property="og:description" content="登记合约只做一件事：收到指纹，发出一条事件。法读取的是事件的格式。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/contract.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/contract.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>登记合约与上链</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html" class=on aria-current=page>登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="contract" data-prev="law.html" data-next="formats.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>登记合约与上链</h1><p class="lede">登记合约只做一件事：收到指纹，发出一条事件。法读取的是事件的格式。</p>
+<h2 id="iface">接口</h2>
+<div class="cmd block"><code>event Anchored(address indexed author, bytes32 indexed hash);
+
+function anchor(bytes32 hash) external;
+function anchorMany(bytes32[] calldata hashes) external;</code><button class="cp" type="button" data-copy="event Anchored(address indexed author, bytes32 indexed hash);
+
+function anchor(bytes32 hash) external;
+function anchorMany(bytes32[] calldata hashes) external;" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p><code>anchor</code> 发出一条事件；<code>anchorMany</code> 为数组中的每个元素各发一条，空数组发出零条。事件中的 <code>author</code> 是调用者地址。合约零存储、零所有者、零升级入口，对所有调用者一视同仁。源码在 <code>base/zikaron-core/contracts/src/ZikaronRegistry.sol</code>，许可为 CC0-1.0。</p>
+<h2 id="deployed">已知部署</h2>
+<p>应用内置两处部署，同一份钉定的构建，代码哈希相同：</p>
+<div class="tw"><table>
+<thead><tr><th>网络</th><th>链号</th><th>登记合约</th><th>起始区块</th></tr></thead>
+<tbody>
+<tr><td>以太坊主网（默认）</td><td>1</td><td><code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code></td><td>26087229</td></tr>
+<tr><td>Sepolia 测试网</td><td>11155111</td><td><code>0xC29410B882c4C3b77e33659d2f06ac563e7B08a3</code></td><td>11715660</td></tr>
+</tbody></table></div>
+<p>起始区块是扫描的起点，早于这个合约上的第一条上链记录。</p>
+<h2 id="forms">两种上链形式</h2>
+<dl>
+<div><dt>登记形式</dt><dd>交易成功，且回执中有一条由登记合约发出的日志：恰有三个主题、数据为空；主题 0 为 <code>Anchored(address,bytes32)</code> 的 keccak256，主题 1 为交易发送者，主题 2 为指纹。同一指纹还须出现在交易的调用数据中，起始偏移为 32 的整数倍，或 4 加 32 的整数倍。</dd></div>
+<div><dt>自转账形式</dt><dd>一笔发给自己的交易，调用数据长度为 32 的正整数倍，每 32 字节为一个指纹。只依赖交易本身，适用于任何 EVM 链。</dd></div>
+</dl>
+<p>两种形式效力相同。核验方在自己的扫描范围中写明认可哪些登记合约地址、哪些发送者、哪些自转账交易。</p>
+<h2 id="sender">对发送者的三项要求</h2>
+<ul>
+<li>发送者是由交易签名恢复出的地址。经中继代发的交易，发送者为中继地址；由账户代码验证的交易，在法中发送者一项为空。</li>
+<li>发送地址在上链所在区块前后均为普通地址。带有代码或 EIP-7702 委托的地址发出的上链记录，一律作废。</li>
+<li>交易签名中写明链号。</li>
+</ul>
+<p>这三项保证一条上链记录始终可以读作「这把密钥本人所为」。</p>
+<h2 id="codehash">代码哈希</h2>
+<p>合约的运行时字节码长 246 字节，其 keccak256 为：</p>
+<div class="kv"><div><span class="k">代码哈希</span><span class="hash">0xfa97a1d9b22fab2b52f4e27c9a965b32734c40001b565ab365d05c887118f57d</span></div></div>
+<p>它由固定的编译设置产生：solc 0.8.28，EVM 版本 cancun，开启优化（200 轮），开启 <code>via_ir</code>，字节码去除元数据。源码或设置的任何改动都会改变哈希。自行重算：</p>
+<div class="cmd block"><code>cd base/zikaron-core/contracts
+forge build
+cast keccak $(forge inspect ZikaronRegistry deployedBytecode)</code><button class="cp" type="button" data-copy="cd base/zikaron-core/contracts
+forge build
+cast keccak $(forge inspect ZikaronRegistry deployedBytecode)" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<h2 id="deploy">自行部署</h2>
+<p>任何人都可以在任一已完成上海升级的 EVM 链上部署相同的字节。部署后核对链上代码哈希与上表一致，再在应用的「设置 › 网络 › 编辑节点…」里填入链 ID、登记合约与起始区块。</p>
+<div class="cmd block"><code>forge create src/ZikaronRegistry.sol:ZikaronRegistry \
+  --rpc-url &lt;节点&gt; --private-key &lt;部署用的密钥&gt; --broadcast
+
+cast keccak $(cast code &lt;新地址&gt; --rpc-url &lt;节点&gt;)</code><button class="cp" type="button" data-copy="forge create src/ZikaronRegistry.sol:ZikaronRegistry \
+  --rpc-url &lt;节点&gt; --private-key &lt;部署用的密钥&gt; --broadcast
+
+cast keccak $(cast code &lt;新地址&gt; --rpc-url &lt;节点&gt;)" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>部署请用专门的密钥；身份密钥只用于签署账本和发送上链交易。</p>
+<p>这份固定构建使用 PUSH0 指令，适用于已完成上海升级的链。更早的链须另行构建，代码哈希也随之改变。法按核验方声明的合约地址读取日志，因此另一份构建只关乎部署的便利。</p>
+<h2 id="gas">费用参考</h2>
+<div class="tw"><table>
+<thead><tr><th>调用</th><th>合约执行消耗的 gas</th></tr></thead>
+<tbody>
+<tr><td><code>anchor</code></td><td>2,352</td></tr>
+<tr><td><code>anchorMany</code>，1 条</td><td>2,776</td></tr>
+<tr><td><code>anchorMany</code>，10 条</td><td>17,746</td></tr>
+<tr><td><code>anchorMany</code>，100 条</td><td>167,661</td></tr>
+</tbody></table></div>
+<p>表中是在 forge 里测得的合约执行部分，交易的 21,000 基础费用与调用数据费用另计。条数越多，单条分摊越少。应用发送时 gas 上限定为 200,000。</p>
+<h2 id="other">经其他合约上链</h2>
+<p>任何合约只要发出同样格式的日志，都可充当登记合约。以下三个条件同时成立，该日志才算上链记录：交易由账本密钥亲自发出；指纹出现在该交易自身的调用数据中，且位置符合上述规定；日志由被调用的合约自身发出。合约在内部转而调用登记合约时，日志记录的是那个合约的地址，对任何账本而言都只是一条普通日志。</p>
+<p>核验方只应把读过源码、代码固定的合约地址写入扫描范围。</p>
+<h2 id="proof">自含上链证明</h2>
+<p>法 §9.7 定义了自含的上链证明，记录包的 <code>proofs/</code> 目录用于携带。凭这样一份证明，核验方只需两个可信的区块哈希即可验证一条上链记录：区块头，交易与回执各自的默克尔证明，以及发送地址在前后两个区块中的账户证明。节点清理历史数据后，此类证明依然有效。</p>
+<div class="pn"><a href="law.html"><span>上一页</span>法文与一致性套件</a><a class="nx" href="formats.html"><span>下一页</span>文件与格式</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#iface">接口</a><a href="#deployed">已知部署</a><a href="#forms">两种上链形式</a><a href="#sender">对发送者的三项要求</a><a href="#codehash">代码哈希</a><a href="#deploy">自行部署</a><a href="#gas">费用参考</a><a href="#other">经其他合约上链</a><a href="#proof">自含上链证明</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

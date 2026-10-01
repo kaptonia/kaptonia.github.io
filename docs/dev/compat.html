@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>兼容与演进 · 开发者指南</title>
+<meta name="description" content="本页说明哪些部分长期稳定，以及新功能从何处加入。">
+<meta property="og:title" content="兼容与演进 · 开发者指南">
+<meta property="og:description" content="本页说明哪些部分长期稳定，以及新功能从何处加入。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/compat.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/compat.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>兼容与演进</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html" class=on aria-current=page>兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="compat" data-prev="contributing.html" data-next="security.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>兼容与演进</h1><p class="lede">本页说明哪些部分长期稳定，以及新功能从何处加入。</p>
+<h2 id="forever">长期稳定的部分</h2>
+<dl>
+<div><dt>条目的字节</dt><dd>已签出的条目保持原样。任何版本的软件都按 zikaron/1 读取，结论与今天相同。</dd></div>
+<div><dt>签名域</dt><dd>四个字面量各有固定含义：<code>zikaron/1</code>、<code>zikaron/1-adoption</code>、<code>zikaron.fpm/1</code>、<code>zikaron.ack/1</code>。</dd></div>
+<div><dt>两种上链形式</dt><dd>事件形式与自转账形式。</dd></div>
+<div><dt>核验结论</dt><dd>同一输入，任何合规实现给出同一输出。</dd></div>
+</dl>
+<h2 id="add">四个扩展入口</h2>
+<dl>
+<div><dt>新的条目类型</dt><dd>类型是开放的。约定一种新类型后，旧软件将其列入「无法识别的类型」，法的检查结论照旧；ZIKARON Desk 的账本状态行会把它算作问题。</dd></div>
+<div><dt>正文附加成员</dt><dd>条目正文可以携带法定成员之外的键，法把它们视为数据。<code>for</code> 与 <code>upstream</code> 都以这种方式加入。</dd></div>
+<div><dt>新的方式标记</dt><dd>存证的 <code>mark</code> 是开放的字面量。新的指纹算法、新的内容种类，各起一个新标记。</dd></div>
+<div><dt>新一版法</dt><dd>规则本身需要改变时，另立 zikaron/2。</dd></div>
+</dl>
+<p>前三个入口都在工具层，当下即可使用。选择哪个入口，取决于新内容需要谁读懂：只供自己的应用读取，用附加成员；需要其他实现也读懂，约定新类型并公开。</p>
+<h2 id="v2">下一版法</h2>
+<p>zikaron/2 意味着新的规格名、新的签名域字面量、新的核与新的摘要，两版的签名相互独立。旧账本在 zikaron/1 下继续有效；需要迁移的作者，在旧账本中记录一条移交，指向签署新账本首条的密钥。</p>
+<p>一把密钥只在一部法下写账本，迁移所用的新账本配一把新密钥。</p>
+<h2 id="formats">本机文件的版本</h2>
+<p>本机的每种文件都带格式版本。升级软件时遵循以下规则：</p>
+<ol>
+<li>新版本能读取全部旧格式。</li>
+<li>改写为新格式时，先写在旁边，读回核对，相符后再替换原文件。</li>
+<li>任何一步核对失败即停止，原文件保持原样，并向用户指明是哪个文件。</li>
+<li>主钥已失、永久封存的文件，字节原样移入机器目录的 <code>set-aside</code>，按序号平铺。</li>
+<li>备份来自更新的版本时，明确提示先升级应用；其他文件读取失败时，报出是哪一份。</li>
+</ol>
+<p>整个过程一步完成：中途断电，下次启动看到的要么是完整的旧状态，要么是完整的新状态。</p>
+<h2 id="cli">命令行输出</h2>
+<p>输出的键名是一张封闭的表，退出码是五个固定值，脚本依赖于此。因此：键名与退出码的含义保持稳定；增加信息时增加新键；新增子命令与参数时同步更新 <code>CLI-SCHEMA.md</code>。</p>
+<h2 id="words">判定词原样保留</h2>
+<p><code>GREEN</code>、<code>PARTIAL</code>、<code>FAIL</code>、<code>COMPLETE</code>、<code>GAPS</code> 等词由核写出，在机器读取的输出中保持原样。界面把它们转述为「全部通过」「有缺项」等用语，原词收在详细信息中。</p>
+<h2 id="time">时间</h2>
+<p>期限与有效期以链上时间或调用方明确给出的时刻判断。界面按用户所选时区显示时间；写入条目与输出的，一律为秒数。</p>
+<h2 id="deprecate">停用功能</h2>
+<p>读取功能永久保留：旧条目、旧记录包、旧备份，新版本都须能读取。写入功能可以停用，停用时在发布说明中写明，并为用户提供替代做法。</p>
+<h2 id="tools">工具层保持轻量</h2>
+<p>测试、量具、脚本、目录划分与本文档都属工具层，为法与用户服务：发现问题当天修复，过时即更换。承重的只有两样：冻结的法，以及用户已写下的字节。</p>
+<div class="pn"><a href="contributing.html"><span>上一页</span>参与贡献</a><a class="nx" href="security.html"><span>下一页</span>安全</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#forever">长期稳定的部分</a><a href="#add">四个扩展入口</a><a href="#v2">下一版法</a><a href="#formats">本机文件的版本</a><a href="#cli">命令行输出</a><a href="#words">判定词原样保留</a><a href="#time">时间</a><a href="#deprecate">停用功能</a><a href="#tools">工具层保持轻量</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

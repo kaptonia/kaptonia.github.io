@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Grants · Wiki</title>
+<meta name="description" content="A grant is an entry in the ledger: it names the grantee, the record, the validity period and the fingerprint of the terms file. Once issued it can only be revoked; its content stays final.">
+<meta property="og:title" content="Grants · Wiki">
+<meta property="og:description" content="A grant is an entry in the ledger: it names the grantee, the record, the validity period and the fingerprint of the terms file. Once issued it can only be revoked; its content stays final.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/grants.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/grants.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Grants</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">The ledger and its entries</a><a href="anchoring.html">Anchoring and networks</a><a href="grants.html" class=on aria-current=page>Grants</a><a href="kits.html">Record kits</a><a href="verify.html">Verification</a><a href="evidence.html">What a record proves</a><a href="keys.html">Identities and keys</a><a href="data.html">Local data and backups</a><a href="alerts.html">Alerts and settings</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="grants" data-prev="anchoring.html" data-next="kits.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Grants</h1><p class="lede">A grant is an entry in the ledger: it names the grantee, the record, the validity period and the fingerprint of the terms file. Once issued it can only be revoked; its content stays final.</p>
+<h2 id="draft">Drafting</h2>
+<p>Open “Grant” and press “New grant”, or press “Grant to someone” on a record’s detail page (that record is filled in). The form’s fields:</p>
+<dl>
+<div><dt>Grantee</dt><dd>Paste a <code>0x…</code> address; the “Recent addresses” menu on the right lists the address book and earlier grantees. Whether the address stands for a person, a company or a contract is for the two sides to agree.</dd></div>
+<div><dt>Which record</dt><dd>Press “Choose a record” and pick one. Only records confirmed on chain can be chosen; the rest are greyed out with the reason.</dd></div>
+<div><dt>Terms file</dt><dd>Required; drop it in or click to choose it. Its SHA-256 fills “Terms file fingerprint”. When the grant is signed, a copy of the file is kept in the data folder; it later goes to the grantee with the grant file and record kits, so they can recompute the fingerprint and check it themselves.</dd></div>
+<div><dt>Validity</dt><dd>“7 days”, “30 days” (the default) or “90 days”, counted from chain time; or “Custom”, with start and end in Unix seconds. While chain time is still missing, sync once first, or use Custom.</dd></div>
+<div><dt>Exclusivity, sublicense and scope</dt><dd>The “Exclusive grant” switch, “Upstream grant (sublicense only)” and “Scope”.</dd></div>
+</dl>
+<p>Addresses and hashes in the grantee, terms file fingerprint and upstream fields are written all in lowercase.</p>
+<h2 id="terms">The meaning lives in the terms</h2>
+<p>The ledger knows form alone: an address, a fingerprint, a span of time. Whether the grant is exclusive, where the work may be used, what it costs and what happens on breach are all written in the terms file. When the grantee recomputes the terms file’s fingerprint and it matches the one in the grant, they know it is the very file attached at signing.</p>
+<p>The “Exclusive grant” switch is recorded on your own machine: when the same record already has an exclusive grant with an overlapping period, the app shows “Exclusive grant conflict” and holds back the new one. Exclusivity that binds others belongs in the terms file.</p>
+<h2 id="issue">Issuing</h2>
+<ol>
+<li>With grantee, record and terms file fingerprint all filled in, press “Add to ledger” (“Send to chain now” when “Auto put on chain” is on).</li>
+<li>The “Sign grant” confirmation card shows the record, validity, terms file and cost; the grantee and the fingerprints are under “Details”. Press again on the card to issue.</li>
+<li>The grant is written to the ledger and joins the pending queue; put it on chain as described under <a href="anchoring.html#queue">The pending queue</a>.</li>
+</ol>
+<p>The “Before signing” side column of the New grant page is a two-step checklist, “Fill in terms” and “Draft your first grant”, with the key’s balance shown below; each step can be marked done.</p>
+<h2 id="hand">Handing it over</h2>
+<dl>
+<div><dt>Grant code</dt><dd>A line of text starting with <code>zikaron-grant:</code>; press “Copy grant code” on the grant’s detail page. It lets the receiver verify the signature and the validity period.</dd></div>
+<div><dt>Grant file</dt><dd>“Export grant file…” writes a <code>.zkgrant</code> file holding the entries of every hop in the grant chain, the issuer’s ledger, the terms files and the grant code, so the receiver can run the full check. The app reads the chain once before exporting.</dd></div>
+</dl>
+<h2 id="revoke">Revoking</h2>
+<p>Press “Revoke grant…” at the bottom of the grant’s detail page. The card shows the record and the original validity, and under “Details” you can fill in the fingerprint of a ruling file. Press “Revoke” to write the revocation entry, which joins the pending queue. A revocation is final, and every sublicense derived from that grant ends with it. Once it is on chain, the grantee’s revocation watch finds it whenever their re-verification can reach your updated ledger (on the same machine, in an upstream folder they saved, or in an updated record kit at your publish address); until then, that grant shows “Has gaps”.</p>
+<h2 id="library">Receiving a grant</h2>
+<p>A User keeps the grants received in “My grants”. Press “Add grant”, paste the grant code or drop in the grant file, and press “Verify and add”:</p>
+<ul>
+<li>The app checks signatures and format first, and adds the grants once all of them pass.</li>
+<li>When a grant code carries a sublicense chain, every hop in it is added.</li>
+<li>A copy of the grant file is kept in the data folder, and the issuer ledger inside it is used for later checks.</li>
+<li>A grant code alone allows checking the signature and validity; for the full check, ask the issuer to export a grant file.</li>
+</ul>
+<p>Each grant has a card, with one of four verdicts:</p>
+<dl>
+<div><dt>All passed</dt><dd>All six checks passed.</dd></div>
+<div><dt>Has gaps</dt><dd>Some checks still await a result, for example the issuer ledger is missing or the grant awaits confirmation on chain. Wait until the result is settled before relying on the grant.</dd></div>
+<div><dt>Failed</dt><dd>At least one check found a problem.</dd></div>
+<div><dt>Revoked by issuer</dt><dd>The issuer has revoked this grant.</dd></div>
+</dl>
+<p>“Verify again” re-verifies the whole vault grant by grant: it looks for the issuer’s ledger on this machine first, then in the vault, then scans the chain. Re-verification also runs on the interval in Settings › Notifications, 600 seconds out of the box. “By issuer” in the toolbar groups the grants by issuer, with problem groups first.</p>
+<h2 id="badge">Credentials</h2>
+<p>A credential is proof of a grant for a third party, such as your customers: a text file and a QR code. Press “Create credential” on the credential card of a grant’s detail page: the app follows the grant chain back to its root and writes <code>badge.txt</code> and the QR code <code>badge.svg</code>. The other party pastes the text into Verify › Verify grant to check it.</p>
+<h2 id="sub">Sublicensing</h2>
+<p>A grant that this session’s re-verification has passed on all six checks has “Sublicense to others” on its detail page. Pressing it first shows the “Sublicense” confirmation card; “Draft…” then opens the sublicense page. The upper half shows the upstream grant; the lower half is the same form as drafting a grant, with the record fixed to the upstream grant’s record.</p>
+<ul>
+<li>The sublicense is written to your own (User) ledger and goes into your own pending queue. A User needs a signing key and a ledger; the page leads you to “Create key…” or “Set up ledger…”.</li>
+<li>A sublicense lives within its upstream grant: when the upstream is revoked or expires, the sublicense ends with it. You set the validity yourself; set it within the upstream validity.</li>
+<li>When a sublicense is verified, each hop gets its own six checks, and each pair of adjacent hops is checked to link up.</li>
+</ul>
+<h2 id="watch">Revocation watch</h2>
+<p>After each re-verification of the whole vault, the app checks two things: has an issuer revoked a grant you hold, and has an issuer’s ledger been handed over to a new key. When either has happened, the window asks the system for attention once, an alert toast appears, and a red row is added at the end of the Alerts page. Each event alerts once.</p>
+<div class="pn"><a href="anchoring.html"><span>Previous</span>Anchoring and networks</a><a class="nx" href="kits.html"><span>Next</span>Record kits</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#draft">Drafting</a><a href="#terms">The meaning lives in the terms</a><a href="#issue">Issuing</a><a href="#hand">Handing it over</a><a href="#revoke">Revoking</a><a href="#library">Receiving a grant</a><a href="#badge">Credentials</a><a href="#sub">Sublicensing</a><a href="#watch">Revocation watch</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

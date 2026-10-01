@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Contributing · Developer guide</title>
+<meta name="description" content="Fixes, tests, and improvements to the interface and documents are welcome. Before you start, confirm which layer your change belongs to.">
+<meta property="og:title" content="Contributing · Developer guide">
+<meta property="og:description" content="Fixes, tests, and improvements to the interface and documents are welcome. Before you start, confirm which layer your change belongs to.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/contributing.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/contributing.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Contributing</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html" class=on aria-current=page>Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html">Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="contributing" data-prev="integrate.html" data-next="compat.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>Contributing</h1><p class="lede">Fixes, tests, and improvements to the interface and documents are welcome. Before you start, confirm which layer your change belongs to.</p>
+<h2 id="where">Where a change goes</h2>
+<div class="tw"><table>
+<thead><tr><th>Change</th><th>Route</th></tr></thead>
+<tbody>
+<tr><td>Interface, wording, interaction</td><td>A pull request, in <code>crates/app</code> and <code>crates/zikaron-ui</code>.</td></tr>
+<tr><td>The command line</td><td>A pull request. When the output format or flags change, update <code>CLI-SCHEMA.md</code> with it.</td></tr>
+<tr><td>A core’s implementation (defects, performance)</td><td>A pull request, with the zero-divergence result of the conformance comparison.</td></tr>
+<tr><td>A new reading of entries</td><td>Settle the convention in the discussions first, then implement it.</td></tr>
+<tr><td>Wording of a law text</td><td>An issue. Prose may be revised while the core’s digest keeps its value.</td></tr>
+<tr><td>The rules of the law</td><td>An issue, which leads to the next version of the law.</td></tr>
+<tr><td>The frozen cores and the registry contract</td><td>An issue. They are pinned by digests and the code hash. The rest of <code>base/</code> is tooling and takes pull requests directly.</td></tr>
+</tbody></table></div>
+<h2 id="flow">Process</h2>
+<ol>
+<li>Open an issue first, saying what you want to change and why; small corrections can go straight to a pull request.</li>
+<li>Branch from main, one request per change.</li>
+<li>Run every test locally.</li>
+<li>In the commit message, say what changed and what users will see.</li>
+</ol>
+<h2 id="check">Checks before submitting</h2>
+<ul class="chk">
+<li><code>cargo test --workspace</code> passes.</li>
+<li><code>cargo build --release --locked</code> passes; when dependencies are added or removed, commit <code>Cargo.lock</code> with the change.</li>
+<li>If <code>zikaron</code> or <code>zikaron-kit</code> changed: the comparer shows zero divergences on corpora from at least three seeds, generated in a copy outside the repository.</li>
+<li>If <code>zikaron-anchor</code> changed: every chain-facing recording replays identically.</li>
+<li>Both digests of the law and the contract’s code hash recompute to their values.</li>
+<li>Every new sentence in the interface exists in Chinese and English.</li>
+<li>Every new control is wired to a real action and shows a clear message when it fails.</li>
+<li>The matching passage of the manual is updated, Chinese and English matching sentence for sentence.</li>
+</ul>
+<h2 id="judge">Judgment belongs in the cores</h2>
+<p>When interface code meets a question such as “is this entry valid” or “is this grant in force right now”, call the core and use its conclusion. A judgment rewritten in the interface will drift from the original. Likewise, the command line passes a core’s output on unchanged.</p>
+<h2 id="test">Rules for tests</h2>
+<dl>
+<div><dt>Temporary directories</dt><dd>Every test creates its machine folder and data folder in its own temporary directory and clears it at the end.</dd></div>
+<div><dt>Test keys</dt><dd>Keys are generated in the test or taken from the corpus; real recovery words and private keys stay outside the repository.</dd></div>
+<div><dt>A local chain</dt><dd>Tests that touch anchoring run against a local anvil or recordings; public nodes are for manual trials.</dd></div>
+<div><dt>Both sides</dt><dd>Every refusal rule comes with one input that should be refused and one that should be accepted.</dd></div>
+<div><dt>Injected time</dt><dd>A test that needs “now” passes the moment in as an argument.</dd></div>
+</dl>
+<h2 id="ui">Interface conventions</h2>
+<ul>
+<li>An action that writes to the ledger or the chain first opens a confirmation card listing where it writes, what it writes and the cost; the solid red key that actually writes appears on the confirmation card alone.</li>
+<li>A screen holds at most one blue primary button.</li>
+<li>The front of the interface uses plain language; addresses, hashes, type names and verdict tokens go under “Details”.</li>
+<li>Every failure says two things: what happened, and what to do next.</li>
+<li>Pages respond at once; long work runs in the background and announces itself once, on completion.</li>
+<li>Where the interface says “in effect” or “confirmed”, a readable fact stands behind it.</li>
+</ul>
+<h2 id="words">Wording</h2>
+<p>Interface wording follows the concise style of mature applications. The manual, the Wiki and this guide state what holds now; history stays in the version record. Code comments are in English and name the section when citing the law.</p>
+<h2 id="private">Keeping the repository clean</h2>
+<p>Commits hold product source and documents alone; local paths, e-mail addresses, keys, node access tokens and personal test data stay outside the repository. Read the diff before you commit.</p>
+<div class="pn"><a href="integrate.html"><span>Previous</span>Integration</a><a class="nx" href="compat.html"><span>Next</span>Compatibility and evolution</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#where">Where a change goes</a><a href="#flow">Process</a><a href="#check">Checks before submitting</a><a href="#judge">Judgment belongs in the cores</a><a href="#test">Rules for tests</a><a href="#ui">Interface conventions</a><a href="#words">Wording</a><a href="#private">Keeping the repository clean</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

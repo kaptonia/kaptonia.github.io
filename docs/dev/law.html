@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>法文与一致性套件 · 开发者指南</title>
+<meta name="description" content="规则写成两部法文，每部配一个冻结的核。一份实现是否合规，运行一遍即可确认。">
+<meta property="og:title" content="法文与一致性套件 · 开发者指南">
+<meta property="og:description" content="规则写成两部法文，每部配一个冻结的核。一份实现是否合规，运行一遍即可确认。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/law.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/law.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>法文与一致性套件</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html" class=on aria-current=page>法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="law" data-prev="cli.html" data-next="contract.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>法文与一致性套件</h1><p class="lede">规则写成两部法文，每部配一个冻结的核。一份实现是否合规，运行一遍即可确认。</p>
+<h2 id="two">两部法</h2>
+<dl>
+<div><dt>zikaron/1</dt><dd>账本的法：条目的字节格式、签名、条目间的链接、审计报告、两种上链形式。文本见 <code>base/zikaron-v1.md</code>。</dd></div>
+<div><dt>zikaron.kit/1</dt><dd>客户端文书的法：指纹清单与回执、凭证载荷、记录包、读数、授权六项核验，建立在 zikaron/1 之上。文本见 <code>base/zikaron-kit-v1.md</code>。</dd></div>
+</dl>
+<p>法中每条规则都是对全部输入有定义的机器判断。条文分三类：凭单个条目即可判定的；凭一组条目加审计输入可判定的；须对照链上数据判定的。前两类可离线判定，冻结覆盖的正是这两类。</p>
+<h2 id="core">冻结核</h2>
+<p>每部法有一份纯 Python、仅依赖标准库的参照实现：zikaron/1 的核是 <code>impl-py/</code> 下的五个文件，zikaron.kit/1 的核是 <code>kit-py/</code> 下的四个文件。把这些文件各自的 SHA-256 连同文件名排成若干行，再取一次 SHA-256，即法文中写明的发布摘要。</p>
+<div class="kv"><div><span class="k">zikaron/1 · §12.5</span><span class="hash">0xbecfb6f0d0f8b71c314f1b2efef414abfb6df74b711ca8f81efdef685d0132fc</span></div><div><span class="k">zikaron.kit/1 · §13.5</span><span class="hash">0x3f8368ebc8b5b7c97e4b5c4240f57f6fc06421b4effbd5a7446d128434a20535</span></div></div>
+<p>摘要写入法文之后，核即为判据，法文是对它的阐述。两者所述相同；理解有分歧时，以核在该输入上的输出为准。</p>
+<h2 id="freeze">冻结的条件</h2>
+<p>冻结一个核，须先有一份仅凭法文独立写成的实现，与之在生成的语料上逐字节一致；再经过至少十万次模糊测试，零崩溃、零挂起、零误收，同一输入始终得到同一答案。可离线判定的两类条文中，每一条封闭边界在每个种子的语料里都须两侧各覆盖一次。条件全部达成后，摘要写入法文，冻结完成。</p>
+<h2 id="run">测试一份实现</h2>
+<p>你的实现须提供约定的命令行接口：zikaron/1 为 <code>zk1</code>，zikaron.kit/1 为 <code>zkk</code>。每个命令读取约定的输入（多为一个文件），向标准输出写一个规范 JSON 值。约定全文见 <code>HARNESS.md</code> 与 <code>HARNESS-KIT.md</code>。</p>
+<p>语料生成器会改写目录中的文件，请先把 <code>base/zikaron-conformance</code> 复制到仓库之外，在副本中操作。</p>
+<div class="cmd block"><code>cp -R base/zikaron-conformance /tmp/conformance
+cd /tmp/conformance
+
+# 生成语料(种子任选，各种子的结果都应一致)
+python3 corpus/gen.py --seed 1
+
+# 在语料上逐份比对你的 zk1 与核
+ZK1_CANDIDATE=/path/to/zk1 python3 compare.py
+
+# kit 同理
+python3 kit-corpus/gen.py --seed 1
+ZKK_CANDIDATE=/path/to/zkk python3 compare-kit.py</code><button class="cp" type="button" data-copy="cp -R base/zikaron-conformance /tmp/conformance
+cd /tmp/conformance
+
+# 生成语料(种子任选，各种子的结果都应一致)
+python3 corpus/gen.py --seed 1
+
+# 在语料上逐份比对你的 zk1 与核
+ZK1_CANDIDATE=/path/to/zk1 python3 compare.py
+
+# kit 同理
+python3 kit-corpus/gen.py --seed 1
+ZKK_CANDIDATE=/path/to/zkk python3 compare-kit.py" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>比对器列出每一处分歧。零分歧是合规的证据；合规的定义是在全部输入上一致，因此在语料之外发现分歧，请提交议题，那是语料应当补充之处。</p>
+<h2 id="chainface">链面参照</h2>
+<p>须对照链上数据判定的条文，参照是 <code>base/zikaron-core/fixtures/</code> 中的录制：每份录下一段链上数据，并附标准扫描结果。扫描器回放每份录制，应逐字节复现标准结果。<code>scan-py/</code> 是一份独立编写的 Python 扫描器，与全部录制一致。</p>
+<h2 id="change">修改法</h2>
+<p>已冻结的核保持原样。修改规则须另立 zikaron/2：新的规格名、新的签名域字面量、新的核与新的摘要。在 zikaron/1 下写成的账本永久有效。</p>
+<p>法文的散文是核的教科书，可以修订得更清楚；核的摘要不变，就仍是 zikaron/1。</p>
+<h2 id="outside">法之外</h2>
+<p>法明确留给读者、裁决者与条款的事项：钱款、授权的含义、证据的分量、记录是否必须上链。实现这些功能的代码属于工具层，见法 §11。</p>
+<div class="pn"><a href="cli.html"><span>上一页</span>命令行</a><a class="nx" href="contract.html"><span>下一页</span>登记合约与上链</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#two">两部法</a><a href="#core">冻结核</a><a href="#freeze">冻结的条件</a><a href="#run">测试一份实现</a><a href="#chainface">链面参照</a><a href="#change">修改法</a><a href="#outside">法之外</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

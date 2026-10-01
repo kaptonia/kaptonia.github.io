@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Security · Developer guide</title>
+<meta name="description" content="This software keeps keys and evidence. This page states what it defends against, by what means, and the rules its maintainers follow.">
+<meta property="og:title" content="Security · Developer guide">
+<meta property="og:description" content="This software keeps keys and evidence. This page states what it defends against, by what means, and the rules its maintainers follow.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/security.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/security.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Security</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html" class=on aria-current=page>Security</a><a href="release.html">Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="security" data-prev="compat.html" data-next="release.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>Security</h1><p class="lede">This software keeps keys and evidence. This page states what it defends against, by what means, and the rules its maintainers follow.</p>
+<h2 id="report">Reporting a vulnerability</h2>
+<p>Please use the repository’s <a href="https://github.com/kaptonia/zikaron/security/advisories/new">private vulnerability reporting</a>, stating the affected version, the steps to reproduce, what you observed and the impact as you see it. Until a fix is released, please keep the details in the private channel.</p>
+<p>These classes are handled first: a signature that bypasses the user’s confirmation; a check that answers “All passed” to a forged input; local data or keys read while locked; two conforming implementations reaching different verdicts on the same input.</p>
+<h2 id="model">Threat model</h2>
+<div class="tw"><table>
+<thead><tr><th>Adversary</th><th>Defence</th></tr></thead>
+<tbody>
+<tr><td>Someone who sits down at the machine while you are away</td><td>The passcode gate; a lock after five wrong tries; auto-lock when idle; the master key cleared from memory on lock.</td></tr>
+<tr><td>Someone who obtains the disk or a backup file</td><td>Ledgers, settings, the queue, the identity registry and received grants are stored encrypted, and the key store is encrypted separately under the passcode; the machine settings read before unlocking and the exports meant for others are plain. What holds against offline guessing is the strength of the passcode and the backup password, and the scrypt (N=262144, r=8, p=1) every try has to run.</td></tr>
+<tr><td>Someone who hands you forged records</td><td>Signatures, the ledger’s chain and the records on the blockchain confirm one another, and verification gives a result for each check.</td></tr>
+<tr><td>Someone who fabricates evidence after the fact</td><td>An anchor gives an upper bound on time; a continuous ledger has every position already taken.</td></tr>
+<tr><td>A node that lies</td><td>Readings from several nodes are compared; a single source is marked as such.</td></tr>
+<tr><td>A web page or app that lures you into signing</td><td>The identity key is used in <b class="zk">Zikaron</b> alone, and the app signs in two of the four domains alone: <code>zikaron/1</code> and <code>zikaron/1-adoption</code>.</td></tr>
+</tbody></table></div>
+<p>Out of scope: malicious software running on an unlocked machine, memory reads, and compromise of the operating system or hardware. For these, the software states its limits as they are.</p>
+<h2 id="keys">Rules for keys</h2>
+<dl>
+<div><dt>Deterministic signatures</dt><dd>RFC 6979 deterministic nonces with low-s values. One key signing the same bytes produces the same signature on every conforming tool.</dd></div>
+<div><dt>Four independent domains</dt><dd>The domain literal is written inside the signed message, so a signature under one domain is valid in that domain alone. A new domain takes a literal wholly distinct from the existing ones.</dd></div>
+<div><dt>Sign what the app assembled</dt><dd>The app signs content it assembled itself and the user has seen on a confirm card; the signing entry point is open to such content alone.</dd></div>
+<div><dt>Keys stay in memory briefly</dt><dd>They are cleared after use. Logs and error messages carry addresses alone.</dd></div>
+<div><dt>Cryptography in one place</dt><dd>Calls for elliptic curves, hashes and key derivation are gathered in designated modules, and other code goes through them.</dd></div>
+</dl>
+<h2 id="chain">Rules for reading the chain</h2>
+<dl>
+<div><dt>Failure is an absent answer</dt><dd>When a node is out of reach, readings differ or a scan is interrupted, the conclusion is recorded as absent, and the interface shows it so. A network fault and a forged record have to be told apart at a glance.</dd></div>
+<div><dt>Green comes from a complete check</dt><dd>A transaction in a block counts as “Confirming”; the green lamp lights once the ledger check’s report has read it.</dd></div>
+<div><dt>Leave the queue on a successful receipt</dt><dd>An entry leaves the queue once its receipt confirms success; entries whose send failed or timed out stay queued. Deleting a record that is still unsent also takes it out of the queue.</dd></div>
+<div><dt>Check before resending</dt><dd>Entries already on chain are kept out of the queue. After a restart, the app resumes waiting for the same transaction’s receipt.</dd></div>
+<div><dt>Certificates checked every time</dt><dd>For <code>https</code> nodes, the certificate chain and host name are checked on every connection. TLS uses rustls, with root certificates built into the app and kept apart from the system’s certificate store.</dd></div>
+<div><dt>Bounded inputs</dt><dd>Each chain read is limited to 30 seconds and a response of at most 64 MiB. Record kits fetched from a publish address travel over <code>https</code> alone: 20 seconds and 32 MiB per file, at most 64 MiB per kit, and at most 3 same-origin redirects.</dd></div>
+</dl>
+<h2 id="privacy">Privacy</h2>
+<ul>
+<li>The app’s network requests go to these destinations alone: the nodes the user configured, the publish address the user entered, the https addresses the user gives when verifying, and the publish address carried in a grant file received (fetched again at each periodic re-verification). Beyond these, the app makes zero update checks and sends zero telemetry.</li>
+<li>Public nodes can see the addresses and contracts queried; the documents and the interface say so.</li>
+<li>Text inside an entry travels with the ledger (record kits, grant files, mirrors) and stays readable for good; the documents say so plainly.</li>
+<li>For short, guessable content, a fingerprint withstands a limited number of guesses; the documents remind users to add random content.</li>
+<li>File names and paths at signing stay on the machine, stored apart from the ledger; record names are written into entries and are public with them.</li>
+</ul>
+<h2 id="deps">Dependencies and the supply chain</h2>
+<ul>
+<li><code>Cargo.lock</code> is committed, and release builds use <code>--locked</code>.</li>
+<li>Dependencies are kept few; the cores and storage use the standard library wherever they can.</li>
+<li>An upgrade of a cryptographic dependency gets its own pull request with a change note, and every conformance comparison is run again.</li>
+<li>A new dependency comes with its purpose, maintenance status and licence.</li>
+<li>Embedded fonts are released with their licence texts.</li>
+</ul>
+<h2 id="files">Rules for writing files</h2>
+<ul>
+<li>Write a temporary file, sync it to disk, then rename it into place.</li>
+<li>Existing files are always kept: a backup, record kit or grant file that meets a taken name saves under a numbered name and says where; key files and the command line stop at a taken name.</li>
+<li>Read back and compare after writing, above all for key files and backups: report success once the read-back matches.</li>
+<li>Changes such as restoring a backup or changing the primary identity complete as one step: either all of it takes effect or everything stays as it was. A batch of signatures stops at the first failure and keeps what it has signed.</li>
+<li>Old data whose master key is gone, closed for good, is moved byte for byte into a <code>set-aside</code> directory.</li>
+<li>Key files are written with mode 0600.</li>
+</ul>
+<h2 id="fail">Failures have to be visible</h2>
+<p>Whenever an operation falls through, the interface says so plainly. The costliest defect in software of this kind is a failure the user takes for a success: evidence believed to be on chain turns out, on the day it is needed, to be missing. When reviewing a pull request, ask of every new action: what does the user see when it fails?</p>
+<div class="pn"><a href="compat.html"><span>Previous</span>Compatibility and evolution</a><a class="nx" href="release.html"><span>Next</span>Releasing</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#report">Reporting a vulnerability</a><a href="#model">Threat model</a><a href="#keys">Rules for keys</a><a href="#chain">Rules for reading the chain</a><a href="#privacy">Privacy</a><a href="#deps">Dependencies and the supply chain</a><a href="#files">Rules for writing files</a><a href="#fail">Failures have to be visible</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

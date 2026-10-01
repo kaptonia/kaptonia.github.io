@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Identities and keys · Wiki</title>
+<meta name="description" content="An identity is a set of signing keys, generated on your machine or imported by you, kept in this machine’s key store and opened by the passcode. The app uses its own key store alone and leaves the system keychain as it is.">
+<meta property="og:title" content="Identities and keys · Wiki">
+<meta property="og:description" content="An identity is a set of signing keys, generated on your machine or imported by you, kept in this machine’s key store and opened by the passcode. The app uses its own key store alone and leaves the system keychain as it is.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/keys.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/keys.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Identities and keys</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">The ledger and its entries</a><a href="anchoring.html">Anchoring and networks</a><a href="grants.html">Grants</a><a href="kits.html">Record kits</a><a href="verify.html">Verification</a><a href="evidence.html">What a record proves</a><a href="keys.html" class=on aria-current=page>Identities and keys</a><a href="data.html">Local data and backups</a><a href="alerts.html">Alerts and settings</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="keys" data-prev="evidence.html" data-next="data.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Identities and keys</h1><p class="lede">An identity is a set of signing keys, generated on your machine or imported by you, kept in this machine’s key store and opened by the passcode. The app uses its own key store alone and leaves the system keychain as it is.</p>
+<h2 id="kinds">Two kinds of identity</h2>
+<dl>
+<div><dt>Recovery-phrase identity</dt><dd>Derived from 12 recovery words, with two keys at once, one for each role: the Recorder at <code>m/44'/60'/0'/0/0</code>, the User at <code>m/44'/60'/0'/0/1</code>. The two addresses differ, and each needs a little gas.</dd></div>
+<div><dt>Local-key identity</dt><dd>An existing private key or key file you import. It fills the one role chosen at import, and the other role stays empty.</dd></div>
+</dl>
+<p>A machine can hold several identities, switched with the identity chip at the top of the sidebar. Each role of each identity has its own key, address and data folder.</p>
+<h2 id="pin">The passcode</h2>
+<p>The passcode is 8 letters or digits, case-sensitive. A machine with a passcode opens with the passcode gate every time; the eighth character submits it.</p>
+<ul>
+<li>After 5 wrong tries in a row the gate becomes “Locked”, and recovery is the way on. The count is kept on disk and survives restarting the app.</li>
+<li>A passcode that is too simple is refused on the spot: eight identical characters, or digits that run in sequence or read as a date. When the current passcode is digits only, Settings suggests adding letters.</li>
+<li>The try limit stops someone sitting at the machine from guessing. Against someone who copies the key store file away, the protection is the passcode itself and the encryption work every try has to repeat; so mix letters and digits.</li>
+</ul>
+<h2 id="lock">Locking</h2>
+<p>“Lock” in the sidebar, or ⌘L, locks at once: the master key is wiped from memory, the data folder is closed, and background work stops: ledger checks, grant re-verification, revocation watch and sending the pending queue. After unlocking, the data folder reopens, anything due runs, and the pending queue goes back to waiting for its receipts.</p>
+<p>“Auto-lock” in Settings › Identity key is on out of the box: after the “Idle time” (1, 5, 15, 30 or 60 minutes; 15 by default) passes idle, the app locks itself, and any key press or mouse movement restarts the clock. Transactions already sent complete as usual.</p>
+<h2 id="primary">The primary identity</h2>
+<p>The first identity on a machine is its primary identity by default; another can be made primary later in Settings › Identity key. When the passcode is forgotten, the primary identity’s credentials alone can reset it:</p>
+<ul>
+<li>A recovery-phrase primary: its 12 recovery words.</li>
+<li>A local-key primary: the key file exported from it, with the file password.</li>
+</ul>
+<p>“Set as primary…” asks for this machine’s passcode. The old primary becomes a secondary identity, and every key and all local data are re-encrypted under a new master key; the passcode stays the same. The change happens completely or leaves everything as it was. A local-key identity imported from a raw private key exports its key file first, and can then become primary.</p>
+<h2 id="forgot">A forgotten passcode</h2>
+<p>On the passcode gate, press “Forgot passcode” to reach “Recover”: fill in the primary identity’s 12 recovery words, or choose the primary’s key file and enter the file password, then set a new passcode. On success the wrong-try count is cleared and the old passcode stops working. A secondary identity’s credentials are refused; use the primary’s, or restore from a backup.</p>
+<p>At the bottom of the recovery card is “Restore from backup…”: choose a whole-machine backup file, enter the backup password, confirm “Replace this machine with the backup?” and set a new passcode. The machine’s identities, keys and data are replaced whole by the backup’s, re-encrypted under the new passcode.</p>
+<h2 id="backup">Backing up keys</h2>
+<dl>
+<div><dt>Recovery phrase</dt><dd>Written on paper. After entering the passcode in Settings › Identity key, “Show recovery phrase…” shows it once more.</dd></div>
+<div><dt>Key file</dt><dd>“Export key file…” writes a standard keystore file that other wallets can read too. The file password is at least 8 characters, and the file can be read by you alone; the app reads it back to check it, and the backup counts once it passes. For a local-key primary, it is also how the passcode is recovered.</dd></div>
+<div><dt>Whole-machine backup</dt><dd>Backs up every identity, ledger and setting together; see <a href="data.html#backup">Whole-machine backup</a>.</dd></div>
+</dl>
+<p>“Backup status” on the Identity key page says how far this identity is backed up: “Recovery phrase confirmed, key file exported”, “Recovery phrase confirmed”, “Key file exported” or “Not backed up”.</p>
+<h2 id="manage">Changing identity</h2>
+<dl>
+<div><dt>Switch identity…</dt><dd>Lists every identity; click a row to see both roles’ full addresses, and press “Switch” to change to it.</dd></div>
+<div><dt>New identity…</dt><dd>Generate, write down and check 12 words, as in wizard step 2.</dd></div>
+<div><dt>Import key…</dt><dd>Three tabs: “Recovery phrase”, “Private key” (64 hexadecimal digits, with or without 0x) and “Key file”. For a private key or key file, choose “Import as which identity”: “Recorder” or “User”.</dd></div>
+<div><dt>Rename…</dt><dd>Changes an identity’s label, which serves to tell identities apart.</dd></div>
+</dl>
+<p>New and imported identities are secondary; the first identity created on a machine becomes its primary. When an identity is imported from its recovery phrase, private key or key file, its ledger stays on the original machine and in its backups; to bring it over, see <a href="data.html#retrieve">Fetching the ledger</a>.</p>
+<h2 id="rules">Rules for the identity key</h2>
+<p>Every word an identity key signs may one day be checked. It is used in <b class="zk">Zikaron</b> alone: it signs ledger entries and claim co-signatures, and it sends anchoring transactions.</p>
+<dl>
+<div><dt>Gas only</dt><dd>Keep assets at another address. The identity key’s address is public, and it needs just enough for gas.</dd></div>
+<div><dt>Signed by <b class="zk">Zikaron</b> alone</dt><dd>Answer signing requests from other apps and web pages with another key. A ledger entry’s signature is a few dozen bytes; an ordinary-looking text handed to you for signing may be an entry someone else drafted in your name.</dd></div>
+<div><dt>A plain address</dt><dd>The identity key’s address stays a plain address; code and delegation belong to other addresses. Once an address carries code or a delegation, every anchor it sends in that time is void.</dd></div>
+<div><dt>One key, one ledger</dt><dd>A key serves this one ledger alone.</dd></div>
+</dl>
+<h2 id="delete">Deleting an identity</h2>
+<p>“Delete identity…” at the bottom of the Identity key page: after this machine’s passcode, it removes the keys from the key store and the identity’s registration, and keeps the data folders.</p>
+<ul>
+<li>A primary identity first passes the primary role to another identity, and can then be deleted.</li>
+<li>An identity first backs up its key or confirms its recovery phrase, and can then be deleted.</li>
+<li>A Recorder records a handover before deleting, so a new key can continue the ledger; see <a href="ledger.html#handover">Handing over a ledger</a>.</li>
+</ul>
+<div class="pn"><a href="evidence.html"><span>Previous</span>What a record proves</a><a class="nx" href="data.html"><span>Next</span>Local data and backups</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#kinds">Two kinds of identity</a><a href="#pin">The passcode</a><a href="#lock">Locking</a><a href="#primary">The primary identity</a><a href="#forgot">A forgotten passcode</a><a href="#backup">Backing up keys</a><a href="#manage">Changing identity</a><a href="#rules">Rules for the identity key</a><a href="#delete">Deleting an identity</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

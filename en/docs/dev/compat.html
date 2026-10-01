@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Compatibility and evolution · Developer guide</title>
+<meta name="description" content="This page states what stays stable, and where new features come in.">
+<meta property="og:title" content="Compatibility and evolution · Developer guide">
+<meta property="og:description" content="This page states what stays stable, and where new features come in.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/compat.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/compat.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Compatibility and evolution</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html" class=on aria-current=page>Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html">Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="compat" data-prev="contributing.html" data-next="security.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>Compatibility and evolution</h1><p class="lede">This page states what stays stable, and where new features come in.</p>
+<h2 id="forever">What stays stable</h2>
+<dl>
+<div><dt>The bytes of an entry</dt><dd>A signed entry stays as it is. Every version of the software reads it under zikaron/1 and reaches the same verdict as today.</dd></div>
+<div><dt>Signing domains</dt><dd>Four literals, each with a fixed meaning: <code>zikaron/1</code>, <code>zikaron/1-adoption</code>, <code>zikaron.fpm/1</code>, <code>zikaron.ack/1</code>.</dd></div>
+<div><dt>The two forms of anchor</dt><dd>The event form and the self-transfer form.</dd></div>
+<div><dt>Verdicts</dt><dd>For the same input, every conforming implementation gives the same output.</dd></div>
+</dl>
+<h2 id="add">Four points of extension</h2>
+<dl>
+<div><dt>A new entry type</dt><dd>Types are open. Once a new type is agreed, older software lists it under “Unrecognized types”, and the verdict under the law stays as it was; ZIKARON Desk’s ledger status line counts it as a problem.</dd></div>
+<div><dt>Extra body members</dt><dd>An entry’s body may carry keys beyond those the law names, and the law treats them as data. <code>for</code> and <code>upstream</code> both came in this way.</dd></div>
+<div><dt>A new mode mark</dt><dd>The <code>mark</code> of a record is an open literal. A new fingerprint algorithm or a new kind of content takes a new mark.</dd></div>
+<div><dt>A new version of the law</dt><dd>When the rules themselves have to change, start zikaron/2.</dd></div>
+</dl>
+<p>The first three are in the tooling layer and usable today. Which to use depends on who has to understand the new thing: for your own app alone, an extra member; for other implementations too, an agreed and published type.</p>
+<h2 id="v2">The next version of the law</h2>
+<p>zikaron/2 means a new spec name, a new signing-domain literal, a new core and a new digest, with signatures under the two versions independent of each other. An old ledger stays valid under zikaron/1; an author who migrates records a handover in the old ledger, naming the key that signs the first entry of the new one.</p>
+<p>A key writes ledgers under one law, so the new ledger of a migration takes a new key.</p>
+<h2 id="formats">Versions of local files</h2>
+<p>Every kind of local file carries a format version. When the software is upgraded, it follows these rules:</p>
+<ol>
+<li>A new version reads every old format.</li>
+<li>To rewrite a file in a new format, write it alongside, read it back and compare, and replace the original once they match.</li>
+<li>When any comparison fails, stop, leave the original as it is, and name the file to the user.</li>
+<li>A sealed file whose master key is gone, closed for good, is moved byte for byte into <code>set-aside</code> in the machine folder, numbered flat.</li>
+<li>When a backup comes from a newer version, the software says plainly to update the app first; for any other unreadable file, it names the file.</li>
+</ol>
+<p>The whole process happens in one step: after a power cut, the next launch finds either the complete old state or the complete new one.</p>
+<h2 id="cli">Command-line output</h2>
+<p>The output keys form a closed table and the exit codes are five fixed values, and scripts depend on them. So the meanings of keys and exit codes stay stable; new information comes as new keys; new subcommands and flags are added to <code>CLI-SCHEMA.md</code> at the same time.</p>
+<h2 id="words">Verdict tokens stay as written</h2>
+<p><code>GREEN</code>, <code>PARTIAL</code>, <code>FAIL</code>, <code>COMPLETE</code>, <code>GAPS</code> and the like are written by the cores and stay as they are in machine-readable output. The interface renders them for people as “All passed”, “Has gaps” and so on, with the original token under Details.</p>
+<h2 id="time">Time</h2>
+<p>Deadlines and validity are judged by chain time, or by a moment the caller states explicitly. The interface displays time in the user’s chosen time zone; entries and output always hold seconds.</p>
+<h2 id="deprecate">Retiring a feature</h2>
+<p>Reading features are kept for good: new versions have to read old entries, old record kits and old backups. Writing features may be retired; when one is, the release notes say so and give users another way to do the same thing.</p>
+<h2 id="tools">Keeping the tooling layer light</h2>
+<p>Tests, gauges, scripts, directory divisions and this document all belong to the tooling layer and serve the law and the user: a fault found is fixed the same day, and what is out of date is replaced. Two things bear the load: the frozen law, and the bytes users have already written.</p>
+<div class="pn"><a href="contributing.html"><span>Previous</span>Contributing</a><a class="nx" href="security.html"><span>Next</span>Security</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#forever">What stays stable</a><a href="#add">Four points of extension</a><a href="#v2">The next version of the law</a><a href="#formats">Versions of local files</a><a href="#cli">Command-line output</a><a href="#words">Verdict tokens stay as written</a><a href="#time">Time</a><a href="#deprecate">Retiring a feature</a><a href="#tools">Keeping the tooling layer light</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

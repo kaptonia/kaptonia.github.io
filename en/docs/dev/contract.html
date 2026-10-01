@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>The registry contract and anchoring · Developer guide</title>
+<meta name="description" content="The registry contract does one thing: it receives a fingerprint and emits an event. What the law reads is the format of the event.">
+<meta property="og:title" content="The registry contract and anchoring · Developer guide">
+<meta property="og:description" content="The registry contract does one thing: it receives a fingerprint and emits an event. What the law reads is the format of the event.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/contract.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/contract.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>The registry contract and anchoring</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html" class=on aria-current=page>The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html">Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="contract" data-prev="law.html" data-next="formats.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>The registry contract and anchoring</h1><p class="lede">The registry contract does one thing: it receives a fingerprint and emits an event. What the law reads is the format of the event.</p>
+<h2 id="iface">Interface</h2>
+<div class="cmd block"><code>event Anchored(address indexed author, bytes32 indexed hash);
+
+function anchor(bytes32 hash) external;
+function anchorMany(bytes32[] calldata hashes) external;</code><button class="cp" type="button" data-copy="event Anchored(address indexed author, bytes32 indexed hash);
+
+function anchor(bytes32 hash) external;
+function anchorMany(bytes32[] calldata hashes) external;" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p><code>anchor</code> emits one event; <code>anchorMany</code> emits one for each element of the array, and zero for an empty array. The <code>author</code> in the event is the caller’s address. The contract has zero storage, zero owners and zero upgrade paths, and treats every caller alike. The source is <code>base/zikaron-core/contracts/src/ZikaronRegistry.sol</code>, licensed CC0-1.0.</p>
+<h2 id="deployed">Known deployments</h2>
+<p>The app comes with two deployments of the same pinned build, with the same code hash:</p>
+<div class="tw"><table>
+<thead><tr><th>Network</th><th>Chain ID</th><th>Registry contract</th><th>Start block</th></tr></thead>
+<tbody>
+<tr><td>Ethereum mainnet (default)</td><td>1</td><td><code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code></td><td>26087229</td></tr>
+<tr><td>Sepolia testnet</td><td>11155111</td><td><code>0xC29410B882c4C3b77e33659d2f06ac563e7B08a3</code></td><td>11715660</td></tr>
+</tbody></table></div>
+<p>The start block is where scanning begins, earlier than the first anchor on that contract.</p>
+<h2 id="forms">Two forms of anchor</h2>
+<dl>
+<div><dt>Registry form</dt><dd>The transaction succeeds, and its receipt holds a log emitted by a registry contract with exactly three topics and empty data: topic 0 is the keccak256 of <code>Anchored(address,bytes32)</code>, topic 1 is the transaction’s sender, topic 2 is the fingerprint. The same fingerprint also appears in the transaction’s calldata, at an offset that is a multiple of 32, or 4 plus a multiple of 32.</dd></div>
+<div><dt>Self-transfer form</dt><dd>A transaction sent to oneself whose calldata is a positive multiple of 32 bytes long, each 32 bytes being one fingerprint. It relies on the transaction alone and suits any EVM chain.</dd></div>
+</dl>
+<p>The two forms are equally valid. A verifier states in its scan range which registry addresses, which senders and which self-transfers it accepts.</p>
+<h2 id="sender">Three requirements on the sender</h2>
+<ul>
+<li>The sender is the address recovered from the transaction’s signature. For a transaction sent through a relayer, the sender is the relayer’s address; for a transaction validated by account code, the sender field under the law is empty.</li>
+<li>The sending address is a plain address both before and after the block of the anchor. Anchors sent from an address that carries code or an EIP-7702 delegation are void.</li>
+<li>The transaction’s signature names the chain ID.</li>
+</ul>
+<p>These three keep every anchor readable as the key holder’s own act.</p>
+<h2 id="codehash">The code hash</h2>
+<p>The contract’s runtime bytecode is 246 bytes long, and its keccak256 is:</p>
+<div class="kv"><div><span class="k">Code hash</span><span class="hash">0xfa97a1d9b22fab2b52f4e27c9a965b32734c40001b565ab365d05c887118f57d</span></div></div>
+<p>It comes from fixed build settings: solc 0.8.28, EVM version cancun, optimizer on with 200 runs, <code>via_ir</code> on, metadata removed from the bytecode. Any change to the source or the settings changes the hash. To recompute it:</p>
+<div class="cmd block"><code>cd base/zikaron-core/contracts
+forge build
+cast keccak $(forge inspect ZikaronRegistry deployedBytecode)</code><button class="cp" type="button" data-copy="cd base/zikaron-core/contracts
+forge build
+cast keccak $(forge inspect ZikaronRegistry deployedBytecode)" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<h2 id="deploy">Deploying your own</h2>
+<p>Anyone may deploy the same bytes on any EVM chain that has passed the Shanghai upgrade. After deploying, check that the hash of the code on chain matches the table above, then enter the chain ID, registry contract and start block in the app under Settings › Network › “Edit nodes…”.</p>
+<div class="cmd block"><code>forge create src/ZikaronRegistry.sol:ZikaronRegistry \
+  --rpc-url &lt;node&gt; --private-key &lt;deployment key&gt; --broadcast
+
+cast keccak $(cast code &lt;new address&gt; --rpc-url &lt;node&gt;)</code><button class="cp" type="button" data-copy="forge create src/ZikaronRegistry.sol:ZikaronRegistry \
+  --rpc-url &lt;node&gt; --private-key &lt;deployment key&gt; --broadcast
+
+cast keccak $(cast code &lt;new address&gt; --rpc-url &lt;node&gt;)" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>Deploy with a dedicated key; the identity key signs the ledger and sends anchors.</p>
+<p>This pinned build uses the PUSH0 instruction and suits chains that have passed the Shanghai upgrade. An earlier chain needs its own build, with its own code hash. The law reads logs by the contract addresses a verifier declares, so a second build is purely a deployment convenience.</p>
+<h2 id="gas">Gas, for reference</h2>
+<div class="tw"><table>
+<thead><tr><th>Call</th><th>Gas used by the contract</th></tr></thead>
+<tbody>
+<tr><td><code>anchor</code></td><td>2,352</td></tr>
+<tr><td><code>anchorMany</code>, 1 element</td><td>2,776</td></tr>
+<tr><td><code>anchorMany</code>, 10 elements</td><td>17,746</td></tr>
+<tr><td><code>anchorMany</code>, 100 elements</td><td>167,661</td></tr>
+</tbody></table></div>
+<p>The table covers the contract’s execution as measured in forge; the transaction’s 21,000 base cost and calldata cost come on top. The more elements, the less each one costs. The app sends with a gas limit of 200,000.</p>
+<h2 id="other">Anchoring through other contracts</h2>
+<p>Any contract that emits a log of the same format can serve as a registry. The log counts as an anchor when three conditions hold together: the transaction is sent by the ledger’s key itself; the fingerprint appears in that transaction’s own calldata, at an offset as stated above; and the log is emitted by the contract that was called. When a contract reaches a registry through an inner call, the log names that contract’s address, and to every ledger it is an ordinary log.</p>
+<p>A verifier should list in its scan range only contract addresses whose source it has read and whose code is fixed.</p>
+<h2 id="proof">Self-contained anchor proofs</h2>
+<p>Law §9.7 defines self-contained anchor proofs, and the <code>proofs/</code> directory of a record kit carries them. With such a proof a verifier checks an anchor from two trusted block hashes alone: the block headers, Merkle proofs of the transaction and of its receipt, and account proofs of the sending address at the two blocks. Such proofs stay valid after nodes prune their history.</p>
+<div class="pn"><a href="law.html"><span>Previous</span>The law and the conformance suite</a><a class="nx" href="formats.html"><span>Next</span>Files and formats</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#iface">Interface</a><a href="#deployed">Known deployments</a><a href="#forms">Two forms of anchor</a><a href="#sender">Three requirements on the sender</a><a href="#codehash">The code hash</a><a href="#deploy">Deploying your own</a><a href="#gas">Gas, for reference</a><a href="#other">Anchoring through other contracts</a><a href="#proof">Self-contained anchor proofs</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

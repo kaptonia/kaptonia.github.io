@@ -1,0 +1,37 @@
+<!--
+title: Overview
+-->
+<p class="lede">For developers who need to verify, build, integrate or maintain the project themselves.</p>
+<h2 id="truth">Criteria</h2>
+<p>There are three criteria: the law texts and code in the repository, the bytes of the release, and the contract on chain. This guide, the Wiki and the website are restatement and explanation; where they differ from the criteria, the criteria prevail.</p>
+<h2 id="layers">Two layers</h2>
+<p>Every product has two layers, with entirely different rules for change.</p>
+<dl>
+<div><dt>The law</dt><dd>The product’s law texts and their frozen cores. Once written they only gain new versions, and old versions stay valid for good; anyone can compute their digests with one command.</dd></div>
+<div><dt>The tooling</dt><dd>Everything else: the app, the command line, the tests, the documents and this site. It can be changed, rewritten or dropped at any time, provided it agrees with the cores of the law byte for byte.</dd></div>
+</dl>
+<p>Before you start, work out which layer your change belongs to. To change tooling, open a pull request; to object to the law, open an issue, which leads to the next version of the law.</p>
+<h2 id="map">Find by task</h2>
+<div class="proj"><section data-p="zikaron">
+<div class="g3">Build</div>
+<div class="cards">
+<a href="verify.html"><b>Checksums</b></a>
+<a href="build.html"><b>Building from source</b></a>
+<a href="layout.html"><b>Repository layout and layers</b></a>
+<a href="cli.html"><b>Command line</b></a>
+<a href="law.html"><b>The law and the conformance suite</b></a>
+<a href="contract.html"><b>The registry contract and anchoring</b></a>
+<a href="formats.html"><b>Files and formats</b></a>
+<a href="integrate.html"><b>Integration</b></a>
+</div>
+<div class="g3">Maintain</div>
+<div class="cards">
+<a href="contributing.html"><b>Contributing</b></a>
+<a href="compat.html"><b>Compatibility and evolution</b></a>
+<a href="security.html"><b>Security</b></a>
+<a href="release.html"><b>Releasing</b></a>
+<a href="fork.html"><b>Forks and independent implementations</b></a>
+</div>
+</section></div><!--/proj-->
+<h2 id="site">This site</h2>
+<p>This site is static files in the repository. To mirror it, clone the repository and serve it from any static host. The pages make two kinds of request: the site’s own static files, and fonts from Google Fonts.</p>

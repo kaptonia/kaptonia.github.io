@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Alerts and settings · Wiki</title>
+<meta name="description" content="The Alerts page gathers what needs your attention in one place; Settings has seven sections, the same for both roles.">
+<meta property="og:title" content="Alerts and settings · Wiki">
+<meta property="og:description" content="The Alerts page gathers what needs your attention in one place; Settings has seven sections, the same for both roles.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/alerts.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/alerts.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Alerts and settings</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">The ledger and its entries</a><a href="anchoring.html">Anchoring and networks</a><a href="grants.html">Grants</a><a href="kits.html">Record kits</a><a href="verify.html">Verification</a><a href="evidence.html">What a record proves</a><a href="keys.html">Identities and keys</a><a href="data.html">Local data and backups</a><a href="alerts.html" class=on aria-current=page>Alerts and settings</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="alerts" data-prev="data.html" data-next="faq.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Alerts and settings</h1><p class="lede">The Alerts page gathers what needs your attention in one place; Settings has seven sections, the same for both roles.</p>
+<h2 id="alerts">The Alerts page</h2>
+<p>“Alerts” in the sidebar. Each row of the table is one matter: a light, the item and its current state. A row that needs action has an “Open …” link at its right; clicking the row goes to the page where it can be dealt with and opens the relevant part. The other rows read “All clear”. The number next to “Alerts” in the sidebar counts the amber and red rows.</p>
+<div class="tw"><table>
+<thead><tr><th>Recorder</th><th>User</th></tr></thead>
+<tbody>
+<tr><td>Pending</td><td>My grants expiring</td></tr>
+<tr><td>Queue backlog</td><td>Grant revoked</td></tr>
+<tr><td>Grants expiring</td><td>Whole-machine backup</td></tr>
+<tr><td>Whole-machine backup</td><td>Ledger handover</td></tr>
+<tr><td>Ledger check result</td><td>Upstream issue</td></tr>
+</tbody></table></div>
+<ul>
+<li>“Whole-machine backup” reads “Not backed up yet” until the first export, and “N not backed up” when ledger entries or received grants have been added since the last one.</li>
+<li>Revocation watch alerts come at the end of the table, one row each, listed in the session that found them; a revoked grant keeps the mark “Revoked by issuer” in My grants.</li>
+</ul>
+<h2 id="notify">How alerts reach you</h2>
+<p>When one of the following newly appears, the window asks the system for attention once (on macOS the Dock icon bounces) and a toast starting with “Alert:” appears: for the Recorder, “Grants expiring”, “Whole-machine backup”, and a ledger check result of a broken chain; for the User, “My grants expiring” (expired ones included), “Whole-machine backup”, “Upstream issue”, and revocation watch. The other amber and red rows show on the Alerts page and in the sidebar count.</p>
+<p>Each matter alerts once. When the situation changes, for example a new deadline or new entries in an upstream ledger, it counts as a new matter and alerts again. Network errors show as “Sync failed” in the status line.</p>
+<h2 id="sync">Sync and the status line</h2>
+<p>The status line shows the most pressing of these: “In progress: …” (click it to return to the page where the task started), “Syncing…”, “Sync failed”, “Last synced HH:MM” and “Not synced yet”. Click the sync icon at the right end of the status line to read the chain in the background for the current role: both roles read the signing key’s balance once; a Recorder whose ledger exists also runs a ledger check; a User also re-verifies My grants.</p>
+<h2 id="periods">Check intervals</h2>
+<p>Settings › Notifications: the Recorder’s “Ledger check” interval is 300 seconds out of the box, and the User’s “Grant verification interval” is 600 seconds. Press “Change interval…” and save a number of seconds; 0 turns the timer off, and the ledger check still runs at once whenever the ledger has changed or has no result yet.</p>
+<h2 id="settings">The seven sections</h2>
+<div class="tw"><table>
+<thead><tr><th>Section</th><th>Contains</th></tr></thead>
+<tbody>
+<tr><td>Language and time</td><td>“中文” or “English”; time zone “UTC” (the default) or “Follow the system”, used for every time shown in the window</td></tr>
+<tr><td>Appearance</td><td>“Light” (the default), “Dark” or “Follow the system”</td></tr>
+<tr><td>Identity key</td><td>Identities, passcode and key backup; see <a href="keys.html">Identities and keys</a></td></tr>
+<tr><td>Network</td><td>Nodes, registry contract, auto put on chain and publish address; see <a href="anchoring.html#networks">Networks</a></td></tr>
+<tr><td>Notifications</td><td>How often the ledger is checked and grants re-verified</td></tr>
+<tr><td>Local data</td><td>Encryption, backup and data folder; see <a href="data.html">Local data and backups</a></td></tr>
+<tr><td>About</td><td>Version, setup check, run wizard again and diagnostics</td></tr>
+</tbody></table></div>
+<p>Appearance, auto-lock, language, the chosen network and the record of the last whole-machine backup are kept on this machine; they apply to every identity and are used on the passcode gate too. All other settings are kept in the current data folder.</p>
+<p>“Setup check” on the About page has a light for each item, with unfinished ones marked “To set up”; “Run self-check” in the “Details” fold at the bottom runs a self-check in the background.</p>
+<h2 id="keys">Keyboard shortcuts</h2>
+<div class="tw"><table>
+<thead><tr><th>Keys</th><th>Action</th></tr></thead>
+<tbody>
+<tr><td>⌘1 to ⌘6</td><td>Open the sidebar pages in order</td></tr>
+<tr><td>⌘[ / ⌘]</td><td>Back / forward</td></tr>
+<tr><td>⌘,</td><td>Settings</td></tr>
+<tr><td>⌘L</td><td>Lock</td></tr>
+</tbody></table></div>
+<p>On Linux, use Ctrl in place of ⌘. Shortcuts pause while the passcode gate, the wizard or a card is open.</p>
+<h2 id="buttons">Button colours</h2>
+<dl>
+<div><dt>Blue</dt><dd>The main action on the screen, at most one per screen.</dd></div>
+<div><dt>White</dt><dd>Every other action.</dd></div>
+<div><dt>White with red text</dt><dd>Opens a confirmation card or the next step; it only leads on.</dd></div>
+<div><dt>Solid red</dt><dd>Writes to the ledger or sends to the chain the moment it is pressed; it appears on the final confirmation card alone.</dd></div>
+</dl>
+<div class="pn"><a href="data.html"><span>Previous</span>Local data and backups</a><a class="nx" href="faq.html"><span>Next</span>Common questions</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#alerts">The Alerts page</a><a href="#notify">How alerts reach you</a><a href="#sync">Sync and the status line</a><a href="#periods">Check intervals</a><a href="#settings">The seven sections</a><a href="#keys">Keyboard shortcuts</a><a href="#buttons">Button colours</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

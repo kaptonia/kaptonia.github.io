@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>发布 · 开发者指南</title>
+<meta name="description" content="发布物须能由任何人逐字节核对：校验值、签名，以及源码包与标签的一致。本页是维护者发布版本的步骤。">
+<meta property="og:title" content="发布 · 开发者指南">
+<meta property="og:description" content="发布物须能由任何人逐字节核对：校验值、签名，以及源码包与标签的一致。本页是维护者发布版本的步骤。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/release.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/release.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>发布</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html" class=on aria-current=page>发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="release" data-prev="security.html" data-next="fork.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>发布</h1><p class="lede">发布物须能由任何人逐字节核对：校验值、签名，以及源码包与标签的一致。本页是维护者发布版本的步骤。</p>
+<h2 id="version">版本号</h2>
+<p>采用 <code>主.次.修订</code> 三段。读写的文件格式或命令行输出格式变化时升次版本号，并在发布说明中列出；仅修复缺陷时升修订号。法的版本写在法的规格名中，与软件版本相互独立。</p>
+<h2 id="before">发布前</h2>
+<ul class="chk">
+<li>主干全部测试通过，每个发布的系统各运行一遍。</li>
+<li>两部法的摘要重算相符。</li>
+<li>核与冻结核比对零分歧；链面录制全部回放一致。</li>
+<li>合约代码哈希重算无误。</li>
+<li>手册中英两份与界面逐句对应。</li>
+<li>在一台干净的机器上走完首次启动六步。</li>
+<li>用上一版本的数据文件夹与备份，各做一次升级与恢复。</li>
+<li>在一个系统上导出的整机备份，到其他每个系统上各恢复一次。</li>
+</ul>
+<h2 id="build">构建</h2>
+<p>发布包从打了标签的那次提交构建。macOS 的包用打包脚本，带上签名身份：</p>
+<div class="cmd block"><code>git tag v0.1.0
+packaging/macos/build.sh --identity Kaptonia</code><button class="cp" type="button" data-copy="git tag v0.1.0
+packaging/macos/build.sh --identity Kaptonia" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>脚本以 <code>--locked</code> 构建应用与命令行，把窗口程序 <code>zikaron-desk</code> 和命令行 <code>zikaron</code> 装进 <code>ZIKARON.app</code>，逐个签名并校验，再做成 <code>dist/ZIKARON-&lt;版本&gt;-macos-&lt;架构&gt;.dmg</code>（带一个指向「应用程序」的链接）与 <code>.pkg</code>（应用进 <code>/Applications</code>，命令行进 <code>/usr/local/bin</code>），并写出 <code>SHA256SUMS-macos-&lt;架构&gt;.txt</code>。二进制去除符号表；家目录、源码目录与构建目录的路径在编译时映射掉，产物独立于构建机器。Linux 的 <code>.deb</code> 与 AppImage 用 <code>packaging/linux/build.sh</code>，或在别的主机上用 <code>cross-build.sh</code>。</p>
+<h2 id="sums">校验值与 <b class="zk">Zikaron</b> 证明</h2>
+<ol>
+<li>为每个发布物（各平台的包与源码包）计算 SHA-256，合成一份发布清单 <code>SHA256SUMS.txt</code>。</li>
+<li>提交时用项目的 Zikaron 账本记下这次提交，各发布包的指纹记入同一本账本，一并上链；发布说明写明交易、区块、记录者地址与各项指纹。</li>
+<li>发布页、网站下载页与清单三处的校验值一致；下载页的「Zikaron 证明」一栏填入各文件的上链交易。</li>
+</ol>
+<p>用户的核对方法见<a href="verify.html">校验</a>。</p>
+<h2 id="sign">系统签名</h2>
+<p>应用与 dmg 用项目自己的证书签名，证书的公用名为 Kaptonia；这张证书由项目自签，发布包在 Apple 公证之外、由项目直接发出。每个版本用同一张证书、同一个标识符 <code>com.kaptonia.zikaron.app</code> 签名，系统据此把各版本认作同一个应用。pkg 以 SHA-256 核对。</p>
+<p>从浏览器下载的文件带着隔离标记，macOS 会拒绝打开；在较新的 macOS 上，「仍要打开」时常失灵。<a href="../../download.html#install">下载页</a>与发布说明写明的做法是：先用 <code>shasum -a 256</code> 核对文件，再在终端里用 <code>xattr</code> 去掉隔离标记。想确认文件来历的用户，可以核对签名者、证书指纹、校验值与 <b class="zk">Zikaron</b> 证明，见<a href="verify.html">校验</a>。</p>
+<h2 id="notes">发布说明</h2>
+<p>每个版本写明：新增、变更与修复；文件格式与命令行输出的变化；升级时用户需要做的事。只写现行事实。</p>
+<h2 id="contract">合约与网络</h2>
+<p>应用内置一张已知部署表：链号、登记合约地址、起始区块、默认节点。新增一行之前：</p>
+<ol>
+<li>读取链上代码，核对代码哈希。</li>
+<li>确认起始区块早于该合约上的第一条上链记录。</li>
+<li>默认节点选两个来源相异的，均支持 TLS，且返回的链号正确。</li>
+</ol>
+<p>表中的行只增加；已发布的行保持原样，旧账本依靠它们继续核验。</p>
+<h2 id="site">网站</h2>
+<p>网站随版本更新下载页的文件名、大小、校验值与 Zikaron 证明。页面由仓库中的脚本生成，生成结果一并提交。</p>
+<h2 id="after">发布后</h2>
+<ul>
+<li>从发布页下载一份，按用户的步骤核对、安装、打开。</li>
+<li>确认网站下载页的拖放校验对每个文件都显示「与发布清单一致」。</li>
+<li>发现发布包有误时，发布新的修订版本；已发布的文件与校验值保持原样。</li>
+</ul>
+<div class="pn"><a href="security.html"><span>上一页</span>安全</a><a class="nx" href="fork.html"><span>下一页</span>分叉与另起实现</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#version">版本号</a><a href="#before">发布前</a><a href="#build">构建</a><a href="#sums">校验值与 Zikaron 证明</a><a href="#sign">系统签名</a><a href="#notes">发布说明</a><a href="#contract">合约与网络</a><a href="#site">网站</a><a href="#after">发布后</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>概览 · 开发者指南</title>
+<meta name="description" content="本指南面向需要自行核对、构建、接入或维护本项目的开发者。">
+<meta property="og:title" content="概览 · 开发者指南">
+<meta property="og:description" content="本指南面向需要自行核对、构建、接入或维护本项目的开发者。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/index.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/index.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>概览</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html" class=on aria-current=page>概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="index" data-next="verify.html"><div class="kick">开发者指南 · 开始</div><h1>概览</h1><p class="lede">本指南面向需要自行核对、构建、接入或维护本项目的开发者。</p>
+<h2 id="truth">判据</h2>
+<p>判据有三：仓库中的法文与代码、发布包的字节、链上的合约。本指南、Wiki 与网站均为转述与说明，与判据有出入时，以判据为准。</p>
+<h2 id="layers">两层</h2>
+<p>每个产品都分为两层，修改规则截然不同。</p>
+<dl>
+<div><dt>法</dt><dd>产品的法文及其冻结核。一经写定只增新版，旧版永久有效；任何人一条命令即可算出其摘要。</dd></div>
+<div><dt>工具</dt><dd>其余一切：应用、命令行、测试、文档与本站。可以随时修改、重写或弃用，前提是与法的核逐字节一致。</dd></div>
+</dl>
+<p>动手前先确认改动属于哪一层。修改工具，请提交合并请求；对法有异议，请提交议题，其归宿是下一版法。</p>
+<h2 id="map">按任务查找</h2>
+<div class="proj"><div class="ptabs" role="tablist" aria-label="产品"><span class="pind" aria-hidden="true"></span><button type="button" role="tab" id="t-zikaron" aria-controls="p-zikaron" aria-selected="true" tabindex="0" data-p="zikaron"><b class="zk">Zikaron</b></button></div><section class="pane" role="tabpanel" id="p-zikaron" aria-labelledby="t-zikaron" data-p="zikaron">
+<div class="g3">开发</div>
+<div class="cards">
+<a href="verify.html"><b>校验</b></a>
+<a href="build.html"><b>从源码构建</b></a>
+<a href="layout.html"><b>仓库结构与分层</b></a>
+<a href="cli.html"><b>命令行</b></a>
+<a href="law.html"><b>法文与一致性套件</b></a>
+<a href="contract.html"><b>登记合约与上链</b></a>
+<a href="formats.html"><b>文件与格式</b></a>
+<a href="integrate.html"><b>接入</b></a>
+</div>
+<div class="g3">维护</div>
+<div class="cards">
+<a href="contributing.html"><b>参与贡献</b></a>
+<a href="compat.html"><b>兼容与演进</b></a>
+<a href="security.html"><b>安全</b></a>
+<a href="release.html"><b>发布</b></a>
+<a href="fork.html"><b>分叉与另起实现</b></a>
+</div>
+</section></div>
+<h2 id="site">本站</h2>
+<p>本站是仓库中的静态文件。如需镜像，克隆仓库后放到任意静态托管处即可。页面只发出两类请求：本站的静态文件，以及 Google Fonts 的字体。</p>
+<div class="pn"><span></span><a class="nx" href="verify.html"><span>下一页</span>校验</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#truth">判据</a><a href="#layers">两层</a><a href="#map">按任务查找</a><a href="#site">本站</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!--
+title: 接入
+-->
+<p class="lede">让你的应用读取 {{Z}} 的记录：核验授权、读取记录包，或在业务流程中提示用户留证。</p>
+<h2 id="shape">接入方式</h2>
+<p>你的应用是读者。账本始终由用户在 {{Z}} 中亲自写入；读者拿到的是用户导出的成品：授权码、授权文件、记录包。这样一本账本始终只有一个写入者，密钥也始终只在一处。</p>
+<h2 id="cli">用命令行核验</h2>
+<p>最简便的接入方式是以子进程调用 <code>zikaron</code>，读取其退出码与标准输出。</p>
+{{code:
+zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
+  --fragment fragment.json --now $(date +%s)
+}}
+<div class="tw"><table>
+<thead><tr><th>退出码</th><th>应用的处理</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>放行</td></tr>
+<tr><td>1</td><td>拒绝。核验失败时列出失败的项；账本或输入有误时显示原因</td></tr>
+<tr><td>3</td><td>暂缓。告知用户哪一项尚待结果，稍后重试</td></tr>
+<tr><td>4</td><td>答案缺席：<code>scan</code> 与 <code>anchor</code> 读链失败，或 <code>keygen</code> 取随机数失败；重试，或更换节点</td></tr>
+<tr><td>2</td><td>调用有误，请检查参数</td></tr>
+</tbody></table></div>
+<p><code>--grant</code> 接受一个条目文件。授权码的每一段是条目字节的 base64url 编码(省去填充)，解码后存为文件即可；多段的授权码(转授权链)用 <code>chain-check --hop</code> 逐跳核验；签发者账本目录可由账本镜像改成，见<a href="cli.html#sealed">命令行</a>；授权文件 <code>.zkgrant</code> 是一个容器，拆法见<a href="formats.html#zkgrant">文件与格式</a>。命令行读链只认 <code>http://</code> 节点，请接本机节点或本机代理。</p>
+<p>请把 3 作为独立的一档处理：「暂无结果」「通过」「失败」是三种状态，界面上也以三种样式呈现。</p>
+<h2 id="lib">直接调用核</h2>
+<p>Rust 项目可依赖 <code>zikaron</code> 与 <code>zikaron-kit</code> 两个 crate。它们只做判断：链由你的代码去读，再把字节交给核；记录包目录可以交给 <code>zikaron_kit::kitdir::verify_kit</code> 直接从盘上读取核验。其他语言请依据法文自行实现，并用一致性套件验收，见<a href="law.html#run">测试一份实现</a>。</p>
+<h2 id="kits">读取用户导出的记录包</h2>
+<p>同一台机器上的应用可以列出用户已导出的记录包，供用户选择递交。机器目录按应用自己的顺序找：</p>
+<ol>
+<li>用户在你的应用设置中手动指定的目录。</li>
+<li>指针文件 <code>~/.zikaron-desk</code> 中写明的路径。指针存在时以它为准：目标读取失败，请明确告知用户「{{Z}} 的数据已迁移」，并请其重新指定。</li>
+<li>指针缺席时，早先版本的位置 <code>~/Library/Application Support/ZIKARON</code>(存在时)，其次是默认位置 <code>~/.zikaron-desk.d/</code>。</li>
+</ol>
+<p>「有效」的唯一标准：该处的 <code>kits/index.json</code> 可读，且格式名为 <code>zikaron.kits-index/1</code>。</p>
+<p>你的应用对 {{Z}} 数据的权限限于读取：机器目录里的 <code>kits/index.json</code>，以及索引行 <code>path</code> 指向的记录包文件夹(它们在各数据目录的 <code>kits/</code> 下)。拿到记录包后先自行核验，再使用其中的文件。</p>
+<h2 id="for">让记录指向你的交易</h2>
+<p>用户为你应用中的一笔交易留证时，可在「为谁留证(可选)」中填写你的应用名、对方身份、对方编号，以及可选的对方角色，这些内容原样写入条目的 <code>for</code> 成员(角色存为 <code>seat</code>)；对方身份须为 <code>0x</code> 加 40 位十六进制。日后读到这条记录的人，据此对应到具体交易。</p>
+<p>请在界面中列出这几个值，便于用户照抄：应用名用固定的短字符串，编号用你系统中该笔交易的编号。</p>
+<h2 id="remind">在关键时刻提醒</h2>
+<p>事前留下的记录分量最重。请在流程中找出这些时刻并提醒用户留证：交付文件时、确认收货时、双方就条款达成一致时。</p>
+<h2 id="sign">签名请求</h2>
+<p>需要用户签名时，请让用户使用交易密钥。身份密钥专用于账本；{{Z}} 的界面也照此设计，签名只发生在用户自己发起的写入中。</p>
+<h2 id="types">约定新的条目类型</h2>
+<p>条目类型是开放的。你可以约定一种新类型，写明类型名、正文成员与读法，并公开这份约定。其他读者遇到它时列入「无法识别的类型」，法的检查结论照旧；ZIKARON Desk 的账本状态行会把它算作问题。</p>
+<ul>
+<li>类型名选用带项目前缀的字面量，与现有类型区分开。</li>
+<li>正文引用其他条目时，使用条目编号。</li>
+<li>读法写成对全部输入都有定义的规则：格式相符时如何读，格式有误时如何显示。</li>
+<li>把约定登记在仓库的讨论区，便于其他实现采纳。</li>
+</ul>

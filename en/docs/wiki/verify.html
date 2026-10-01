@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Verification · Wiki</title>
+<meta name="description" content="The receiver does the verifying. “Verify” in the sidebar has “Verify grant” and “Look up a ledger”, and the User also has “Verify record”. Verifying only reads: it reads the inputs and the chain, and shows the result on the page.">
+<meta property="og:title" content="Verification · Wiki">
+<meta property="og:description" content="The receiver does the verifying. “Verify” in the sidebar has “Verify grant” and “Look up a ledger”, and the User also has “Verify record”. Verifying only reads: it reads the inputs and the chain, and shows the result on the page.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/verify.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/verify.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Verification</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">The ledger and its entries</a><a href="anchoring.html">Anchoring and networks</a><a href="grants.html">Grants</a><a href="kits.html">Record kits</a><a href="verify.html" class=on aria-current=page>Verification</a><a href="evidence.html">What a record proves</a><a href="keys.html">Identities and keys</a><a href="data.html">Local data and backups</a><a href="alerts.html">Alerts and settings</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="verify" data-prev="kits.html" data-next="evidence.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Verification</h1><p class="lede">The receiver does the verifying. “Verify” in the sidebar has “Verify grant” and “Look up a ledger”, and the User also has “Verify record”. Verifying only reads: it reads the inputs and the chain, and shows the result on the page.</p>
+<h2 id="grant">Verify grant</h2>
+<p>Put in all three things, then press “Verify” once:</p>
+<ol>
+<li><b>Grant</b>: paste a grant code, or press “Choose a file…” to pick a grant file.</li>
+<li><b>File</b> (optional): the work you received.</li>
+<li><b>Terms</b> (optional): the terms file.</li>
+</ol>
+<p>Under “Advanced options” you can point each hop of the grant chain at the issuer’s ledger folder, use other nodes, registry contract or start block, or give a moment to check as of; left empty, the values in Settings and chain time apply.</p>
+<h2 id="source">Where the issuer’s ledger comes from</h2>
+<p>The full check needs the issuer’s ledger. The app looks for it in this order:</p>
+<ol>
+<li><b>This machine</b>: the issuer’s ledger on this same machine.</li>
+<li><b>The vault</b>: ledgers carried by grant files you added, and upstream folders you saved.</li>
+<li><b>A record kit</b>: the kit or grant file you point to, and the ledger carried by the grant file being checked.</li>
+<li><b>A publish address</b>: the issuer’s https address. Each file is fetched, and the kit is used once it passes its check.</li>
+</ol>
+<p>The result card has one “Ledger source” line per hop, naming where the ledger was found; “Replace…” or “Add…” lets you give an https address, record kit, ledger folder or grant file yourself.</p>
+<h2 id="six">The six checks</h2>
+<dl>
+<div><dt>Grant signature</dt><dd>The entry was signed by the issuer’s key, and it is a grant.</dd></div>
+<div><dt>Issuer ledger intact</dt><dd>The issuer’s ledger links up entry by entry, and the chain is whole.</dd></div>
+<div><dt>In the issuer’s ledger</dt><dd>The grant is an entry in that ledger, and the key that signed it is entitled to write the ledger.</dd></div>
+<div><dt>Confirmed on chain</dt><dd>The grant, or some entry after it, is on chain.</dd></div>
+<div><dt>Within validity</dt><dd>The moment of the check falls between the start and end the grant states.</dd></div>
+<div><dt>Not revoked</dt><dd>After reading the issuer’s whole ledger, the grant still stands.</dd></div>
+</dl>
+<p>A check still lacking a result shows a grey light with the reason beside it, for example issuer ledger missing, nodes still to be configured, a chain read that failed for now, or awaiting confirmation on chain; below, each kind of gap gets one sentence on what to do next.</p>
+<p>Each hop of a sublicense gets its own six lights, and between hops a light “Hop N links to hop N+1”: the downstream ledger must be opened by the grantee the upstream grant names. The chain passes when every hop passes.</p>
+<h2 id="result">The result</h2>
+<p>The result card starts with three lines:</p>
+<div class="tw"><table>
+<thead><tr><th>Line</th><th>Shows</th></tr></thead>
+<tbody>
+<tr><td>Grant</td><td>“All six checks passed”, “Has gaps” or “Failed”</td></tr>
+<tr><td>File</td><td>“Match” or “Mismatch” against the work hash the grant points to; for several hops, the last hop</td></tr>
+<tr><td>Terms</td><td>“Match” or “Mismatch” against the terms fingerprint in the grant</td></tr>
+</tbody></table></div>
+<p>The summary at the bottom takes one of three forms: “All match” (the grant passed all six checks, and the file and terms, where given, match), “N do not match”, and “Not everything could be checked” (everything checked matches, but the grant has gaps or reading a file failed).</p>
+<p class="call">“Has gaps” is a grade of its own, meaning “no answer yet”, and it always stands apart from passing. When you meet it, check again in a few minutes; if you need the work urgently, ask the other side to supply what is missing.</p>
+<p>A check fails on evidence in hand, such as a revocation or a wrong signature; “Not revoked” rests on a complete reading of the record. Where the record has gaps, the light turns grey and the grant reads “Has gaps”.</p>
+<h2 id="file">Checking a received file</h2>
+<p>When you receive the work itself, put it into the “File” box on Verify grant and press “Verify” together with the grant: the app computes the SHA-256 of the file’s bytes and compares it with the work hash the grant points to. “Details” shows the byte count, the computed digest and the expected digest side by side. After changing the file, press “Verify” again.</p>
+<h2 id="record">The record verifier</h2>
+<p>“Verify record” under the User’s “Verify”. Drop in a record kit folder, a grant file or a single record file, and it is checked as soon as it is in. The result card has three lights:</p>
+<dl>
+<div><dt>Record kit</dt><dd>Whether the kit is intact and its signatures valid; a single file is verified as a single file.</dd></div>
+<div><dt>Anchor proofs on chain</dt><dd>How many match the chain and how many are still off chain; when reading the chain fails, “Not compared with the chain”.</dd></div>
+<div><dt>Issuer ledger</dt><dd>The ledger check result; when a kit carries part of the ledger, “This is part of the ledger”.</dd></div>
+</dl>
+<p>The “Record by record” table below has one row per record in the kit: whether the original in the kit matches its recomputed fingerprint, the on-chain state, and the first anchor block time. With a record hash filled in under “Advanced options”, the record’s three depth readings appear as well.</p>
+<h2 id="others">Looking up a ledger</h2>
+<p>Fill in “Author address” and press “Read”: the app scans the chain for that address’s anchor proofs and looks for its ledger content in the four places above, in the same order. “Overview” has four tiles: ledger status, record count, grant history and last on chain; “Entry list” lists the other ledger entry by entry, and a click on a row opens a read-only detail. When anchor proofs turn up and the ledger content is missing, the overview says so plainly and the record count reads “Not obtained”.</p>
+<h2 id="dd">Due diligence</h2>
+<p>A User does due diligence on “Look up a ledger”: fill in the record hash and the validity needed under “Advanced options”, and “Overview” gains a “Grant conflict check”, which tells you whether the period you need overlaps active grants the author has already issued. “Save snapshot” writes this result to a JSON snapshot for your own files.</p>
+<h2 id="basis">The scope of a result</h2>
+<p>Every check rests on one specific reading: which chain, which registry contract, from which block, and which addresses. “All passed” means all six checks passed within what was read. To widen the scope, fill in “Advanced options” and check again.</p>
+<p>Verifying writes two things on this machine: changes to the address book, and snapshot files written by “Save snapshot”.</p>
+<div class="pn"><a href="kits.html"><span>Previous</span>Record kits</a><a class="nx" href="evidence.html"><span>Next</span>What a record proves</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#grant">Verify grant</a><a href="#source">Where the issuer’s ledger comes from</a><a href="#six">The six checks</a><a href="#result">The result</a><a href="#file">Checking a received file</a><a href="#record">The record verifier</a><a href="#others">Looking up a ledger</a><a href="#dd">Due diligence</a><a href="#basis">The scope of a result</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

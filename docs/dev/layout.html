@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>仓库结构与分层 · 开发者指南</title>
+<meta name="description" content="判断由核做出，界面负责呈现。先弄清各层的职责，再确定改动的位置。">
+<meta property="og:title" content="仓库结构与分层 · 开发者指南">
+<meta property="og:description" content="判断由核做出，界面负责呈现。先弄清各层的职责，再确定改动的位置。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/layout.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/layout.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>仓库结构与分层</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html" class=on aria-current=page>仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="layout" data-prev="build.html" data-next="cli.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>仓库结构与分层</h1><p class="lede">判断由核做出，界面负责呈现。先弄清各层的职责，再确定改动的位置。</p>
+<h2 id="tree">目录</h2>
+<div class="tw"><table>
+<thead><tr><th>路径</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td><code>crates/zikaron</code></td><td>zikaron/1 的核：规范字节、条目、签名、审计。</td></tr>
+<tr><td><code>crates/zikaron-kit</code></td><td>zikaron.kit/1 的核：文书、凭证载荷、记录包、读数、授权六项核验。</td></tr>
+<tr><td><code>crates/zikaron-store</code></td><td>账本的磁盘读写，仅用标准库。</td></tr>
+<tr><td><code>crates/zikaron-anchor</code></td><td>链上操作：扫描上链记录、JSON-RPC、发送上链交易。</td></tr>
+<tr><td><code>crates/zikaron-cli</code></td><td>命令行 <code>zikaron</code>。</td></tr>
+<tr><td><code>crates/zikaron-glue</code></td><td>记录包导出与各处共用的约定。</td></tr>
+<tr><td><code>crates/zikaron-ui</code></td><td>控件库与外观。</td></tr>
+<tr><td><code>crates/app</code></td><td>桌面应用。</td></tr>
+<tr><td><code>base/</code></td><td>冻结的两部法文及其参照实现、一致性语料、登记合约。</td></tr>
+<tr><td><code>contracts/</code></td><td>测试上链路径所用的合约变体。</td></tr>
+<tr><td><code>packaging/</code></td><td>macOS 与 Linux 的打包脚本、图标。</td></tr>
+<tr><td><code>docs/manual/</code></td><td>使用手册，中英文各一份。</td></tr>
+<tr><td><code>CLI-SCHEMA.md</code></td><td>命令行的输出格式、退出码、拒绝原因与参数。</td></tr>
+</tbody></table></div>
+<h2 id="stack">四层结构</h2>
+<ol>
+<li><b>基底</b>（<code>base/</code>）。法文、冻结核、语料、合约、链面夹具，作为其余一切的参照。其中冻结核由法文写明的摘要钉住，合约由代码哈希钉住；其余是工装，可以重建、替换或删除。</li>
+<li><b>核与存取</b>（<code>zikaron</code>、<code>zikaron-kit</code>、<code>zikaron-store</code>、<code>zikaron-anchor</code>）。全部判断在此做出。</li>
+<li><b>对接</b>（<code>zikaron-cli</code>、<code>zikaron-glue</code>）。组装输入、调用核、原样传出结果。</li>
+<li><b>界面</b>（<code>zikaron-ui</code>、<code>app</code>）。呈现与交互。</li>
+</ol>
+<p>依赖自上而下：上层调用下层的公开接口，下层独立于上层。各 crate 都依据法文独立写成，与 <code>base/</code> 之间零路径依赖。</p>
+<h2 id="rules">五条规则</h2>
+<dl>
+<div><dt>界面只呈现</dt><dd>条目是否合法、授权是否有效，由核给出结论，界面负责呈现。界面中出现自行判断语法的代码，应移入核。</dd></div>
+<div><dt>对接层只组装</dt><dd>命令行与胶水代码把参数组装成输入、调用核、选定退出码；核写出的字节原样传出，键名与取值保持不变。</dd></div>
+<div><dt>判据原样</dt><dd>两个冻结核由法文里的摘要钉住，登记合约由代码哈希钉住，这些字节保持原样。对其有异议，请提交议题，见<a href="compat.html">兼容与演进</a>。</dd></div>
+<div><dt>核验页只读</dt><dd>核验授权与核验记录两页，权限限于读取输入与链上数据。</dd></div>
+<div><dt>身份密钥只签账本</dt><dd>应用里的密钥只用于签署条目、为导入连署，以及发送上链交易；付款、钱包、委托等功能交由其他软件。</dd></div>
+</dl>
+<h2 id="one">一处实现，处处复用</h2>
+<p>同一判断只实现一次。授权的六项核验由 <code>zikaron-kit</code> 提供，核验页、命令行与「我的授权」的定期复核共用这一实现，读数亦然。因此同一输入在任何入口都得到同一结论。</p>
+<p>每一种账本条目都有对应的写入子命令。为应用新增操作时，先在命令行中跑通，再做界面。</p>
+<h2 id="cite">注释中的法条引用</h2>
+<p>代码注释以 <code>law §N</code> 指 zikaron/1 的条文（kit 一侧的代码里也写作 <code>parent law §N</code>），以 <code>kit law §N</code> 指 zikaron.kit/1 的条文。修改一段实现之前，先读它所引的条文。</p>
+<div class="pn"><a href="build.html"><span>上一页</span>从源码构建</a><a class="nx" href="cli.html"><span>下一页</span>命令行</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#tree">目录</a><a href="#stack">四层结构</a><a href="#rules">五条规则</a><a href="#one">一处实现，处处复用</a><a href="#cite">注释中的法条引用</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

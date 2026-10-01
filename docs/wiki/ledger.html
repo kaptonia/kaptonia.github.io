@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>账本与条目 · Wiki</title>
+<meta name="description" content="每种角色有一本自己的账本：一串签名条目，按顺序写成，只能追加。第一条是「创建账本」，一本账只有这一个根。">
+<meta property="og:title" content="账本与条目 · Wiki">
+<meta property="og:description" content="每种角色有一本自己的账本：一串签名条目，按顺序写成，只能追加。第一条是「创建账本」，一本账只有这一个根。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/wiki/ledger.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/wiki/ledger.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>账本与条目</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html">上手</a><a href="ledger.html" class=on aria-current=page>账本与条目</a><a href="anchoring.html">上链与网络</a><a href="grants.html">授权</a><a href="kits.html">记录包</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html">身份与密钥</a><a href="data.html">本机数据与备份</a><a href="alerts.html">提醒与设置</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="ledger" data-prev="start.html" data-next="anchoring.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>账本与条目</h1><p class="lede">每种角色有一本自己的账本：一串签名条目，按顺序写成，只能追加。第一条是「创建账本」，一本账只有这一个根。</p>
+<h2 id="entry">条目的构成</h2>
+<dl>
+<div><dt>作者</dt><dd>签署这一条的密钥地址。</dd></div>
+<div><dt>序号</dt><dd>在账本中的位置，从 0 起算。</dd></div>
+<div><dt>前一个条目</dt><dd>前一条的编号，把本条与此前的整本账本连在一起。</dd></div>
+<div><dt>类型与正文</dt><dd>这一条记的内容，如一份内容指纹、一次授权、一次撤销。</dd></div>
+<div><dt>签名</dt><dd>作者的密钥对以上全部内容的签名。</dd></div>
+</dl>
+<p>每个条目都带着前一条的编号。任何一条被改动、增删或调换，其后所有编号都随之改变；所以核实了最新一条，即核实了此前的整本账本。</p>
+<h2 id="types">条目类型</h2>
+<div class="tw"><table>
+<thead><tr><th>类型</th><th>说明</th></tr></thead>
+<tbody>
+<tr><td>创建账本</td><td>账本的根</td></tr>
+<tr><td>存证</td><td>一件记录的内容指纹</td></tr>
+<tr><td>授权</td><td>授权某个地址在一段时间内使用某件记录</td></tr>
+<tr><td>撤销</td><td>撤销一份授权</td></tr>
+<tr><td>注记</td><td>给某一条补充说明</td></tr>
+<tr><td>导入</td><td>把这把密钥早先上链的锚收进账本</td></tr>
+<tr><td>换密钥或移交</td><td>把账本交给新密钥</td></tr>
+<tr><td>删除条目</td><td>把一条存证标为已删除</td></tr>
+</tbody></table></div>
+<p>条目类型是开放的。其他工具可以约定自己的类型写进账本；读者遇到陌生的类型，把它列为「无法识别的类型」，法的检查结论照旧。「删除条目」就是这样一种读法约定：本应用认得它，别的工具把它列进这一栏。本应用的账本状态行把这一栏算作问题，自己的删除条目除外：条数正好等于删除条目数时，这一项亮绿灯「约定条目 N 条」。</p>
+<h2 id="append">只追加</h2>
+<p>账本只做一件事：在末尾追加。写错了，追加注记；作废一条存证，追加删除；收回授权，追加撤销。既有条目永远原样保留，账本的历史因此确定。</p>
+<h2 id="history">存证</h2>
+<p>在首页或「记录存证」页，把文件、文件夹或 Git 仓库拖进拖放区，或点它选择，打开「新建存证」卡。内容指纹这样算：</p>
+<div class="tw"><table>
+<thead><tr><th>类型</th><th>算法</th></tr></thead>
+<tbody>
+<tr><td>文件</td><td>文件字节的 SHA-256</td></tr>
+<tr><td>文件夹</td><td>连同各文件名和内容一起算</td></tr>
+<tr><td>Git 仓库</td><td>按当前提交算</td></tr>
+</tbody></table></div>
+<ol>
+<li>填「记录名称」。留空时自动填上：文件取去掉扩展名的文件名，文件夹或仓库取全名。记录名称写进存证条目。</li>
+<li>可选的「为谁留证（可选）」折叠有四格：「应用」「对方身份（0x…）」「对方编号」「对方角色（可选）」。填了任一格，前三格都要有，对方身份写成 <code>0x</code> 加 40 位十六进制。这些字原样写进存证条目，供日后读到这条记录的人对应到具体的交易。</li>
+<li>可选的「高级选项」里可以关联一个 Git 仓库，以后按「检查新提交」查看上次存证之后新增了几个提交。</li>
+<li>按「加入账本」，在确认卡上核对「文件」「费用」，再按红色的「加入账本」，条目即写入账本并排进待上链队列。</li>
+</ol>
+<p><b>批量存证。</b>往卡里的拖放区一次拖进两份以上文件，就成为一批：一个文件写一条存证，「记录名称」写进每一条。中途有一件失败即停下，已签入的留在账本里，其余文件留在表里，处理后可以再按。批量只收文件。</p>
+<p><b>验一份文件。</b>「记录存证」页搜索格旁的「验一份文件」：选一份文件，应用算出它的 SHA-256，在当前账本里找同样指纹的存证，答出第几条、是否已上链、块时间。</p>
+<h2 id="public">写入即公开</h2>
+<p class="call">签入时的文件位置只存在这台机器上。记录名称、注记文字、「为谁留证」的内容、授权中的使用范围都写在条目里：凡拿到你账本的人都能读到（授权文件就带着整本账本），并且永久保留。落笔前请慎重；记录名称留空时，填进条目的是文件名。</p>
+<p>指纹只回答两份内容是否相同。内容很短、容易猜时（如一个日期、一个金额），别人可以逐个算候选答案的指纹来比对。这类内容存证前，请与一段随机文字合成一个文件。</p>
+<h2 id="retract">删除存证</h2>
+<p>在记录详情页底部按「删除存证…」，确认卡写着「存证将标为已删除，已发出的授权不受影响。」按「删除」后，账本里写入一条「删除条目」指向这条存证，原条目一个字节都保持原样。此后这件记录划掉显示，详情页注明它已被删除，新建授权的选单也随之略去它。</p>
+<div class="tw"><table>
+<thead><tr><th>被删的存证</th><th>结果</th></tr></thead>
+<tbody>
+<tr><td>还在队里待发，或始终只在本地</td><td>存证从队里拿掉，删除只记在本地，显示「本地删除」</td></tr>
+<tr><td>已经发出、入块或上链</td><td>删除条目进待上链队列，像其他条目一样上链；链上记录照旧，深度照旧计入</td></tr>
+</tbody></table></div>
+<p>删除条目的格式与读法是本应用的约定，写在<a href="../dev/formats.html#retraction">文件与格式</a>里。</p>
+<h2 id="annotate">注记</h2>
+<p>「账本」页「更多」菜单里的「添加注记…」，或条目详情里的「注记…」：写注记内容，点选目标条目，按「添加注记」。注记另存为新条目，原条目保持原样。</p>
+<h2 id="adopt">导入上链存证</h2>
+<p>把这把密钥早先上链、账本里尚缺的锚收进账本。打开「账本 › 更多 › 导入已有存证…」：</p>
+<ul>
+<li>「密钥地址」空着：列出本机密钥早先发过、账本里尚缺的锚，清单来自上一趟账本检查。</li>
+<li>填一个地址：扫链列出那把密钥发过的锚。表中「通过」的行默认勾选，只有这一种能导入。</li>
+<li>导入别人的地址时，要那把密钥的持有人签字：把卡上的「文本」发给对方，对方在自己的应用里用「更多 › 为他人签认领…」输入本机口令签字，签回后你粘贴进来，当场核验。缺了签字也能导入，那几枚锚记为未证实。</li>
+</ul>
+<p>按「导入 N 枚」，写一条导入条目，进待上链队列。</p>
+<h2 id="handover">移交账本</h2>
+<p>「账本 › 更多 › 换密钥或移交…」：填「新密钥地址」（新密钥的上链存证须为零条，读数为零才能继续），选「仅换钥」或「交给他人」，可写说明，按红色的「确认移交」。移交后这本账由新密钥续写，本机转为只读。移交是单向的。</p>
+<h2 id="one">一钥一账</h2>
+<p>一把密钥只写一本账。同一把密钥在同一序号上签出两个相异的条目，任何核验者都能发现，账本检查随即判为「未通过」。所以：</p>
+<ul>
+<li>同一个数据目录同一时间只有一个窗口写入，后打开的窗口只能读，页顶挂只读提示条。</li>
+<li>凭助记词、私钥或密钥文件在另一台机器上还原的身份，先暂停写入，从整机备份取回账本并与链上核对相符后再恢复，见<a href="data.html#retrieve">取回账本</a>。</li>
+<li>换密钥前先登记移交，新密钥凭此续写这本账。</li>
+</ul>
+<div class="pn"><a href="start.html"><span>上一页</span>上手</a><a class="nx" href="anchoring.html"><span>下一页</span>上链与网络</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#entry">条目的构成</a><a href="#types">条目类型</a><a href="#append">只追加</a><a href="#history">存证</a><a href="#public">写入即公开</a><a href="#retract">删除存证</a><a href="#annotate">注记</a><a href="#adopt">导入上链存证</a><a href="#handover">移交账本</a><a href="#one">一钥一账</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

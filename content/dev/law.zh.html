@@ -1,0 +1,41 @@
+<!--
+title: 法文与一致性套件
+-->
+<p class="lede">规则写成两部法文，每部配一个冻结的核。一份实现是否合规，运行一遍即可确认。</p>
+<h2 id="two">两部法</h2>
+<dl>
+<div><dt>zikaron/1</dt><dd>账本的法：条目的字节格式、签名、条目间的链接、审计报告、两种上链形式。文本见 <code>base/zikaron-v1.md</code>。</dd></div>
+<div><dt>zikaron.kit/1</dt><dd>客户端文书的法：指纹清单与回执、凭证载荷、记录包、读数、授权六项核验，建立在 zikaron/1 之上。文本见 <code>base/zikaron-kit-v1.md</code>。</dd></div>
+</dl>
+<p>法中每条规则都是对全部输入有定义的机器判断。条文分三类：凭单个条目即可判定的；凭一组条目加审计输入可判定的；须对照链上数据判定的。前两类可离线判定，冻结覆盖的正是这两类。</p>
+<h2 id="core">冻结核</h2>
+<p>每部法有一份纯 Python、仅依赖标准库的参照实现：zikaron/1 的核是 <code>impl-py/</code> 下的五个文件，zikaron.kit/1 的核是 <code>kit-py/</code> 下的四个文件。把这些文件各自的 SHA-256 连同文件名排成若干行，再取一次 SHA-256，即法文中写明的发布摘要。</p>
+<div class="kv"><div><span class="k">zikaron/1 · §12.5</span><span class="hash">{{CORE}}</span></div><div><span class="k">zikaron.kit/1 · §13.5</span><span class="hash">{{KIT}}</span></div></div>
+<p>摘要写入法文之后，核即为判据，法文是对它的阐述。两者所述相同；理解有分歧时，以核在该输入上的输出为准。</p>
+<h2 id="freeze">冻结的条件</h2>
+<p>冻结一个核，须先有一份仅凭法文独立写成的实现，与之在生成的语料上逐字节一致；再经过至少十万次模糊测试，零崩溃、零挂起、零误收，同一输入始终得到同一答案。可离线判定的两类条文中，每一条封闭边界在每个种子的语料里都须两侧各覆盖一次。条件全部达成后，摘要写入法文，冻结完成。</p>
+<h2 id="run">测试一份实现</h2>
+<p>你的实现须提供约定的命令行接口：zikaron/1 为 <code>zk1</code>，zikaron.kit/1 为 <code>zkk</code>。每个命令读取约定的输入(多为一个文件)，向标准输出写一个规范 JSON 值。约定全文见 <code>HARNESS.md</code> 与 <code>HARNESS-KIT.md</code>。</p>
+<p>语料生成器会改写目录中的文件，请先把 <code>base/zikaron-conformance</code> 复制到仓库之外，在副本中操作。</p>
+{{code:
+cp -R base/zikaron-conformance /tmp/conformance
+cd /tmp/conformance
+
+# 生成语料(种子任选，各种子的结果都应一致)
+python3 corpus/gen.py --seed 1
+
+# 在语料上逐份比对你的 zk1 与核
+ZK1_CANDIDATE=/path/to/zk1 python3 compare.py
+
+# kit 同理
+python3 kit-corpus/gen.py --seed 1
+ZKK_CANDIDATE=/path/to/zkk python3 compare-kit.py
+}}
+<p>比对器列出每一处分歧。零分歧是合规的证据；合规的定义是在全部输入上一致，因此在语料之外发现分歧，请提交议题，那是语料应当补充之处。</p>
+<h2 id="chainface">链面参照</h2>
+<p>须对照链上数据判定的条文，参照是 <code>base/zikaron-core/fixtures/</code> 中的录制：每份录下一段链上数据，并附标准扫描结果。扫描器回放每份录制，应逐字节复现标准结果。<code>scan-py/</code> 是一份独立编写的 Python 扫描器，与全部录制一致。</p>
+<h2 id="change">修改法</h2>
+<p>已冻结的核保持原样。修改规则须另立 zikaron/2：新的规格名、新的签名域字面量、新的核与新的摘要。在 zikaron/1 下写成的账本永久有效。</p>
+<p>法文的散文是核的教科书，可以修订得更清楚；核的摘要不变，就仍是 zikaron/1。</p>
+<h2 id="outside">法之外</h2>
+<p>法明确留给读者、裁决者与条款的事项：钱款、授权的含义、证据的分量、记录是否必须上链。实现这些功能的代码属于工具层，见法 §11。</p>

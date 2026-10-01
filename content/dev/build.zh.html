@@ -1,0 +1,64 @@
+<!--
+title: 从源码构建
+-->
+<p class="lede">一个 Rust 工作区：一条命令构建，一条命令测试，各平台用各自的脚本打包。</p>
+<h2 id="need">环境要求</h2>
+<dl>
+<div><dt>Rust</dt><dd>stable 版，2021 edition，用 <a href="https://rustup.rs">rustup</a> 安装。</dd></div>
+<div><dt>C 工具链</dt><dd>TLS 用到的加密库 <code>ring</code> 要为本机编译一段 C 代码。在 macOS 上装 Xcode 的命令行工具即可。</dd></div>
+<div><dt>Linux 的系统库</dt><dd>窗口、键盘与文件对话框所需的开发包，见下文。</dd></div>
+<div><dt>Python 3</dt><dd>运行法的冻结核与一致性比对，只用标准库。</dd></div>
+<div><dt>Foundry</dt><dd>测试登记合约、重算代码哈希时使用。</dd></div>
+</dl>
+<p>在 Debian 或 Ubuntu 上，先装构建依赖：</p>
+{{code:
+sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 \
+  libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
+  xdg-desktop-portal xdg-desktop-portal-gtk
+}}
+<p>Linux 上的系统文件对话框走桌面门户，所以运行时要有 <code>xdg-desktop-portal</code> 和一个后端；缺少门户时，把文件直接拖进窗口即可。</p>
+<h2 id="build">构建与测试</h2>
+{{code:
+tar -xzf zikaron-{{VER}}-src.tar.gz
+cd zikaron-{{VER}}
+cargo build --release --locked
+cargo test --workspace
+}}
+<p><code>--locked</code> 让构建严格使用 <code>Cargo.lock</code> 锁定的依赖版本，发布包也这样构建。产物：</p>
+<div class="tw"><table>
+<thead><tr><th>程序</th><th>是什么</th></tr></thead>
+<tbody>
+<tr><td><code>target/release/app</code></td><td>桌面窗口，在 macOS 上打包为 <code>ZIKARON.app</code>，在 Linux 上为 <code>zikaron-desk</code></td></tr>
+<tr><td><code>target/release/zikaron</code></td><td>命令行，见<a href="cli.html">命令行</a></td></tr>
+<tr><td><code>zk1</code>、<code>zkk</code>、<code>zks</code>、<code>zka</code>、<code>zkg</code></td><td>供测试与一致性比对用的辅助程序</td></tr>
+</tbody></table></div>
+<h2 id="package">打包</h2>
+<div class="tw"><table>
+<thead><tr><th>脚本</th><th>产出</th></tr></thead>
+<tbody>
+<tr><td><code>packaging/macos/build.sh [--identity NAME]</code></td><td><code>ZIKARON.app</code>，装在 <code>.dmg</code> 和 <code>.pkg</code> 里(macOS)</td></tr>
+<tr><td><code>packaging/linux/build.sh</code></td><td><code>.deb</code> 与 AppImage，在 Linux 上原生构建</td></tr>
+<tr><td><code>packaging/linux/cross-build.sh</code></td><td>在别的主机上用 zig 与 <code>cargo-zigbuild</code> 打出同样的 Linux x86_64 包</td></tr>
+</tbody></table></div>
+<p>包落在 <code>dist/</code>，每个平台附一份 <code>SHA256SUMS-&lt;系统&gt;-&lt;架构&gt;.txt</code>。macOS 脚本省略 <code>--identity</code> 时做临时签名(<code>-</code>)；发布包用 Kaptonia 的证书签名，见<a href="release.html">发布</a>。</p>
+<h2 id="contract">合约测试</h2>
+{{code:
+cd base/zikaron-core/contracts
+forge test
+}}
+<h2 id="law">法的核</h2>
+{{code:
+cd base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh
+}}
+<p>用候选实现跑一致性语料的方法，见<a href="law.html#run">测试一份实现</a>。</p>
+<h2 id="safe">用独立数据试用</h2>
+<p>应用从 <code>HOME</code> 找机器目录，密钥库也只住在那里。把 <code>HOME</code> 指向一个空目录后启动，机器目录、密钥库与账本都落在其中，与日常数据隔离：</p>
+{{code:
+T=$(mktemp -d)
+HOME=$T ./target/release/app
+}}
+<p>试用时先在向导里选「自定义」，接 Sepolia 测试网，见 Wiki 的<a href="../wiki/anchoring.html#networks">网络</a>。测试用的密钥用 <code>zikaron keygen</code> 现场生成，用后即弃。</p>
+<h2 id="fonts">内嵌字体</h2>
+<p>界面的西文字体 Inter 与等宽字体 JetBrains Mono 内嵌于应用；中文在 macOS 上取自系统的苹方，在 Linux 上用随应用内嵌的 Noto Sans SC。三种内嵌字体都以 SIL OFL 1.1 发布，许可文本在 <code>crates/zikaron-ui/fonts/</code>。</p>

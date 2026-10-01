@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>命令行 · 开发者指南</title>
+<meta name="description" content="zikaron 提供与窗口相同的账本操作，一个动作一个子命令。它面向脚本：输出是单个 JSON 值，结论体现在退出码里。完整的输出形状、退出码、拒绝原因与参数，见源码里的 CLI-SCHEMA.md。">
+<meta property="og:title" content="命令行 · 开发者指南">
+<meta property="og:description" content="zikaron 提供与窗口相同的账本操作，一个动作一个子命令。它面向脚本：输出是单个 JSON 值，结论体现在退出码里。完整的输出形状、退出码、拒绝原因与参数，见源码里的 CLI-SCHEMA.md。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/cli.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/cli.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>命令行</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html" class=on aria-current=page>命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="cli" data-prev="layout.html" data-next="law.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>命令行</h1><p class="lede"><code>zikaron</code> 提供与窗口相同的账本操作，一个动作一个子命令。它面向脚本：输出是单个 JSON 值，结论体现在退出码里。完整的输出形状、退出码、拒绝原因与参数，见源码里的 <code>CLI-SCHEMA.md</code>。</p>
+<h2 id="where">在哪里</h2>
+<dl>
+<div><dt>用 dmg 安装的</dt><dd><code>/Applications/ZIKARON.app/Contents/MacOS/zikaron</code></dd></div>
+<div><dt>用 pkg 安装的</dt><dd><code>/usr/local/bin/zikaron</code></dd></div>
+<div><dt>从源码构建的</dt><dd><code>target/release/zikaron</code></dd></div>
+</dl>
+<h2 id="contract">三条约定</h2>
+<dl>
+<div><dt>标准输出是单个规范 JSON 值</dt><dd>每次调用输出一个值，以值的最后一个字符结束。字节格式依法 §3.4：紧凑书写，成员按字节序排列。</dd></div>
+<div><dt>误用时标准输出为空</dt><dd>参数有误、路径读取失败时，退出码为 2，标准输出零字节，标准错误的第一行写作 <code>&lt;原因&gt; &lt;对象&gt;</code>，如 <code>E_UNREADABLE /nowhere/at/all</code>。调用方凭标准输出是否为空，即可分清答案与误用。</dd></div>
+<div><dt>状态词原样传出</dt><dd><code>GREEN</code>、<code>PARTIAL</code>、<code>FAIL</code>、<code>COMPLETE</code>、<code>GAPS</code> 等由核写出，命令行原样传出。</dd></div>
+</dl>
+<p>写文件只有一种方式：<code>--out</code> 先在旁边写完整个临时文件、落盘，再改名到位；同名文件已经存在时，这次写入作罢，原文件一个字节都保持原样。</p>
+<h2 id="exit">退出码</h2>
+<div class="tw"><table>
+<thead><tr><th>码</th><th>含义</th><th>示例</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>已答，答案肯定</td><td><code>GREEN</code>、<code>COMPLETE</code></td></tr>
+<tr><td>1</td><td>已答，答案否定</td><td>条目被拒，或结论为 <code>FAIL</code>、<code>BROKEN_CHAIN</code>、<code>NO_LABEL</code></td></tr>
+<tr><td>2</td><td>误用</td><td>参数有误、路径读取失败，标准输出为空</td></tr>
+<tr><td>3</td><td>已答，介于两者之间</td><td><code>PARTIAL</code>、<code>GAPS</code>、<code>UNAVAILABLE</code></td></tr>
+<tr><td>4</td><td>答案缺席</td><td>节点失联、多个节点读数相左、扫描被拒</td></tr>
+</tbody></table></div>
+<p>3 与 4 各占一个码，是这张表的分量所在。把「尚未上链」并入 0，买方会把尚待锚定的授权当作放行；并入 1，一次「暂不可知」会被读成「伪造」。把「节点不通」并入 1，一次网络故障会被读成「这条链是假的」。扫描失败是答案缺席，调用方应重试或换节点。</p>
+<h2 id="verbs">二十一个子命令</h2>
+<div class="tw"><table>
+<thead><tr><th>子命令</th><th>作用</th></tr></thead>
+<tbody>
+<tr><td><code>keygen</code></td><td>生成一把密钥，输出地址与私钥</td></tr>
+<tr><td><code>init</code></td><td>在空账本上写创建账本条目</td></tr>
+<tr><td><code>history</code></td><td>追加一条存证</td></tr>
+<tr><td><code>grant</code></td><td>签一份授权并写入账本</td></tr>
+<tr><td><code>revoke</code></td><td>签一份撤销并写入账本（裁决文件摘要可选）</td></tr>
+<tr><td><code>adopt</code></td><td>写一条导入条目</td></tr>
+<tr><td><code>attest</code></td><td>用外部密钥出一份连署</td></tr>
+<tr><td><code>succeed</code></td><td>写一条换密钥或移交条目</td></tr>
+<tr><td><code>annotate</code></td><td>写一条注记</td></tr>
+<tr><td><code>retract</code></td><td>写一条删除条目（目标须是本账本里一条现存的存证）</td></tr>
+<tr><td><code>anchor</code></td><td>把哈希锚定上链：调用登记合约，或自转账裸锚</td></tr>
+<tr><td><code>scan</code></td><td>按链设置扫描锚</td></tr>
+<tr><td><code>audit</code></td><td>用扫描结果加账本做审计，输出报告与结论</td></tr>
+<tr><td><code>check-grant</code></td><td>六项核验一份授权</td></tr>
+<tr><td><code>chain-check</code></td><td>逐跳核验转授权链（<code>--hop &lt;授权文件&gt;[=&lt;审计输入文件&gt;]</code>，可重复）</td></tr>
+<tr><td><code>depth</code></td><td>一件记录的深度读数</td></tr>
+<tr><td><code>fpm-sign</code></td><td>签指纹清单</td></tr>
+<tr><td><code>ack-sign</code></td><td>签收执</td></tr>
+<tr><td><code>badge</code></td><td>编码或解码凭证（<code>--encode</code> 与 <code>--decode</code> 二选一）</td></tr>
+<tr><td><code>kit-export</code></td><td>导出记录包，自验通过才写出</td></tr>
+<tr><td><code>show</code></td><td>显示一条条目的作者、ID、类型、上一条、序号与内容</td></tr>
+</tbody></table></div>
+<p>子命令之外的第一个词按误用处理，退出码为 2。</p>
+<h2 id="flags">参数</h2>
+<p>五十三个参数一律是长参数，且每个都带一个值；每个子命令有自己的一张参数表，表外参数按误用处理。条目正文中法所要求的成员，在命令行上都可以省略；省略后由核依法拒收，命令行只检查它自己做事所必需的几项。这样判断规则只在核里存在一份。</p>
+<h2 id="walk">示例</h2>
+<p>生成密钥、创建账本、存证一份文件、上链、审计：</p>
+<div class="cmd block"><code>zikaron keygen
+# {&quot;address&quot;:&quot;0x…&quot;,&quot;ok&quot;:true,&quot;privkey&quot;:&quot;0x…&quot;}
+
+zikaron init --ledger ./ledger --key &lt;私钥&gt; --statement &quot;作品存证&quot;
+
+zikaron history --ledger ./ledger --key &lt;私钥&gt; \
+  --content 0x$(shasum -a 256 手稿.pdf | cut -d&#x27; &#x27; -f1) \
+  --mark bytes-sha256/1 \
+  --toolchain 0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d
+# {&quot;entryId&quot;:&quot;0x…&quot;,&quot;ledger&quot;:&quot;…&quot;,&quot;ok&quot;:true,&quot;seq&quot;:1,&quot;written&quot;:true}
+
+zikaron anchor --key &lt;私钥&gt; --endpoint &lt;链号&gt;=&lt;节点&gt; \
+  --form registry --registry &lt;合约地址&gt; --hash &lt;entryId&gt;
+
+zikaron scan --endpoint &lt;链号&gt;=&lt;节点一&gt; --endpoint &lt;链号&gt;=&lt;节点二&gt; \
+  --basis basis.json &gt; fragment.json
+
+zikaron audit --ledger ./ledger --fragment fragment.json
+echo $?</code><button class="cp" type="button" data-copy="zikaron keygen
+# {&quot;address&quot;:&quot;0x…&quot;,&quot;ok&quot;:true,&quot;privkey&quot;:&quot;0x…&quot;}
+
+zikaron init --ledger ./ledger --key &lt;私钥&gt; --statement &quot;作品存证&quot;
+
+zikaron history --ledger ./ledger --key &lt;私钥&gt; \
+  --content 0x$(shasum -a 256 手稿.pdf | cut -d&#x27; &#x27; -f1) \
+  --mark bytes-sha256/1 \
+  --toolchain 0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d
+# {&quot;entryId&quot;:&quot;0x…&quot;,&quot;ledger&quot;:&quot;…&quot;,&quot;ok&quot;:true,&quot;seq&quot;:1,&quot;written&quot;:true}
+
+zikaron anchor --key &lt;私钥&gt; --endpoint &lt;链号&gt;=&lt;节点&gt; \
+  --form registry --registry &lt;合约地址&gt; --hash &lt;entryId&gt;
+
+zikaron scan --endpoint &lt;链号&gt;=&lt;节点一&gt; --endpoint &lt;链号&gt;=&lt;节点二&gt; \
+  --basis basis.json &gt; fragment.json
+
+zikaron audit --ledger ./ledger --fragment fragment.json
+echo $?" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p><code>--toolchain</code> 的值是字面量 <code>bytes-sha256/1</code> 的 SHA-256，表示「内容指纹是一串字节的 SHA-256」。命令行的读链层只认 <code>http://主机:端口</code> 形式的节点地址，请指向本机节点或本机代理；<code>anchor</code> 恰好收一个 <code>--endpoint</code>。<code>basis.json</code> 写明扫描范围：哪些链、哪个登记合约、哪些发送地址、起止区块，格式见法 §9.4。</p>
+<h2 id="now">时间由调用方注入</h2>
+<p>期限与时段只按链上时间和 <code>--now</code> 注入的时刻判断；省略 <code>--now</code> 即只用链上时间。时刻都由调用方给出，所以同一输入始终得到同一结论。</p>
+<h2 id="sealed">读应用自己的账本</h2>
+<p>ZIKARON Desk 数据目录里的账本是加密的，口令只在应用里，命令行读到时拒绝：</p>
+<div class="cmd block"><code>E_UNREADABLE 已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读</code><button class="cp" type="button" data-copy="E_UNREADABLE 已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>退出码为 2。要交给命令行处理，先在应用里导出「账本镜像」：镜像 <code>entries/</code> 里每个文件是一条条目的原文，文件名就是 64 位十六进制。单条可用 <code>show --path</code> 按文件读；要当作 <code>--ledger</code> 账本目录，把这些文件复制到一个空文件夹，并在文件名后加 <code>.entry</code>。</p>
+<div class="pn"><a href="layout.html"><span>上一页</span>仓库结构与分层</a><a class="nx" href="law.html"><span>下一页</span>法文与一致性套件</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#where">在哪里</a><a href="#contract">三条约定</a><a href="#exit">退出码</a><a href="#verbs">二十一个子命令</a><a href="#flags">参数</a><a href="#walk">示例</a><a href="#now">时间由调用方注入</a><a href="#sealed">读应用自己的账本</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

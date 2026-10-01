@@ -1,0 +1,64 @@
+<!--
+title: Glossary
+-->
+<p class="lede">Common words in the interface and these documents, grouped by use; the term used in the law texts and on the command line is in brackets.</p>
+<div class="proj"><section data-p="zikaron">
+<h2 id="ledger">The ledger</h2>
+<dl>
+<div><dt>Ledger</dt><dd>A chain of signed entries written in order, which can only be appended to; after a handover, a new key continues it. One for each role. (ledger)</dd></div>
+<div><dt>Entry</dt><dd>One item of a ledger, carrying its author’s signature and the ID of the entry before it. (entry)</dd></div>
+<div><dt>Content fingerprint</dt><dd>A 32-byte digest computed from a run of bytes; change one byte of the content and the fingerprint changes beyond recognition. (digest, SHA-256)</dd></div>
+<div><dt>Create the ledger</dt><dd>The root of the ledger, its first entry. (genesis)</dd></div>
+<div><dt>Anchored record</dt><dd>An entry that records the content fingerprint of one record. (history)</dd></div>
+<div><dt>Note on entry</dt><dd>An entry that adds a note to an earlier entry. (annotation)</dd></div>
+<div><dt>Adoption</dt><dd>An entry that brings anchors this key put on chain earlier into the ledger. (adoption)</dd></div>
+<div><dt>Key change or handover</dt><dd>An entry that hands the ledger to a new key. (succession)</dd></div>
+<div><dt>Deletion</dt><dd>An entry that marks a record as deleted; a reading convention of this app. (retraction)</dd></div>
+<div><dt>Recorded for</dt><dd>The app, their identity, their reference and their role, optionally filled in when recording and written into the entry as they are.</dd></div>
+</dl>
+<h2 id="chain">Anchoring</h2>
+<dl>
+<div><dt>Put on chain (anchor)</dt><dd>Send entries in an Ethereum transaction. (anchor)</dd></div>
+<div><dt>Registry contract</dt><dd>A small contract on chain that emits an event for every fingerprint it receives, shared by everyone. (registry)</dd></div>
+<div><dt>Pending</dt><dd>Entries written to the ledger and queued to be sent.</dd></div>
+<div><dt>First anchor block time</dt><dd>The time of the block in which an entry first went on chain.</dd></div>
+<div><dt>Ledger check</dt><dd>The result of comparing every local entry with the anchors on chain; “Confirmed” rests on it. (audit)</dd></div>
+<div><dt>Auto put on chain</dt><dd>A setting that, when on, opens the “Put on chain” card right after writing.</dd></div>
+</dl>
+<h2 id="grant">Grants</h2>
+<dl>
+<div><dt>Grant</dt><dd>An entry that lets an address use a record for a period of time, with the fingerprint of a terms file. (grant)</dd></div>
+<div><dt>Revocation</dt><dd>An entry that revokes a grant. (revocation)</dd></div>
+<div><dt>Terms file</dt><dd>The file that sets out what a grant means; the grant records its fingerprint. (terms)</dd></div>
+<div><dt>Grant code</dt><dd>A line of text starting with <code>zikaron-grant:</code>, enough to verify the signature and validity.</dd></div>
+<div><dt>Grant file</dt><dd>A <code>.zkgrant</code> file carrying the issuer’s ledger, enough for the full check.</dd></div>
+<div><dt>Sublicense</dt><dd>A grant a User writes in their own ledger on the strength of a grant they hold, passing it on to someone else.</dd></div>
+<div><dt>Credential</dt><dd>Proof of a grant for a third party: a text file and a QR code. (badge)</dd></div>
+<div><dt>Revocation watch</dt><dd>The check after each re-verification for grants revoked and issuer ledgers handed over.</dd></div>
+</dl>
+<h2 id="verify">Presenting and verifying</h2>
+<dl>
+<div><dt>Record kit</dt><dd>A folder exported from a ledger, holding the chosen entries, the original files and the on-chain proofs. (disclosure kit)</dd></div>
+<div><dt>Six checks</dt><dd>The six items checked one by one when verifying a grant: grant signature, issuer ledger intact, in the issuer’s ledger, confirmed on chain, within validity, not revoked.</dd></div>
+<div><dt>All passed, Has gaps, Failed</dt><dd>The three verdicts of a check. (GREEN, PARTIAL, FAIL)</dd></div>
+<div><dt>Depth readings</dt><dd>Three numbers: first recorded, max depth and continuity. (depth)</dd></div>
+<div><dt>Published address</dt><dd>The https address where you put record kits online.</dd></div>
+<div><dt>Due diligence</dt><dd>Before taking a grant, checking whether active grants already in the other side’s ledger overlap the period you need.</dd></div>
+</dl>
+<h2 id="key">Identities and data</h2>
+<dl>
+<div><dt>Identity</dt><dd>A set of signing keys and the data under it. Either a recovery-phrase identity or a local-key identity.</dd></div>
+<div><dt>Role</dt><dd>Recorder or User, each with its own key, address and ledger.</dd></div>
+<div><dt>Identity chip</dt><dd>The card at the top of the sidebar showing the current identity; click it to switch, create or import identities.</dd></div>
+<div><dt>Recovery phrase</dt><dd>12 words that derive a recovery-phrase identity’s two keys again.</dd></div>
+<div><dt>Primary identity</dt><dd>The identity whose credentials can reset a forgotten passcode.</dd></div>
+<div><dt>Passcode</dt><dd>8 letters or digits that open this machine’s key store.</dd></div>
+<div><dt>Master key</dt><dd>The key that encrypts all local data, opened by the passcode.</dd></div>
+<div><dt>Key store</dt><dd>The encrypted file on this machine that holds the keys.</dd></div>
+<div><dt>Key file</dt><dd>One exported key in the standard keystore format, with a file password.</dd></div>
+<div><dt>Whole-machine backup</dt><dd>One encrypted file holding every identity, key, data and setting, with the extension <code>.zikaron</code>.</dd></div>
+<div><dt>Ledger mirror</dt><dd>A copy of the ledger exported for other tools to read.</dd></div>
+<div><dt>Machine folder</dt><dd>Where the key store, the identity registry and the machine settings live; one per machine.</dd></div>
+<div><dt>Data folder</dt><dd>Where one role of one identity keeps its ledger and settings.</dd></div>
+</dl>
+</section></div><!--/proj-->

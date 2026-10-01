@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Overview · Developer guide</title>
+<meta name="description" content="For developers who need to verify, build, integrate or maintain the project themselves.">
+<meta property="og:title" content="Overview · Developer guide">
+<meta property="og:description" content="For developers who need to verify, build, integrate or maintain the project themselves.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/index.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/index.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Overview</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html" class=on aria-current=page>Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html">Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="index" data-next="verify.html"><div class="kick">Developer guide · Start</div><h1>Overview</h1><p class="lede">For developers who need to verify, build, integrate or maintain the project themselves.</p>
+<h2 id="truth">Criteria</h2>
+<p>There are three criteria: the law texts and code in the repository, the bytes of the release, and the contract on chain. This guide, the Wiki and the website are restatement and explanation; where they differ from the criteria, the criteria prevail.</p>
+<h2 id="layers">Two layers</h2>
+<p>Every product has two layers, with entirely different rules for change.</p>
+<dl>
+<div><dt>The law</dt><dd>The product’s law texts and their frozen cores. Once written they only gain new versions, and old versions stay valid for good; anyone can compute their digests with one command.</dd></div>
+<div><dt>The tooling</dt><dd>Everything else: the app, the command line, the tests, the documents and this site. It can be changed, rewritten or dropped at any time, provided it agrees with the cores of the law byte for byte.</dd></div>
+</dl>
+<p>Before you start, work out which layer your change belongs to. To change tooling, open a pull request; to object to the law, open an issue, which leads to the next version of the law.</p>
+<h2 id="map">Find by task</h2>
+<div class="proj"><div class="ptabs" role="tablist" aria-label="Product"><span class="pind" aria-hidden="true"></span><button type="button" role="tab" id="t-zikaron" aria-controls="p-zikaron" aria-selected="true" tabindex="0" data-p="zikaron"><b class="zk">Zikaron</b></button></div><section class="pane" role="tabpanel" id="p-zikaron" aria-labelledby="t-zikaron" data-p="zikaron">
+<div class="g3">Build</div>
+<div class="cards">
+<a href="verify.html"><b>Checksums</b></a>
+<a href="build.html"><b>Building from source</b></a>
+<a href="layout.html"><b>Repository layout and layers</b></a>
+<a href="cli.html"><b>Command line</b></a>
+<a href="law.html"><b>The law and the conformance suite</b></a>
+<a href="contract.html"><b>The registry contract and anchoring</b></a>
+<a href="formats.html"><b>Files and formats</b></a>
+<a href="integrate.html"><b>Integration</b></a>
+</div>
+<div class="g3">Maintain</div>
+<div class="cards">
+<a href="contributing.html"><b>Contributing</b></a>
+<a href="compat.html"><b>Compatibility and evolution</b></a>
+<a href="security.html"><b>Security</b></a>
+<a href="release.html"><b>Releasing</b></a>
+<a href="fork.html"><b>Forks and independent implementations</b></a>
+</div>
+</section></div>
+<h2 id="site">This site</h2>
+<p>This site is static files in the repository. To mirror it, clone the repository and serve it from any static host. The pages make two kinds of request: the site’s own static files, and fonts from Google Fonts.</p>
+<div class="pn"><span></span><a class="nx" href="verify.html"><span>Next</span>Checksums</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#truth">Criteria</a><a href="#layers">Two layers</a><a href="#map">Find by task</a><a href="#site">This site</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

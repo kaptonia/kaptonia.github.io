@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Anchoring and networks · Wiki</title>
+<meta name="description" content="Putting entries on chain means sending them in an Ethereum transaction. It gives a settled upper bound on time: once an entry is on chain, anyone can check against the chain that the ledger held it at that moment.">
+<meta property="og:title" content="Anchoring and networks · Wiki">
+<meta property="og:description" content="Putting entries on chain means sending them in an Ethereum transaction. It gives a settled upper bound on time: once an entry is on chain, anyone can check against the chain that the ledger held it at that moment.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/anchoring.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/anchoring.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Anchoring and networks</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">The ledger and its entries</a><a href="anchoring.html" class=on aria-current=page>Anchoring and networks</a><a href="grants.html">Grants</a><a href="kits.html">Record kits</a><a href="verify.html">Verification</a><a href="evidence.html">What a record proves</a><a href="keys.html">Identities and keys</a><a href="data.html">Local data and backups</a><a href="alerts.html">Alerts and settings</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="anchoring" data-prev="ledger.html" data-next="grants.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Anchoring and networks</h1><p class="lede">Putting entries on chain means sending them in an Ethereum transaction. It gives a settled upper bound on time: once an entry is on chain, anyone can check against the chain that the ledger held it at that moment.</p>
+<h2 id="what">What anchoring proves</h2>
+<p>What goes on chain is the entry ID, the SHA-256 of all the entry’s bytes, and the entry in turn records the content fingerprint. The content comes first, then the entry, then the ID. An entry ID that appears in a block therefore proves that the entry, and the content it records, existed by that block’s time at the latest.</p>
+<p>Every entry carries the ID of the one before it. Once the latest entry is on chain, every entry before it, and the content each one records, gains the same upper bound.</p>
+<dl>
+<div><dt>How early</dt><dd>Anchoring gives the upper bound alone. The content may have been written the day before, or ten years before.</dd></div>
+<div><dt>Who the author is</dt><dd>What the chain shows is that this key held the fingerprint of this content at that time.</dd></div>
+<div><dt>Whether the content is true</dt><dd>Any file has a fingerprint and any fingerprint can go on chain; what anchoring proves is time.</dd></div>
+</dl>
+<p>How to weigh a record is set out in <a href="evidence.html">What a record proves</a>.</p>
+<h2 id="queue">The pending queue</h2>
+<p>New entries join the “Pending” queue first. The “Pending N” segment in the Records toolbar lists them, and the “This batch” card below the table gives the entry count and the gas estimate. Press “Put all on chain”, or “Put on chain now” on one entry’s detail page, and the “Put on chain” card opens:</p>
+<ol>
+<li>The card shows “Entry count” and the “Gas cap”; the gas estimate is under “Details”.</li>
+<li>Once the estimate is in, press “Confirm and send”: the app signs, sends the transaction and waits for the receipt.</li>
+</ol>
+<p>All entries in a batch travel in one transaction for the cost of one transaction; the more entries, the smaller each one’s share.</p>
+<p><b>The gas cap</b> is worked out from the base fee of the latest block: (base fee × 2 + tip) × gas limit. If reading the base fee fails, it is taken as 0.0006 ETH. The transaction goes out once the balance covers the cap; when it falls short, the message gives the amount needed and the balance at hand, with “Copy address” for topping it up.</p>
+<h2 id="after">After sending</h2>
+<ul>
+<li>In a block within 30 seconds: the toast reads “Put N on chain”.</li>
+<li>Still outside a block after that: the toast reads “Submitted N, waiting for confirmation”, and the app asks for the receipt again every 15 seconds.</li>
+<li>Quit and reopen the app, and it keeps waiting for that transaction’s receipt; each batch is sent once.</li>
+<li>If the receipt shows the transaction failed, the entries stay in the queue and can be sent again.</li>
+</ul>
+<h2 id="states">On-chain states</h2>
+<div class="tw"><table>
+<thead><tr><th>State</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>Pending</td><td>Queued, waiting to be sent</td></tr>
+<tr><td>Waiting to go on chain</td><td>Sent, waiting to get into a block</td></tr>
+<tr><td>Confirming</td><td>In a block, waiting for a ledger check to confirm it</td></tr>
+<tr><td>Confirmed</td><td>A ledger check has confirmed it is anchored</td></tr>
+<tr><td>Confirmed · last checked …</td><td>This session’s check is still out, so this is the last result; it turns grey after a day</td></tr>
+<tr><td>Reverted</td><td>The transaction failed on chain; the entry stays queued and can be sent again</td></tr>
+<tr><td>Not sent</td><td>Refused before sending (for example, a balance below the cap); the entry stays queued</td></tr>
+<tr><td>Not on chain</td><td>Outside the queue and off the chain</td></tr>
+</tbody></table></div>
+<p>Anything that requires “Confirmed”, such as choosing a record when drafting a grant, accepts this session’s check alone.</p>
+<p><b>Auto put on chain.</b> The “Auto put on chain” switch in Settings › Network is off out of the box. When it is on, the write button reads “Send to chain now”, and after writing the app estimates gas and opens the “Put on chain” card straight away. It applies to every kind of write: records, grants, revocations and so on.</p>
+<h2 id="audit">Ledger check</h2>
+<p>The ledger check compares every local entry with the anchors on chain. It runs on the interval in Settings › Notifications, 300 seconds out of the box; straight away whenever the ledger has changed (a new entry written, a batch put on chain); and whenever you press Sync. It needs nodes, chain ID and registry contract all set.</p>
+<p>The ledger status line at the top of the Ledger page reads “OK” or “Problems”; click it for the check card, with a light and a count for each item: on chain, not on chain yet, mismatched on chain, imports unproven, unrecognized types, malformed entries and so on. The ledger is “OK” when there is a check result, the chain is intact and every problem item is zero; entries still waiting to go on chain count as fine. When the result is a broken chain, the whole ledger becomes read-only and the broken-chain bar appears at the top of the page, with “Go to Restore”.</p>
+<h2 id="dense">Frequency and precision</h2>
+<p>Entries written between two anchorings all take the later anchoring as their upper bound. Anchor once a month and time is precise to a month; once a day, to a day. More frequent anchoring costs more and dates more precisely. A ledger anchored every few days over several years carries a different weight from one begun yesterday; the readings on the record kit export page give three numbers for this, see <a href="kits.html#depth">Depth</a>.</p>
+<h2 id="networks">Networks</h2>
+<p>Step 3 of the wizard sets this machine’s network. The app comes with two networks, each with two public nodes from different providers so that their answers can be cross-checked:</p>
+<div class="tw"><table>
+<thead><tr><th></th><th>Ethereum mainnet (default)</th><th>Sepolia testnet</th></tr></thead>
+<tbody>
+<tr><td>Chain ID</td><td>1</td><td>11155111</td></tr>
+<tr><td>Registry contract</td><td><code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code></td><td><code>0xC29410B882c4C3b77e33659d2f06ac563e7B08a3</code></td></tr>
+<tr><td>Start block</td><td>26087229</td><td>11715660</td></tr>
+<tr><td>Nodes</td><td><code>https://mainnet.gateway.tenderly.co</code><br><code>https://rpc.flashbots.net</code></td><td><code>https://sepolia.gateway.tenderly.co</code><br><code>https://rpc.sepolia.ethpandaops.io</code></td></tr>
+</tbody></table></div>
+<p>With “Ethereum mainnet”, when the current data folder still lacks chain settings, the app fills in the chain ID, registry contract, start block and two public nodes for you. Anchoring on mainnet costs real ETH.</p>
+<p><b>Trying it on the testnet.</b> Choose “Custom” in wizard step 3, then in Settings › Network press “Edit nodes…”, enter <code>11155111=https://sepolia.gateway.tenderly.co 11155111=https://rpc.sepolia.ethpandaops.io</code> and press “Save nodes”; then fill in the chain ID, registry contract and start block and press “Save chain settings”.</p>
+<p><b>Custom.</b> Nodes are written as <code>chain-id=node-url</code>, separated by spaces. Once you have saved your own values, the “Network” row reads “Custom”.</p>
+<h2 id="nodes">Nodes</h2>
+<p>The app reads the chain and sends transactions through the nodes you configure. The “Chain reading” row in Settings › Network says how many nodes agree; when a single node responds, it says the reading comes from one source. For <code>https://</code> nodes the certificate and host name are checked on every connection, and the chain is read once the certificate passes.</p>
+<p class="call">Public nodes can see the addresses and contracts you query. If that concerns you, switch to a node of your own.</p>
+<h2 id="final">After anchoring</h2>
+<p>Anchoring goes one way. What stays on chain is a 32-byte entry ID and the sending address; the content, file names and record names all stay off chain. The sending address is public, and anyone can look up which IDs it has sent.</p>
+<div class="pn"><a href="ledger.html"><span>Previous</span>The ledger and its entries</a><a class="nx" href="grants.html"><span>Next</span>Grants</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#what">What anchoring proves</a><a href="#queue">The pending queue</a><a href="#after">After sending</a><a href="#states">On-chain states</a><a href="#audit">Ledger check</a><a href="#dense">Frequency and precision</a><a href="#networks">Networks</a><a href="#nodes">Nodes</a><a href="#final">After anchoring</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

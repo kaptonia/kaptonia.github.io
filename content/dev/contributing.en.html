@@ -1,0 +1,57 @@
+<!--
+title: Contributing
+-->
+<p class="lede">Fixes, tests, and improvements to the interface and documents are welcome. Before you start, confirm which layer your change belongs to.</p>
+<h2 id="where">Where a change goes</h2>
+<div class="tw"><table>
+<thead><tr><th>Change</th><th>Route</th></tr></thead>
+<tbody>
+<tr><td>Interface, wording, interaction</td><td>A pull request, in <code>crates/app</code> and <code>crates/zikaron-ui</code>.</td></tr>
+<tr><td>The command line</td><td>A pull request. When the output format or flags change, update <code>CLI-SCHEMA.md</code> with it.</td></tr>
+<tr><td>A core’s implementation (defects, performance)</td><td>A pull request, with the zero-divergence result of the conformance comparison.</td></tr>
+<tr><td>A new reading of entries</td><td>Settle the convention in the discussions first, then implement it.</td></tr>
+<tr><td>Wording of a law text</td><td>An issue. Prose may be revised while the core’s digest keeps its value.</td></tr>
+<tr><td>The rules of the law</td><td>An issue, which leads to the next version of the law.</td></tr>
+<tr><td>The frozen cores and the registry contract</td><td>An issue. They are pinned by digests and the code hash. The rest of <code>base/</code> is tooling and takes pull requests directly.</td></tr>
+</tbody></table></div>
+<h2 id="flow">Process</h2>
+<ol>
+<li>Open an issue first, saying what you want to change and why; small corrections can go straight to a pull request.</li>
+<li>Branch from main, one request per change.</li>
+<li>Run every test locally.</li>
+<li>In the commit message, say what changed and what users will see.</li>
+</ol>
+<h2 id="check">Checks before submitting</h2>
+<ul class="chk">
+<li><code>cargo test --workspace</code> passes.</li>
+<li><code>cargo build --release --locked</code> passes; when dependencies are added or removed, commit <code>Cargo.lock</code> with the change.</li>
+<li>If <code>zikaron</code> or <code>zikaron-kit</code> changed: the comparer shows zero divergences on corpora from at least three seeds, generated in a copy outside the repository.</li>
+<li>If <code>zikaron-anchor</code> changed: every chain-facing recording replays identically.</li>
+<li>Both digests of the law and the contract’s code hash recompute to their values.</li>
+<li>Every new sentence in the interface exists in Chinese and English.</li>
+<li>Every new control is wired to a real action and shows a clear message when it fails.</li>
+<li>The matching passage of the manual is updated, Chinese and English matching sentence for sentence.</li>
+</ul>
+<h2 id="judge">Judgment belongs in the cores</h2>
+<p>When interface code meets a question such as “is this entry valid” or “is this grant in force right now”, call the core and use its conclusion. A judgment rewritten in the interface will drift from the original. Likewise, the command line passes a core’s output on unchanged.</p>
+<h2 id="test">Rules for tests</h2>
+<dl>
+<div><dt>Temporary directories</dt><dd>Every test creates its machine folder and data folder in its own temporary directory and clears it at the end.</dd></div>
+<div><dt>Test keys</dt><dd>Keys are generated in the test or taken from the corpus; real recovery words and private keys stay outside the repository.</dd></div>
+<div><dt>A local chain</dt><dd>Tests that touch anchoring run against a local anvil or recordings; public nodes are for manual trials.</dd></div>
+<div><dt>Both sides</dt><dd>Every refusal rule comes with one input that should be refused and one that should be accepted.</dd></div>
+<div><dt>Injected time</dt><dd>A test that needs “now” passes the moment in as an argument.</dd></div>
+</dl>
+<h2 id="ui">Interface conventions</h2>
+<ul>
+<li>An action that writes to the ledger or the chain first opens a confirmation card listing where it writes, what it writes and the cost; the solid red key that actually writes appears on the confirmation card alone.</li>
+<li>A screen holds at most one blue primary button.</li>
+<li>The front of the interface uses plain language; addresses, hashes, type names and verdict tokens go under “Details”.</li>
+<li>Every failure says two things: what happened, and what to do next.</li>
+<li>Pages respond at once; long work runs in the background and announces itself once, on completion.</li>
+<li>Where the interface says “in effect” or “confirmed”, a readable fact stands behind it.</li>
+</ul>
+<h2 id="words">Wording</h2>
+<p>Interface wording follows the concise style of mature applications. The manual, the Wiki and this guide state what holds now; history stays in the version record. Code comments are in English and name the section when citing the law.</p>
+<h2 id="private">Keeping the repository clean</h2>
+<p>Commits hold product source and documents alone; local paths, e-mail addresses, keys, node access tokens and personal test data stay outside the repository. Read the diff before you commit.</p>

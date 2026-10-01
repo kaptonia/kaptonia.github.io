@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>The law and the conformance suite · Developer guide</title>
+<meta name="description" content="The rules are written as two law texts, each with a frozen core. One run shows whether an implementation conforms.">
+<meta property="og:title" content="The law and the conformance suite · Developer guide">
+<meta property="og:description" content="The rules are written as two law texts, each with a frozen core. One run shows whether an implementation conforms.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/law.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/law.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>The law and the conformance suite</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html" class=on aria-current=page>The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html">Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="law" data-prev="cli.html" data-next="contract.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>The law and the conformance suite</h1><p class="lede">The rules are written as two law texts, each with a frozen core. One run shows whether an implementation conforms.</p>
+<h2 id="two">Two laws</h2>
+<dl>
+<div><dt>zikaron/1</dt><dd>The law of the ledger: the byte format of an entry, signatures, how entries link, the audit report, the two forms of anchoring. The text is <code>base/zikaron-v1.md</code>.</dd></div>
+<div><dt>zikaron.kit/1</dt><dd>The law of the client’s documents: fingerprint manifests and acknowledgements, credential payloads, record kits, readings, the six checks on a grant. It builds on zikaron/1. The text is <code>base/zikaron-kit-v1.md</code>.</dd></div>
+</dl>
+<p>Every rule in the law is a machine decision defined over all inputs. The rules fall into three classes: those decided from one entry alone; those decided from a set of entries together with the audit inputs; and those decided against a chain. The first two are decided offline, and they are exactly what the freeze covers.</p>
+<h2 id="core">The frozen cores</h2>
+<p>Each law has a reference implementation in pure Python over the standard library: the zikaron/1 core is five files under <code>impl-py/</code>, and the zikaron.kit/1 core is four files under <code>kit-py/</code>. List the SHA-256 of each file with its name, one per line, take the SHA-256 of that listing, and you have the release digest named in the law text.</p>
+<div class="kv"><div><span class="k">zikaron/1 · §12.5</span><span class="hash">0xbecfb6f0d0f8b71c314f1b2efef414abfb6df74b711ca8f81efdef685d0132fc</span></div><div><span class="k">zikaron.kit/1 · §13.5</span><span class="hash">0x3f8368ebc8b5b7c97e4b5c4240f57f6fc06421b4effbd5a7446d128434a20535</span></div></div>
+<p>Once the digest is written into the law text, the core is the criterion and the text expounds it. Both say the same thing; where readings differ, run the core on that input and take its output.</p>
+<h2 id="freeze">Conditions for a freeze</h2>
+<p>Freezing a core first takes an implementation written from the law text alone that agrees with it byte for byte on a generated corpus; then at least a hundred thousand fuzz samples with zero panics, zero hangs and zero wrong accepts, the same input always getting the same answer. Under every seed, the corpus has to cover both sides of every closed boundary in the two offline classes. Once all conditions are met, the digest is written into the law text and the freeze is complete.</p>
+<h2 id="run">Testing an implementation</h2>
+<p>Your implementation must expose the agreed command-line interface: <code>zk1</code> for zikaron/1 and <code>zkk</code> for zikaron.kit/1. Each command reads its agreed inputs (mostly one file) and writes one canonical JSON value to standard output. The full contracts are <code>HARNESS.md</code> and <code>HARNESS-KIT.md</code>.</p>
+<p>The corpus generator rewrites files in its directory, so copy <code>base/zikaron-conformance</code> out of the repository first and work in the copy.</p>
+<div class="cmd block"><code>cp -R base/zikaron-conformance /tmp/conformance
+cd /tmp/conformance
+
+# Generate a corpus (any seed; every seed should agree)
+python3 corpus/gen.py --seed 1
+
+# Compare your zk1 with the core on the corpus, file by file
+ZK1_CANDIDATE=/path/to/zk1 python3 compare.py
+
+# The same for the kit law
+python3 kit-corpus/gen.py --seed 1
+ZKK_CANDIDATE=/path/to/zkk python3 compare-kit.py</code><button class="cp" type="button" data-copy="cp -R base/zikaron-conformance /tmp/conformance
+cd /tmp/conformance
+
+# Generate a corpus (any seed; every seed should agree)
+python3 corpus/gen.py --seed 1
+
+# Compare your zk1 with the core on the corpus, file by file
+ZK1_CANDIDATE=/path/to/zk1 python3 compare.py
+
+# The same for the kit law
+python3 kit-corpus/gen.py --seed 1
+ZKK_CANDIDATE=/path/to/zkk python3 compare-kit.py" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>The comparer lists every divergence. Zero divergences is evidence of conformance; conformance is defined as agreement on every input, so a divergence found outside the corpus belongs in an issue, as a place where the corpus should grow.</p>
+<h2 id="chainface">The chain-facing reference</h2>
+<p>For the rules decided against a chain, the reference is the recordings under <code>base/zikaron-core/fixtures/</code>: each records a stretch of chain data with the expected scan result. A scanner replays every recording and should reproduce the expected result byte for byte. <code>scan-py/</code> is an independently written Python scanner that agrees with every recording.</p>
+<h2 id="change">Changing the law</h2>
+<p>A frozen core stays as it is. Changing the rules takes zikaron/2: a new spec name, a new signing-domain literal, a new core and a new digest. Ledgers written under zikaron/1 stay valid for good.</p>
+<p>The prose of a law text is the core’s textbook and may be revised for clarity; while the core’s digest keeps its value, the law is still zikaron/1.</p>
+<h2 id="outside">Outside the law</h2>
+<p>The law expressly leaves some matters to readers, arbiters and terms: money, the meaning of a grant, the weight of evidence, whether a record has to be anchored. Code that implements such features belongs to the tooling layer; see law §11.</p>
+<div class="pn"><a href="cli.html"><span>Previous</span>Command line</a><a class="nx" href="contract.html"><span>Next</span>The registry contract and anchoring</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#two">Two laws</a><a href="#core">The frozen cores</a><a href="#freeze">Conditions for a freeze</a><a href="#run">Testing an implementation</a><a href="#chainface">The chain-facing reference</a><a href="#change">Changing the law</a><a href="#outside">Outside the law</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

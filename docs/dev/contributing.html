@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>参与贡献 · 开发者指南</title>
+<meta name="description" content="欢迎修复缺陷、补充测试、改进界面与文档。动手之前，请先确认改动所在的层。">
+<meta property="og:title" content="参与贡献 · 开发者指南">
+<meta property="og:description" content="欢迎修复缺陷、补充测试、改进界面与文档。动手之前，请先确认改动所在的层。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/contributing.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/contributing.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>参与贡献</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html" class=on aria-current=page>参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="contributing" data-prev="integrate.html" data-next="compat.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>参与贡献</h1><p class="lede">欢迎修复缺陷、补充测试、改进界面与文档。动手之前，请先确认改动所在的层。</p>
+<h2 id="where">改动的去向</h2>
+<div class="tw"><table>
+<thead><tr><th>改动内容</th><th>途径</th></tr></thead>
+<tbody>
+<tr><td>界面、文案、交互</td><td>合并请求，修改 <code>crates/app</code> 与 <code>crates/zikaron-ui</code>。</td></tr>
+<tr><td>命令行</td><td>合并请求。输出格式或参数变化时，同步修改 <code>CLI-SCHEMA.md</code>。</td></tr>
+<tr><td>核的实现（缺陷、性能）</td><td>合并请求，附一致性比对零分歧的结果。</td></tr>
+<tr><td>新的条目读法</td><td>先在讨论区确定约定，再实现。</td></tr>
+<tr><td>法文措辞</td><td>议题。散文可以修订，核的摘要保持不变。</td></tr>
+<tr><td>法的规则</td><td>议题，其归宿是下一版法。</td></tr>
+<tr><td>冻结核与登记合约</td><td>议题。它们由摘要与代码哈希钉住。<code>base/</code> 里其余的工装可以直接提合并请求。</td></tr>
+</tbody></table></div>
+<h2 id="flow">流程</h2>
+<ol>
+<li>先开议题，说明要改什么、为什么；小的修正可直接提交合并请求。</li>
+<li>从主干创建分支，一个请求只做一件事。</li>
+<li>在本地跑通全部测试。</li>
+<li>提交说明写清改动内容，以及用户能看到的变化。</li>
+</ol>
+<h2 id="check">提交前检查</h2>
+<ul class="chk">
+<li><code>cargo test --workspace</code> 全部通过。</li>
+<li><code>cargo build --release --locked</code> 通过；依赖有增减时，一并提交 <code>Cargo.lock</code>。</li>
+<li>修改了 <code>zikaron</code> 或 <code>zikaron-kit</code>：比对器在至少三个种子的语料上零分歧，语料在仓库之外的副本中生成。</li>
+<li>修改了 <code>zikaron-anchor</code>：全部链面录制回放一致。</li>
+<li>两部法的摘要与合约代码哈希重算相符。</li>
+<li>界面新增的每句文字都有中英两个版本。</li>
+<li>新增的每个控件都接通真实操作，失败时有明确提示。</li>
+<li>手册中对应段落同步更新，中英文逐句对应。</li>
+</ul>
+<h2 id="judge">判断放在核中</h2>
+<p>编写界面代码时，遇到「这个条目是否合法」「这份授权此刻是否有效」一类问题，请调用核、采用其结论。在界面中另写一遍判断，日后两处必然出现偏差。命令行同理，原样传出核的输出。</p>
+<h2 id="test">测试规范</h2>
+<dl>
+<div><dt>使用临时目录</dt><dd>每个测试在自己的临时目录中创建机器目录与数据文件夹，结束时清理。</dd></div>
+<div><dt>使用测试密钥</dt><dd>密钥在测试中现场生成，或取自语料；真实的助记词与私钥留在仓库之外。</dd></div>
+<div><dt>使用本地链</dt><dd>涉及上链的测试针对本地 anvil 或录制运行；公共节点留作手动试用。</dd></div>
+<div><dt>正反两面都测</dt><dd>每条拒绝规则都配一个应被拒绝的输入和一个应被接受的输入。</dd></div>
+<div><dt>时间由注入给出</dt><dd>需要「当前时刻」的测试，把时刻作为参数传入。</dd></div>
+</dl>
+<h2 id="ui">界面约定</h2>
+<ul>
+<li>写账本、写链的动作先弹出确认卡，列明写到哪里、写什么、花费多少；真正写入的红色实心键只出现在确认卡上。</li>
+<li>每屏至多一个蓝色主按钮。</li>
+<li>前台使用日常用语；地址、哈希、类型名、判定词收在「详细信息」中。</li>
+<li>每次失败都说明两件事：发生了什么，下一步怎么做。</li>
+<li>页面即时响应，耗时操作放到后台，完成时提示一次。</li>
+<li>界面上的「已生效」「已确认」，背后须有可读取的事实。</li>
+</ul>
+<h2 id="words">文字</h2>
+<p>界面用语采用成熟应用的简洁写法。手册、Wiki 与本指南只写现行内容，历史留在版本记录中。代码注释用英文，引用法条时写明条号。</p>
+<h2 id="private">保持仓库干净</h2>
+<p>提交中只放产品源码与文档；本机路径、邮箱、密钥、节点访问令牌、个人测试数据都留在仓库之外。提交前请检查差异。</p>
+<div class="pn"><a href="integrate.html"><span>上一页</span>接入</a><a class="nx" href="compat.html"><span>下一页</span>兼容与演进</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#where">改动的去向</a><a href="#flow">流程</a><a href="#check">提交前检查</a><a href="#judge">判断放在核中</a><a href="#test">测试规范</a><a href="#ui">界面约定</a><a href="#words">文字</a><a href="#private">保持仓库干净</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

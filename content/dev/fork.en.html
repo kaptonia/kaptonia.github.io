@@ -1,0 +1,35 @@
+<!--
+title: Forks and independent implementations
+-->
+<p class="lede">The code is released under MIT and the law texts are open to all. Forks are welcome, and so are implementations in any language. There is one request: keep differences visible.</p>
+<h2 id="license">Licence</h2>
+<p>Code and documents are under the MIT licence: you may use, modify, redistribute and sell them, keeping the licence text. The registry contract’s source is under CC0, and the embedded fonts are each under SIL OFL 1.1.</p>
+<h2 id="impl">An implementation of your own</h2>
+<p>The law text is self-contained: every judgment verification needs is stated in it. Write an implementation from the text in the language you choose, then validate it with the conformance suite; with zero divergences against the frozen core it is a conforming implementation, on the same footing as the one in this repository.</p>
+<p>The more independent implementations, the sturdier the law: each one written from the text alone is one more chance to find an ambiguity in it. When you find two implementations diverging outside the corpus, open an issue.</p>
+<h2 id="fork">Forking the app</h2>
+<p>Changing the interface, adding features and changing defaults all belong to the tooling layer, and you are free to do them. Please attend to three points:</p>
+<dl>
+<div><dt>Take another name</dt><dd>So that users can tell the two programs apart.</dd></div>
+<div><dt>Take another machine folder</dt><dd>So that the two programs keep their key stores and data apart.</dd></div>
+<div><dt>Stay conforming to the law</dt><dd>The original can read ledgers your fork writes, and your fork can read ledgers the original writes.</dd></div>
+</dl>
+<h2 id="rules">Changing the rules</h2>
+<p>A change to the rules has to be visible to every reader: start a new spec name and a new signing-domain literal. Signatures under the two sets of rules are then independent, and a reader sees at a glance which set an entry belongs to.</p>
+<ul>
+<li>Choose a spec name and domain literal wholly distinct from the existing ones; the literal <code>zikaron/1</code> always means the present law.</li>
+<li>Publish your law text and core, and state the digest.</li>
+<li>Write ledgers under the new rules with a new key.</li>
+</ul>
+<h2 id="registry">The registry contract</h2>
+<p>The contract is shared by everyone. Anyone can deploy the same bytes on any EVM chain that has passed the Shanghai upgrade and get the same code hash. A verifier states in its scan range which addresses it accepts; a contract you deploy and one someone else deploys stand equal before the law.</p>
+<h2 id="govern">Who decides</h2>
+<dl>
+<div><dt>The law</dt><dd>The frozen core decides. Maintainers, like everyone else, can only start a new version.</dd></div>
+<div><dt>The contract</dt><dd>The deployed bytes decide.</dd></div>
+<div><dt>This repository</dt><dd>The maintainers decide which pull requests to merge. When you disagree with a choice, forking is a legitimate way out.</dd></div>
+<div><dt>Users’ data and keys</dt><dd>The users decide; the project holds source code alone.</dd></div>
+<div><dt>The weight of evidence</dt><dd>The reader of the evidence decides.</dd></div>
+</dl>
+<h2 id="words">Stating it plainly</h2>
+<p>When you present your fork or implementation, state which version of the law it conforms to, which registry contract it uses and which nodes it connects to by default. Users rely on these to judge whether records written by the two programs can verify each other.</p>

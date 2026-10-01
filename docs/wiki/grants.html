@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>授权 · Wiki</title>
+<meta name="description" content="授权是账本里的一条：写明被授权方、哪一件记录、有效期，以及条款文件的指纹。签发后只能撤销，内容保持定稿。">
+<meta property="og:title" content="授权 · Wiki">
+<meta property="og:description" content="授权是账本里的一条：写明被授权方、哪一件记录、有效期，以及条款文件的指纹。签发后只能撤销，内容保持定稿。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/wiki/grants.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/wiki/grants.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>授权</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html">上手</a><a href="ledger.html">账本与条目</a><a href="anchoring.html">上链与网络</a><a href="grants.html" class=on aria-current=page>授权</a><a href="kits.html">记录包</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html">身份与密钥</a><a href="data.html">本机数据与备份</a><a href="alerts.html">提醒与设置</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="grants" data-prev="anchoring.html" data-next="kits.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>授权</h1><p class="lede">授权是账本里的一条：写明被授权方、哪一件记录、有效期，以及条款文件的指纹。签发后只能撤销，内容保持定稿。</p>
+<h2 id="draft">起草</h2>
+<p>到「授权」按「新建授权」，或在记录详情里按「授权给他人」（这件记录已预填）。表单各格：</p>
+<dl>
+<div><dt>被授权方</dt><dd>粘贴一个 <code>0x…</code> 地址；右边「最近地址」列出地址簿和以前的被授权方。地址背后是个人、公司还是合约，由双方自行约定。</dd></div>
+<div><dt>哪一条记录</dt><dd>按「选择记录」挑一件。只有已确认上链的记录能选，其余灰着并注明原因。</dd></div>
+<div><dt>条款文件</dt><dd>必填，拖进来或点选。它的 SHA-256 自动填进「条款文件指纹」。签发时这份文件在数据目录里留一份，之后随授权文件和记录包交给对方，对方自己重算指纹即可核对。</dd></div>
+<div><dt>有效期</dt><dd>「7 天」「30 天」（默认）「90 天」，按链上时间起算；或「自定义」，填起止的 Unix 秒。链上时间尚缺时，先同步一次，或改用自定义。</dd></div>
+<div><dt>独占、转授权与范围</dt><dd>「独占授权」开关、「上游授权（转授权用）」与「使用范围」。</dd></div>
+</dl>
+<p>被授权方、条款文件指纹、上游三格里的地址或哈希一律写成小写。</p>
+<h2 id="terms">含义在条款里</h2>
+<p>账本只认形式：一个地址、一个指纹、一段时间。是否独占、可用于何处、价格几何、违约如何处理，都写在条款文件里。对方重算条款文件的指纹，与授权里记下的一致，就能确认这正是签发时所附的那一份。</p>
+<p>「独占授权」开关只记在你自己的机器上：同一件记录已有独占授权且时段重叠时，应用弹出「独占授权冲突」，拦下新的签发。对外具有约束力的独占，要写进条款文件。</p>
+<h2 id="issue">签发</h2>
+<ol>
+<li>被授权方、记录、条款文件指纹三样齐了，按「加入账本」（开了「自动上链」时写「立即上链」）。</li>
+<li>确认卡「签发授权」写出记录、有效期、条款文件与费用，被授权方和各项指纹在「详细信息」里。在卡上再按一次即签发。</li>
+<li>授权写进账本，进待上链队列，照<a href="anchoring.html#queue">待上链队列</a>上链。</li>
+</ol>
+<p>新建授权页的旁栏「签发前的检查」是一张两步清单：「填写条款」和「起草首份授权」，下面显示密钥余额，可以逐步标记完成。</p>
+<h2 id="hand">交给对方</h2>
+<dl>
+<div><dt>授权码</dt><dd>以 <code>zikaron-grant:</code> 开头的一段文本，在授权详情里按「复制授权码」。它能核验签名和有效期。</dd></div>
+<div><dt>授权文件</dt><dd>按「导出授权文件…」写出一份 <code>.zkgrant</code> 文件：授权链各跳的条目、签发者账本、条款文件和授权码都在里面，对方能做完整核验。导出前应用会现读一次链。</dd></div>
+</dl>
+<h2 id="revoke">撤销</h2>
+<p>在授权详情页底部按「撤销授权…」，卡上写着记录与原有效期，「详细信息」里可以填裁决文件的指纹。按「确认撤销」写入撤销条目，进待上链队列。撤销是终局的，由这份授权派生的转授权同时失效。上链后，对方复核时只要拿得到你更新后的账本（同一台机器、对方存下的上游目录，或你发布地址上更新过的记录包），撤销监测就会发现它；在那之前，那份授权显示「有缺项」。</p>
+<h2 id="library">收下授权</h2>
+<p>使用方把收到的授权放进「我的授权」。按「添加授权」，贴授权码，或把授权文件拖进来，按「核验并添加」：</p>
+<ul>
+<li>应用先核验签名和格式，全部通过才收下。</li>
+<li>授权码带着转授权链时，链上各跳一并收下。</li>
+<li>授权文件在数据目录里留一份，其中的签发者账本以后用于核验。</li>
+<li>只有授权码时，能核验签名和有效期；要完整核验，请签发者导出授权文件。</li>
+</ul>
+<p>每份授权一张卡，判定有四种：</p>
+<dl>
+<div><dt>全部通过</dt><dd>六项核验都通过。</dd></div>
+<div><dt>有缺项</dt><dd>部分项目尚待结果，例如缺签发者账本、尚待确认上链。等结果明确后再依赖这份授权。</dd></div>
+<div><dt>未通过</dt><dd>至少一项查出问题。</dd></div>
+<div><dt>已被撤销</dt><dd>签发者已撤销这份授权。</dd></div>
+</dl>
+<p>「重新核验」逐份复核整个库：先在本机、再在保管库里找签发者账本，然后扫链。复核也按「设置 › 通知」的周期自动跑，出厂为每 600 秒。工具栏的「按签发者」把授权按签发者分组，有问题的组排在最上。</p>
+<h2 id="badge">凭证</h2>
+<p>凭证是给第三方（例如你的顾客）看的授权证明，一份文本加一张二维码。在授权详情的凭证卡上按「生成凭证」：应用把授权链一直接到根，写出 <code>badge.txt</code> 和二维码 <code>badge.svg</code>。对方在「核验 › 核验授权」贴入文本即可核验。</p>
+<h2 id="sub">转授权</h2>
+<p>本次运行复核过、六项核验全部通过的授权，详情上有「转授权给他人」。按下先出确认卡「转授权」，再按「起草…」进入转授权页：上半是上游授权的信息，下半与起草授权相同，记录固定为上游的那件。</p>
+<ul>
+<li>转授权写进你自己（使用方）的账本，进你自己的待上链队列。使用方要有签名密钥和账本，页面会引你去「生成密钥…」或「开账…」。</li>
+<li>转授权以上游为限：上游被撤销或到期，转授权随之失效。有效期由你自己设定，请把它设在上游的有效期之内。</li>
+<li>核验转授权时，每一跳各核六项，再核相邻两跳是否接上。</li>
+</ul>
+<h2 id="watch">撤销监测</h2>
+<p>每次整库复核之后，应用检查两件事：签发者是否撤销了你持有的某份授权，签发者账本是否移交给了新密钥。发现其中之一时，窗口向系统请求一次注意，出一条提醒，并在「提醒」页末尾加一行红灯。同一件事只提醒一次。</p>
+<div class="pn"><a href="anchoring.html"><span>上一页</span>上链与网络</a><a class="nx" href="kits.html"><span>下一页</span>记录包</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#draft">起草</a><a href="#terms">含义在条款里</a><a href="#issue">签发</a><a href="#hand">交给对方</a><a href="#revoke">撤销</a><a href="#library">收下授权</a><a href="#badge">凭证</a><a href="#sub">转授权</a><a href="#watch">撤销监测</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

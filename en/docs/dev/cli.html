@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Command line · Developer guide</title>
+<meta name="description" content="zikaron offers the same ledger operations as the window, one subcommand per action. It is built for scripts: the output is a single JSON value, and the verdict is in the exit code. The full output shapes, exit codes, refusal reasons and flags are in CLI-SCHEMA.md in the source.">
+<meta property="og:title" content="Command line · Developer guide">
+<meta property="og:description" content="zikaron offers the same ledger operations as the window, one subcommand per action. It is built for scripts: the output is a single JSON value, and the verdict is in the exit code. The full output shapes, exit codes, refusal reasons and flags are in CLI-SCHEMA.md in the source.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/cli.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/cli.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Command line</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html" class=on aria-current=page>Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html">Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="cli" data-prev="layout.html" data-next="law.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>Command line</h1><p class="lede"><code>zikaron</code> offers the same ledger operations as the window, one subcommand per action. It is built for scripts: the output is a single JSON value, and the verdict is in the exit code. The full output shapes, exit codes, refusal reasons and flags are in <code>CLI-SCHEMA.md</code> in the source.</p>
+<h2 id="where">Where it is</h2>
+<dl>
+<div><dt>Installed from the dmg</dt><dd><code>/Applications/ZIKARON.app/Contents/MacOS/zikaron</code></dd></div>
+<div><dt>Installed from the pkg</dt><dd><code>/usr/local/bin/zikaron</code></dd></div>
+<div><dt>Built from source</dt><dd><code>target/release/zikaron</code></dd></div>
+</dl>
+<h2 id="contract">Three conventions</h2>
+<dl>
+<div><dt>Standard output is one canonical JSON value</dt><dd>Each call prints one value, ending at the value’s last character. The byte format follows law §3.4: compact, members sorted by bytes.</dd></div>
+<div><dt>Misuse leaves standard output empty</dt><dd>For wrong arguments or an unreadable path, the exit code is 2, standard output has zero bytes, and the first line of standard error reads <code>&lt;reason&gt; &lt;subject&gt;</code>, as in <code>E_UNREADABLE /nowhere/at/all</code>. Whether standard output holds any bytes tells a caller an answer from a misuse.</dd></div>
+<div><dt>Status words pass through unchanged</dt><dd><code>GREEN</code>, <code>PARTIAL</code>, <code>FAIL</code>, <code>COMPLETE</code>, <code>GAPS</code> and the like are written by the cores and passed on by the command line as they are.</dd></div>
+</dl>
+<p>Files are written one way: <code>--out</code> first writes a whole temporary file alongside, syncs it to disk, then renames it into place; when a file of that name already exists, the write stops and the existing file keeps every byte.</p>
+<h2 id="exit">Exit codes</h2>
+<div class="tw"><table>
+<thead><tr><th>Code</th><th>Meaning</th><th>Example</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Answered, affirmative</td><td><code>GREEN</code>, <code>COMPLETE</code></td></tr>
+<tr><td>1</td><td>Answered, negative</td><td>The entry was refused, or the verdict is <code>FAIL</code>, <code>BROKEN_CHAIN</code> or <code>NO_LABEL</code></td></tr>
+<tr><td>2</td><td>Misuse</td><td>Wrong arguments or an unreadable path; standard output is empty</td></tr>
+<tr><td>3</td><td>Answered, in between</td><td><code>PARTIAL</code>, <code>GAPS</code>, <code>UNAVAILABLE</code></td></tr>
+<tr><td>4</td><td>Answer absent</td><td>Node unreachable, nodes disagreeing, scan refused</td></tr>
+</tbody></table></div>
+<p>The weight of this table is that 3 and 4 each have a code of their own. Fold “not yet on chain” into 0, and a buyer takes an unanchored grant as cleared; fold it into 1, and a passing “not yet known” reads as “forged”. Fold “node unreachable” into 1, and a network fault reads as “this chain is fake”. A failed scan is an absent answer, and the caller retries or changes nodes.</p>
+<h2 id="verbs">Twenty-one subcommands</h2>
+<div class="tw"><table>
+<thead><tr><th>Subcommand</th><th>What it does</th></tr></thead>
+<tbody>
+<tr><td><code>keygen</code></td><td>Generate a key and print its address and private key</td></tr>
+<tr><td><code>init</code></td><td>Write the ledger’s creation entry into an empty ledger</td></tr>
+<tr><td><code>history</code></td><td>Append an anchored record</td></tr>
+<tr><td><code>grant</code></td><td>Sign a grant and write it to the ledger</td></tr>
+<tr><td><code>revoke</code></td><td>Sign a revocation and write it to the ledger (ruling file digest optional)</td></tr>
+<tr><td><code>adopt</code></td><td>Write an adoption entry</td></tr>
+<tr><td><code>attest</code></td><td>Produce a co-signature with an outside key</td></tr>
+<tr><td><code>succeed</code></td><td>Write a key change or handover entry</td></tr>
+<tr><td><code>annotate</code></td><td>Write a note</td></tr>
+<tr><td><code>retract</code></td><td>Write a deletion entry (the target must be a record in this ledger that is still undeleted)</td></tr>
+<tr><td><code>anchor</code></td><td>Anchor a hash on chain, through the registry contract or as a bare self-transfer</td></tr>
+<tr><td><code>scan</code></td><td>Scan for anchors using the chain settings</td></tr>
+<tr><td><code>audit</code></td><td>Audit a ledger against scan results and print a report and verdict</td></tr>
+<tr><td><code>check-grant</code></td><td>Run the six checks on a grant</td></tr>
+<tr><td><code>chain-check</code></td><td>Check a sublicense chain hop by hop (<code>--hop &lt;grant file&gt;[=&lt;audit input file&gt;]</code>, repeatable)</td></tr>
+<tr><td><code>depth</code></td><td>Depth readings for a record</td></tr>
+<tr><td><code>fpm-sign</code></td><td>Sign a fingerprint manifest</td></tr>
+<tr><td><code>ack-sign</code></td><td>Sign an acknowledgement</td></tr>
+<tr><td><code>badge</code></td><td>Encode or decode a credential (exactly one of <code>--encode</code> and <code>--decode</code>)</td></tr>
+<tr><td><code>kit-export</code></td><td>Export a record kit, written once it passes its self-check</td></tr>
+<tr><td><code>show</code></td><td>Show an entry’s author, ID, type, previous entry, sequence and content</td></tr>
+</tbody></table></div>
+<p>Any other first word counts as misuse, with exit code 2.</p>
+<h2 id="flags">Flags</h2>
+<p>All fifty-three flags are long flags, and each takes a value; every subcommand has its own table of flags, and a flag outside it counts as misuse. Members the law requires in an entry’s body may all be left off the command line; the core then refuses the entry under the law, and the command line checks the few items it needs for its own work. That way each rule of judgment exists once, in the core.</p>
+<h2 id="walk">Example</h2>
+<p>Generate a key, create a ledger, record a file, anchor it, audit:</p>
+<div class="cmd block"><code>zikaron keygen
+# {&quot;address&quot;:&quot;0x…&quot;,&quot;ok&quot;:true,&quot;privkey&quot;:&quot;0x…&quot;}
+
+zikaron init --ledger ./ledger --key &lt;private key&gt; --statement &quot;Records of my work&quot;
+
+zikaron history --ledger ./ledger --key &lt;private key&gt; \
+  --content 0x$(shasum -a 256 manuscript.pdf | cut -d&#x27; &#x27; -f1) \
+  --mark bytes-sha256/1 \
+  --toolchain 0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d
+# {&quot;entryId&quot;:&quot;0x…&quot;,&quot;ledger&quot;:&quot;…&quot;,&quot;ok&quot;:true,&quot;seq&quot;:1,&quot;written&quot;:true}
+
+zikaron anchor --key &lt;private key&gt; --endpoint &lt;chain-id&gt;=&lt;node&gt; \
+  --form registry --registry &lt;contract address&gt; --hash &lt;entryId&gt;
+
+zikaron scan --endpoint &lt;chain-id&gt;=&lt;node one&gt; --endpoint &lt;chain-id&gt;=&lt;node two&gt; \
+  --basis basis.json &gt; fragment.json
+
+zikaron audit --ledger ./ledger --fragment fragment.json
+echo $?</code><button class="cp" type="button" data-copy="zikaron keygen
+# {&quot;address&quot;:&quot;0x…&quot;,&quot;ok&quot;:true,&quot;privkey&quot;:&quot;0x…&quot;}
+
+zikaron init --ledger ./ledger --key &lt;private key&gt; --statement &quot;Records of my work&quot;
+
+zikaron history --ledger ./ledger --key &lt;private key&gt; \
+  --content 0x$(shasum -a 256 manuscript.pdf | cut -d&#x27; &#x27; -f1) \
+  --mark bytes-sha256/1 \
+  --toolchain 0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d
+# {&quot;entryId&quot;:&quot;0x…&quot;,&quot;ledger&quot;:&quot;…&quot;,&quot;ok&quot;:true,&quot;seq&quot;:1,&quot;written&quot;:true}
+
+zikaron anchor --key &lt;private key&gt; --endpoint &lt;chain-id&gt;=&lt;node&gt; \
+  --form registry --registry &lt;contract address&gt; --hash &lt;entryId&gt;
+
+zikaron scan --endpoint &lt;chain-id&gt;=&lt;node one&gt; --endpoint &lt;chain-id&gt;=&lt;node two&gt; \
+  --basis basis.json &gt; fragment.json
+
+zikaron audit --ledger ./ledger --fragment fragment.json
+echo $?" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>The value of <code>--toolchain</code> is the SHA-256 of the literal <code>bytes-sha256/1</code>, meaning “the content fingerprint is the SHA-256 of a run of bytes”. The command line’s chain layer accepts node addresses of the form <code>http://host:port</code> alone, so point it at a local node or a local proxy; <code>anchor</code> takes exactly one <code>--endpoint</code>. <code>basis.json</code> states the scan range: which chains, which registry contract, which senders, and the start and end blocks; the format is in law §9.4.</p>
+<h2 id="now">Time is injected by the caller</h2>
+<p>Deadlines and periods are judged by chain time and the moment injected with <code>--now</code>; when <code>--now</code> is left off, chain time alone applies. Every moment comes from the caller, so the same input always reaches the same verdict.</p>
+<h2 id="sealed">Reading the app’s own ledger</h2>
+<p>A ledger in ZIKARON Desk’s data folder is encrypted and the passcode lives in the app, so the command line refuses to read one, with exit code 2 and this line on standard error (“locked: this is ZIKARON Desk’s sealed local data; the command line does not read it”):</p>
+<div class="cmd block"><code>E_UNREADABLE 已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读</code><button class="cp" type="button" data-copy="E_UNREADABLE 已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>To hand a ledger to the command line, export a “Ledger mirror” in the app first: each file in the mirror’s <code>entries/</code> is one entry’s bytes, named with exactly its 64 hexadecimal digits. A single entry can be read by file with <code>show --path</code>; to use them as a <code>--ledger</code> folder, copy the files into an empty folder and add <code>.entry</code> to each file name.</p>
+<div class="pn"><a href="layout.html"><span>Previous</span>Repository layout and layers</a><a class="nx" href="law.html"><span>Next</span>The law and the conformance suite</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#where">Where it is</a><a href="#contract">Three conventions</a><a href="#exit">Exit codes</a><a href="#verbs">Twenty-one subcommands</a><a href="#flags">Flags</a><a href="#walk">Example</a><a href="#now">Time is injected by the caller</a><a href="#sealed">Reading the app’s own ledger</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

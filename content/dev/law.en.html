@@ -1,0 +1,41 @@
+<!--
+title: The law and the conformance suite
+-->
+<p class="lede">The rules are written as two law texts, each with a frozen core. One run shows whether an implementation conforms.</p>
+<h2 id="two">Two laws</h2>
+<dl>
+<div><dt>zikaron/1</dt><dd>The law of the ledger: the byte format of an entry, signatures, how entries link, the audit report, the two forms of anchoring. The text is <code>base/zikaron-v1.md</code>.</dd></div>
+<div><dt>zikaron.kit/1</dt><dd>The law of the client’s documents: fingerprint manifests and acknowledgements, credential payloads, record kits, readings, the six checks on a grant. It builds on zikaron/1. The text is <code>base/zikaron-kit-v1.md</code>.</dd></div>
+</dl>
+<p>Every rule in the law is a machine decision defined over all inputs. The rules fall into three classes: those decided from one entry alone; those decided from a set of entries together with the audit inputs; and those decided against a chain. The first two are decided offline, and they are exactly what the freeze covers.</p>
+<h2 id="core">The frozen cores</h2>
+<p>Each law has a reference implementation in pure Python over the standard library: the zikaron/1 core is five files under <code>impl-py/</code>, and the zikaron.kit/1 core is four files under <code>kit-py/</code>. List the SHA-256 of each file with its name, one per line, take the SHA-256 of that listing, and you have the release digest named in the law text.</p>
+<div class="kv"><div><span class="k">zikaron/1 · §12.5</span><span class="hash">{{CORE}}</span></div><div><span class="k">zikaron.kit/1 · §13.5</span><span class="hash">{{KIT}}</span></div></div>
+<p>Once the digest is written into the law text, the core is the criterion and the text expounds it. Both say the same thing; where readings differ, run the core on that input and take its output.</p>
+<h2 id="freeze">Conditions for a freeze</h2>
+<p>Freezing a core first takes an implementation written from the law text alone that agrees with it byte for byte on a generated corpus; then at least a hundred thousand fuzz samples with zero panics, zero hangs and zero wrong accepts, the same input always getting the same answer. Under every seed, the corpus has to cover both sides of every closed boundary in the two offline classes. Once all conditions are met, the digest is written into the law text and the freeze is complete.</p>
+<h2 id="run">Testing an implementation</h2>
+<p>Your implementation must expose the agreed command-line interface: <code>zk1</code> for zikaron/1 and <code>zkk</code> for zikaron.kit/1. Each command reads its agreed inputs (mostly one file) and writes one canonical JSON value to standard output. The full contracts are <code>HARNESS.md</code> and <code>HARNESS-KIT.md</code>.</p>
+<p>The corpus generator rewrites files in its directory, so copy <code>base/zikaron-conformance</code> out of the repository first and work in the copy.</p>
+{{code:
+cp -R base/zikaron-conformance /tmp/conformance
+cd /tmp/conformance
+
+# Generate a corpus (any seed; every seed should agree)
+python3 corpus/gen.py --seed 1
+
+# Compare your zk1 with the core on the corpus, file by file
+ZK1_CANDIDATE=/path/to/zk1 python3 compare.py
+
+# The same for the kit law
+python3 kit-corpus/gen.py --seed 1
+ZKK_CANDIDATE=/path/to/zkk python3 compare-kit.py
+}}
+<p>The comparer lists every divergence. Zero divergences is evidence of conformance; conformance is defined as agreement on every input, so a divergence found outside the corpus belongs in an issue, as a place where the corpus should grow.</p>
+<h2 id="chainface">The chain-facing reference</h2>
+<p>For the rules decided against a chain, the reference is the recordings under <code>base/zikaron-core/fixtures/</code>: each records a stretch of chain data with the expected scan result. A scanner replays every recording and should reproduce the expected result byte for byte. <code>scan-py/</code> is an independently written Python scanner that agrees with every recording.</p>
+<h2 id="change">Changing the law</h2>
+<p>A frozen core stays as it is. Changing the rules takes zikaron/2: a new spec name, a new signing-domain literal, a new core and a new digest. Ledgers written under zikaron/1 stay valid for good.</p>
+<p>The prose of a law text is the core’s textbook and may be revised for clarity; while the core’s digest keeps its value, the law is still zikaron/1.</p>
+<h2 id="outside">Outside the law</h2>
+<p>The law expressly leaves some matters to readers, arbiters and terms: money, the meaning of a grant, the weight of evidence, whether a record has to be anchored. Code that implements such features belongs to the tooling layer; see law §11.</p>

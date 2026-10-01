@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Getting started · Wiki</title>
+<meta name="description" content="From installation to your first record on chain takes about ten minutes, half of it spent writing down the recovery words.">
+<meta property="og:title" content="Getting started · Wiki">
+<meta property="og:description" content="From installation to your first record on chain takes about ten minutes, half of it spent writing down the recovery words.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/start.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/start.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Getting started</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html" class=on aria-current=page>Getting started</a><a href="ledger.html">The ledger and its entries</a><a href="anchoring.html">Anchoring and networks</a><a href="grants.html">Grants</a><a href="kits.html">Record kits</a><a href="verify.html">Verification</a><a href="evidence.html">What a record proves</a><a href="keys.html">Identities and keys</a><a href="data.html">Local data and backups</a><a href="alerts.html">Alerts and settings</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="start" data-prev="zikaron.html" data-next="ledger.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Getting started</h1><p class="lede">From installation to your first record on chain takes about ten minutes, half of it spent writing down the recovery words.</p>
+<h2 id="install">Installation</h2>
+<p>Version 0.1.0 comes as two packages for Macs with Apple silicon, available on the <a href="../../download.html">download page</a>:</p>
+<dl>
+<div><dt><code>.dmg</code></dt><dd>Open it and drag <code>ZIKARON.app</code> to Applications. The <code>zikaron</code> command line is inside the app bundle at <code>ZIKARON.app/Contents/MacOS/zikaron</code>.</dd></div>
+<div><dt><code>.pkg</code></dt><dd>An installer that puts the app in <code>/Applications</code> and the command line at <code>/usr/local/bin/zikaron</code>.</dd></div>
+</dl>
+<p>The app is signed with Kaptonia’s self-signed certificate and is outside Apple’s notarization. Files downloaded in a browser carry macOS’s quarantine flag, and macOS refuses to open them; on recent macOS, “Open Anyway” in System Settings › Privacy &amp; Security works only some of the time. The reliable way is to check the file first, then remove the quarantine flag in Terminal:</p>
+<ol>
+<li><b>Check the SHA-256.</b> The result should match the one on the download page: <div class="cmd"><code>shasum -a 256 ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg</code><button class="cp" type="button" data-copy="shasum -a 256 ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div></li>
+<li><b>With the dmg:</b> before opening the dmg, run the command below, then open the dmg and drag <code>ZIKARON.app</code> to Applications: <div class="cmd"><code>xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg</code><button class="cp" type="button" data-copy="xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>If you have already dragged the app in, run this instead: <div class="cmd"><code>xattr -dr com.apple.quarantine /Applications/ZIKARON.app</code><button class="cp" type="button" data-copy="xattr -dr com.apple.quarantine /Applications/ZIKARON.app" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div></li>
+<li><b>With the pkg:</b> run the command below, then double-click the pkg to install: <div class="cmd"><code>xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.pkg</code><button class="cp" type="button" data-copy="xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.pkg" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div></li>
+</ol>
+<p>Change the paths to wherever you downloaded the files.</p>
+<h2 id="wizard">First run</h2>
+<p>The first time the app opens, the wizard appears by itself, with six steps listed down the left and the current step on the right. Whether a step is done depends on the actual state.</p>
+<ol>
+<li><b>Set a passcode.</b> 8 letters or digits, case-sensitive, entered twice. A passcode that is too simple is refused on the spot: eight identical characters, or digits that run in sequence or read as a date. The passcode comes before the identity because keys are stored in a key store that the passcode opens.</li>
+<li><b>Create an identity.</b> One of three ways: generate 12 recovery words, write them on paper and fill in three of them picked at random; import an existing key; or restore from a whole-machine backup. The first identity created on this machine is its primary identity.</li>
+<li><b>Network.</b> “Ethereum mainnet” is selected by default; or choose “Custom” and fill in the chain ID, registry contract and nodes yourself. Anchoring on mainnet costs real ETH in gas.</li>
+<li><b>Create the ledger.</b> Write a ledger description (optional), press “Create the ledger”, then press it again on the confirmation card. This step is free and writes locally.</li>
+<li><b>Add gas.</b> The page shows the key address and a payment QR code. Send a little ETH from your wallet and press “I have sent it”; the wizard reads the balance on chain once, and above zero the step is done. You may choose “Later”.</li>
+<li><b>Whole-machine backup.</b> Export a password-protected backup file; one file restores everything. You may choose “Do it later”; do it soon.</li>
+</ol>
+<p>Once a passcode and an identity are set, “Exit setup” at the bottom of the step list, or Esc, returns you to where you were, and finished steps stay finished. For unfinished steps, “Run wizard again” in Settings › About picks up where you left off.</p>
+<p class="call">Write the recovery words on paper and keep them where you alone can reach them. The recovery words bring back keys; this machine’s ledgers, received grants and settings come back from a whole-machine backup; keep the original files yourself.</p>
+<h2 id="recorder">A full walkthrough for the Recorder</h2>
+<p>Choose “Recorder” at the top of the sidebar.</p>
+<ol>
+<li><b>Record.</b> Drop the work’s file onto the drop zone on Home, fill in “Record name”, press “Add to ledger”, then press “Add to ledger” again on the confirmation card.</li>
+<li><b>Put it on chain.</b> Click the “Pending” card on Home, or press “Put all on chain” under the “Pending” segment of Records, then press “Confirm and send” on the “Put on chain” card. A few minutes later the state turns “Confirmed”.</li>
+<li><b>Grant.</b> Open “Grant” and press “New grant”: fill in the grantee’s address, choose a record that is on chain, drop in the terms file, choose a validity period, press “Add to ledger” and again on the confirmation card, then put it on chain as in step 2.</li>
+<li><b>Hand it over.</b> On the grant’s detail page, press “Copy grant code” or “Export grant file…” and send it to the grantee. The grant file carries your ledger, so they can run the full check.</li>
+<li><b>Day to day.</b> Watch the Alerts page; when needed, press “Revoke grant…” on a grant’s detail page.</li>
+</ol>
+<p>A record is final once written; to add to it, append a note. Keep the original files safe: to prove something later, you show the original, byte for byte identical to its fingerprint.</p>
+<h2 id="user">A full walkthrough for the User</h2>
+<ol>
+<li>Switch to “User” at the top of the sidebar. A User ledger is needed only to sublicense; when you get there, press “Set up ledger…” on the sublicense page.</li>
+<li>Paste the grant code you received into the “Verify a grant” card on Home, press “Start check” and read the result.</li>
+<li>Open “My grants”, press “Add grant”, paste the grant code or drop in the grant file, and press “Verify and add” to keep it.</li>
+<li>When you receive the work itself, open Verify › Verify grant, put in the grant, the file and the terms file, and press “Verify” once to check all three together.</li>
+<li>Watch the Alerts page: grants about to expire, revoked grants and issuer ledgers that were handed over all show up there.</li>
+</ol>
+<h2 id="window">The window</h2>
+<p>The sidebar is on the left and the page on the right. The sidebar, top to bottom: the identity chip (the current identity’s name and kind; click it to switch or create identities), the role switch “Recorder” | “User”, that role’s pages, and at the bottom “Settings”, “Lock” and the status line. The small icon at the right end of the status line is “Sync”; click it to read the chain in the background.</p>
+<div class="tw"><table>
+<thead><tr><th>Recorder</th><th>User</th></tr></thead>
+<tbody>
+<tr><td>Home</td><td>Home</td></tr>
+<tr><td><b>Record</b>: Records, Grant</td><td><b>Grant</b>: My grants</td></tr>
+<tr><td><b>Look up</b>: Verify, Ledger, Alerts</td><td><b>Look up</b>: Verify, Alerts</td></tr>
+</tbody></table></div>
+<p>Every action that writes to the ledger or the chain first shows a confirmation card, listing what will be written, where, and at what cost; the solid red key on the card writes, and “Cancel” or Esc leaves everything as it was. Shortcuts and the other settings are covered in <a href="alerts.html">Alerts and settings</a>.</p>
+<div class="pn"><a href="zikaron.html"><span>Previous</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>Next</span>The ledger and its entries</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#install">Installation</a><a href="#wizard">First run</a><a href="#recorder">A full walkthrough for the Recorder</a><a href="#user">A full walkthrough for the User</a><a href="#window">The window</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

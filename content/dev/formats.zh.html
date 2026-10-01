@@ -1,0 +1,107 @@
+<!--
+title: 文件与格式
+-->
+<p class="lede">应用与命令行读写的各类文件。带版本号的格式，版本号写在文件里。</p>
+<h2 id="entry">条目</h2>
+<p>条目是一个规范 JSON 对象，恰有七个成员：</p>
+<div class="tw"><table>
+<thead><tr><th>成员</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td><code>spec</code></td><td>规格名，<code>zikaron/1</code></td></tr>
+<tr><td><code>entryType</code></td><td>类型：<code>genesis</code>、<code>history</code>、<code>grant</code>、<code>revocation</code>、<code>adoption</code>、<code>succession</code>、<code>annotation</code>，或任何约定的新类型</td></tr>
+<tr><td><code>author</code></td><td>作者地址，小写十六进制</td></tr>
+<tr><td><code>seq</code></td><td>序号，从 0 起</td></tr>
+<tr><td><code>prev</code></td><td>前一条的编号；第一条为 <code>null</code></td></tr>
+<tr><td><code>body</code></td><td>正文，按类型而定</td></tr>
+<tr><td><code>sig</code></td><td>65 字节的 EIP-191 签名</td></tr>
+</tbody></table></div>
+<p>条目编号是它全部字节的 SHA-256。规范格式：紧凑书写，成员按字节序排列，整数按十进制书写，十六进制一律小写。详见法 §3 与 §4。</p>
+<h2 id="ledgerdir">命令行的账本目录</h2>
+<p>一个明文文件夹，每条条目一个文件，文件名为条目编号的 64 位十六进制加 <code>.entry</code>。<code>zikaron</code> 读写的就是这种目录。</p>
+<h2 id="machine">机器目录</h2>
+<p>每台机器一个。默认位置是 <code>~/.zikaron-desk.d/</code>；指针文件 <code>~/.zikaron-desk</code> 可以把它指到别处：一行绝对路径，以一个换行结尾，权限 0600。早先版本放在 <code>~/Library/Application Support/ZIKARON</code> 的，应用会沿用并迁移一次。</p>
+<div class="tw"><table>
+<thead><tr><th>文件</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td><code>keys-anchor.json</code></td><td>密钥库，格式 <code>zikaron-desk/keybox/3</code>，权限 0600；错误次数也记在这里</td></tr>
+<tr><td><code>identities-anchor.json</code></td><td>身份登记，加密</td></tr>
+<tr><td><code>machine.json</code></td><td>机器设置，格式 <code>zikaron-desk/machine/1</code>，明文，开锁前要读</td></tr>
+<tr><td><code>kits/index.json</code></td><td>记录包索引，明文，见下文</td></tr>
+<tr><td><code>records/index.json</code></td><td>签入时的文件名与位置，加密</td></tr>
+<tr><td><code>set-aside/</code></td><td>主钥已失、永久封存的文件，字节原样，按 1、2、3 编号平铺；目录已有时为 <code>set-aside-2</code>、<code>-3</code></td></tr>
+</tbody></table></div>
+<p>机器目录从 <code>HOME</code> 算起，应用只用自己的密钥库，系统钥匙串保持原样。</p>
+<h2 id="folder">数据目录</h2>
+<p>每个身份的每种角色一个，默认放在机器目录下，角色子目录为 <code>author</code>(记录者)或 <code>grantee</code>(使用方)。里面四个子目录：</p>
+<dl>
+<div><dt><code>ledger/</code></dt><dd>账本，每条条目一个加密文件。</dd></div>
+<div><dt><code>kits/</code></dt><dd>导出的记录包、授权文件、凭证、快照，以及签发时留存的条款文件(<code>kits/terms/</code>)。</dd></div>
+<div><dt><code>grants-held/</code></dt><dd>收到的授权，每份附上次复核的结论；收下的授权文件在 <code>grants-held/files/</code>。</dd></div>
+<div><dt><code>settings/</code></dt><dd>设置 <code>desk.json</code>、待上链队列 <code>queue.json</code>、上次账本检查 <code>last-audit.json</code>，以及只让一个窗口写入的锁 <code>writer.lock</code>。</dd></div>
+</dl>
+<p>数据目录的文件夹名和账本里的文件名，都由一把本机名钥转写，地址与条目编号由此从文件名上隐去；内容逐文件加密。要给别的工具读，导出账本镜像。</p>
+<h2 id="local">本机数据的加密</h2>
+<p>本机数据钥由主钥经 HKDF-SHA256 派生(信息串 <code>zikaron/local/v1</code>)，文件名钥另用信息串 <code>zikaron/names/v1</code>。每个文件以 XChaCha20-Poly1305 单独加密：</p>
+{{code:
+"zikaron-local/1\n" · 种类长度(1 字节) · 种类 · 版本(u16 大端) · 随机数(24 字节) · 密文与标签
+}}
+<p>随机数之前的部分都作为附加数据，所以一个文件绑定在它的种类与格式版本上。写入时先写临时文件，再改名到位。</p>
+<h2 id="keybox">密钥库</h2>
+<p>主钥与各身份的密钥封在 <code>keys-anchor.json</code> 里：口令经 scrypt(N=262144、r=8、p=1)派生密钥，以 AES-128-CTR 加密，keccak MAC 校验。口令为 8 位 ASCII 字母或数字，连错 5 次锁定，只能走恢复。</p>
+<h2 id="backup">整机备份</h2>
+<p>文件名 <code>zikaron-backup-YYYY-MM-DD.zikaron</code>(UTC 日期)，同一天再导出编号为 <code>-2</code>、<code>-3</code>。第一行为 <code>zikaron-backup/1</code>，第二行是规范 JSON 文件头：<code>app</code>、<code>created</code>、<code>format</code>、<code>kdf</code>(scrypt 的 N、r、p 与 32 字节盐)、<code>nonce</code>。正文用 scrypt(N=262144、r=8、p=1)从备份密码派生密钥，以 XChaCha20-Poly1305 加密，两行文件头作为附加数据。</p>
+<p>备份里有：身份登记、每个身份的密钥、每一份加密的本机文件(解开后放入)、主身份的记录与 <code>machine.json</code>。主钥、口令与错误次数留在本机；明文的导出件(记录包、索引、凭证、授权文件、镜像、密钥文件)也在备份之外。</p>
+<h2 id="keyfile">密钥文件</h2>
+<p>标准以太坊 keystore(V3)：scrypt(N=262144、r=8、p=1)、aes-128-ctr，文件名为 <code>UTC--&lt;时间&gt;--&lt;40 位十六进制地址&gt;</code>，权限 0600，以导出时设定的文件密码(至少 8 位)加密。写出后应用读回核对格式与地址，相符才算导出成功。</p>
+<h2 id="kit">记录包</h2>
+<p>一个文件夹，格式由 zikaron.kit/1 §7 规定：</p>
+{{code:
+kit-3fa9c2e1/
+  manifest.json            清单
+  entries/<64 位十六进制>.zk1   条目，每条一个文件
+  files/<路径>              原文件与附件
+  files/verify.md          给收件方的核验说明
+  proofs/<路径>             上链证明
+}}
+<p>清单列出每个条目的编号，每个文件的路径、大小与 SHA-256，以及每份证明对应的交易；包里出现清单之外的文件，核验即失败。记录包编号是清单字节的 SHA-256。包内路径只用 <code>a-z</code>、<code>0-9</code>、<code>.</code>、<code>_</code>、<code>-</code>；有附件改过名时，<code>files/zikaron-names.json</code> 记下原名与包内名的对照，改名规则为 <code>&lt;转写名&gt;-&lt;原名 SHA-256 前八位&gt;.&lt;扩展名&gt;</code>。</p>
+<p>导出的文件夹名为 <code>kit-</code> 加所选里序号最小的那件记录的内容指纹前八位；所选只含其他条目时为 <code>kit</code>，同名已有即编号为 <code>-2</code>、<code>-3</code>。</p>
+<h2 id="index">记录包索引</h2>
+<p>机器目录下的 <code>kits/index.json</code>，格式名 <code>zikaron.kits-index/1</code>，明文保存，供同一台机器上的其他应用只读访问，见<a href="integrate.html#kits">接入</a>。每导出一个记录包记一行，同一路径再导出时替换原行：</p>
+<div class="tw"><table>
+<thead><tr><th>字段</th><th>内容</th></tr></thead>
+<tbody>
+<tr><td><code>id</code></td><td>记录包编号</td></tr>
+<tr><td><code>created</code></td><td>导出时刻，Unix 秒</td></tr>
+<tr><td><code>root</code></td><td>账本创建条目的编号</td></tr>
+<tr><td><code>path</code></td><td>包的绝对路径</td></tr>
+<tr><td><code>contents</code></td><td>包内原件的内容指纹</td></tr>
+<tr><td><code>note_md</code></td><td>附言</td></tr>
+<tr><td><code>link</code></td><td>取处(这个包在网上的 https 地址)，可选</td></tr>
+</tbody></table></div>
+<h2 id="code">授权码与凭证</h2>
+<p>文本 <code>zikaron-grant:</code> 后接一段或多段，段间以 <code>.</code> 连接。每段是一条授权条目的规范字节，经 base64url 编码(省去填充)；多段时，从最初作者的授权依次排到当前这一份。全长上限 2,953 字节，恰为一个二维码的容量(版本 40、字节模式、纠错等级 L)。格式见 zikaron.kit/1 §6。</p>
+<p>凭证文件夹名为 <code>badge-</code> 加授权编号前十位，里面的 <code>badge.txt</code> 是原样的文本，<code>badge.svg</code> 是它的二维码。</p>
+<h2 id="zkgrant">授权文件</h2>
+<p>扩展名 <code>.zkgrant</code>，文件名为 <code>grant-</code> 加授权编号前十位。它是一个容器：第一行 <code>zikaron-kit-file/1</code>，之后每一项写成「包内路径、换行、十进制长度、换行、字节、换行」，清单在前，其余按字节序。上限为总长 64 MiB、4096 项。里面装着：</p>
+<ul>
+<li><code>manifest.json</code>；</li>
+<li><code>entries/*.zk1</code>：授权链各跳的条目，授权在本角色账本里时，连同签发者账本；</li>
+<li><code>files/zikaron-grant.txt</code>(授权码)、<code>files/terms/…</code>(条款文件)、<code>files/verify.md</code>，以及可选的 <code>files/publish.txt</code>(导出这份授权文件的数据目录所设的发布地址)。</li>
+</ul>
+<h2 id="mirror">账本镜像</h2>
+{{code:
+<所选文件夹>/ZIKARON-backup/<40 位十六进制地址>/<author|grantee>/
+  mirror.json              种类 desk-mirror,版本 1
+  entries/<64 位十六进制>     条目原文,文件名只有编号
+  held/<路径>               收到的授权等
+}}
+<p>同一文件夹里已有较早的镜像时，只补上新增的条目。要当作命令行的 <code>--ledger</code> 目录，把 <code>entries/</code> 里的文件复制到空文件夹，并在文件名后加 <code>.entry</code>。</p>
+<h2 id="derive">派生路径</h2>
+<div class="kv"><div><span class="k">记录者</span><span class="hash">m/44'/60'/0'/0/0</span></div><div><span class="k">使用方</span><span class="hash">m/44'/60'/0'/0/1</span></div></div>
+<h2 id="conv">约定的字面量</h2>
+<dl>
+<div><dt><code>bytes-sha256/1</code></dt><dd>存证的方式标记，文件、文件夹与 Git 仓库共用这一个，表示内容指纹是一串字节的 SHA-256。对文件，这串字节是文件的全部字节；对文件夹，是按相对路径排序的规范 JSON <code>{"files":[{"path":…,"sha256":…}…]}</code>(符号链接与特殊文件略过并计数，空文件夹拒收)；对 Git 仓库，是当前提交对象去掉 <code>commit &lt;长度&gt;\0</code> 头之后的字节，与 <code>git cat-file commit HEAD | shasum -a 256</code> 相同。与之配对的 <code>toolchain</code> 是这个字面量本身的 SHA-256：<code>0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d</code>。</dd></div>
+<div id="retraction"><dt><code>retraction</code></dt><dd>删除条目的类型名。正文中 <code>subject</code> 必填，为本账本里一条存证的编号，<code>0x</code> 加 64 位小写十六进制；<code>note_md</code> 可选。别的工具把它列为未知类型(<code>UNKNOWN_TYPE</code>)，账本结论照旧；本应用的读法写在 <code>zikaron_glue::retraction</code>，应用与命令行共用。</dd></div>
+<div><dt><code>for</code></dt><dd>存证正文里的附加成员：<code>app</code>、<code>identity</code>(hex20)、<code>ref</code>，另有可选的 <code>seat</code>。填了任一项，前三项都要有。</dd></div>
+<div><dt><code>upstream</code></dt><dd>授权正文里的附加成员，值为上游授权的编号，zikaron.kit/1 把它读作转授权。</dd></div>
+</dl>

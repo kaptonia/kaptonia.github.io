@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>安全 · 开发者指南</title>
+<meta name="description" content="本软件保管的是密钥与证据。本页说明它防范什么、依靠什么防范，以及维护者须遵守的规范。">
+<meta property="og:title" content="安全 · 开发者指南">
+<meta property="og:description" content="本软件保管的是密钥与证据。本页说明它防范什么、依靠什么防范，以及维护者须遵守的规范。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/security.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/security.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>安全</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html" class=on aria-current=page>安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="security" data-prev="compat.html" data-next="release.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>安全</h1><p class="lede">本软件保管的是密钥与证据。本页说明它防范什么、依靠什么防范，以及维护者须遵守的规范。</p>
+<h2 id="report">报告漏洞</h2>
+<p>请通过仓库的<a href="https://github.com/kaptonia/zikaron/security/advisories/new">私密漏洞报告</a>提交，写明受影响的版本、复现步骤、观察到的结果以及你判断的影响。修复发布之前，请把细节限于私密渠道。</p>
+<p>以下几类优先处理：签名绕过用户确认；核验对伪造的输入答「全部通过」；读出锁定状态下的本机数据或密钥；两份合规实现对同一输入给出相异的结论。</p>
+<h2 id="model">威胁模型</h2>
+<div class="tw"><table>
+<thead><tr><th>对手</th><th>防护</th></tr></thead>
+<tbody>
+<tr><td>趁你离开时坐到机器前的人</td><td>口令门；输错五次锁定；闲置自动锁定；锁定时从内存清除主钥。</td></tr>
+<tr><td>取得磁盘或备份文件的人</td><td>账本、设置、队列、身份登记与收到的授权都加密存放，密钥库另以口令加密；开锁前要读的机器设置与给别人读的导出件是明文。抵御离线穷举的，是口令与备份密码本身的强度，以及每次尝试都要跑的 scrypt（N=262144、r=8、p=1）。</td></tr>
+<tr><td>伪造记录交给你的人</td><td>签名、账本链条与链上记录相互印证，核验逐项给出结论。</td></tr>
+<tr><td>事后补造证据的人</td><td>上链给出时间上限；连续的账本占满了每一个位置。</td></tr>
+<tr><td>说谎的节点</td><td>多个节点的读数相互对照；单一来源时明确标注。</td></tr>
+<tr><td>诱导你签名的网页或应用</td><td>身份密钥只在 <b class="zk">Zikaron</b> 中使用；应用只签四个域里的两个：<code>zikaron/1</code> 与 <code>zikaron/1-adoption</code>。</td></tr>
+</tbody></table></div>
+<p>以下情形在防护范围之外：已解锁机器上运行的恶意软件、内存读取、操作系统或硬件层面的攻破。对此，软件如实声明自身的边界。</p>
+<h2 id="keys">密钥规范</h2>
+<dl>
+<div><dt>签名确定</dt><dd>采用 RFC 6979 确定性随机数与低 s 值。同一把密钥对同一份字节，在任何合规工具上都签出同一个签名。</dd></div>
+<div><dt>四个域相互独立</dt><dd>域的字面量写在被签消息中，一个域下的签名只在该域内有效。新增域时，选用与现有字面量全然相异的字面量。</dd></div>
+<div><dt>只签自己组装的字节</dt><dd>应用只对自己组装、且用户已在确认卡上看过的内容签名；签名入口仅对此类内容开放。</dd></div>
+<div><dt>密钥在内存中短暂停留</dt><dd>用后即清除。日志与错误信息中只写地址。</dd></div>
+<div><dt>密码学调用集中一处</dt><dd>椭圆曲线、哈希、密钥派生的调用集中在指定模块，其他代码经由该模块使用。</dd></div>
+</dl>
+<h2 id="chain">读链规范</h2>
+<dl>
+<div><dt>失败即答案缺席</dt><dd>节点连接失败、读数相异、扫描中断时，结论记为缺席，界面照此显示。网络故障与伪造记录，须让用户一眼分清。</dd></div>
+<div><dt>绿灯只来自完整的检查</dt><dd>交易进入区块只算「确认中」；账本检查的报告读到它，才点亮绿灯。</dd></div>
+<div><dt>回执成功才出队</dt><dd>条目在回执确认成功后离开队列；发送失败、等待超时的条目留在队列中。删除尚未发出的存证时，它也随之出队。</dd></div>
+<div><dt>重发前先查</dt><dd>已上链的条目挡在队列之外。重启后继续等待原交易的回执。</dd></div>
+<div><dt>逐次核对证书</dt><dd>每次连接都核对 <code>https</code> 节点的证书链与主机名。TLS 用 rustls，根证书随应用内置，与系统的证书库分开。</dd></div>
+<div><dt>输入设上限</dt><dd>每次读链 30 秒为限，应答至多 64 MiB。从发布地址取记录包只走 <code>https</code>，每个文件 20 秒、32 MiB，一个包至多 64 MiB，同源跳转至多 3 次。</dd></div>
+</dl>
+<h2 id="privacy">隐私</h2>
+<ul>
+<li>应用的网络请求只有这几个去处：用户配置的节点、用户填写的发布地址、核验时用户给出的 https 地址，以及收到的授权文件里带着的发布地址（定期复核时也会去取）。除此之外，应用零更新检查、零遥测。</li>
+<li>公共节点能看到查询的地址与合约，文档与界面如实告知。</li>
+<li>条目中的文字随账本流出（记录包、授权文件、镜像），永久可读；文档如实告知。</li>
+<li>短小、易猜的内容，其指纹能承受的穷举有限，文档提醒用户加入随机内容。</li>
+<li>签入时的文件名与路径留在本机，与账本分开存放；记录名称写进条目，随条目公开。</li>
+</ul>
+<h2 id="deps">依赖与供应链</h2>
+<ul>
+<li><code>Cargo.lock</code> 随仓库提交，发布构建使用 <code>--locked</code>。</li>
+<li>依赖保持精简，核与存储尽量只用标准库。</li>
+<li>升级密码学相关依赖时单独提交合并请求，附变更说明，并重跑全部一致性比对。</li>
+<li>新增依赖须说明用途、维护状况与许可。</li>
+<li>内嵌字体与其许可文本一并发布。</li>
+</ul>
+<h2 id="files">文件写入规范</h2>
+<ul>
+<li>先写临时文件并同步落盘，再重命名到位。</li>
+<li>已有文件一律保留：备份、记录包、授权文件遇到同名时自动编号另存，并告知存放位置；密钥文件与命令行遇到同名即停止。</li>
+<li>写完读回核对，密钥文件与备份尤其如此：读回相符才向用户报告成功。</li>
+<li>恢复备份、更换主身份这类改动整步完成：要么全部生效，要么保持原状。批量签名在第一处失败停下，已签的保留。</li>
+<li>主钥已失、永久封存的旧数据，字节原样移入 <code>set-aside</code> 目录。</li>
+<li>密钥文件权限设为 0600。</li>
+</ul>
+<h2 id="fail">失败必须可见</h2>
+<p>每次操作落空，界面都给出明确提示。这类软件中代价最高的缺陷，是被用户当作成功的失败：一份以为已经上链的证据，到要用时才发现缺失。评审合并请求时，对每个新操作都问一句：它失败时，用户看到什么？</p>
+<div class="pn"><a href="compat.html"><span>上一页</span>兼容与演进</a><a class="nx" href="release.html"><span>下一页</span>发布</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#report">报告漏洞</a><a href="#model">威胁模型</a><a href="#keys">密钥规范</a><a href="#chain">读链规范</a><a href="#privacy">隐私</a><a href="#deps">依赖与供应链</a><a href="#files">文件写入规范</a><a href="#fail">失败必须可见</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

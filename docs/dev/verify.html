@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>校验 · 开发者指南</title>
+<meta name="description" content="发布包、签名、法的摘要与登记合约，每个数值都可以自行复算。">
+<meta property="og:title" content="校验 · 开发者指南">
+<meta property="og:description" content="发布包、签名、法的摘要与登记合约，每个数值都可以自行复算。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/verify.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/verify.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>校验</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html" class=on aria-current=page>校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="verify" data-prev="index.html" data-next="build.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>校验</h1><p class="lede">发布包、签名、法的摘要与登记合约，每个数值都可以自行复算。</p>
+<h2 id="release">发布包</h2>
+<p>0.1.0 的发布物有三个文件，校验值写在发布清单 <code>SHA256SUMS.txt</code> 里：</p>
+<div class="kv"><div><span class="k"><code>.dmg</code></span><span class="hash">033cccae949d3d37d6c2c8674ae32419a01790c523ab34b84ea54211cc78d1dd</span></div><div><span class="k"><code>.pkg</code></span><span class="hash">6f49a4cb35b7e7aeaa2fc724382ff650bd9a6e6a6a5347d598533e8ee5f5464a</span></div><div><span class="k">源码包</span><span class="hash">383b08847004b3409275c388dd6e1b8bb76c63fab1e73d0d2734e6c6720b81f5</span></div></div>
+<p>算一个文件，与上表比对：</p>
+<div class="cmd"><code>shasum -a 256 ZIKARON-0.1.0-macos-arm64.dmg</code><button class="cp" type="button" data-copy="shasum -a 256 ZIKARON-0.1.0-macos-arm64.dmg" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>或者把发布清单和下载的文件放在同一个文件夹里，一次核对全部：</p>
+<div class="cmd"><code>shasum -a 256 -c --ignore-missing SHA256SUMS.txt</code><button class="cp" type="button" data-copy="shasum -a 256 -c --ignore-missing SHA256SUMS.txt" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p><a href="../../download.html#check">下载页</a>的拖放框做的是同一件事：在浏览器里算 SHA-256，与清单比对。</p>
+<h2 id="sign">签名</h2>
+<p>应用和 dmg 都由 Kaptonia 的自签证书签名；pkg 以 SHA-256 核对。装好之后查看应用的签名，输出里的 <code>Authority</code> 应为 Kaptonia，<code>Identifier</code> 应为 <code>com.kaptonia.zikaron.app</code>：</p>
+<div class="cmd"><code>codesign -dvv /Applications/ZIKARON.app</code><button class="cp" type="button" data-copy="codesign -dvv /Applications/ZIKARON.app" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>再看签名要求，<code>certificate leaf</code> 后面那一串是证书的 SHA-1：</p>
+<div class="cmd"><code>codesign -d -r- /Applications/ZIKARON.app</code><button class="cp" type="button" data-copy="codesign -d -r- /Applications/ZIKARON.app" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>要算证书的 SHA-256，先把证书取出来：</p>
+<div class="cmd block"><code>codesign -d --extract-certificates /Applications/ZIKARON.app
+shasum -a 256 codesign0</code><button class="cp" type="button" data-copy="codesign -d --extract-certificates /Applications/ZIKARON.app
+shasum -a 256 codesign0" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<div class="kv"><div><span class="k">签名者</span><span>CN=Kaptonia（自签）</span></div><div><span class="k">证书 SHA-256</span><span class="hash">a6ddc371e855197c5021ef44ab0802749cda318bc12d0138ccac9f46a4d46905</span></div><div><span class="k">证书 SHA-1</span><span class="hash">570690b34fc35243ae8b45be0aeb800e1074225e</span></div><div><span class="k">有效期</span><span>2026-09-26 至 2036-09-23</span></div></div>
+<p>dmg 本身的签名同样可查：<code>codesign -dvv ZIKARON-0.1.0-macos-arm64.dmg</code>。</p>
+<h2 id="anchored"><b class="zk">Zikaron</b> 证明</h2>
+<p>每次发布的代码是一次提交。0.1.0 发布之前，项目用 <b class="zk">Zikaron</b> 账本记下这次提交和各发布物的指纹，锚定到以太坊主网，写下即定，带有区块时间。下载表的「Zikaron 证明」一栏链到这笔交易。</p>
+<div class="kv"><div><span class="k">交易</span><span class="hash"><a href="https://etherscan.io/tx/0x028fdb5591635442bb0ca30dced70305438dac34434b7a02c9daa7f9054fd329">0x028fdb5591635442bb0ca30dced70305438dac34434b7a02c9daa7f9054fd329</a></span></div><div><span class="k">区块</span><span>26094186 · 2026-10-01 01:29:59 UTC</span></div><div><span class="k">记录者地址</span><span class="hash">0x3be672658efa08b9820bbebaf7c4f0e77433f878</span></div><div><span class="k">登记合约</span><span class="hash">0x36Ea8A857a5FE813429d4D9947000C644A88809A</span></div></div>
+<p>账本里记下的内容指纹：</p>
+<div class="kv"><div><span class="k"><code>.dmg</code></span><span class="hash">033cccae949d3d37d6c2c8674ae32419a01790c523ab34b84ea54211cc78d1dd</span></div><div><span class="k"><code>.pkg</code></span><span class="hash">6f49a4cb35b7e7aeaa2fc724382ff650bd9a6e6a6a5347d598533e8ee5f5464a</span></div><div><span class="k">源码包</span><span class="hash">383b08847004b3409275c388dd6e1b8bb76c63fab1e73d0d2734e6c6720b81f5</span></div><div><span class="k"><code>SHA256SUMS.txt</code></span><span class="hash">c054be85a20952f986ea46ad9f6201c2c9bdcbecef01ef62e650525a54e52cef</span></div><div><span class="k">源码提交 <code>54fe7db</code></span><span class="hash">b0a679c69cac91c68b99fe704f30abd2bdc9107053650dec2373f2507ed1b434</span></div></div>
+<p>源码提交的指纹是提交对象的 SHA-256。在仓库标签 <code>v0.1.0</code> 的克隆里运行：</p>
+<div class="cmd"><code>git cat-file commit HEAD | shasum -a 256</code><button class="cp" type="button" data-copy="git cat-file commit HEAD | shasum -a 256" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>链上锚定的是账本条目的编号，条目里记着上面这些指纹。</p>
+<h2 id="law">法的摘要</h2>
+<p>两部法已冻结，摘要写在法文里。解开源码后自行计算，结果应与下表一致：</p>
+<div class="cmd block"><code>cd zikaron-0.1.0/base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh</code><button class="cp" type="button" data-copy="cd zikaron-0.1.0/base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<div class="kv"><div><span class="k">zikaron/1 · §12.5</span><span class="hash">0xbecfb6f0d0f8b71c314f1b2efef414abfb6df74b711ca8f81efdef685d0132fc</span></div><div><span class="k">zikaron.kit/1 · §13.5</span><span class="hash">0x3f8368ebc8b5b7c97e4b5c4240f57f6fc06421b4effbd5a7446d128434a20535</span></div></div>
+<p>两个脚本各读几个 Python 源文件，算出一个摘要；其中任一字节改动，摘要随之改变。详见<a href="law.html">法文与一致性套件</a>。</p>
+<h2 id="contract">登记合约</h2>
+<p>登记合约只做一件事：收到指纹，发出一条事件。应用内置两处部署，读取链上代码并算 keccak256，结果应等于下表的代码哈希：</p>
+<div class="cmd"><code>cast keccak $(cast code &lt;合约地址&gt; --rpc-url &lt;节点&gt;)</code><button class="cp" type="button" data-copy="cast keccak $(cast code &lt;合约地址&gt; --rpc-url &lt;节点&gt;)" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<div class="kv"><div><span class="k">代码哈希</span><span class="hash">0xfa97a1d9b22fab2b52f4e27c9a965b32734c40001b565ab365d05c887118f57d</span></div><div><span class="k">以太坊主网</span><span class="hash">0x36Ea8A857a5FE813429d4D9947000C644A88809A</span></div><div><span class="k">Sepolia</span><span class="hash">0xC29410B882c4C3b77e33659d2f06ac563e7B08a3</span></div></div>
+<p>从源码重算这个哈希的方法，见<a href="contract.html#codehash">登记合约与上链</a>。</p>
+<div class="pn"><a href="index.html"><span>上一页</span>概览</a><a class="nx" href="build.html"><span>下一页</span>从源码构建</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#release">发布包</a><a href="#sign">签名</a><a href="#anchored">Zikaron 证明</a><a href="#law">法的摘要</a><a href="#contract">登记合约</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

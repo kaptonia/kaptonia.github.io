@@ -1,0 +1,46 @@
+<!--
+title: Checksums
+-->
+<p class="lede">Every figure for the release files, the signature, the law’s digests and the registry contract can be recomputed yourself.</p>
+<h2 id="release">Release files</h2>
+<p>Version 0.1.0 has three release files, with their checksums in the release list <code>SHA256SUMS.txt</code>:</p>
+<div class="kv"><div><span class="k"><code>.dmg</code></span><span class="hash">033cccae949d3d37d6c2c8674ae32419a01790c523ab34b84ea54211cc78d1dd</span></div><div><span class="k"><code>.pkg</code></span><span class="hash">6f49a4cb35b7e7aeaa2fc724382ff650bd9a6e6a6a5347d598533e8ee5f5464a</span></div><div><span class="k">Source</span><span class="hash">383b08847004b3409275c388dd6e1b8bb76c63fab1e73d0d2734e6c6720b81f5</span></div></div>
+<p>Compute one file and compare it with the table:</p>
+{{cmd:shasum -a 256 {{FILE0}}}}
+<p>Or put the release list and the downloaded files in one folder and check them all at once:</p>
+{{cmd:shasum -a 256 -c --ignore-missing SHA256SUMS.txt}}
+<p>The drop zone on the <a href="../../download.html#check">download page</a> does the same: it computes the SHA-256 in the browser and compares it with the list.</p>
+<h2 id="sign">Signature</h2>
+<p>The app and the dmg are signed with Kaptonia’s self-signed certificate; the pkg is checked by its SHA-256. Once installed, look at the app’s signature: <code>Authority</code> in the output should be Kaptonia, and <code>Identifier</code> should be <code>com.kaptonia.zikaron.app</code>:</p>
+{{cmd:codesign -dvv /Applications/ZIKARON.app}}
+<p>Then look at the signing requirement; the string after <code>certificate leaf</code> is the certificate’s SHA-1:</p>
+{{cmd:codesign -d -r- /Applications/ZIKARON.app}}
+<p>To compute the certificate’s SHA-256, extract the certificate first:</p>
+{{code:
+codesign -d --extract-certificates /Applications/ZIKARON.app
+shasum -a 256 codesign0
+}}
+<div class="kv"><div><span class="k">Signer</span><span>CN=Kaptonia (self-signed)</span></div><div><span class="k">Certificate SHA-256</span><span class="hash">a6ddc371e855197c5021ef44ab0802749cda318bc12d0138ccac9f46a4d46905</span></div><div><span class="k">Certificate SHA-1</span><span class="hash">570690b34fc35243ae8b45be0aeb800e1074225e</span></div><div><span class="k">Valid</span><span>2026-09-26 to 2036-09-23</span></div></div>
+<p>The dmg’s own signature can be checked the same way: <code>codesign -dvv ZIKARON-0.1.0-macos-arm64.dmg</code>.</p>
+<h2 id="anchored">{{Z}} record</h2>
+<p>The code of each release is one commit. Before 0.1.0 was published, the project recorded that commit and each release file’s fingerprint in its {{Z}} ledger and anchored them on Ethereum mainnet: written once and final, with a block time. The “Zikaron record” column of the download table links to this transaction.</p>
+<div class="kv"><div><span class="k">Transaction</span><span class="hash"><a href="https://etherscan.io/tx/0x028fdb5591635442bb0ca30dced70305438dac34434b7a02c9daa7f9054fd329">0x028fdb5591635442bb0ca30dced70305438dac34434b7a02c9daa7f9054fd329</a></span></div><div><span class="k">Block</span><span>26094186 · 2026-10-01 01:29:59 UTC</span></div><div><span class="k">Recorder address</span><span class="hash">0x3be672658efa08b9820bbebaf7c4f0e77433f878</span></div><div><span class="k">Registry contract</span><span class="hash">{{MAINNET}}</span></div></div>
+<p>The content fingerprints recorded in the ledger:</p>
+<div class="kv"><div><span class="k"><code>.dmg</code></span><span class="hash">033cccae949d3d37d6c2c8674ae32419a01790c523ab34b84ea54211cc78d1dd</span></div><div><span class="k"><code>.pkg</code></span><span class="hash">6f49a4cb35b7e7aeaa2fc724382ff650bd9a6e6a6a5347d598533e8ee5f5464a</span></div><div><span class="k">Source</span><span class="hash">383b08847004b3409275c388dd6e1b8bb76c63fab1e73d0d2734e6c6720b81f5</span></div><div><span class="k"><code>SHA256SUMS.txt</code></span><span class="hash">c054be85a20952f986ea46ad9f6201c2c9bdcbecef01ef62e650525a54e52cef</span></div><div><span class="k">Source commit <code>54fe7db</code></span><span class="hash">b0a679c69cac91c68b99fe704f30abd2bdc9107053650dec2373f2507ed1b434</span></div></div>
+<p>The source commit’s fingerprint is the SHA-256 of the commit object. In a clone of the repository at tag <code>v{{VER}}</code>, run:</p>
+{{cmd:git cat-file commit HEAD | shasum -a 256}}
+<p>What is anchored on chain is the IDs of the ledger entries, and the entries record the fingerprints above.</p>
+<h2 id="law">The law’s digests</h2>
+<p>Both laws are frozen, and their digests are written in the law texts. Unpack the source and compute them yourself; the results should match the table:</p>
+{{code:
+cd zikaron-{{VER}}/base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh
+}}
+<div class="kv"><div><span class="k">zikaron/1 · §12.5</span><span class="hash">{{CORE}}</span></div><div><span class="k">zikaron.kit/1 · §13.5</span><span class="hash">{{KIT}}</span></div></div>
+<p>Each script reads a few Python source files and computes one digest; change any byte of them and the digest changes. See <a href="law.html">The law and the conformance suite</a>.</p>
+<h2 id="contract">The registry contract</h2>
+<p>The registry contract does one thing: it receives a fingerprint and emits an event. The app comes with two deployments; read the code on chain and compute its keccak256, and the result should equal the code hash below:</p>
+{{cmd:cast keccak $(cast code <contract address> --rpc-url <node>)}}
+<div class="kv"><div><span class="k">Code hash</span><span class="hash">{{CODEHASH}}</span></div><div><span class="k">Ethereum mainnet</span><span class="hash">{{MAINNET}}</span></div><div><span class="k">Sepolia</span><span class="hash">{{SEPOLIA}}</span></div></div>
+<p>How to recompute the hash from source is under <a href="contract.html#codehash">The registry contract and anchoring</a>.</p>

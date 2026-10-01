@@ -1,0 +1,57 @@
+<!--
+title: Alerts and settings
+-->
+<p class="lede">The Alerts page gathers what needs your attention in one place; Settings has seven sections, the same for both roles.</p>
+<h2 id="alerts">The Alerts page</h2>
+<p>“Alerts” in the sidebar. Each row of the table is one matter: a light, the item and its current state. A row that needs action has an “Open …” link at its right; clicking the row goes to the page where it can be dealt with and opens the relevant part. The other rows read “All clear”. The number next to “Alerts” in the sidebar counts the amber and red rows.</p>
+<div class="tw"><table>
+<thead><tr><th>Recorder</th><th>User</th></tr></thead>
+<tbody>
+<tr><td>Pending</td><td>My grants expiring</td></tr>
+<tr><td>Queue backlog</td><td>Grant revoked</td></tr>
+<tr><td>Grants expiring</td><td>Whole-machine backup</td></tr>
+<tr><td>Whole-machine backup</td><td>Ledger handover</td></tr>
+<tr><td>Ledger check result</td><td>Upstream issue</td></tr>
+</tbody></table></div>
+<ul>
+<li>“Whole-machine backup” reads “Not backed up yet” until the first export, and “N not backed up” when ledger entries or received grants have been added since the last one.</li>
+<li>Revocation watch alerts come at the end of the table, one row each, listed in the session that found them; a revoked grant keeps the mark “Revoked by issuer” in My grants.</li>
+</ul>
+<h2 id="notify">How alerts reach you</h2>
+<p>When one of the following newly appears, the window asks the system for attention once (on macOS the Dock icon bounces) and a toast starting with “Alert:” appears: for the Recorder, “Grants expiring”, “Whole-machine backup”, and a ledger check result of a broken chain; for the User, “My grants expiring” (expired ones included), “Whole-machine backup”, “Upstream issue”, and revocation watch. The other amber and red rows show on the Alerts page and in the sidebar count.</p>
+<p>Each matter alerts once. When the situation changes, for example a new deadline or new entries in an upstream ledger, it counts as a new matter and alerts again. Network errors show as “Sync failed” in the status line.</p>
+<h2 id="sync">Sync and the status line</h2>
+<p>The status line shows the most pressing of these: “In progress: …” (click it to return to the page where the task started), “Syncing…”, “Sync failed”, “Last synced HH:MM” and “Not synced yet”. Click the sync icon at the right end of the status line to read the chain in the background for the current role: both roles read the signing key’s balance once; a Recorder whose ledger exists also runs a ledger check; a User also re-verifies My grants.</p>
+<h2 id="periods">Check intervals</h2>
+<p>Settings › Notifications: the Recorder’s “Ledger check” interval is 300 seconds out of the box, and the User’s “Grant verification interval” is 600 seconds. Press “Change interval…” and save a number of seconds; 0 turns the timer off, and the ledger check still runs at once whenever the ledger has changed or has no result yet.</p>
+<h2 id="settings">The seven sections</h2>
+<div class="tw"><table>
+<thead><tr><th>Section</th><th>Contains</th></tr></thead>
+<tbody>
+<tr><td>Language and time</td><td>“中文” or “English”; time zone “UTC” (the default) or “Follow the system”, used for every time shown in the window</td></tr>
+<tr><td>Appearance</td><td>“Light” (the default), “Dark” or “Follow the system”</td></tr>
+<tr><td>Identity key</td><td>Identities, passcode and key backup; see <a href="keys.html">Identities and keys</a></td></tr>
+<tr><td>Network</td><td>Nodes, registry contract, auto put on chain and publish address; see <a href="anchoring.html#networks">Networks</a></td></tr>
+<tr><td>Notifications</td><td>How often the ledger is checked and grants re-verified</td></tr>
+<tr><td>Local data</td><td>Encryption, backup and data folder; see <a href="data.html">Local data and backups</a></td></tr>
+<tr><td>About</td><td>Version, setup check, run wizard again and diagnostics</td></tr>
+</tbody></table></div>
+<p>Appearance, auto-lock, language, the chosen network and the record of the last whole-machine backup are kept on this machine; they apply to every identity and are used on the passcode gate too. All other settings are kept in the current data folder.</p>
+<p>“Setup check” on the About page has a light for each item, with unfinished ones marked “To set up”; “Run self-check” in the “Details” fold at the bottom runs a self-check in the background.</p>
+<h2 id="keys">Keyboard shortcuts</h2>
+<div class="tw"><table>
+<thead><tr><th>Keys</th><th>Action</th></tr></thead>
+<tbody>
+<tr><td>⌘1 to ⌘6</td><td>Open the sidebar pages in order</td></tr>
+<tr><td>⌘[ / ⌘]</td><td>Back / forward</td></tr>
+<tr><td>⌘,</td><td>Settings</td></tr>
+<tr><td>⌘L</td><td>Lock</td></tr>
+</tbody></table></div>
+<p>On Linux, use Ctrl in place of ⌘. Shortcuts pause while the passcode gate, the wizard or a card is open.</p>
+<h2 id="buttons">Button colours</h2>
+<dl>
+<div><dt>Blue</dt><dd>The main action on the screen, at most one per screen.</dd></div>
+<div><dt>White</dt><dd>Every other action.</dd></div>
+<div><dt>White with red text</dt><dd>Opens a confirmation card or the next step; it only leads on.</dd></div>
+<div><dt>Solid red</dt><dd>Writes to the ledger or sends to the chain the moment it is pressed; it appears on the final confirmation card alone.</dd></div>
+</dl>

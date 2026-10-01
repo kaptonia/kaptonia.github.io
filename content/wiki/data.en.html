@@ -1,0 +1,60 @@
+<!--
+title: Local data and backups
+-->
+<p class="lede">Ledgers, settings and the grants you receive are all kept encrypted on your machine. How much comes back after a computer is replaced or lost depends on which backups were made beforehand.</p>
+<h2 id="sealed">Local data is always encrypted</h2>
+<p>All local data is encrypted under one master key, and the master key is opened by the passcode. Ledger entries, settings, the pending queue, the identity registry, the record index, and received grants and terms files are all encrypted with a local data key derived from the master key (XChaCha20-Poly1305). While the app is locked all of it stays sealed, and someone who copies this machine’s files needs the passcode to read them.</p>
+<p>Three kinds of file sit outside the master key’s encryption, because they are meant for others to read or must be read before unlocking:</p>
+<ul>
+<li>Read before unlocking: the key store itself (encrypted separately), the machine settings <code>machine.json</code>, and the data folder pointer.</li>
+<li>Exports meant for others: record kits and the record kit index, grant files, credentials, ledger mirrors, key files and whole-machine backups (a whole-machine backup is encrypted with its backup password).</li>
+<li>Files other people send you.</li>
+</ul>
+<h2 id="where">Where the files live</h2>
+<dl>
+<div><dt>Machine folder</dt><dd>Holds the key store, the identity registry, the machine settings and the record kit index. Its default location is <code>~/.zikaron-desk.d/</code>; the pointer file <code>~/.zikaron-desk</code> (one line holding an absolute path) can point it elsewhere.</dd></div>
+<div><dt>Data folders</dt><dd>One for each role of each identity, holding the ledger, settings, pending queue, received grants and so on.</dd></div>
+</dl>
+<h2 id="backup">Whole-machine backup</h2>
+<p>One backup file restores everything: every identity and key on this machine, all local data and all settings. The master key, the passcode and the wrong-try count stay on the machine and stay out of the backup.</p>
+<ol>
+<li>“Export backup…” in Settings › Local data: enter this machine’s passcode, choose a backup password (at least 8 characters) and repeat it, choose where to save it, and press “Export”.</li>
+<li>The file is named <code>zikaron-backup-YYYY-MM-DD.zikaron</code>; a second export on the same day gets a number, and earlier files stay as they are.</li>
+<li>The app reads the file back and opens it once to check it, and then says “Backup exported: …”.</li>
+</ol>
+<p>A backup derives its key from the backup password with scrypt (N=262144, r=8, p=1) and is encrypted with XChaCha20-Poly1305. The backup password is the one key to the backup; keep it safe in another place.</p>
+<p><b>Restoring from a backup.</b> “Restore from backup…”: choose the backup file, enter the backup password and this machine’s passcode, and press “Recover”. The machine’s identities, keys and data are replaced whole by the backup’s, and the passcode stays the same; whatever this machine held beyond the backup is replaced with it. The restore happens completely or leaves everything as it was. Old files that still fail to open afterwards are moved unchanged into the <code>set-aside</code> folder in the machine folder.</p>
+<p>When ledger entries or received grants have been added since the last backup, the Alerts page shows “N not backed up”; export again.</p>
+<h2 id="words">With the recovery phrase alone</h2>
+<p>A recovery phrase brings back keys. Entry files live on the machine, and the chain holds their fingerprints; so with the recovery phrase alone, what comes back is the data readable on chain; the entries themselves rest on a whole-machine backup, and the original files on what you keep yourself.</p>
+<h2 id="retrieve">Fetching the ledger</h2>
+<p>When an identity is imported again from its recovery phrase, private key or key file, a red box appears at the top of the Local data page: “This identity was restored: its ledger has not been fetched”. Until the ledger is fetched, the identity can read and writing is paused. To fetch it, choose a whole-machine backup, enter the backup password and press “Fetch ledger”. The app takes this identity’s ledger from the backup and compares it with this key’s anchors on chain:</p>
+<dl>
+<div><dt>Everything matches</dt><dd>Every anchor on chain is in the ledger, and writing opens again.</dd></div>
+<div><dt>The chain has newer entries</dt><dd>Some anchors on chain are missing from the fetched ledger, and the identity stays read-only. Find the newer backup and fetch again.</dd></div>
+<div><dt>Conflict with entries on this machine</dt><dd>A conflict card appears; after “Fetch and replace”, the machine’s previous data is kept as “Old data” and can be viewed read-only.</dd></div>
+</dl>
+<p>This way, the ledger that continues is always the newest one.</p>
+<h2 id="mirror">Ledger mirror</h2>
+<p>A Recorder’s Local data page has “Export ledger mirror…”: it exports the ledger to a folder you choose, laid out as <code>ZIKARON-backup/&lt;address&gt;/&lt;role&gt;</code>; when the folder already holds an older mirror, only the new entries are added. A mirror is an export for other tools to read, and entries for the <code>zikaron</code> command line come from here; see <a href="../dev/cli.html#sealed">Command line</a>. To restore a machine, use a whole-machine backup.</p>
+<h2 id="folder">Data folder</h2>
+<dl>
+<div><dt>Change data folder…</dt><dd>Lasts for this session; the next launch returns to this identity’s own data folder.</dd></div>
+<div><dt>Move to an empty folder</dt><dd>Moves the data folder there and makes it this identity’s data folder; the files at the old location stay as they are, to clear when you choose.</dd></div>
+<div><dt>Import grants folder…</dt><dd>For the User: imports the grant entry files in a folder in one go.</dd></div>
+<div><dt>Reconcile</dt><dd>“Reconcile now” under “Advanced options” checks the local ledger offline and, once it passes, allows writing again.</dd></div>
+</dl>
+<p>One window at a time writes to a data folder; a window opened later can only read, and shows the read-only bar at the top.</p>
+<h2 id="readonly">When the ledger turns read-only</h2>
+<dl>
+<div><dt>Ledger handed over</dt><dd>The ledger now belongs to a new key, and this machine can read it.</dd></div>
+<div><dt>Ledger chain broken</dt><dd>The ledger check found a broken chain. Press “Go to Restore” and restore from a whole-machine backup, or reconcile under “Advanced options”.</dd></div>
+<div><dt>Another window is writing</dt><dd>Close the other window, then reopen this data folder (lock and unlock, or restart the app) to write; or carry on reading here.</dd></div>
+<div><dt>Restored identity</dt><dd>Read-only until its ledger is fetched; see above.</dd></div>
+</dl>
+<h2 id="habit">Backup essentials</h2>
+<ol>
+<li>Write the recovery phrase on paper and keep it apart from the computer.</li>
+<li>Keep whole-machine backups on another disk, and the backup password in another place.</li>
+<li>Keep the original files yourself. The ledger records fingerprints; to prove something later, you show the original, byte for byte.</li>
+</ol>

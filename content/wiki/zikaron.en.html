@@ -1,0 +1,42 @@
+<!--
+title: Zikaron
+nav: Introduction
+-->
+<p class="lede">Evidence infrastructure. ZIKARON Desk is a desktop application for your own machine: it records your works or files in an append-only ledger, anchors that ledger to Ethereum, and lets you issue grants from it. Whoever receives a grant can verify it independently, on any machine.</p>
+<h2 id="name">The name</h2>
+<p>Zikaron (Hebrew <span lang="he" dir="rtl">זִכָּרוֹן</span>) means “memorial”. When Israel crossed the Jordan, Joshua had twelve men each carry a stone out of the river to be set up as a memorial: when the ark of the covenant entered the Jordan, the waters were cut off before it, and the stones were to keep that day in Israel’s memory for ever (Joshua 4:4–7).</p>
+<h2 id="why">Why evidence comes first</h2>
+<p>Ownership, trade and rulings all rest, in the end, on a settled record. A record weighs most when it was made while the outcome still lay ahead, because then everyone is still willing to record things as they are. So evidence is the foundation of everything else, and it is released first.</p>
+<p>One person can keep evidence alone: what you record today has a time today.</p>
+<h2 id="how">How it works</h2>
+<ol>
+<li><b>Record.</b> Drop a file into the app. It computes the file’s content fingerprint and writes it as an anchored record in your ledger, signed by your key. The file stays on your machine.</li>
+<li><b>Put on chain.</b> The entries are sent to Ethereum. From then on it can be shown that the content existed by that moment at the latest.</li>
+<li><b>Grant or present.</b> To grant rights in a work, issue a grant; to present evidence, export a record kit.</li>
+<li><b>Verify.</b> With a grant file, the other side checks it themselves, item by item: signature, ledger, anchoring, validity and revocation; with a record kit, signature, ledger and anchoring; with a grant code alone, signature and validity.</li>
+</ol>
+<p>Each step has its own page: <a href="ledger.html">The ledger and its entries</a>, <a href="anchoring.html">Anchoring and networks</a>, <a href="grants.html">Grants</a>, <a href="kits.html">Record kits</a> and <a href="verify.html">Verification</a>.</p>
+<h2 id="roles">Two roles</h2>
+<dl>
+<div><dt>Recorder</dt><dd>Records their own works, issues grants, puts entries on chain, exports record kits.</dd></div>
+<div><dt>User</dt><dd>Receives other people’s grants and verifies them, checks received files and terms, creates credentials, and can sublicense.</dd></div>
+</dl>
+<p>Both roles live in one app, switched at the top of the sidebar. Each role has its own key, address and ledger; see <a href="keys.html">Identities and keys</a>.</p>
+<h2 id="enforce">Who enforces creative rights</h2>
+<p>In the past, a registry certified authorship, grants rested on contracts and notaries, and infringement went to courts and police. Here, who recorded what and when, and what was granted to whom, is visible to all and checkable by all. The enforcers are the users: before buying, using or passing a work on, they check the grant and accept what passes.</p>
+<p>The ledger records facts. Accusing someone of infringement is speech, weighted by the speaker, and it stays outside the ledger; the ledger lets anyone check such a claim within seconds.</p>
+<h2 id="limits">Limits</h2>
+<ul>
+<li>Whether two works are alike, and which is the original, is for an arbiter to decide.</li>
+<li>Payment happens elsewhere; the app handles documents and checks.</li>
+<li>Files stay on your machine and you keep your own keys. The app connects to the nodes you configure, the publish address you enter, and the https addresses you give when verifying or that a grant file carries.</li>
+<li>To look up a ledger you first need its address. Directories, showcases and rankings are left to whoever wants to build them.</li>
+<li>Whether to use a work is always the user’s decision.</li>
+</ul>
+<h2 id="release">Release</h2>
+<dl>
+<div><dt>Current version</dt><dd>ZIKARON Desk 0.1.0.</dd></div>
+<div><dt>Packages</dt><dd>Macs with Apple silicon, macOS 11 or later; see the <a href="../../download.html">download page</a>. On x86_64 Linux, build from source; see <a href="../dev/build.html">Developer guide · Building from source</a>.</dd></div>
+<div><dt>Command line</dt><dd>The <code>zikaron</code> that comes with the app, one verb per action; see <a href="../dev/cli.html">Command line</a>.</dd></div>
+<div><dt>Licence</dt><dd>MIT; the source is public on GitHub.</dd></div>
+</dl>

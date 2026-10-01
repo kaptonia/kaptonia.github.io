@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Local data and backups · Wiki</title>
+<meta name="description" content="Ledgers, settings and the grants you receive are all kept encrypted on your machine. How much comes back after a computer is replaced or lost depends on which backups were made beforehand.">
+<meta property="og:title" content="Local data and backups · Wiki">
+<meta property="og:description" content="Ledgers, settings and the grants you receive are all kept encrypted on your machine. How much comes back after a computer is replaced or lost depends on which backups were made beforehand.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/data.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/data.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Local data and backups</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">The ledger and its entries</a><a href="anchoring.html">Anchoring and networks</a><a href="grants.html">Grants</a><a href="kits.html">Record kits</a><a href="verify.html">Verification</a><a href="evidence.html">What a record proves</a><a href="keys.html">Identities and keys</a><a href="data.html" class=on aria-current=page>Local data and backups</a><a href="alerts.html">Alerts and settings</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="data" data-prev="keys.html" data-next="alerts.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Local data and backups</h1><p class="lede">Ledgers, settings and the grants you receive are all kept encrypted on your machine. How much comes back after a computer is replaced or lost depends on which backups were made beforehand.</p>
+<h2 id="sealed">Local data is always encrypted</h2>
+<p>All local data is encrypted under one master key, and the master key is opened by the passcode. Ledger entries, settings, the pending queue, the identity registry, the record index, and received grants and terms files are all encrypted with a local data key derived from the master key (XChaCha20-Poly1305). While the app is locked all of it stays sealed, and someone who copies this machine’s files needs the passcode to read them.</p>
+<p>Three kinds of file sit outside the master key’s encryption, because they are meant for others to read or must be read before unlocking:</p>
+<ul>
+<li>Read before unlocking: the key store itself (encrypted separately), the machine settings <code>machine.json</code>, and the data folder pointer.</li>
+<li>Exports meant for others: record kits and the record kit index, grant files, credentials, ledger mirrors, key files and whole-machine backups (a whole-machine backup is encrypted with its backup password).</li>
+<li>Files other people send you.</li>
+</ul>
+<h2 id="where">Where the files live</h2>
+<dl>
+<div><dt>Machine folder</dt><dd>Holds the key store, the identity registry, the machine settings and the record kit index. Its default location is <code>~/.zikaron-desk.d/</code>; the pointer file <code>~/.zikaron-desk</code> (one line holding an absolute path) can point it elsewhere.</dd></div>
+<div><dt>Data folders</dt><dd>One for each role of each identity, holding the ledger, settings, pending queue, received grants and so on.</dd></div>
+</dl>
+<h2 id="backup">Whole-machine backup</h2>
+<p>One backup file restores everything: every identity and key on this machine, all local data and all settings. The master key, the passcode and the wrong-try count stay on the machine and stay out of the backup.</p>
+<ol>
+<li>“Export backup…” in Settings › Local data: enter this machine’s passcode, choose a backup password (at least 8 characters) and repeat it, choose where to save it, and press “Export”.</li>
+<li>The file is named <code>zikaron-backup-YYYY-MM-DD.zikaron</code>; a second export on the same day gets a number, and earlier files stay as they are.</li>
+<li>The app reads the file back and opens it once to check it, and then says “Backup exported: …”.</li>
+</ol>
+<p>A backup derives its key from the backup password with scrypt (N=262144, r=8, p=1) and is encrypted with XChaCha20-Poly1305. The backup password is the one key to the backup; keep it safe in another place.</p>
+<p><b>Restoring from a backup.</b> “Restore from backup…”: choose the backup file, enter the backup password and this machine’s passcode, and press “Recover”. The machine’s identities, keys and data are replaced whole by the backup’s, and the passcode stays the same; whatever this machine held beyond the backup is replaced with it. The restore happens completely or leaves everything as it was. Old files that still fail to open afterwards are moved unchanged into the <code>set-aside</code> folder in the machine folder.</p>
+<p>When ledger entries or received grants have been added since the last backup, the Alerts page shows “N not backed up”; export again.</p>
+<h2 id="words">With the recovery phrase alone</h2>
+<p>A recovery phrase brings back keys. Entry files live on the machine, and the chain holds their fingerprints; so with the recovery phrase alone, what comes back is the data readable on chain; the entries themselves rest on a whole-machine backup, and the original files on what you keep yourself.</p>
+<h2 id="retrieve">Fetching the ledger</h2>
+<p>When an identity is imported again from its recovery phrase, private key or key file, a red box appears at the top of the Local data page: “This identity was restored: its ledger has not been fetched”. Until the ledger is fetched, the identity can read and writing is paused. To fetch it, choose a whole-machine backup, enter the backup password and press “Fetch ledger”. The app takes this identity’s ledger from the backup and compares it with this key’s anchors on chain:</p>
+<dl>
+<div><dt>Everything matches</dt><dd>Every anchor on chain is in the ledger, and writing opens again.</dd></div>
+<div><dt>The chain has newer entries</dt><dd>Some anchors on chain are missing from the fetched ledger, and the identity stays read-only. Find the newer backup and fetch again.</dd></div>
+<div><dt>Conflict with entries on this machine</dt><dd>A conflict card appears; after “Fetch and replace”, the machine’s previous data is kept as “Old data” and can be viewed read-only.</dd></div>
+</dl>
+<p>This way, the ledger that continues is always the newest one.</p>
+<h2 id="mirror">Ledger mirror</h2>
+<p>A Recorder’s Local data page has “Export ledger mirror…”: it exports the ledger to a folder you choose, laid out as <code>ZIKARON-backup/&lt;address&gt;/&lt;role&gt;</code>; when the folder already holds an older mirror, only the new entries are added. A mirror is an export for other tools to read, and entries for the <code>zikaron</code> command line come from here; see <a href="../dev/cli.html#sealed">Command line</a>. To restore a machine, use a whole-machine backup.</p>
+<h2 id="folder">Data folder</h2>
+<dl>
+<div><dt>Change data folder…</dt><dd>Lasts for this session; the next launch returns to this identity’s own data folder.</dd></div>
+<div><dt>Move to an empty folder</dt><dd>Moves the data folder there and makes it this identity’s data folder; the files at the old location stay as they are, to clear when you choose.</dd></div>
+<div><dt>Import grants folder…</dt><dd>For the User: imports the grant entry files in a folder in one go.</dd></div>
+<div><dt>Reconcile</dt><dd>“Reconcile now” under “Advanced options” checks the local ledger offline and, once it passes, allows writing again.</dd></div>
+</dl>
+<p>One window at a time writes to a data folder; a window opened later can only read, and shows the read-only bar at the top.</p>
+<h2 id="readonly">When the ledger turns read-only</h2>
+<dl>
+<div><dt>Ledger handed over</dt><dd>The ledger now belongs to a new key, and this machine can read it.</dd></div>
+<div><dt>Ledger chain broken</dt><dd>The ledger check found a broken chain. Press “Go to Restore” and restore from a whole-machine backup, or reconcile under “Advanced options”.</dd></div>
+<div><dt>Another window is writing</dt><dd>Close the other window, then reopen this data folder (lock and unlock, or restart the app) to write; or carry on reading here.</dd></div>
+<div><dt>Restored identity</dt><dd>Read-only until its ledger is fetched; see above.</dd></div>
+</dl>
+<h2 id="habit">Backup essentials</h2>
+<ol>
+<li>Write the recovery phrase on paper and keep it apart from the computer.</li>
+<li>Keep whole-machine backups on another disk, and the backup password in another place.</li>
+<li>Keep the original files yourself. The ledger records fingerprints; to prove something later, you show the original, byte for byte.</li>
+</ol>
+<div class="pn"><a href="keys.html"><span>Previous</span>Identities and keys</a><a class="nx" href="alerts.html"><span>Next</span>Alerts and settings</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#sealed">Local data is always encrypted</a><a href="#where">Where the files live</a><a href="#backup">Whole-machine backup</a><a href="#words">With the recovery phrase alone</a><a href="#retrieve">Fetching the ledger</a><a href="#mirror">Ledger mirror</a><a href="#folder">Data folder</a><a href="#readonly">When the ledger turns read-only</a><a href="#habit">Backup essentials</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

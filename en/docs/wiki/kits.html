@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Record kits · Wiki</title>
+<meta name="description" content="A record kit is a folder exported from a ledger. It holds the chosen entries, the original files and the on-chain proofs, so someone else can verify them offline.">
+<meta property="og:title" content="Record kits · Wiki">
+<meta property="og:description" content="A record kit is a folder exported from a ledger. It holds the chosen entries, the original files and the on-chain proofs, so someone else can verify them offline.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/kits.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/kits.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Record kits</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">The ledger and its entries</a><a href="anchoring.html">Anchoring and networks</a><a href="grants.html">Grants</a><a href="kits.html" class=on aria-current=page>Record kits</a><a href="verify.html">Verification</a><a href="evidence.html">What a record proves</a><a href="keys.html">Identities and keys</a><a href="data.html">Local data and backups</a><a href="alerts.html">Alerts and settings</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="kits" data-prev="grants.html" data-next="verify.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Record kits</h1><p class="lede">A record kit is a folder exported from a ledger. It holds the chosen entries, the original files and the on-chain proofs, so someone else can verify them offline.</p>
+<h2 id="range">Entry range</h2>
+<p>Open it with “Export record kit” on a record’s or entry’s detail page; that entry is already selected. The “Entry range” line shows “All N” (an empty choice means the whole ledger) or “N selected”. “Choose…” lets you pick any set of entries, so you show the entries that bear on the matter and keep the rest to yourself.</p>
+<ul>
+<li>Revocations of the chosen grants, and the ledger’s creation and handover entries, come along automatically; the receiver needs them to tell whose ledger this is.</li>
+<li>When some chosen entries are still off chain, red text says the kit lacks their on-chain proofs, with “Put on chain now” beside it.</li>
+</ul>
+<p class="call">Entries go into the kit whole, record names, notes and “Recorded for” fields included. Before handing a kit over, look at what the chosen entries say.</p>
+<h2 id="files">Originals and attachments</h2>
+<dl>
+<div><dt>Originals of the selected records</dt><dd>Lists the files this machine signed for the chosen records; you can “Remove” any of them. A file that has moved from where it was signed, or has been changed, is marked on the page and left out of the kit.</dd></div>
+<div><dt>Attachments</dt><dd>Drop in files or folders; each item shows the name it will have in the kit (“Exported as files/…”). Attachments must be originals of the chosen records.</dd></div>
+<div><dt>Note and save location</dt><dd>Write a note for the kit; the save location defaults to <code>kits</code> in the data folder.</dd></div>
+</dl>
+<p>File names inside a kit use lowercase letters, digits, <code>.</code>, <code>_</code> and <code>-</code> alone, so they unpack and match on any system. Other names are rewritten automatically: lowercased, each run of other characters replaced by one <code>-</code>, leading and trailing <code>-</code> and <code>.</code> trimmed, and the first eight characters of the original name’s digest inserted before the extension (for example <code>name-1a2b3c4d.pdf</code>). When names were rewritten, the kit carries a table of original names, <code>files/zikaron-names.json</code>.</p>
+<h2 id="export">Verify and export</h2>
+<ol>
+<li>Press “Verify and export”; the app reads the chain once.</li>
+<li>It creates a folder named <code>kit-</code> plus the first eight characters of the earliest chosen record’s fingerprint at the save location, numbering it if the name is taken.</li>
+<li>The kit checks itself and is written once it passes; the toast reads “Record kit exported to …”.</li>
+</ol>
+<p>The receiver runs the same check, so a kit that passes on your side passes on theirs.</p>
+<h2 id="side">The side column</h2>
+<dl>
+<div><dt>How recipients verify</dt><dd>The receiver drops the kit into Verify › Verify record.</dd></div>
+<div><dt>Readings and reference (not in the package)</dt><dd>“Calculate” computes three readings for the first chosen record and shows them on the page; see “Depth” below.</dd></div>
+<div><dt>Record packages exported on this Mac</dt><dd>One section for each kit this machine has exported from this ledger. You can set a “Fetch address”, the kit’s https address online; “Delete local copy” deletes the local kit folder and leaves the ledger as it is.</dd></div>
+</dl>
+<h2 id="depth">Depth</h2>
+<p>Depth readings describe how long a record has been in the ledger and how continuously it has been on chain:</p>
+<dl>
+<div><dt>First recorded</dt><dd>Among the anchored records of this content that are on chain, the earliest upper bound on time: the earliest moment the content can be shown to have existed.</dd></div>
+<div><dt>Max depth</dt><dd>The number of anchored records of this content that are on chain.</dd></div>
+<div><dt>Continuity</dt><dd>Written as “on chain / span”: the span is the number of positions from the first to the last record of this content, and on chain is how many of those positions went on chain directly. The closer the two numbers, the steadier the record.</dd></div>
+</dl>
+<p>A Recorder sees them in the export page’s side column; a User sees them in the Record verifier once a record hash is filled in; in due diligence, with a record hash filled in on “Look up a ledger”, “Max depth” is under “Details”. The command line’s <code>depth</code> uses the same calculation: the same input gives the same readings, so the side presenting and the side checking work the same sum.</p>
+<h2 id="publish">Publishing</h2>
+<p>A record kit can live at any https address that serves static files. Fill in the “Published address” in Settings › Network, save it, then press “Check publication”: the app fetches the kit from the publish address file by file, compares it with the local copy and answers “Published”, “Publication incomplete” or “Cannot reach the published address”. You do the upload; the app does the checking.</p>
+<p>Once a verifier enters this address, the app fetches each file, checks its fingerprint, and uses the kit once it passes its check.</p>
+<h2 id="recv">On receiving a record kit</h2>
+<p>Switch to “User”, open “Verify record” under “Verify” and drop the kit in; see <a href="verify.html#record">The record verifier</a>.</p>
+<div class="pn"><a href="grants.html"><span>Previous</span>Grants</a><a class="nx" href="verify.html"><span>Next</span>Verification</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#range">Entry range</a><a href="#files">Originals and attachments</a><a href="#export">Verify and export</a><a href="#side">The side column</a><a href="#depth">Depth</a><a href="#publish">Publishing</a><a href="#recv">On receiving a record kit</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

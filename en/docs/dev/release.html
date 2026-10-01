@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Releasing · Developer guide</title>
+<meta name="description" content="A release has to be checkable byte for byte by anyone: its checksums, its signature, and the match between the source archive and the tag. These are the steps a maintainer follows.">
+<meta property="og:title" content="Releasing · Developer guide">
+<meta property="og:description" content="A release has to be checkable byte for byte by anyone: its checksums, its signature, and the match between the source archive and the tag. These are the steps a maintainer follows.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/release.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/release.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Releasing</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html">Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html" class=on aria-current=page>Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="release" data-prev="security.html" data-next="fork.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>Releasing</h1><p class="lede">A release has to be checkable byte for byte by anyone: its checksums, its signature, and the match between the source archive and the tag. These are the steps a maintainer follows.</p>
+<h2 id="version">Version numbers</h2>
+<p>Three parts, <code>major.minor.patch</code>. When a file format read or written, or the command line’s output format, changes, the minor version goes up and the release notes list the change; a release of defect fixes alone raises the patch number. The law’s version is written in its spec name and is independent of the software version.</p>
+<h2 id="before">Before a release</h2>
+<ul class="chk">
+<li>Every test passes on main, on each released system.</li>
+<li>Both digests of the law recompute to their values.</li>
+<li>The cores show zero divergences against the frozen cores, and every chain-facing recording replays identically.</li>
+<li>The contract’s code hash recomputes correctly.</li>
+<li>The Chinese and English manuals match the interface sentence for sentence.</li>
+<li>The six first-launch steps are walked through on a clean machine.</li>
+<li>One upgrade and one restore are done with a data folder and a backup from the previous version.</li>
+<li>A whole-machine backup exported on one system is restored once on each of the others.</li>
+</ul>
+<h2 id="build">Build</h2>
+<p>Release files are built from the tagged commit. The macOS packages come from the packaging script, with the signing identity:</p>
+<div class="cmd block"><code>git tag v0.1.0
+packaging/macos/build.sh --identity Kaptonia</code><button class="cp" type="button" data-copy="git tag v0.1.0
+packaging/macos/build.sh --identity Kaptonia" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>The script builds the app and the command line with <code>--locked</code>, puts the window program <code>zikaron-desk</code> and the command line <code>zikaron</code> into <code>ZIKARON.app</code>, signs and verifies each one, then makes <code>dist/ZIKARON-&lt;version&gt;-macos-&lt;arch&gt;.dmg</code> (with a link to Applications) and a <code>.pkg</code> (the app into <code>/Applications</code>, the command line into <code>/usr/local/bin</code>), and writes <code>SHA256SUMS-macos-&lt;arch&gt;.txt</code>. Binaries are stripped of symbols; the home, source and build directory paths are mapped away at compile time, so the product is independent of the build machine. The Linux <code>.deb</code> and AppImage come from <code>packaging/linux/build.sh</code>, or from <code>cross-build.sh</code> on another host.</p>
+<h2 id="sums">Checksums and <b class="zk">Zikaron</b> record</h2>
+<ol>
+<li>Compute the SHA-256 of every release file (each platform’s packages and the source archive) and gather them into one release list, <code>SHA256SUMS.txt</code>.</li>
+<li>At commit time, record the commit in the project’s Zikaron ledger, together with each release file’s fingerprint, and anchor them on chain; the release notes state the transaction, block, recorder address and each fingerprint.</li>
+<li>The release page, the website’s download page and the list agree in all three places; the download page’s “Zikaron record” column carries each file’s anchoring transaction.</li>
+</ol>
+<p>How users check them is under <a href="verify.html">Checksums</a>.</p>
+<h2 id="sign">System signing</h2>
+<p>The app and the dmg are signed with the project’s own certificate, whose common name is Kaptonia; the project issues this certificate itself, the release is outside Apple’s notarization, and the project publishes it directly. Every version is signed with the same certificate and the same identifier, <code>com.kaptonia.zikaron.app</code>, so the system recognizes each version as the same app. The pkg is checked by its SHA-256.</p>
+<p>Files downloaded in a browser carry a quarantine flag, and macOS refuses to open them; on recent macOS, “Open Anyway” works only some of the time. The way the <a href="../../download.html#install">download page</a> and the release notes give is: check the file with <code>shasum -a 256</code> first, then remove the quarantine flag in Terminal with <code>xattr</code>. Users who want to confirm where a file came from can check its signer, certificate fingerprint, checksum and <b class="zk">Zikaron</b> record; see <a href="verify.html">Checksums</a>.</p>
+<h2 id="notes">Release notes</h2>
+<p>For every version, state what was added, changed and fixed; changes to file formats and command-line output; and what users have to do when upgrading. State what holds now.</p>
+<h2 id="contract">Contract and networks</h2>
+<p>The app carries a table of known deployments: chain ID, registry contract address, start block, default nodes. Before adding a row:</p>
+<ol>
+<li>Read the code from the chain and check its code hash.</li>
+<li>Confirm that the start block comes before the first anchor on that contract.</li>
+<li>Choose two default nodes from different sources, both with TLS, both answering the right chain ID.</li>
+</ol>
+<p>Rows are only added; released rows stay as they are, and old ledgers go on being verified by them.</p>
+<h2 id="site">The website</h2>
+<p>With every version the website updates the file names, sizes, checksums and Zikaron records on its download page. The pages are generated by a script in the repository, and the output is committed with it.</p>
+<h2 id="after">After a release</h2>
+<ul>
+<li>Download a copy from the release page, then check, install and open it by the users’ own steps.</li>
+<li>Confirm that the drop zone on the download page answers “Matches the release list” for every file.</li>
+<li>When a release file turns out to be wrong, publish a new patch version; published files and checksums stay as they are.</li>
+</ul>
+<div class="pn"><a href="security.html"><span>Previous</span>Security</a><a class="nx" href="fork.html"><span>Next</span>Forks and independent implementations</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#version">Version numbers</a><a href="#before">Before a release</a><a href="#build">Build</a><a href="#sums">Checksums and Zikaron record</a><a href="#sign">System signing</a><a href="#notes">Release notes</a><a href="#contract">Contract and networks</a><a href="#site">The website</a><a href="#after">After a release</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

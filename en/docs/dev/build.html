@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Building from source · Developer guide</title>
+<meta name="description" content="One Rust workspace: one command to build, one command to test, and packaging scripts for each platform.">
+<meta property="og:title" content="Building from source · Developer guide">
+<meta property="og:description" content="One Rust workspace: one command to build, one command to test, and packaging scripts for each platform.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/dev/build.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/dev/build.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Building from source</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">Build</div><a href="verify.html">Checksums</a><a href="build.html" class=on aria-current=page>Building from source</a><a href="layout.html">Repository layout and layers</a><a href="cli.html">Command line</a><a href="law.html">The law and the conformance suite</a><a href="contract.html">The registry contract and anchoring</a><a href="formats.html">Files and formats</a><a href="integrate.html">Integration</a><div class="g2">Maintain</div><a href="contributing.html">Contributing</a><a href="compat.html">Compatibility and evolution</a><a href="security.html">Security</a><a href="release.html">Releasing</a><a href="fork.html">Forks and independent implementations</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="build" data-prev="verify.html" data-next="layout.html"><div class="kick">Developer guide · <b class="zk">Zikaron</b></div><h1>Building from source</h1><p class="lede">One Rust workspace: one command to build, one command to test, and packaging scripts for each platform.</p>
+<h2 id="need">Requirements</h2>
+<dl>
+<div><dt>Rust</dt><dd>Stable, 2021 edition, installed with <a href="https://rustup.rs">rustup</a>.</dd></div>
+<div><dt>A C toolchain</dt><dd>The cryptography library <code>ring</code>, used by TLS, compiles some C code for the host. On macOS, the Xcode command line tools are enough.</dd></div>
+<div><dt>Linux system libraries</dt><dd>Development packages for windows, keyboards and file dialogs; see below.</dd></div>
+<div><dt>Python 3</dt><dd>Runs the law’s frozen cores and the conformance comparisons, with the standard library alone.</dd></div>
+<div><dt>Foundry</dt><dd>Used to test the registry contract and recompute its code hash.</dd></div>
+</dl>
+<p>On Debian or Ubuntu, install the build dependencies first:</p>
+<div class="cmd block"><code>sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 \
+  libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
+  xdg-desktop-portal xdg-desktop-portal-gtk</code><button class="cp" type="button" data-copy="sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 \
+  libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
+  xdg-desktop-portal xdg-desktop-portal-gtk" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>On Linux the system file dialog goes through the desktop portal, so running the app needs <code>xdg-desktop-portal</code> and a backend; where the portal is missing, drag files straight into the window.</p>
+<h2 id="build">Build and test</h2>
+<div class="cmd block"><code>tar -xzf zikaron-0.1.0-src.tar.gz
+cd zikaron-0.1.0
+cargo build --release --locked
+cargo test --workspace</code><button class="cp" type="button" data-copy="tar -xzf zikaron-0.1.0-src.tar.gz
+cd zikaron-0.1.0
+cargo build --release --locked
+cargo test --workspace" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p><code>--locked</code> holds the build to the dependency versions pinned in <code>Cargo.lock</code>, as release builds do. The products:</p>
+<div class="tw"><table>
+<thead><tr><th>Program</th><th>What it is</th></tr></thead>
+<tbody>
+<tr><td><code>target/release/app</code></td><td>The desktop window, packaged as <code>ZIKARON.app</code> on macOS and as <code>zikaron-desk</code> on Linux</td></tr>
+<tr><td><code>target/release/zikaron</code></td><td>The command line; see <a href="cli.html">Command line</a></td></tr>
+<tr><td><code>zk1</code>, <code>zkk</code>, <code>zks</code>, <code>zka</code>, <code>zkg</code></td><td>Helper programs for tests and conformance comparisons</td></tr>
+</tbody></table></div>
+<h2 id="package">Packaging</h2>
+<div class="tw"><table>
+<thead><tr><th>Script</th><th>Output</th></tr></thead>
+<tbody>
+<tr><td><code>packaging/macos/build.sh [--identity NAME]</code></td><td><code>ZIKARON.app</code>, inside a <code>.dmg</code> and a <code>.pkg</code> (macOS)</td></tr>
+<tr><td><code>packaging/linux/build.sh</code></td><td>A <code>.deb</code> and an AppImage, built natively on Linux</td></tr>
+<tr><td><code>packaging/linux/cross-build.sh</code></td><td>The same Linux x86_64 packages, built on another host with zig and <code>cargo-zigbuild</code></td></tr>
+</tbody></table></div>
+<p>Packages land in <code>dist/</code>, each platform with a <code>SHA256SUMS-&lt;system&gt;-&lt;arch&gt;.txt</code>. When <code>--identity</code> is left off, the macOS script signs ad hoc (<code>-</code>); release packages are signed with Kaptonia’s certificate; see <a href="release.html">Releasing</a>.</p>
+<h2 id="contract">Contract tests</h2>
+<div class="cmd block"><code>cd base/zikaron-core/contracts
+forge test</code><button class="cp" type="button" data-copy="cd base/zikaron-core/contracts
+forge test" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<h2 id="law">The law’s cores</h2>
+<div class="cmd block"><code>cd base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh</code><button class="cp" type="button" data-copy="cd base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>How to run the conformance corpora against a candidate implementation is under <a href="law.html#run">Testing an implementation</a>.</p>
+<h2 id="safe">Trying it with separate data</h2>
+<p>The app finds the machine folder from <code>HOME</code>, and the key store lives there alone. Point <code>HOME</code> at an empty directory before launching, and the machine folder, key store and ledgers all land inside it, apart from your everyday data:</p>
+<div class="cmd block"><code>T=$(mktemp -d)
+HOME=$T ./target/release/app</code><button class="cp" type="button" data-copy="T=$(mktemp -d)
+HOME=$T ./target/release/app" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>For a trial, choose “Custom” in the wizard first and connect to the Sepolia testnet; see <a href="../wiki/anchoring.html#networks">Networks</a> in the Wiki. Generate test keys on the spot with <code>zikaron keygen</code>, and discard them after use.</p>
+<h2 id="fonts">Embedded fonts</h2>
+<p>The interface’s Latin face Inter and the monospace JetBrains Mono are embedded in the app; Chinese comes from the system’s PingFang on macOS and from the embedded Noto Sans SC on Linux. All three embedded fonts are released under SIL OFL 1.1, with their licence texts in <code>crates/zikaron-ui/fonts/</code>.</p>
+<div class="pn"><a href="verify.html"><span>Previous</span>Checksums</a><a class="nx" href="layout.html"><span>Next</span>Repository layout and layers</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#need">Requirements</a><a href="#build">Build and test</a><a href="#package">Packaging</a><a href="#contract">Contract tests</a><a href="#law">The law’s cores</a><a href="#safe">Trying it with separate data</a><a href="#fonts">Embedded fonts</a></nav></div>
+<script src="../../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

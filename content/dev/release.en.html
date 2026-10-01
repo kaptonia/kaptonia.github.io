@@ -1,0 +1,52 @@
+<!--
+title: Releasing
+-->
+<p class="lede">A release has to be checkable byte for byte by anyone: its checksums, its signature, and the match between the source archive and the tag. These are the steps a maintainer follows.</p>
+<h2 id="version">Version numbers</h2>
+<p>Three parts, <code>major.minor.patch</code>. When a file format read or written, or the command line’s output format, changes, the minor version goes up and the release notes list the change; a release of defect fixes alone raises the patch number. The law’s version is written in its spec name and is independent of the software version.</p>
+<h2 id="before">Before a release</h2>
+<ul class="chk">
+<li>Every test passes on main, on each released system.</li>
+<li>Both digests of the law recompute to their values.</li>
+<li>The cores show zero divergences against the frozen cores, and every chain-facing recording replays identically.</li>
+<li>The contract’s code hash recomputes correctly.</li>
+<li>The Chinese and English manuals match the interface sentence for sentence.</li>
+<li>The six first-launch steps are walked through on a clean machine.</li>
+<li>One upgrade and one restore are done with a data folder and a backup from the previous version.</li>
+<li>A whole-machine backup exported on one system is restored once on each of the others.</li>
+</ul>
+<h2 id="build">Build</h2>
+<p>Release files are built from the tagged commit. The macOS packages come from the packaging script, with the signing identity:</p>
+{{code:
+git tag v{{VER}}
+packaging/macos/build.sh --identity Kaptonia
+}}
+<p>The script builds the app and the command line with <code>--locked</code>, puts the window program <code>zikaron-desk</code> and the command line <code>zikaron</code> into <code>ZIKARON.app</code>, signs and verifies each one, then makes <code>dist/ZIKARON-&lt;version&gt;-macos-&lt;arch&gt;.dmg</code> (with a link to Applications) and a <code>.pkg</code> (the app into <code>/Applications</code>, the command line into <code>/usr/local/bin</code>), and writes <code>SHA256SUMS-macos-&lt;arch&gt;.txt</code>. Binaries are stripped of symbols; the home, source and build directory paths are mapped away at compile time, so the product is independent of the build machine. The Linux <code>.deb</code> and AppImage come from <code>packaging/linux/build.sh</code>, or from <code>cross-build.sh</code> on another host.</p>
+<h2 id="sums">Checksums and {{Z}} record</h2>
+<ol>
+<li>Compute the SHA-256 of every release file (each platform’s packages and the source archive) and gather them into one release list, <code>SHA256SUMS.txt</code>.</li>
+<li>At commit time, record the commit in the project’s Zikaron ledger, together with each release file’s fingerprint, and anchor them on chain; the release notes state the transaction, block, recorder address and each fingerprint.</li>
+<li>The release page, the website’s download page and the list agree in all three places; the download page’s “Zikaron record” column carries each file’s anchoring transaction.</li>
+</ol>
+<p>How users check them is under <a href="verify.html">Checksums</a>.</p>
+<h2 id="sign">System signing</h2>
+<p>The app and the dmg are signed with the project’s own certificate, whose common name is Kaptonia; the project issues this certificate itself, the release is outside Apple’s notarization, and the project publishes it directly. Every version is signed with the same certificate and the same identifier, <code>com.kaptonia.zikaron.app</code>, so the system recognizes each version as the same app. The pkg is checked by its SHA-256.</p>
+<p>Files downloaded in a browser carry a quarantine flag, and macOS refuses to open them; on recent macOS, “Open Anyway” works only some of the time. The way the <a href="../../download.html#install">download page</a> and the release notes give is: check the file with <code>shasum -a 256</code> first, then remove the quarantine flag in Terminal with <code>xattr</code>. Users who want to confirm where a file came from can check its signer, certificate fingerprint, checksum and {{Z}} record; see <a href="verify.html">Checksums</a>.</p>
+<h2 id="notes">Release notes</h2>
+<p>For every version, state what was added, changed and fixed; changes to file formats and command-line output; and what users have to do when upgrading. State what holds now.</p>
+<h2 id="contract">Contract and networks</h2>
+<p>The app carries a table of known deployments: chain ID, registry contract address, start block, default nodes. Before adding a row:</p>
+<ol>
+<li>Read the code from the chain and check its code hash.</li>
+<li>Confirm that the start block comes before the first anchor on that contract.</li>
+<li>Choose two default nodes from different sources, both with TLS, both answering the right chain ID.</li>
+</ol>
+<p>Rows are only added; released rows stay as they are, and old ledgers go on being verified by them.</p>
+<h2 id="site">The website</h2>
+<p>With every version the website updates the file names, sizes, checksums and Zikaron records on its download page. The pages are generated by a script in the repository, and the output is committed with it.</p>
+<h2 id="after">After a release</h2>
+<ul>
+<li>Download a copy from the release page, then check, install and open it by the users’ own steps.</li>
+<li>Confirm that the drop zone on the download page answers “Matches the release list” for every file.</li>
+<li>When a release file turns out to be wrong, publish a new patch version; published files and checksums stay as they are.</li>
+</ul>

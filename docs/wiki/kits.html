@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>记录包 · Wiki</title>
+<meta name="description" content="记录包是从账本导出的一个文件夹，含所选条目、原文件和上链证明，交给别人离线核验。">
+<meta property="og:title" content="记录包 · Wiki">
+<meta property="og:description" content="记录包是从账本导出的一个文件夹，含所选条目、原文件和上链证明，交给别人离线核验。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/wiki/kits.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/wiki/kits.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>记录包</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html">上手</a><a href="ledger.html">账本与条目</a><a href="anchoring.html">上链与网络</a><a href="grants.html">授权</a><a href="kits.html" class=on aria-current=page>记录包</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html">身份与密钥</a><a href="data.html">本机数据与备份</a><a href="alerts.html">提醒与设置</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="kits" data-prev="grants.html" data-next="verify.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>记录包</h1><p class="lede">记录包是从账本导出的一个文件夹，含所选条目、原文件和上链证明，交给别人离线核验。</p>
+<h2 id="range">条目范围</h2>
+<p>从记录详情或条目详情的「导出记录包」进入，那一条已经选上。「条目范围」一行显示「全部 N 条」（选择为空即整本）或「已选 N 条」。按「选择…」可以任挑几条，只出示与本事相关的条目，其余留在你手中。</p>
+<ul>
+<li>所选授权的撤销条目、账本的创建条目和移交条目自动一并带上，核验方靠它们认出这是谁的账本。</li>
+<li>所选里有尚待上链的条目时，红字提示包里缺这几条的上链证明，旁边有「现在上链」。</li>
+</ul>
+<p class="call">条目整条带进包里，其中的记录名称、注记和「为谁留证」也在内。交出前，请看一眼所选条目写了什么。</p>
+<h2 id="files">原件与附件</h2>
+<dl>
+<div><dt>所选记录的原件</dt><dd>列出所选存证当初在这台机器上签入的文件，可以逐件「移除」。文件已离开原位置，或被改动过，页面会注明，这份文件就留在包外。</dd></div>
+<div><dt>附件</dt><dd>拖入文件或文件夹，每项显示它在包里的名字（「导出为 files/…」）。附件要是所选记录的原件。</dd></div>
+<div><dt>附言与保存位置</dt><dd>写一段附言；保存位置默认是数据目录里的 <code>kits</code>。</dd></div>
+</dl>
+<p>包内文件名只用小写字母、数字、<code>.</code>、<code>_</code>、<code>-</code>，以保证在任何系统上都解得开、对得上。其余名字自动转写：转小写，一段其他字符换成一个 <code>-</code>，去掉首尾的 <code>-</code> 和 <code>.</code>，在扩展名前加上原名摘要的前八位（如 <code>name-1a2b3c4d.pdf</code>）。改过名时，包里附一份原名对照表 <code>files/zikaron-names.json</code>。</p>
+<h2 id="export">核验并导出</h2>
+<ol>
+<li>按「核验并导出」，应用先现读一次链。</li>
+<li>在保存位置建一个 <code>kit-</code> 加所选最早一件记录指纹前八位的文件夹，同名已有即往后编号。</li>
+<li>包先自验，通过才写出，提示「记录包已导出到 …」。</li>
+</ol>
+<p>收件方跑的是同一套核验，所以在你这边通过的包，在对方那里同样通过。</p>
+<h2 id="side">旁栏</h2>
+<dl>
+<div><dt>收件方如何核验</dt><dd>对方在「核验 › 核验记录」拖入记录包即可。</dd></div>
+<div><dt>读数与基准（不进包）</dt><dd>按「计算」算出所选第一件存证的三个读数，只显示在页上，见下文「深度」。</dd></div>
+<div><dt>本机导出过的记录包</dt><dd>这台机器从这本账导出过的每个包各一段。可以设「取处」，即这个包在网上的 https 地址；「删除本机副本」删掉本地的包文件夹，账本保持原样。</dd></div>
+</dl>
+<h2 id="depth">深度</h2>
+<p>深度读数说明一件记录在这本账里存在了多久、上链有多连续：</p>
+<dl>
+<div><dt>首次存证</dt><dd>记下这份内容、且已上链的存证里，最早的那个时间上限：这份内容最早有据可查的时间。</dd></div>
+<div><dt>最大深度</dt><dd>记下这份内容、且已上链的存证条数。</dd></div>
+<div><dt>连续上链</dt><dd>写作「已上链 / 跨度」：跨度是从第一条到最后一条这份内容的存证之间的位置数，已上链是其中直接上链的位置数。两数越接近，记录越连贯。</dd></div>
+</dl>
+<p>记录者在导出页的旁栏看得到；使用方在「记录核验器」填了记录哈希时看得到；尽调时在「查看他人账本」填了记录哈希，「详细信息」里有最大深度。命令行的 <code>depth</code> 用的是同一套算法：输入相同，读数相同，出示方与查验方算的是同一道题。</p>
+<h2 id="publish">公开发布</h2>
+<p>记录包可以放到任何支持静态文件的 https 地址。在「设置 › 网络」填好「发布地址」并保存，再按「检查发布」：应用从发布地址逐个文件取回记录包，与本地那一份比对，答「已发布」「发布不完整」或「无法访问发布地址」。上传由你自己完成，应用只负责核对。</p>
+<p>核验方填入这个地址后，应用逐个文件取回、核对指纹，通过包验证后才用。</p>
+<h2 id="recv">收到记录包之后</h2>
+<p>切换到「使用方」，打开「核验」的「核验记录」，把记录包拖进去，见<a href="verify.html#record">记录核验器</a>。</p>
+<div class="pn"><a href="grants.html"><span>上一页</span>授权</a><a class="nx" href="verify.html"><span>下一页</span>核验</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#range">条目范围</a><a href="#files">原件与附件</a><a href="#export">核验并导出</a><a href="#side">旁栏</a><a href="#depth">深度</a><a href="#publish">公开发布</a><a href="#recv">收到记录包之后</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!--
+title: The registry contract and anchoring
+-->
+<p class="lede">The registry contract does one thing: it receives a fingerprint and emits an event. What the law reads is the format of the event.</p>
+<h2 id="iface">Interface</h2>
+{{code:
+event Anchored(address indexed author, bytes32 indexed hash);
+
+function anchor(bytes32 hash) external;
+function anchorMany(bytes32[] calldata hashes) external;
+}}
+<p><code>anchor</code> emits one event; <code>anchorMany</code> emits one for each element of the array, and zero for an empty array. The <code>author</code> in the event is the caller’s address. The contract has zero storage, zero owners and zero upgrade paths, and treats every caller alike. The source is <code>base/zikaron-core/contracts/src/ZikaronRegistry.sol</code>, licensed CC0-1.0.</p>
+<h2 id="deployed">Known deployments</h2>
+<p>The app comes with two deployments of the same pinned build, with the same code hash:</p>
+<div class="tw"><table>
+<thead><tr><th>Network</th><th>Chain ID</th><th>Registry contract</th><th>Start block</th></tr></thead>
+<tbody>
+<tr><td>Ethereum mainnet (default)</td><td>1</td><td><code>{{MAINNET}}</code></td><td>26087229</td></tr>
+<tr><td>Sepolia testnet</td><td>11155111</td><td><code>{{SEPOLIA}}</code></td><td>11715660</td></tr>
+</tbody></table></div>
+<p>The start block is where scanning begins, earlier than the first anchor on that contract.</p>
+<h2 id="forms">Two forms of anchor</h2>
+<dl>
+<div><dt>Registry form</dt><dd>The transaction succeeds, and its receipt holds a log emitted by a registry contract with exactly three topics and empty data: topic 0 is the keccak256 of <code>Anchored(address,bytes32)</code>, topic 1 is the transaction’s sender, topic 2 is the fingerprint. The same fingerprint also appears in the transaction’s calldata, at an offset that is a multiple of 32, or 4 plus a multiple of 32.</dd></div>
+<div><dt>Self-transfer form</dt><dd>A transaction sent to oneself whose calldata is a positive multiple of 32 bytes long, each 32 bytes being one fingerprint. It relies on the transaction alone and suits any EVM chain.</dd></div>
+</dl>
+<p>The two forms are equally valid. A verifier states in its scan range which registry addresses, which senders and which self-transfers it accepts.</p>
+<h2 id="sender">Three requirements on the sender</h2>
+<ul>
+<li>The sender is the address recovered from the transaction’s signature. For a transaction sent through a relayer, the sender is the relayer’s address; for a transaction validated by account code, the sender field under the law is empty.</li>
+<li>The sending address is a plain address both before and after the block of the anchor. Anchors sent from an address that carries code or an EIP-7702 delegation are void.</li>
+<li>The transaction’s signature names the chain ID.</li>
+</ul>
+<p>These three keep every anchor readable as the key holder’s own act.</p>
+<h2 id="codehash">The code hash</h2>
+<p>The contract’s runtime bytecode is 246 bytes long, and its keccak256 is:</p>
+<div class="kv"><div><span class="k">Code hash</span><span class="hash">{{CODEHASH}}</span></div></div>
+<p>It comes from fixed build settings: solc 0.8.28, EVM version cancun, optimizer on with 200 runs, <code>via_ir</code> on, metadata removed from the bytecode. Any change to the source or the settings changes the hash. To recompute it:</p>
+{{code:
+cd base/zikaron-core/contracts
+forge build
+cast keccak $(forge inspect ZikaronRegistry deployedBytecode)
+}}
+<h2 id="deploy">Deploying your own</h2>
+<p>Anyone may deploy the same bytes on any EVM chain that has passed the Shanghai upgrade. After deploying, check that the hash of the code on chain matches the table above, then enter the chain ID, registry contract and start block in the app under Settings › Network › “Edit nodes…”.</p>
+{{code:
+forge create src/ZikaronRegistry.sol:ZikaronRegistry \
+  --rpc-url <node> --private-key <deployment key> --broadcast
+
+cast keccak $(cast code <new address> --rpc-url <node>)
+}}
+<p>Deploy with a dedicated key; the identity key signs the ledger and sends anchors.</p>
+<p>This pinned build uses the PUSH0 instruction and suits chains that have passed the Shanghai upgrade. An earlier chain needs its own build, with its own code hash. The law reads logs by the contract addresses a verifier declares, so a second build is purely a deployment convenience.</p>
+<h2 id="gas">Gas, for reference</h2>
+<div class="tw"><table>
+<thead><tr><th>Call</th><th>Gas used by the contract</th></tr></thead>
+<tbody>
+<tr><td><code>anchor</code></td><td>2,352</td></tr>
+<tr><td><code>anchorMany</code>, 1 element</td><td>2,776</td></tr>
+<tr><td><code>anchorMany</code>, 10 elements</td><td>17,746</td></tr>
+<tr><td><code>anchorMany</code>, 100 elements</td><td>167,661</td></tr>
+</tbody></table></div>
+<p>The table covers the contract’s execution as measured in forge; the transaction’s 21,000 base cost and calldata cost come on top. The more elements, the less each one costs. The app sends with a gas limit of 200,000.</p>
+<h2 id="other">Anchoring through other contracts</h2>
+<p>Any contract that emits a log of the same format can serve as a registry. The log counts as an anchor when three conditions hold together: the transaction is sent by the ledger’s key itself; the fingerprint appears in that transaction’s own calldata, at an offset as stated above; and the log is emitted by the contract that was called. When a contract reaches a registry through an inner call, the log names that contract’s address, and to every ledger it is an ordinary log.</p>
+<p>A verifier should list in its scan range only contract addresses whose source it has read and whose code is fixed.</p>
+<h2 id="proof">Self-contained anchor proofs</h2>
+<p>Law §9.7 defines self-contained anchor proofs, and the <code>proofs/</code> directory of a record kit carries them. With such a proof a verifier checks an anchor from two trusted block hashes alone: the block headers, Merkle proofs of the transaction and of its receipt, and account proofs of the sending address at the two blocks. Such proofs stay valid after nodes prune their history.</p>

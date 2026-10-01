@@ -1,0 +1,27 @@
+<!--
+title: Common questions
+-->
+<div class="proj"><section data-p="zikaron">
+<dl>
+<div><dt>Which computers does it run on?</dt><dd>Version 0.1.0 comes as packages for Macs with Apple silicon, macOS 11 or later; see the <a href="../../download.html">download page</a>. On x86_64 Linux, build from source; see <a href="../dev/build.html">Building from source</a>.</dd></div>
+<div><dt>Why does macOS stop it from opening?</dt><dd>The app is signed with Kaptonia’s self-signed certificate and is outside Apple’s notarization, and files downloaded in a browser carry the quarantine flag. Check the SHA-256 first, then remove the quarantine flag in Terminal; see <a href="start.html#install">Getting started · Installation</a>.</dd></div>
+<div><dt>Is there a token?</dt><dd>The project itself has zero tokens. Anchoring costs the chain’s own gas.</dd></div>
+<div><dt>Who operates it?</dt><dd>The registry contract runs by itself and the app runs on your machine; each user operates their own part.</dd></div>
+<div><dt>Do I need to sign up?</dt><dd>Your identity is a set of keys generated on your machine, ready to use once generated.</dd></div>
+<div><dt>Where is the data kept?</dt><dd>On your machine, encrypted. The chain holds entry IDs and the sending address.</dd></div>
+<div><dt>What does anchoring cost?</dt><dd>The default network is Ethereum mainnet, which costs real ETH; how much depends on the fee at the time. A batch of entries travels in one transaction, and the more entries, the less each costs; before sending, the app shows the gas cap. To try it first, switch to the Sepolia testnet as the Wiki describes.</dd></div>
+<div><dt>Are my files uploaded?</dt><dd>Files stay on your machine. Fingerprints are computed locally, and what goes to the chain is entry IDs (the SHA-256 of each entry).</dd></div>
+<div><dt>What if I change computers or lose my keys?</dt><dd>The whole-machine backup and its password restore every identity, ledger and setting; the original files are yours to keep. With the 12 recovery words alone, you recover the keys and the data readable on chain, and the ledger itself comes back from a whole-machine backup. With both lost, the local data stays sealed for good.</dd></div>
+<div><dt>What if I forget the passcode?</dt><dd>Press “Forgot passcode” on the passcode gate and reset it with the primary identity’s recovery words or key file, or restore from a whole-machine backup; see <a href="keys.html#forgot">A forgotten passcode</a>.</dd></div>
+<div><dt>What if I find a mistake after recording?</dt><dd>Add a note that explains it, or delete the record. The original entry stays in the ledger as it is.</dd></div>
+<div><dt>What does the other side need in order to verify?</dt><dd>This app or the <code>zikaron</code> command line, both open source. Verification only reads, and uses public data and the files you hand over.</dd></div>
+<div><dt>Can it prove that I am the original author?</dt><dd>It proves that your key held the content by a certain moment at the latest. The more continuously the making of a work is recorded, the more convincing that proof. See <a href="evidence.html">What a record proves</a>.</dd></div>
+<div><dt>May I use it commercially, modify it or republish it?</dt><dd>Yes. Code and text are under the MIT licence; keep the licence text. The embedded fonts each follow their own licence.</dd></div>
+<div><dt>How does it relate to the law where I live?</dt><dd>It is an optional tool that runs alongside local law. Observe the law where you live as usual.</dd></div>
+<div><dt>Whom do I ask when something goes wrong?</dt><dd><a href="{{REPO}}/issues">Open an issue</a> on GitHub, or visit the <a href="{{REPO}}/discussions">discussions</a>. Report security vulnerabilities through the repository’s private channel; see <a href="../dev/security.html">Developer guide · Security</a>.</dd></div>
+</dl>
+</section></div><!--/proj-->
+<h2 id="site">This site</h2>
+<dl>
+<div><dt>What does this site record?</dt><dd>Two display preferences, kept in your browser: which product groups are folded in the sidebar, and which product is selected. They stay on this machine. The pages make two kinds of request: the site’s own static files, and fonts from Google Fonts.</dd></div>
+</dl>

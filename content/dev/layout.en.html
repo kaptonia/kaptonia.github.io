@@ -1,0 +1,43 @@
+<!--
+title: Repository layout and layers
+-->
+<p class="lede">The cores make judgments; the interface presents them. Learn what each layer is responsible for, then decide where a change belongs.</p>
+<h2 id="tree">Directories</h2>
+<div class="tw"><table>
+<thead><tr><th>Path</th><th>Contents</th></tr></thead>
+<tbody>
+<tr><td><code>crates/zikaron</code></td><td>The zikaron/1 core: canonical bytes, entries, signatures, audit.</td></tr>
+<tr><td><code>crates/zikaron-kit</code></td><td>The zikaron.kit/1 core: documents, credential payloads, record kits, readings, the six checks on a grant.</td></tr>
+<tr><td><code>crates/zikaron-store</code></td><td>Ledger storage on disk. Standard library only.</td></tr>
+<tr><td><code>crates/zikaron-anchor</code></td><td>Chain access: scanning anchors, JSON-RPC, sending anchoring transactions.</td></tr>
+<tr><td><code>crates/zikaron-cli</code></td><td>The <code>zikaron</code> command line.</td></tr>
+<tr><td><code>crates/zikaron-glue</code></td><td>Record kit export and conventions shared across the tree.</td></tr>
+<tr><td><code>crates/zikaron-ui</code></td><td>The widget library and skin.</td></tr>
+<tr><td><code>crates/app</code></td><td>The desktop app.</td></tr>
+<tr><td><code>base/</code></td><td>The two frozen law texts, their reference implementations, the conformance corpora and the registry contract.</td></tr>
+<tr><td><code>contracts/</code></td><td>Contract variants used by tests of the anchoring path.</td></tr>
+<tr><td><code>packaging/</code></td><td>Packaging scripts and icons for macOS and Linux.</td></tr>
+<tr><td><code>docs/manual/</code></td><td>The user manual, in Chinese and English.</td></tr>
+<tr><td><code>CLI-SCHEMA.md</code></td><td>The command line’s output format, exit codes, refusals and flags.</td></tr>
+</tbody></table></div>
+<h2 id="stack">Four layers</h2>
+<ol>
+<li><b>Base</b> (<code>base/</code>). Law texts, frozen cores, corpora, the contract, chain-facing fixtures: the reference for everything else. The frozen cores are pinned by the digests the law texts name, and the contract by its code hash; the rest is tooling, free to rebuild, replace or delete.</li>
+<li><b>Cores and storage</b> (<code>zikaron</code>, <code>zikaron-kit</code>, <code>zikaron-store</code>, <code>zikaron-anchor</code>). Every judgment is made here.</li>
+<li><b>Glue</b> (<code>zikaron-cli</code>, <code>zikaron-glue</code>). Assembles inputs, calls the cores, passes results on unchanged.</li>
+<li><b>Interface</b> (<code>zikaron-ui</code>, <code>app</code>). Presentation and interaction.</li>
+</ol>
+<p>Dependencies point downward: an upper layer calls the public interface of a lower one, and lower layers stand independent of upper ones. Every crate is written from the law texts on its own, with zero path dependencies on <code>base/</code>.</p>
+<h2 id="rules">Five rules</h2>
+<dl>
+<div><dt>The interface only presents</dt><dd>Whether an entry is valid and whether a grant is in force are concluded by the cores, and the interface presents the conclusion. Interface code that judges syntax for itself belongs in a core.</dd></div>
+<div><dt>The glue only assembles</dt><dd>The command line and glue code turn arguments into inputs, call the cores and choose the exit code; bytes a core writes are passed on as they are, keys and values unchanged.</dd></div>
+<div><dt>The criteria stay as they are</dt><dd>The two frozen cores are pinned by the digests in the law texts, and the registry contract by its code hash; those bytes stay as they are. Raise objections to them as issues; see <a href="compat.html">Compatibility and evolution</a>.</dd></div>
+<div><dt>Verify pages only read</dt><dd>The permissions of Verify grant and Verify record are limited to reading their inputs and the chain.</dd></div>
+<div><dt>Identity keys sign the ledger alone</dt><dd>Keys in the app sign entries, co-sign for adoptions and send anchoring transactions; payments, wallets and delegation are left to other software.</dd></div>
+</dl>
+<h2 id="one">One implementation, reused everywhere</h2>
+<p>Each judgment is implemented once. The six checks on a grant come from <code>zikaron-kit</code>, shared by the verify page, the command line and the periodic review of My grants; the readings likewise. The same input therefore gets the same verdict at every entry point.</p>
+<p>Every type of ledger entry has a subcommand that writes it. When adding an action to the app, make it work on the command line first, then build the interface.</p>
+<h2 id="cite">Law citations in comments</h2>
+<p>Code comments cite zikaron/1 as <code>law §N</code> (on the kit side also <code>parent law §N</code>) and zikaron.kit/1 as <code>kit law §N</code>. Before changing an implementation, read the section it cites.</p>

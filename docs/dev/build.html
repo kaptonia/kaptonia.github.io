@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>从源码构建 · 开发者指南</title>
+<meta name="description" content="一个 Rust 工作区：一条命令构建，一条命令测试，各平台用各自的脚本打包。">
+<meta property="og:title" content="从源码构建 · 开发者指南">
+<meta property="og:description" content="一个 Rust 工作区：一条命令构建，一条命令测试，各平台用各自的脚本打包。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/build.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/build.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>从源码构建</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html" class=on aria-current=page>从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html">分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="build" data-prev="verify.html" data-next="layout.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>从源码构建</h1><p class="lede">一个 Rust 工作区：一条命令构建，一条命令测试，各平台用各自的脚本打包。</p>
+<h2 id="need">环境要求</h2>
+<dl>
+<div><dt>Rust</dt><dd>stable 版，2021 edition，用 <a href="https://rustup.rs">rustup</a> 安装。</dd></div>
+<div><dt>C 工具链</dt><dd>TLS 用到的加密库 <code>ring</code> 要为本机编译一段 C 代码。在 macOS 上装 Xcode 的命令行工具即可。</dd></div>
+<div><dt>Linux 的系统库</dt><dd>窗口、键盘与文件对话框所需的开发包，见下文。</dd></div>
+<div><dt>Python 3</dt><dd>运行法的冻结核与一致性比对，只用标准库。</dd></div>
+<div><dt>Foundry</dt><dd>测试登记合约、重算代码哈希时使用。</dd></div>
+</dl>
+<p>在 Debian 或 Ubuntu 上，先装构建依赖：</p>
+<div class="cmd block"><code>sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 \
+  libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
+  xdg-desktop-portal xdg-desktop-portal-gtk</code><button class="cp" type="button" data-copy="sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 \
+  libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
+  xdg-desktop-portal xdg-desktop-portal-gtk" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>Linux 上的系统文件对话框走桌面门户，所以运行时要有 <code>xdg-desktop-portal</code> 和一个后端；缺少门户时，把文件直接拖进窗口即可。</p>
+<h2 id="build">构建与测试</h2>
+<div class="cmd block"><code>tar -xzf zikaron-0.1.0-src.tar.gz
+cd zikaron-0.1.0
+cargo build --release --locked
+cargo test --workspace</code><button class="cp" type="button" data-copy="tar -xzf zikaron-0.1.0-src.tar.gz
+cd zikaron-0.1.0
+cargo build --release --locked
+cargo test --workspace" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p><code>--locked</code> 让构建严格使用 <code>Cargo.lock</code> 锁定的依赖版本，发布包也这样构建。产物：</p>
+<div class="tw"><table>
+<thead><tr><th>程序</th><th>是什么</th></tr></thead>
+<tbody>
+<tr><td><code>target/release/app</code></td><td>桌面窗口，在 macOS 上打包为 <code>ZIKARON.app</code>，在 Linux 上为 <code>zikaron-desk</code></td></tr>
+<tr><td><code>target/release/zikaron</code></td><td>命令行，见<a href="cli.html">命令行</a></td></tr>
+<tr><td><code>zk1</code>、<code>zkk</code>、<code>zks</code>、<code>zka</code>、<code>zkg</code></td><td>供测试与一致性比对用的辅助程序</td></tr>
+</tbody></table></div>
+<h2 id="package">打包</h2>
+<div class="tw"><table>
+<thead><tr><th>脚本</th><th>产出</th></tr></thead>
+<tbody>
+<tr><td><code>packaging/macos/build.sh [--identity NAME]</code></td><td><code>ZIKARON.app</code>，装在 <code>.dmg</code> 和 <code>.pkg</code> 里（macOS）</td></tr>
+<tr><td><code>packaging/linux/build.sh</code></td><td><code>.deb</code> 与 AppImage，在 Linux 上原生构建</td></tr>
+<tr><td><code>packaging/linux/cross-build.sh</code></td><td>在别的主机上用 zig 与 <code>cargo-zigbuild</code> 打出同样的 Linux x86_64 包</td></tr>
+</tbody></table></div>
+<p>包落在 <code>dist/</code>，每个平台附一份 <code>SHA256SUMS-&lt;系统&gt;-&lt;架构&gt;.txt</code>。macOS 脚本省略 <code>--identity</code> 时做临时签名（<code>-</code>）；发布包用 Kaptonia 的证书签名，见<a href="release.html">发布</a>。</p>
+<h2 id="contract">合约测试</h2>
+<div class="cmd block"><code>cd base/zikaron-core/contracts
+forge test</code><button class="cp" type="button" data-copy="cd base/zikaron-core/contracts
+forge test" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<h2 id="law">法的核</h2>
+<div class="cmd block"><code>cd base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh</code><button class="cp" type="button" data-copy="cd base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>用候选实现跑一致性语料的方法，见<a href="law.html#run">测试一份实现</a>。</p>
+<h2 id="safe">用独立数据试用</h2>
+<p>应用从 <code>HOME</code> 找机器目录，密钥库也只住在那里。把 <code>HOME</code> 指向一个空目录后启动，机器目录、密钥库与账本都落在其中，与日常数据隔离：</p>
+<div class="cmd block"><code>T=$(mktemp -d)
+HOME=$T ./target/release/app</code><button class="cp" type="button" data-copy="T=$(mktemp -d)
+HOME=$T ./target/release/app" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>试用时先在向导里选「自定义」，接 Sepolia 测试网，见 Wiki 的<a href="../wiki/anchoring.html#networks">网络</a>。测试用的密钥用 <code>zikaron keygen</code> 现场生成，用后即弃。</p>
+<h2 id="fonts">内嵌字体</h2>
+<p>界面的西文字体 Inter 与等宽字体 JetBrains Mono 内嵌于应用；中文在 macOS 上取自系统的苹方，在 Linux 上用随应用内嵌的 Noto Sans SC。三种内嵌字体都以 SIL OFL 1.1 发布，许可文本在 <code>crates/zikaron-ui/fonts/</code>。</p>
+<div class="pn"><a href="verify.html"><span>上一页</span>校验</a><a class="nx" href="layout.html"><span>下一页</span>仓库结构与分层</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#need">环境要求</a><a href="#build">构建与测试</a><a href="#package">打包</a><a href="#contract">合约测试</a><a href="#law">法的核</a><a href="#safe">用独立数据试用</a><a href="#fonts">内嵌字体</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

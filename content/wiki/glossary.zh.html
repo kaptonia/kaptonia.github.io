@@ -1,0 +1,64 @@
+<!--
+title: 词汇表
+-->
+<p class="lede">界面与文档中的常用词，按用途分组；括号内为法文与命令行中的写法。</p>
+<div class="proj"><section data-p="zikaron">
+<h2 id="ledger">账本</h2>
+<dl>
+<div><dt>账本</dt><dd>按顺序写成的一串签名条目，只能追加；移交之后由新密钥续写。每种角色一本。(ledger)</dd></div>
+<div><dt>条目</dt><dd>账本里的一项，带着作者签名和前一条的编号。(entry)</dd></div>
+<div><dt>内容指纹</dt><dd>由一段字节算出的 32 字节摘要；内容改动一个字节，指纹即面目全非。(digest，SHA-256)</dd></div>
+<div><dt>创建账本</dt><dd>账本的根，第一条。(genesis)</dd></div>
+<div><dt>存证</dt><dd>记下一件记录的内容指纹的条目。(history)</dd></div>
+<div><dt>注记</dt><dd>给某一条补充说明的条目。(annotation)</dd></div>
+<div><dt>导入</dt><dd>把这把密钥早先上链的锚收进账本的条目。(adoption)</dd></div>
+<div><dt>换密钥或移交</dt><dd>把账本交给新密钥的条目。(succession)</dd></div>
+<div><dt>删除条目</dt><dd>把一条存证标为已删除的条目，属本应用的读法约定。(retraction)</dd></div>
+<div><dt>为谁留证</dt><dd>存证时可选填的应用、对方身份、对方编号与对方角色，原样写进条目。</dd></div>
+</dl>
+<h2 id="chain">上链</h2>
+<dl>
+<div><dt>上链(锚定)</dt><dd>把条目发进一笔以太坊交易。(anchor)</dd></div>
+<div><dt>登记合约</dt><dd>链上的一份小合约，收到指纹即发出一条事件，人人共用。(registry)</dd></div>
+<div><dt>待上链</dt><dd>已写进账本、排队等待发出的条目。</dd></div>
+<div><dt>首锚区块时刻</dt><dd>条目最早一次上链所在区块的时间。</dd></div>
+<div><dt>账本检查</dt><dd>把本机账本逐条和链上的锚对一遍后给出的结论；「已确认」以此为准。(audit)</dd></div>
+<div><dt>自动上链</dt><dd>开着时，写入后直接打开「上链」卡的设置。</dd></div>
+</dl>
+<h2 id="grant">授权</h2>
+<dl>
+<div><dt>授权</dt><dd>授权某个地址在一段时间内使用某件记录的条目，附条款文件的指纹。(grant)</dd></div>
+<div><dt>撤销</dt><dd>撤销一份授权的条目。(revocation)</dd></div>
+<div><dt>条款文件</dt><dd>写明授权含义的文件，授权里记下它的指纹。(terms)</dd></div>
+<div><dt>授权码</dt><dd>以 <code>zikaron-grant:</code> 开头的一段文本，能核验签名和有效期。</dd></div>
+<div><dt>授权文件</dt><dd><code>.zkgrant</code> 文件，带着签发者账本，可以做完整核验。</dd></div>
+<div><dt>转授权</dt><dd>使用方凭所持授权，写进自己账本、再授给别人的授权。</dd></div>
+<div><dt>凭证</dt><dd>给第三方看的授权证明，一份文本加一张二维码。(badge)</dd></div>
+<div><dt>撤销监测</dt><dd>每次复核后检查所持授权是否被撤销、签发者账本是否移交。</dd></div>
+</dl>
+<h2 id="verify">出示与核验</h2>
+<dl>
+<div><dt>记录包</dt><dd>从账本导出的文件夹，含所选条目、原文件和上链证明。(disclosure kit)</dd></div>
+<div><dt>六项核验</dt><dd>核验授权时逐项检查的六项：授权签名、签发者账本完整、在签发者账本里、上链已确认、在有效期内、未被撤销。</dd></div>
+<div><dt>全部通过、有缺项、未通过</dt><dd>核验的三种结论。(GREEN、PARTIAL、FAIL)</dd></div>
+<div><dt>深度读数</dt><dd>首次存证、最大深度、连续上链三个数。(depth)</dd></div>
+<div><dt>发布地址</dt><dd>你把记录包放到网上的 https 地址。</dd></div>
+<div><dt>尽调</dt><dd>取得授权之前，检查对方账本中现有的有效授权是否与所需期限重叠。</dd></div>
+</dl>
+<h2 id="key">身份与数据</h2>
+<dl>
+<div><dt>身份</dt><dd>一组签名密钥及其名下的数据。分助记词身份与本机身份两种。</dd></div>
+<div><dt>角色</dt><dd>记录者或使用方，各有自己的密钥、地址和账本。</dd></div>
+<div><dt>身份牌</dt><dd>左栏顶上写着当前身份的卡，点开可切换、新建或导入身份。</dd></div>
+<div><dt>助记词</dt><dd>12 个词，可重新派生助记词身份的两把密钥。</dd></div>
+<div><dt>主身份</dt><dd>它的凭据可以在忘记口令时重设口令的那个身份。</dd></div>
+<div><dt>口令</dt><dd>8 位字母或数字，开启本机密钥库。</dd></div>
+<div><dt>主钥</dt><dd>加密本机全部数据的那枚密钥，由口令开启。</dd></div>
+<div><dt>密钥库</dt><dd>本机存放密钥的加密文件。</dd></div>
+<div><dt>密钥文件</dt><dd>导出的单把密钥，标准 keystore 格式，带文件密码。</dd></div>
+<div><dt>整机备份</dt><dd>含全部身份、密钥、数据与设置的单个加密文件，扩展名 <code>.zikaron</code>。</dd></div>
+<div><dt>账本镜像</dt><dd>导出给别的工具读的账本副本。</dd></div>
+<div><dt>机器目录</dt><dd>存放密钥库、身份登记与机器设置的位置，每台机器一个。</dd></div>
+<div><dt>数据目录</dt><dd>某一身份某一角色存放账本与设置的位置。</dd></div>
+</dl>
+</section></div><!--/proj-->

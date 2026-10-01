@@ -1,0 +1,44 @@
+<!--
+title: Record kits
+-->
+<p class="lede">A record kit is a folder exported from a ledger. It holds the chosen entries, the original files and the on-chain proofs, so someone else can verify them offline.</p>
+<h2 id="range">Entry range</h2>
+<p>Open it with “Export record kit” on a record’s or entry’s detail page; that entry is already selected. The “Entry range” line shows “All N” (an empty choice means the whole ledger) or “N selected”. “Choose…” lets you pick any set of entries, so you show the entries that bear on the matter and keep the rest to yourself.</p>
+<ul>
+<li>Revocations of the chosen grants, and the ledger’s creation and handover entries, come along automatically; the receiver needs them to tell whose ledger this is.</li>
+<li>When some chosen entries are still off chain, red text says the kit lacks their on-chain proofs, with “Put on chain now” beside it.</li>
+</ul>
+<p class="call">Entries go into the kit whole, record names, notes and “Recorded for” fields included. Before handing a kit over, look at what the chosen entries say.</p>
+<h2 id="files">Originals and attachments</h2>
+<dl>
+<div><dt>Originals of the selected records</dt><dd>Lists the files this machine signed for the chosen records; you can “Remove” any of them. A file that has moved from where it was signed, or has been changed, is marked on the page and left out of the kit.</dd></div>
+<div><dt>Attachments</dt><dd>Drop in files or folders; each item shows the name it will have in the kit (“Exported as files/…”). Attachments must be originals of the chosen records.</dd></div>
+<div><dt>Note and save location</dt><dd>Write a note for the kit; the save location defaults to <code>kits</code> in the data folder.</dd></div>
+</dl>
+<p>File names inside a kit use lowercase letters, digits, <code>.</code>, <code>_</code> and <code>-</code> alone, so they unpack and match on any system. Other names are rewritten automatically: lowercased, each run of other characters replaced by one <code>-</code>, leading and trailing <code>-</code> and <code>.</code> trimmed, and the first eight characters of the original name’s digest inserted before the extension (for example <code>name-1a2b3c4d.pdf</code>). When names were rewritten, the kit carries a table of original names, <code>files/zikaron-names.json</code>.</p>
+<h2 id="export">Verify and export</h2>
+<ol>
+<li>Press “Verify and export”; the app reads the chain once.</li>
+<li>It creates a folder named <code>kit-</code> plus the first eight characters of the earliest chosen record’s fingerprint at the save location, numbering it if the name is taken.</li>
+<li>The kit checks itself and is written once it passes; the toast reads “Record kit exported to …”.</li>
+</ol>
+<p>The receiver runs the same check, so a kit that passes on your side passes on theirs.</p>
+<h2 id="side">The side column</h2>
+<dl>
+<div><dt>How recipients verify</dt><dd>The receiver drops the kit into Verify › Verify record.</dd></div>
+<div><dt>Readings and reference (not in the package)</dt><dd>“Calculate” computes three readings for the first chosen record and shows them on the page; see “Depth” below.</dd></div>
+<div><dt>Record packages exported on this Mac</dt><dd>One section for each kit this machine has exported from this ledger. You can set a “Fetch address”, the kit’s https address online; “Delete local copy” deletes the local kit folder and leaves the ledger as it is.</dd></div>
+</dl>
+<h2 id="depth">Depth</h2>
+<p>Depth readings describe how long a record has been in the ledger and how continuously it has been on chain:</p>
+<dl>
+<div><dt>First recorded</dt><dd>Among the anchored records of this content that are on chain, the earliest upper bound on time: the earliest moment the content can be shown to have existed.</dd></div>
+<div><dt>Max depth</dt><dd>The number of anchored records of this content that are on chain.</dd></div>
+<div><dt>Continuity</dt><dd>Written as “on chain / span”: the span is the number of positions from the first to the last record of this content, and on chain is how many of those positions went on chain directly. The closer the two numbers, the steadier the record.</dd></div>
+</dl>
+<p>A Recorder sees them in the export page’s side column; a User sees them in the Record verifier once a record hash is filled in; in due diligence, with a record hash filled in on “Look up a ledger”, “Max depth” is under “Details”. The command line’s <code>depth</code> uses the same calculation: the same input gives the same readings, so the side presenting and the side checking work the same sum.</p>
+<h2 id="publish">Publishing</h2>
+<p>A record kit can live at any https address that serves static files. Fill in the “Published address” in Settings › Network, save it, then press “Check publication”: the app fetches the kit from the publish address file by file, compares it with the local copy and answers “Published”, “Publication incomplete” or “Cannot reach the published address”. You do the upload; the app does the checking.</p>
+<p>Once a verifier enters this address, the app fetches each file, checks its fingerprint, and uses the kit once it passes its check.</p>
+<h2 id="recv">On receiving a record kit</h2>
+<p>Switch to “User”, open “Verify record” under “Verify” and drop the kit in; see <a href="verify.html#record">The record verifier</a>.</p>

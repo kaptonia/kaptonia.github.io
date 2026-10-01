@@ -1,0 +1,61 @@
+<!--
+title: Verification
+-->
+<p class="lede">The receiver does the verifying. “Verify” in the sidebar has “Verify grant” and “Look up a ledger”, and the User also has “Verify record”. Verifying only reads: it reads the inputs and the chain, and shows the result on the page.</p>
+<h2 id="grant">Verify grant</h2>
+<p>Put in all three things, then press “Verify” once:</p>
+<ol>
+<li><b>Grant</b>: paste a grant code, or press “Choose a file…” to pick a grant file.</li>
+<li><b>File</b> (optional): the work you received.</li>
+<li><b>Terms</b> (optional): the terms file.</li>
+</ol>
+<p>Under “Advanced options” you can point each hop of the grant chain at the issuer’s ledger folder, use other nodes, registry contract or start block, or give a moment to check as of; left empty, the values in Settings and chain time apply.</p>
+<h2 id="source">Where the issuer’s ledger comes from</h2>
+<p>The full check needs the issuer’s ledger. The app looks for it in this order:</p>
+<ol>
+<li><b>This machine</b>: the issuer’s ledger on this same machine.</li>
+<li><b>The vault</b>: ledgers carried by grant files you added, and upstream folders you saved.</li>
+<li><b>A record kit</b>: the kit or grant file you point to, and the ledger carried by the grant file being checked.</li>
+<li><b>A publish address</b>: the issuer’s https address. Each file is fetched, and the kit is used once it passes its check.</li>
+</ol>
+<p>The result card has one “Ledger source” line per hop, naming where the ledger was found; “Replace…” or “Add…” lets you give an https address, record kit, ledger folder or grant file yourself.</p>
+<h2 id="six">The six checks</h2>
+<dl>
+<div><dt>Grant signature</dt><dd>The entry was signed by the issuer’s key, and it is a grant.</dd></div>
+<div><dt>Issuer ledger intact</dt><dd>The issuer’s ledger links up entry by entry, and the chain is whole.</dd></div>
+<div><dt>In the issuer’s ledger</dt><dd>The grant is an entry in that ledger, and the key that signed it is entitled to write the ledger.</dd></div>
+<div><dt>Confirmed on chain</dt><dd>The grant, or some entry after it, is on chain.</dd></div>
+<div><dt>Within validity</dt><dd>The moment of the check falls between the start and end the grant states.</dd></div>
+<div><dt>Not revoked</dt><dd>After reading the issuer’s whole ledger, the grant still stands.</dd></div>
+</dl>
+<p>A check still lacking a result shows a grey light with the reason beside it, for example issuer ledger missing, nodes still to be configured, a chain read that failed for now, or awaiting confirmation on chain; below, each kind of gap gets one sentence on what to do next.</p>
+<p>Each hop of a sublicense gets its own six lights, and between hops a light “Hop N links to hop N+1”: the downstream ledger must be opened by the grantee the upstream grant names. The chain passes when every hop passes.</p>
+<h2 id="result">The result</h2>
+<p>The result card starts with three lines:</p>
+<div class="tw"><table>
+<thead><tr><th>Line</th><th>Shows</th></tr></thead>
+<tbody>
+<tr><td>Grant</td><td>“All six checks passed”, “Has gaps” or “Failed”</td></tr>
+<tr><td>File</td><td>“Match” or “Mismatch” against the work hash the grant points to; for several hops, the last hop</td></tr>
+<tr><td>Terms</td><td>“Match” or “Mismatch” against the terms fingerprint in the grant</td></tr>
+</tbody></table></div>
+<p>The summary at the bottom takes one of three forms: “All match” (the grant passed all six checks, and the file and terms, where given, match), “N do not match”, and “Not everything could be checked” (everything checked matches, but the grant has gaps or reading a file failed).</p>
+<p class="call">“Has gaps” is a grade of its own, meaning “no answer yet”, and it always stands apart from passing. When you meet it, check again in a few minutes; if you need the work urgently, ask the other side to supply what is missing.</p>
+<p>A check fails on evidence in hand, such as a revocation or a wrong signature; “Not revoked” rests on a complete reading of the record. Where the record has gaps, the light turns grey and the grant reads “Has gaps”.</p>
+<h2 id="file">Checking a received file</h2>
+<p>When you receive the work itself, put it into the “File” box on Verify grant and press “Verify” together with the grant: the app computes the SHA-256 of the file’s bytes and compares it with the work hash the grant points to. “Details” shows the byte count, the computed digest and the expected digest side by side. After changing the file, press “Verify” again.</p>
+<h2 id="record">The record verifier</h2>
+<p>“Verify record” under the User’s “Verify”. Drop in a record kit folder, a grant file or a single record file, and it is checked as soon as it is in. The result card has three lights:</p>
+<dl>
+<div><dt>Record kit</dt><dd>Whether the kit is intact and its signatures valid; a single file is verified as a single file.</dd></div>
+<div><dt>Anchor proofs on chain</dt><dd>How many match the chain and how many are still off chain; when reading the chain fails, “Not compared with the chain”.</dd></div>
+<div><dt>Issuer ledger</dt><dd>The ledger check result; when a kit carries part of the ledger, “This is part of the ledger”.</dd></div>
+</dl>
+<p>The “Record by record” table below has one row per record in the kit: whether the original in the kit matches its recomputed fingerprint, the on-chain state, and the first anchor block time. With a record hash filled in under “Advanced options”, the record’s three depth readings appear as well.</p>
+<h2 id="others">Looking up a ledger</h2>
+<p>Fill in “Author address” and press “Read”: the app scans the chain for that address’s anchor proofs and looks for its ledger content in the four places above, in the same order. “Overview” has four tiles: ledger status, record count, grant history and last on chain; “Entry list” lists the other ledger entry by entry, and a click on a row opens a read-only detail. When anchor proofs turn up and the ledger content is missing, the overview says so plainly and the record count reads “Not obtained”.</p>
+<h2 id="dd">Due diligence</h2>
+<p>A User does due diligence on “Look up a ledger”: fill in the record hash and the validity needed under “Advanced options”, and “Overview” gains a “Grant conflict check”, which tells you whether the period you need overlaps active grants the author has already issued. “Save snapshot” writes this result to a JSON snapshot for your own files.</p>
+<h2 id="basis">The scope of a result</h2>
+<p>Every check rests on one specific reading: which chain, which registry contract, from which block, and which addresses. “All passed” means all six checks passed within what was read. To widen the scope, fill in “Advanced options” and check again.</p>
+<p>Verifying writes two things on this machine: changes to the address book, and snapshot files written by “Save snapshot”.</p>

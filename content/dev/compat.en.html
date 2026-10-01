@@ -1,0 +1,42 @@
+<!--
+title: Compatibility and evolution
+-->
+<p class="lede">This page states what stays stable, and where new features come in.</p>
+<h2 id="forever">What stays stable</h2>
+<dl>
+<div><dt>The bytes of an entry</dt><dd>A signed entry stays as it is. Every version of the software reads it under zikaron/1 and reaches the same verdict as today.</dd></div>
+<div><dt>Signing domains</dt><dd>Four literals, each with a fixed meaning: <code>zikaron/1</code>, <code>zikaron/1-adoption</code>, <code>zikaron.fpm/1</code>, <code>zikaron.ack/1</code>.</dd></div>
+<div><dt>The two forms of anchor</dt><dd>The event form and the self-transfer form.</dd></div>
+<div><dt>Verdicts</dt><dd>For the same input, every conforming implementation gives the same output.</dd></div>
+</dl>
+<h2 id="add">Four points of extension</h2>
+<dl>
+<div><dt>A new entry type</dt><dd>Types are open. Once a new type is agreed, older software lists it under “Unrecognized types”, and the verdict under the law stays as it was; ZIKARON Desk’s ledger status line counts it as a problem.</dd></div>
+<div><dt>Extra body members</dt><dd>An entry’s body may carry keys beyond those the law names, and the law treats them as data. <code>for</code> and <code>upstream</code> both came in this way.</dd></div>
+<div><dt>A new mode mark</dt><dd>The <code>mark</code> of a record is an open literal. A new fingerprint algorithm or a new kind of content takes a new mark.</dd></div>
+<div><dt>A new version of the law</dt><dd>When the rules themselves have to change, start zikaron/2.</dd></div>
+</dl>
+<p>The first three are in the tooling layer and usable today. Which to use depends on who has to understand the new thing: for your own app alone, an extra member; for other implementations too, an agreed and published type.</p>
+<h2 id="v2">The next version of the law</h2>
+<p>zikaron/2 means a new spec name, a new signing-domain literal, a new core and a new digest, with signatures under the two versions independent of each other. An old ledger stays valid under zikaron/1; an author who migrates records a handover in the old ledger, naming the key that signs the first entry of the new one.</p>
+<p>A key writes ledgers under one law, so the new ledger of a migration takes a new key.</p>
+<h2 id="formats">Versions of local files</h2>
+<p>Every kind of local file carries a format version. When the software is upgraded, it follows these rules:</p>
+<ol>
+<li>A new version reads every old format.</li>
+<li>To rewrite a file in a new format, write it alongside, read it back and compare, and replace the original once they match.</li>
+<li>When any comparison fails, stop, leave the original as it is, and name the file to the user.</li>
+<li>A sealed file whose master key is gone, closed for good, is moved byte for byte into <code>set-aside</code> in the machine folder, numbered flat.</li>
+<li>When a backup comes from a newer version, the software says plainly to update the app first; for any other unreadable file, it names the file.</li>
+</ol>
+<p>The whole process happens in one step: after a power cut, the next launch finds either the complete old state or the complete new one.</p>
+<h2 id="cli">Command-line output</h2>
+<p>The output keys form a closed table and the exit codes are five fixed values, and scripts depend on them. So the meanings of keys and exit codes stay stable; new information comes as new keys; new subcommands and flags are added to <code>CLI-SCHEMA.md</code> at the same time.</p>
+<h2 id="words">Verdict tokens stay as written</h2>
+<p><code>GREEN</code>, <code>PARTIAL</code>, <code>FAIL</code>, <code>COMPLETE</code>, <code>GAPS</code> and the like are written by the cores and stay as they are in machine-readable output. The interface renders them for people as “All passed”, “Has gaps” and so on, with the original token under Details.</p>
+<h2 id="time">Time</h2>
+<p>Deadlines and validity are judged by chain time, or by a moment the caller states explicitly. The interface displays time in the user’s chosen time zone; entries and output always hold seconds.</p>
+<h2 id="deprecate">Retiring a feature</h2>
+<p>Reading features are kept for good: new versions have to read old entries, old record kits and old backups. Writing features may be retired; when one is, the release notes say so and give users another way to do the same thing.</p>
+<h2 id="tools">Keeping the tooling layer light</h2>
+<p>Tests, gauges, scripts, directory divisions and this document all belong to the tooling layer and serve the law and the user: a fault found is fixed the same day, and what is out of date is replaced. Two things bear the load: the frozen law, and the bytes users have already written.</p>

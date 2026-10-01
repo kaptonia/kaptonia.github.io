@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>分叉与另起实现 · 开发者指南</title>
+<meta name="description" content="代码以 MIT 许可发布，法文人人可读。欢迎分叉，欢迎用任何语言另写实现。只有一项请求：让分歧可见。">
+<meta property="og:title" content="分叉与另起实现 · 开发者指南">
+<meta property="og:description" content="代码以 MIT 许可发布，法文人人可读。欢迎分叉，欢迎用任何语言另写实现。只有一项请求：让分歧可见。">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/dev/fork.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=d4d72dff">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html">Wiki</a><a href="../dev/index.html" class=on>开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/dev/fork.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="dev"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>分叉与另起实现</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><div class="g2">开发</div><a href="verify.html">校验</a><a href="build.html">从源码构建</a><a href="layout.html">仓库结构与分层</a><a href="cli.html">命令行</a><a href="law.html">法文与一致性套件</a><a href="contract.html">登记合约与上链</a><a href="formats.html">文件与格式</a><a href="integrate.html">接入</a><div class="g2">维护</div><a href="contributing.html">参与贡献</a><a href="compat.html">兼容与演进</a><a href="security.html">安全</a><a href="release.html">发布</a><a href="fork.html" class=on aria-current=page>分叉与另起实现</a></div></div></div></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:dev')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="fork" data-prev="release.html"><div class="kick">开发者指南 · <b class="zk">Zikaron</b></div><h1>分叉与另起实现</h1><p class="lede">代码以 MIT 许可发布，法文人人可读。欢迎分叉，欢迎用任何语言另写实现。只有一项请求：让分歧可见。</p>
+<h2 id="license">许可</h2>
+<p>代码与文档采用 MIT 许可：可以使用、修改、再发布与商用，保留许可文本即可。登记合约源码采用 CC0，内嵌字体各按 SIL OFL 1.1。</p>
+<h2 id="impl">另起一份实现</h2>
+<p>法文自成体系，核验所需的每条判断都写在其中。依据法文，用你选择的语言编写实现，再用一致性套件验收；与冻结核零分歧，即为合规实现，与本仓库的实现地位相同。</p>
+<p>独立实现越多，法越稳固：每多一份依据文本独立写成的实现，文本中的歧义就多一次被发现的机会。在语料之外发现两份实现有分歧，请提交议题。</p>
+<h2 id="fork">分叉本应用</h2>
+<p>修改界面、增加功能、更换默认设置，都属工具层，尽可自由去做。请注意三点：</p>
+<dl>
+<div><dt>另取名称</dt><dd>让用户能区分两个软件。</dd></div>
+<div><dt>另设机器目录</dt><dd>让两个软件的密钥库与数据分开存放。</dd></div>
+<div><dt>保持对法合规</dt><dd>你的分叉写出的账本，原版可以读取；原版写出的账本，你的分叉也可以读取。</dd></div>
+</dl>
+<h2 id="rules">修改规则</h2>
+<p>规则的改动须让每位读者都看得见：另起新的规格名与签名域字面量。这样两套规则下的签名相互独立，读者一眼就能看出条目属于哪一套。</p>
+<ul>
+<li>规格名与域字面量须与现有的全然相异；<code>zikaron/1</code> 这一字面量永远指现行这部法。</li>
+<li>公开你的法文与核，并写明摘要。</li>
+<li>用一把新密钥书写新规则下的账本。</li>
+</ul>
+<h2 id="registry">登记合约</h2>
+<p>合约为所有人共用。任何人都可以在任一已完成上海升级的 EVM 链上部署相同的字节，得到相同的代码哈希。核验方在自己的扫描范围中写明认可哪些地址；你部署的合约与他人部署的，在法中地位相同。</p>
+<h2 id="govern">决定权归属</h2>
+<dl>
+<div><dt>法</dt><dd>由冻结核决定。维护者与任何人一样，只能另立新版。</dd></div>
+<div><dt>合约</dt><dd>由部署的字节决定。</dd></div>
+<div><dt>本仓库</dt><dd>由维护者决定合并哪些请求。对取舍有异议时，分叉是正当的出路。</dd></div>
+<div><dt>用户的数据与密钥</dt><dd>由用户自己决定，项目方手中只有源码。</dd></div>
+<div><dt>证据的分量</dt><dd>由读证据的人决定。</dd></div>
+</dl>
+<h2 id="words">如实说明</h2>
+<p>介绍你的分叉或实现时，请如实写明它与哪一版法合规、使用哪个登记合约、默认连接哪些节点。用户据此判断两个软件写出的记录能否互相核验。</p>
+<div class="pn"><a href="release.html"><span>上一页</span>发布</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#license">许可</a><a href="#impl">另起一份实现</a><a href="#fork">分叉本应用</a><a href="#rules">修改规则</a><a href="#registry">登记合约</a><a href="#govern">决定权归属</a><a href="#words">如实说明</a></nav></div>
+<script src="../../site.js?v=9784bc60" defer></script>
+</body>
+</html>

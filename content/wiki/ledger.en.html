@@ -1,0 +1,77 @@
+<!--
+title: The ledger and its entries
+-->
+<p class="lede">Each role has a ledger of its own: a chain of signed entries, written in order, that can only be appended to. The first entry is “Create the ledger”, the ledger’s one and only root.</p>
+<h2 id="entry">What an entry holds</h2>
+<dl>
+<div><dt>Author</dt><dd>The address of the key that signed the entry.</dd></div>
+<div><dt>Sequence</dt><dd>The entry’s position in the ledger, counted from 0.</dd></div>
+<div><dt>Previous entry</dt><dd>The ID of the entry before, which ties this entry to the whole ledger before it.</dd></div>
+<div><dt>Type and body</dt><dd>What the entry records: a content fingerprint, a grant, a revocation.</dd></div>
+<div><dt>Signature</dt><dd>The author key’s signature over all of the above.</dd></div>
+</dl>
+<p>Every entry carries the ID of the one before it. Change, add, remove or swap any entry and every ID after it changes; so verifying the latest entry verifies the whole ledger before it.</p>
+<h2 id="types">Entry types</h2>
+<div class="tw"><table>
+<thead><tr><th>Type</th><th>What it is</th></tr></thead>
+<tbody>
+<tr><td>Create the ledger</td><td>The root of the ledger</td></tr>
+<tr><td>Anchored record</td><td>The content fingerprint of one record</td></tr>
+<tr><td>Grant</td><td>Lets an address use a record for a period of time</td></tr>
+<tr><td>Revocation</td><td>Revokes a grant</td></tr>
+<tr><td>Note on entry</td><td>Adds a note to an earlier entry</td></tr>
+<tr><td>Adoption</td><td>Brings anchors this key put on chain earlier into the ledger</td></tr>
+<tr><td>Key change or handover</td><td>Hands the ledger to a new key</td></tr>
+<tr><td>Deletion</td><td>Marks a record as deleted</td></tr>
+</tbody></table></div>
+<p>The set of types is open. Other tools may agree on types of their own and write them to a ledger; a reader that meets an unfamiliar type lists it under “Unrecognized types”, and the verdict under the law stays as it was. “Deletion” is such a reading convention: this app reads it, and other tools list it in that column. This app’s ledger status line counts that column as a problem, its own deletions excepted: when the count equals exactly the number of deletion entries, the item shows as a green “N convention entries”.</p>
+<h2 id="append">Append only</h2>
+<p>A ledger does one thing: it appends at the end. For a mistake, add a note; to retire a record, add a deletion; to take a grant back, add a revocation. Earlier entries stay exactly as they are, and that is what settles a ledger’s past.</p>
+<h2 id="history">Recording</h2>
+<p>On Home or the Records page, drop a file, a folder or a Git repository into the drop zone, or click it to choose one. The “New record” card opens. The content fingerprint is computed this way:</p>
+<div class="tw"><table>
+<thead><tr><th>Kind</th><th>How</th></tr></thead>
+<tbody>
+<tr><td>File</td><td>SHA-256 of the file’s bytes</td></tr>
+<tr><td>Folder</td><td>Over every file name and its content</td></tr>
+<tr><td>Git repository</td><td>Over the current commit</td></tr>
+</tbody></table></div>
+<ol>
+<li>Fill in “Record name”. Left empty, it is filled in for you: a file’s name minus its extension, or a folder’s or repository’s full name. The record name is written into the record entry.</li>
+<li>The optional “Recorded for (optional)” fold has four fields: “App”, “Their identity (0x…)”, “Their reference” and “Their role (optional)”. Once any of them is filled in, the first three are required, and their identity is written as <code>0x</code> followed by 40 hexadecimal digits. These words go into the record entry as they are, so that whoever reads the record later can tie it to a specific transaction.</li>
+<li>Under “Advanced options” you may link a Git repository; later, “Check commits” shows how many commits have been made since the last record.</li>
+<li>Press “Add to ledger”, check “File” and “Cost” on the confirmation card, then press the solid red “Add to ledger”. The entry is written to the ledger and joins the pending queue.</li>
+</ol>
+<p><b>Batches.</b> Drop two or more files into the card’s drop zone at once to make a batch: each file becomes one record, and the one “Record name” goes into every entry. The batch stops at the first failure; entries already signed stay in the ledger and the remaining files stay in the list, ready for another press once the problem is fixed. A batch takes files only.</p>
+<p><b>Check a file.</b> “Check a file”, beside the search field on the Records page: choose a file, and the app computes its SHA-256, looks for a record with the same fingerprint in the current ledger, and answers with the entry number, its on-chain state and its block time.</p>
+<h2 id="public">Written means public</h2>
+<p class="call">Where each file was when it was signed lives on this machine alone. Record names, note text, the “Recorded for” fields and a grant’s scope are written into entries: anyone who holds your ledger can read them (a grant file carries the whole ledger), for good. Write them with care; when “Record name” is left empty, the file name goes into the entry.</p>
+<p>A fingerprint answers one question: are these two contents the same. When the content is short and easy to guess (a date, an amount), others can compute the fingerprint of each candidate and compare. Before recording such content, combine it with a stretch of random text in one file.</p>
+<h2 id="retract">Deleting a record</h2>
+<p>Press “Delete record…” at the bottom of the record’s detail page. The card reads “The record will be marked as deleted. Grants already issued are not affected.” Press “Delete”: a “Deletion” entry pointing at the record is added to the ledger, and the original entry stays exactly as it was, byte for byte. From then on the record is struck through, its page says it was deleted, and New grant leaves it out of the choice.</p>
+<div class="tw"><table>
+<thead><tr><th>The deleted record</th><th>Result</th></tr></thead>
+<tbody>
+<tr><td>Still waiting in the queue, or local all along</td><td>The record leaves the queue and the deletion stays local, shown as “Deleted locally”</td></tr>
+<tr><td>Already sent, in a block or on chain</td><td>The deletion entry joins the pending queue and goes on chain like any other entry; the chain record stays as it is and still counts towards depth</td></tr>
+</tbody></table></div>
+<p>The format of a deletion entry and how it is read are this app’s convention, set out in <a href="../dev/formats.html#retraction">Files and formats</a>.</p>
+<h2 id="annotate">Notes</h2>
+<p>“Add note…” in the “More” menu of the Ledger page, or “Note…” on an entry’s detail page: write the “Note text”, pick the “Target entry” and press “Add note”. The note is saved as a new entry, and the original entry stays as it is.</p>
+<h2 id="adopt">Importing anchor proofs</h2>
+<p>This brings anchors that a key put on chain earlier, outside the ledger, into the ledger. Open Ledger › More › “Import existing records…”:</p>
+<ul>
+<li>With “Key address” empty, it lists anchors this machine’s key sent earlier that the ledger lacks. The list comes from the last ledger check.</li>
+<li>With an address filled in, it scans the chain for the anchors that key sent. Rows marked “Passed” are switched on by default, and only these can be imported.</li>
+<li>To import another person’s address, the holder of that key signs for it: send them the “Text” from the card; they sign it in their own app with More › “Sign a claim for someone…” and this machine’s passcode, and send the signature back; you paste it in and it is checked on the spot. Importing also works with the signature missing, and those anchors are then recorded as unproven.</li>
+</ul>
+<p>Press “Import N”. One adoption entry is written and joins the pending queue.</p>
+<h2 id="handover">Handing over a ledger</h2>
+<p>Ledger › More › “Change key or hand over…”: fill in the “New key address” (the new key must have zero anchor proofs on chain, and the reading must show zero to continue), choose “Key change only” or “Hand over to someone”, add a statement if you like, and press the solid red “Hand over”. From then on the new key continues the ledger and this machine becomes read-only. A handover goes one way.</p>
+<h2 id="one">One key, one ledger</h2>
+<p>A key writes one ledger. If one key signs two differing entries at the same sequence number, every verifier can see it, and the ledger check judges it “Failed”. Therefore:</p>
+<ul>
+<li>One window at a time writes to a data folder. A window opened later can only read, and shows the read-only bar at the top of the page.</li>
+<li>An identity restored on another machine from its recovery phrase, private key or key file first pauses writing; it resumes once its ledger has been fetched from a whole-machine backup and matched against the chain. See <a href="data.html#retrieve">Fetching the ledger</a>.</li>
+<li>Before changing keys, record a handover; the new key continues the ledger on the strength of it.</li>
+</ul>

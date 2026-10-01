@@ -1,0 +1,64 @@
+<!--
+title: Building from source
+-->
+<p class="lede">One Rust workspace: one command to build, one command to test, and packaging scripts for each platform.</p>
+<h2 id="need">Requirements</h2>
+<dl>
+<div><dt>Rust</dt><dd>Stable, 2021 edition, installed with <a href="https://rustup.rs">rustup</a>.</dd></div>
+<div><dt>A C toolchain</dt><dd>The cryptography library <code>ring</code>, used by TLS, compiles some C code for the host. On macOS, the Xcode command line tools are enough.</dd></div>
+<div><dt>Linux system libraries</dt><dd>Development packages for windows, keyboards and file dialogs; see below.</dd></div>
+<div><dt>Python 3</dt><dd>Runs the law’s frozen cores and the conformance comparisons, with the standard library alone.</dd></div>
+<div><dt>Foundry</dt><dd>Used to test the registry contract and recompute its code hash.</dd></div>
+</dl>
+<p>On Debian or Ubuntu, install the build dependencies first:</p>
+{{code:
+sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 \
+  libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
+  xdg-desktop-portal xdg-desktop-portal-gtk
+}}
+<p>On Linux the system file dialog goes through the desktop portal, so running the app needs <code>xdg-desktop-portal</code> and a backend; where the portal is missing, drag files straight into the window.</p>
+<h2 id="build">Build and test</h2>
+{{code:
+tar -xzf zikaron-{{VER}}-src.tar.gz
+cd zikaron-{{VER}}
+cargo build --release --locked
+cargo test --workspace
+}}
+<p><code>--locked</code> holds the build to the dependency versions pinned in <code>Cargo.lock</code>, as release builds do. The products:</p>
+<div class="tw"><table>
+<thead><tr><th>Program</th><th>What it is</th></tr></thead>
+<tbody>
+<tr><td><code>target/release/app</code></td><td>The desktop window, packaged as <code>ZIKARON.app</code> on macOS and as <code>zikaron-desk</code> on Linux</td></tr>
+<tr><td><code>target/release/zikaron</code></td><td>The command line; see <a href="cli.html">Command line</a></td></tr>
+<tr><td><code>zk1</code>, <code>zkk</code>, <code>zks</code>, <code>zka</code>, <code>zkg</code></td><td>Helper programs for tests and conformance comparisons</td></tr>
+</tbody></table></div>
+<h2 id="package">Packaging</h2>
+<div class="tw"><table>
+<thead><tr><th>Script</th><th>Output</th></tr></thead>
+<tbody>
+<tr><td><code>packaging/macos/build.sh [--identity NAME]</code></td><td><code>ZIKARON.app</code>, inside a <code>.dmg</code> and a <code>.pkg</code> (macOS)</td></tr>
+<tr><td><code>packaging/linux/build.sh</code></td><td>A <code>.deb</code> and an AppImage, built natively on Linux</td></tr>
+<tr><td><code>packaging/linux/cross-build.sh</code></td><td>The same Linux x86_64 packages, built on another host with zig and <code>cargo-zigbuild</code></td></tr>
+</tbody></table></div>
+<p>Packages land in <code>dist/</code>, each platform with a <code>SHA256SUMS-&lt;system&gt;-&lt;arch&gt;.txt</code>. When <code>--identity</code> is left off, the macOS script signs ad hoc (<code>-</code>); release packages are signed with Kaptonia’s certificate; see <a href="release.html">Releasing</a>.</p>
+<h2 id="contract">Contract tests</h2>
+{{code:
+cd base/zikaron-core/contracts
+forge test
+}}
+<h2 id="law">The law’s cores</h2>
+{{code:
+cd base/zikaron-conformance
+./criterion-digest.sh
+./criterion-digest-kit.sh
+}}
+<p>How to run the conformance corpora against a candidate implementation is under <a href="law.html#run">Testing an implementation</a>.</p>
+<h2 id="safe">Trying it with separate data</h2>
+<p>The app finds the machine folder from <code>HOME</code>, and the key store lives there alone. Point <code>HOME</code> at an empty directory before launching, and the machine folder, key store and ledgers all land inside it, apart from your everyday data:</p>
+{{code:
+T=$(mktemp -d)
+HOME=$T ./target/release/app
+}}
+<p>For a trial, choose “Custom” in the wizard first and connect to the Sepolia testnet; see <a href="../wiki/anchoring.html#networks">Networks</a> in the Wiki. Generate test keys on the spot with <code>zikaron keygen</code>, and discard them after use.</p>
+<h2 id="fonts">Embedded fonts</h2>
+<p>The interface’s Latin face Inter and the monospace JetBrains Mono are embedded in the app; Chinese comes from the system’s PingFang on macOS and from the embedded Noto Sans SC on Linux. All three embedded fonts are released under SIL OFL 1.1, with their licence texts in <code>crates/zikaron-ui/fonts/</code>.</p>
