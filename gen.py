@@ -249,9 +249,9 @@ def zikaron():
     <p class="cite">{t("约书亚记 4:4–7", "Joshua 4:4–7")}</p>""", " etym-cap")
     go = t("打开 →", "Open →")
     end = cap("zend", "T", f"""<div class="tools t3">
-    <a class="tool" href="use.html"><b>{t("使用", "Use")}</b><span>Zikaron Desk {VER}</span><em>{go}</em></a>
-    <a class="tool" href="docs/wiki/zikaron.html"><b>{t("使用说明", "User guide")}</b><span>Wiki</span><em>{go}</em></a>
-    <a class="tool" href="docs/dev/index.html#map"><b>{t("开发者指南", "Developer guide")}</b><span>{t("校验、法文、命令行与合约", "Verification, law, command line, contract")}</span><em>{go}</em></a>
+    <a class="tool" href="use.html"><b>{t("使用", "Use")}</b><em>{go}</em></a>
+    <a class="tool" href="docs/wiki/zikaron.html"><b>Wiki</b><em>{go}</em></a>
+    <a class="tool" href="docs/dev/index.html#map"><b>{t("开发者指南", "Developer guide")}</b><em>{go}</em></a>
   </div>""")
     # 功能一段照常滚动:从交易与履约翻下来时淡入,翻到最后一页时淡出(site.js 的翻页与 style.css 的 .flow)
     body = f"""<main class="theater">
