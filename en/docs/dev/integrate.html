@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/dev/integrate.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=e8e6674a">
+<link rel="stylesheet" href="../../../style.css?v=5b251068">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -36,7 +36,7 @@
 <p>The simplest integration calls <code>zikaron</code> as a subprocess and reads its exit code and standard output.</p>
 <div class="cmd block"><code>zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
   --fragment fragment.json --now $(date +%s)</code><button class="cp" type="button" data-copy="zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
-  --fragment fragment.json --now $(date +%s)" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+  --fragment fragment.json --now $(date +%s)" aria-label="Copy" title="Copy"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <div class="tw"><table>
 <thead><tr><th>Exit code</th><th>What your app does</th></tr></thead>
 <tbody>
@@ -51,7 +51,7 @@
 <p>Handle 3 as a level of its own: “no result yet”, “passed” and “failed” are three states, and your interface shows them in three styles.</p>
 <h2 id="desk">Writing through the desktop</h2>
 <p>With <code>--home &lt;the desktop’s data folder&gt;</code>, ten writing verbs (<code>init</code>, <code>history</code>, <code>grant</code>, <code>revoke</code>, <code>adopt</code>, <code>attest</code>, <code>annotate</code>, <code>retract</code>, <code>anchor</code>, <code>kit-export</code>) are done by the <b class="zk">Zikaron</b> that is running, unlocked and holding that data folder as its writer: the entry is written into the user’s ledger under the user’s identity and shows in the window at once. The private keys and the passcode stay in the desktop. <code>succeed</code> with <code>--home</code> always answers <code>E_ON_DESKTOP</code>.</p>
-<div class="cmd block"><code>zikaron history --home &quot;$DESK_HOME&quot; --file ./delivery.pdf --note &quot;First delivery&quot;</code><button class="cp" type="button" data-copy="zikaron history --home &quot;$DESK_HOME&quot; --file ./delivery.pdf --note &quot;First delivery&quot;" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<div class="cmd block"><code>zikaron history --home &quot;$DESK_HOME&quot; --file ./delivery.pdf --note &quot;First delivery&quot;</code><button class="cp" type="button" data-copy="zikaron history --home &quot;$DESK_HOME&quot; --file ./delivery.pdf --note &quot;First delivery&quot;" aria-label="Copy" title="Copy"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <div class="tw"><table>
 <thead><tr><th>Answer</th><th>What your app does</th></tr></thead>
 <tbody>
@@ -96,6 +96,6 @@
 <li>Register the convention in the repository’s discussions, so other implementations can adopt it.</li>
 </ul>
 <div class="pn"><a href="formats.html"><span>Previous</span>Files and formats</a><a class="nx" href="contributing.html"><span>Next</span>Contributing</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#shape">How integration works</a><a href="#cli">Verifying with the command line</a><a href="#desk">Writing through the desktop</a><a href="#alone">Writing with the credential</a><a href="#lib">Calling the cores directly</a><a href="#kits">Reading the record kits a user has exported</a><a href="#for">Pointing a record at your transaction</a><a href="#remind">Reminding at the right moment</a><a href="#sign">Signing requests</a><a href="#types">Agreeing on a new entry type</a></nav></div>
-<script src="../../../site.js?v=fa6bc6e1" defer></script>
+<script src="../../../site.js?v=e33906fb" defer></script>
 </body>
 </html>

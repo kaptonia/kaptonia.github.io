@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/ai.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=e8e6674a">
+<link rel="stylesheet" href="../../style.css?v=5b251068">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -48,7 +48,7 @@
 先运行 zikaron contract，它列出全部子命令、各自的参数和退出码。
 要写进我账本的操作，每条命令都带 --home &quot;&lt;数据目录&gt;&quot;，交给正在运行的桌面去做。
 每条命令在标准输出给一个 JSON 值，结论看退出码：
-  0 完成；1 被拒或未通过；2 命令写错；3 部分结果，或已加入队列等我在桌面上发；4 没有答案，例如桌面没有作答、连不上节点。" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+  0 完成；1 被拒或未通过；2 命令写错；3 部分结果，或已加入队列等我在桌面上发；4 没有答案，例如桌面没有作答、连不上节点。" aria-label="复制" title="复制"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <p>AI 代理可以先做完好几件事，最后上链一次，让它们装进同一笔交易，只付一笔的费用。</p>
 <h2 id="credential">经凭据操作时</h2>
 <p>AI 代理凭你在桌面上授权的一份限期凭据，直接写桌面托管的账本、发它的待上链队列；桌面关着、锁着都行，用的是桌面密钥库里的钥。</p>
@@ -71,7 +71,7 @@
 上链：zikaron anchor --ledger &quot;&lt;账本文件夹&gt;&quot;，发这本账的待上链队列。
 每条命令在标准输出给一个 JSON 值，结论看退出码：
   0 完成；1 被拒或未通过，例如凭据过期 E_CREDENTIAL_EXPIRED、桌面正在写 E_HOME_HELD(稍后再试)；2 命令写错；3 部分结果，或已加入队列等我在桌面上发；4 没有答案，例如连不上节点、交易还没入块。
-凭据过期时告诉我。" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+凭据过期时告诉我。" aria-label="复制" title="复制"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <p>桌面开着时，AI 代理写进的条目随即出现在窗口里。AI 代理做完，到「设置 › 命令行」关掉「经凭据操作」，凭据即删。</p>
 <h2 id="standalone">纯命令行时</h2>
 <p>AI 代理用一把专用的密钥独立写一本账，用不着桌面；主机重启后照常工作，全程不用你管，地址里的钱不够时再充一点。重要的身份交给桌面托管，这里只用一把专用的钥。</p>
@@ -93,7 +93,7 @@
 上链：zikaron anchor --key-file &quot;&lt;私钥文件&gt;&quot; --endpoint 1=&lt;节点地址&gt; --form registry --registry &lt;登记合约地址&gt; --hash &lt;条目编号&gt;
   --hash 可以重复，一笔交易锚多条；记下写入时输出的条目编号，攒几条一起发。
 每条命令在标准输出给一个 JSON 值，结论看退出码：0 完成；1 被拒或未通过；2 命令写错；3 部分结果；4 没有答案，例如连不上节点。
-上链被拒时，把原因告诉我；余额不够就请我充值。" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+上链被拒时，把原因告诉我；余额不够就请我充值。" aria-label="复制" title="复制"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <p>这把钥由 AI 代理使用，风险限于这本专用的账和地址里的 ETH。这本账日后可以用「导入密钥」和「收编已有账本目录」接进桌面；要让它在远程主机与你的电脑之间来回写，见<a href="cli.html#handover">交接账本</a>。私钥文件的保管办法见<a href="cli.html#plain">明文的文件</a>。</p>
 <h2 id="remote">远程操作</h2>
 <p>把应用放在家里的一台迷你主机，或一台云主机上，AI 代理就能远程替你操作。命令行只和同一台机器上的同一个用户打交道，所以 AI 代理要在那台主机上执行命令：用这个用户经 SSH 登录进去，或者直接装在那台主机上。要处理的文件，也先放到那台主机上。</p>
@@ -113,6 +113,6 @@
 <li>整机备份和私钥文件的副本，放在主机以外的地方。</li>
 </ul>
 <div class="pn"><a href="cli.html"><span>上一页</span>命令行</a><a class="nx" href="alerts.html"><span>下一页</span>设置与提醒</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#desk">经桌面 App 操作时</a><a href="#credential">经凭据操作时</a><a href="#standalone">纯命令行时</a><a href="#remote">远程操作</a><a href="#safety">安全</a></nav></div>
-<script src="../../site.js?v=fa6bc6e1" defer></script>
+<script src="../../site.js?v=e33906fb" defer></script>
 </body>
 </html>

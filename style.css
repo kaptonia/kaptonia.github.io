@@ -938,3 +938,17 @@ html[lang="en"] .art .pt p{font-size:20px;line-height:1.8;letter-spacing:0}
 @media (max-width:860px){.dl .hero-more{margin-top:64px}.dl #talk{margin-top:90px}}
 .dl #files{margin-top:84px}
 @media (max-width:860px){.dl #files{margin-top:64px}}
+/* 手机上两个对话窗口各成一节:上下隔开,滚到哪个哪个播放,另一个淡着停住;不用点 */
+@media (max-width:860px){
+  .dl .chat2{gap:96px}
+  .dl .chatw:not(.on){cursor:default}
+  .dl .chatw:not(.on):hover{opacity:.42}
+  .dl .chat-top .e2{display:none!important}
+  .dl .chatw:not(.on) .chat-top .e1{display:inline!important}
+}
+/* 复制键:复制之后图标换成一个小对勾,片刻后换回 */
+.ic-ok{display:none}
+.did .ic-copy{display:none}
+.did .ic-ok{display:inline-block;animation:ok-in 260ms var(--ease)}
+@keyframes ok-in{from{opacity:0;transform:scale(.6)}}
+.get.agent .btn.did svg{color:var(--accent)}

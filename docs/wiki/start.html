@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/start.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=e8e6674a">
+<link rel="stylesheet" href="../../style.css?v=5b251068">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -38,39 +38,7 @@
 </ul>
 <p>从早先版本升级时，先照下面的<a href="#upgrade">从早先版本升级</a>把账本带过来。</p>
 <h2 id="agent">通过 AI Agent 使用</h2>
-<p>有云端电脑的 AI Agent，可以自己把 ZIKARON 装好并进入可用状态，你只需要与它简单对话就可以使用。把下面这段交给它：</p>
-<div class="cmd block"><code>ZIKARON 最简上手（给 AI agent）
-1. 拉取并安装：从 https://github.com/kaptonia/zikaron 的 Releases 下载最新安装包，用 SHA256SUMS.txt 校验后安装。Linux 用：sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -o Dpkg::Options::=--force-confold ./zikaron-desk_*_amd64.deb
-2. 读说明：README.md（网络和合约地址）和 CLI-SCHEMA.md（命令用法）。装好后运行 zikaron contract，以它列出的子命令、参数和退出码为准。
-3. 进入工作状态：
-   - 用户本机已经有 ZIKARON 桌面版的话，优先用 --home 或「经凭据操作」，私钥留在用户电脑上。
-   - 否则：zikaron keygen 生成私钥，存进 600 权限的文件，绝不显示；问用户要不要把这个私钥文件交给他保管一份，要的话以文件交付，不贴进聊天，并提醒他存到离线的地方；然后 zikaron init 建账本；请用户往这个地址充一点 ETH 付 gas。
-4. 日常：history --file 记录 → anchor 上链 → scan 后 audit 核验；要分享就 kit-export 导出记录包，对方用 kit-verify 核验。几条记录攒在一起上链，一笔交易只付一次 gas。
-5. 升级：定期查看 Releases。有新版本时，先读发布说明和 CHANGELOG 里的「升级」一节，再用 SHA256SUMS.txt 校验，然后照第 1 步覆盖安装。命令行的账本目录跨版本照常读写。发布说明要求手工迁移的话，先告诉用户，得到同意再动手。升级后运行 zikaron contract，确认命令有没有变化。每次升级时提醒用户下载一份账本备份（把账本目录打包成一个文件交给用户），并和用户约好以后定期备份。
-6. 用户想换用更安全的桌面版时，一步一步带用户做：
-   - 打开下载页 https://kaptonia.github.io/use.html，按用户的系统下载，先核对 SHA-256 再安装。Mac 第一次打开前要去掉隔离标记，下载页有可以照抄的命令。
-   - 第一次打开：设口令，把助记词抄在纸上，放在离线的地方。助记词只由用户自己保管，不要让用户发给你。
-   - 把这本账带进桌面，二选一：
-     · 把私钥交给用户，让用户在桌面版「导入密钥」，再用「收编已有账本目录」收进来。收编后，原目录由桌面接管。
-     · 用 hand-over 把账本写成交接件交给用户，用户在桌面一侧 take-over 收下，之后账本在两处之间轮流写。
-   - 之后请用户在「设置 › 命令行」打开「经桌面 App 操作」或「经凭据操作」，你改用 --home 或凭据工作，云端的私钥文件随后删掉。
-7. 规矩：私钥和助记词不进聊天和日志；一本账同一时间只能有一处写，换地方写用 hand-over / take-over。</code><button class="cp" type="button" data-copy="ZIKARON 最简上手（给 AI agent）
-1. 拉取并安装：从 https://github.com/kaptonia/zikaron 的 Releases 下载最新安装包，用 SHA256SUMS.txt 校验后安装。Linux 用：sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -o Dpkg::Options::=--force-confold ./zikaron-desk_*_amd64.deb
-2. 读说明：README.md（网络和合约地址）和 CLI-SCHEMA.md（命令用法）。装好后运行 zikaron contract，以它列出的子命令、参数和退出码为准。
-3. 进入工作状态：
-   - 用户本机已经有 ZIKARON 桌面版的话，优先用 --home 或「经凭据操作」，私钥留在用户电脑上。
-   - 否则：zikaron keygen 生成私钥，存进 600 权限的文件，绝不显示；问用户要不要把这个私钥文件交给他保管一份，要的话以文件交付，不贴进聊天，并提醒他存到离线的地方；然后 zikaron init 建账本；请用户往这个地址充一点 ETH 付 gas。
-4. 日常：history --file 记录 → anchor 上链 → scan 后 audit 核验；要分享就 kit-export 导出记录包，对方用 kit-verify 核验。几条记录攒在一起上链，一笔交易只付一次 gas。
-5. 升级：定期查看 Releases。有新版本时，先读发布说明和 CHANGELOG 里的「升级」一节，再用 SHA256SUMS.txt 校验，然后照第 1 步覆盖安装。命令行的账本目录跨版本照常读写。发布说明要求手工迁移的话，先告诉用户，得到同意再动手。升级后运行 zikaron contract，确认命令有没有变化。每次升级时提醒用户下载一份账本备份（把账本目录打包成一个文件交给用户），并和用户约好以后定期备份。
-6. 用户想换用更安全的桌面版时，一步一步带用户做：
-   - 打开下载页 https://kaptonia.github.io/use.html，按用户的系统下载，先核对 SHA-256 再安装。Mac 第一次打开前要去掉隔离标记，下载页有可以照抄的命令。
-   - 第一次打开：设口令，把助记词抄在纸上，放在离线的地方。助记词只由用户自己保管，不要让用户发给你。
-   - 把这本账带进桌面，二选一：
-     · 把私钥交给用户，让用户在桌面版「导入密钥」，再用「收编已有账本目录」收进来。收编后，原目录由桌面接管。
-     · 用 hand-over 把账本写成交接件交给用户，用户在桌面一侧 take-over 收下，之后账本在两处之间轮流写。
-   - 之后请用户在「设置 › 命令行」打开「经桌面 App 操作」或「经凭据操作」，你改用 --home 或凭据工作，云端的私钥文件随后删掉。
-7. 规矩：私钥和助记词不进聊天和日志；一本账同一时间只能有一处写，换地方写用 hand-over / take-over。" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
-<p>各种用法的细节见<a href="cli.html">命令行</a>与<a href="ai.html">AI 代理与远程操作</a>。</p>
+<p>有云端电脑的 AI Agent，可以自己把 ZIKARON 装好并进入可用状态，你只需要与它简单对话就可以使用。交给它的提示词在<a href="../../use.html">使用页</a>，一键复制。各种用法的细节见<a href="cli.html">命令行</a>与<a href="ai.html">AI 代理与远程操作</a>。</p>
 <h2 id="upgrade">从早先版本升级</h2>
 <p>这一版只读它自己写的加密形式，从一个空的机器目录起步；早先版本留下的密钥库、身份、设置和数据原样留在原处。记录者的账本照下面五步带过来：</p>
 <ol>
@@ -118,6 +86,6 @@
 </tbody></table></div>
 <p>凡是写进账本或发到链上的动作，都先出一张确认卡，写明要写什么、费用多少。按卡上红色的键才真正写入，按「取消」即作罢。</p>
 <div class="pn"><a href="zikaron.html"><span>上一页</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>下一页</span>存证与上链</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#install">安装</a><a href="#agent">通过 AI Agent 使用</a><a href="#upgrade">从早先版本升级</a><a href="#wizard">第一次打开</a><a href="#first">第一条记录</a><a href="#receive">收到别人的授权</a><a href="#window">窗口</a></nav></div>
-<script src="../../site.js?v=fa6bc6e1" defer></script>
+<script src="../../site.js?v=e33906fb" defer></script>
 </body>
 </html>

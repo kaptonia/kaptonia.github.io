@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/dev/integrate.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=e8e6674a">
+<link rel="stylesheet" href="../../style.css?v=5b251068">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -36,7 +36,7 @@
 <p>最简便的接入方式是以子进程调用 <code>zikaron</code>，读取其退出码与标准输出。</p>
 <div class="cmd block"><code>zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
   --fragment fragment.json --now $(date +%s)</code><button class="cp" type="button" data-copy="zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
-  --fragment fragment.json --now $(date +%s)" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+  --fragment fragment.json --now $(date +%s)" aria-label="复制" title="复制"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <div class="tw"><table>
 <thead><tr><th>退出码</th><th>应用的处理</th></tr></thead>
 <tbody>
@@ -51,7 +51,7 @@
 <p>请把 3 作为独立的一档处理：「暂无结果」「通过」「失败」是三种状态，界面上也以三种样式呈现。</p>
 <h2 id="desk">经桌面写入</h2>
 <p>给 <code>--home &lt;桌面的数据目录&gt;</code> 时，十个写入动词（<code>init</code>、<code>history</code>、<code>grant</code>、<code>revoke</code>、<code>adopt</code>、<code>attest</code>、<code>annotate</code>、<code>retract</code>、<code>anchor</code>、<code>kit-export</code>）交给正在运行、已解锁、并以写者打开这个数据目录的 <b class="zk">Zikaron</b> 去做：条目以用户的身份写进用户的账本，窗口里随即可见。私钥与口令都留在桌面里。<code>succeed</code> 带 <code>--home</code> 一律答 <code>E_ON_DESKTOP</code>。</p>
-<div class="cmd block"><code>zikaron history --home &quot;$DESK_HOME&quot; --file ./delivery.pdf --note &quot;交付第一版&quot;</code><button class="cp" type="button" data-copy="zikaron history --home &quot;$DESK_HOME&quot; --file ./delivery.pdf --note &quot;交付第一版&quot;" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<div class="cmd block"><code>zikaron history --home &quot;$DESK_HOME&quot; --file ./delivery.pdf --note &quot;交付第一版&quot;</code><button class="cp" type="button" data-copy="zikaron history --home &quot;$DESK_HOME&quot; --file ./delivery.pdf --note &quot;交付第一版&quot;" aria-label="复制" title="复制"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <div class="tw"><table>
 <thead><tr><th>答复</th><th>应用的处理</th></tr></thead>
 <tbody>
@@ -96,6 +96,6 @@
 <li>把约定登记在仓库的讨论区，便于其他实现采纳。</li>
 </ul>
 <div class="pn"><a href="formats.html"><span>上一页</span>文件与格式</a><a class="nx" href="contributing.html"><span>下一页</span>参与贡献</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#shape">接入方式</a><a href="#cli">用命令行核验</a><a href="#desk">经桌面写入</a><a href="#alone">经凭据写入</a><a href="#lib">直接调用核</a><a href="#kits">读取用户导出的记录包</a><a href="#for">让记录指向你的交易</a><a href="#remind">在关键时刻提醒</a><a href="#sign">签名请求</a><a href="#types">约定新的条目类型</a></nav></div>
-<script src="../../site.js?v=fa6bc6e1" defer></script>
+<script src="../../site.js?v=e33906fb" defer></script>
 </body>
 </html>

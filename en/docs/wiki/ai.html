@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/ai.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=e8e6674a">
+<link rel="stylesheet" href="../../../style.css?v=5b251068">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -48,7 +48,7 @@ Each command prints one JSON value on standard output; the exit code gives the o
 Run zikaron contract first: it lists every subcommand, its flags and the exit codes.
 For anything that writes to my ledger, every command carries --home &quot;&lt;data folder&gt;&quot; and is carried out by the running desktop.
 Each command prints one JSON value on standard output; the exit code gives the outcome:
-  0 done; 1 refused or failed; 2 the command is wrong; 3 a partial result, or queued for me to send from the desktop; 4 no answer, such as no answer from the desktop or nodes unreachable." aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+  0 done; 1 refused or failed; 2 the command is wrong; 3 a partial result, or queued for me to send from the desktop; 4 no answer, such as no answer from the desktop or nodes unreachable." aria-label="Copy" title="Copy"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <p>The AI Agent can finish several pieces of work first and put them on chain once at the end, so they travel in one transaction for the price of one.</p>
 <h2 id="credential">With a credential</h2>
 <p>With a credential for a set time that you grant on the desktop, the AI Agent writes the ledger the desktop keeps and sends its queue directly, with the desktop closed or locked, signing with the key in the desktop’s key store.</p>
@@ -71,7 +71,7 @@ Every command that writes to the ledger carries --ledger &quot;&lt;ledger folder
 Put on chain: zikaron anchor --ledger &quot;&lt;ledger folder&gt;&quot; sends this ledger&#x27;s queue.
 Each command prints one JSON value on standard output; the exit code gives the outcome:
   0 done; 1 refused or failed, such as an expired credential E_CREDENTIAL_EXPIRED or the desktop writing E_HOME_HELD (try again shortly); 2 the command is wrong; 3 a partial result, or queued for me to send from the desktop; 4 no answer, such as nodes unreachable or the transaction still outside a block.
-When the credential has expired, tell me." aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+When the credential has expired, tell me." aria-label="Copy" title="Copy"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <p>While the desktop is open, the entries the AI Agent writes show up in the window at once. When the AI Agent is done, turn off “With a credential” in Settings › Command line, and the credential is deleted.</p>
 <h2 id="standalone">With the command line on its own</h2>
 <p>The AI Agent writes a ledger of its own with a dedicated key, with no desktop involved. It keeps working after the machine restarts, so the whole lifecycle runs without you; add a little ETH when the address runs short. Important identities stay with the desktop; this uses a dedicated key alone.</p>
@@ -93,7 +93,7 @@ Every command that writes to the ledger carries --ledger &quot;&lt;ledger folder
 Put on chain: zikaron anchor --key-file &quot;&lt;key file&gt;&quot; --endpoint 1=&lt;node address&gt; --form registry --registry &lt;registry contract address&gt; --hash &lt;entry ID&gt;
   --hash can repeat, so one transaction anchors several; note the entry IDs printed on writing and send a few together.
 Each command prints one JSON value on standard output; the exit code gives the outcome: 0 done; 1 refused or failed; 2 the command is wrong; 3 a partial result; 4 no answer, such as nodes unreachable.
-When putting on chain is refused, tell me why; if the balance is short, ask me to top it up." aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+When putting on chain is refused, tell me why; if the balance is short, ask me to top it up." aria-label="Copy" title="Copy"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <p>The AI Agent uses this key, and what is at stake is this dedicated ledger and the ETH at its address. The ledger can join the desktop later through “Import key” and “Adopt existing ledger folder”; to write it by turns on the remote machine and on your own computer, see <a href="cli.html#handover">Handing a ledger over</a>. How to keep the key file is under <a href="cli.html#plain">Plain files</a>.</p>
 <h2 id="remote">Remote operation</h2>
 <p>Put the app on a small computer at home or on a cloud server, and an AI Agent can work for you remotely. The command line deals with the same user on the same machine alone, so the AI Agent runs its commands on that machine: it logs in as that user over SSH, or is installed on the machine itself. Files to work on go to that machine first.</p>
@@ -113,6 +113,6 @@ When putting on chain is refused, tell me why; if the balance is short, ask me t
 <li>Keep whole-machine backups and copies of the key file off the machine.</li>
 </ul>
 <div class="pn"><a href="cli.html"><span>Previous</span>Command line</a><a class="nx" href="alerts.html"><span>Next</span>Settings and alerts</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#desk">Through the desktop app</a><a href="#credential">With a credential</a><a href="#standalone">With the command line on its own</a><a href="#remote">Remote operation</a><a href="#safety">Safety</a></nav></div>
-<script src="../../../site.js?v=fa6bc6e1" defer></script>
+<script src="../../../site.js?v=e33906fb" defer></script>
 </body>
 </html>

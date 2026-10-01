@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/dev/contract.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=e8e6674a">
+<link rel="stylesheet" href="../../style.css?v=5b251068">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -37,7 +37,7 @@ function anchor(bytes32 hash) external;
 function anchorMany(bytes32[] calldata hashes) external;</code><button class="cp" type="button" data-copy="event Anchored(address indexed author, bytes32 indexed hash);
 
 function anchor(bytes32 hash) external;
-function anchorMany(bytes32[] calldata hashes) external;" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+function anchorMany(bytes32[] calldata hashes) external;" aria-label="复制" title="复制"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <p><code>anchor</code> 发出一条事件；<code>anchorMany</code> 为数组中的每个元素各发一条，空数组发出零条。事件中的 <code>author</code> 是调用者地址。合约零存储、零所有者、零升级入口，对所有调用者一视同仁。源码在 <code>base/zikaron-core/contracts/src/ZikaronRegistry.sol</code>，许可为 CC0-1.0。</p>
 <h2 id="deployed">已知部署</h2>
 <p>应用内置四处部署，同一份钉定的构建，代码哈希相同；以太坊主网、Arbitrum One、OP Mainnet 三处还是同一个部署者、同一份部署字节、同一个地址：</p>
@@ -71,7 +71,7 @@ function anchorMany(bytes32[] calldata hashes) external;" aria-label="复制" ti
 forge build
 cast keccak $(forge inspect ZikaronRegistry deployedBytecode)</code><button class="cp" type="button" data-copy="cd base/zikaron-core/contracts
 forge build
-cast keccak $(forge inspect ZikaronRegistry deployedBytecode)" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+cast keccak $(forge inspect ZikaronRegistry deployedBytecode)" aria-label="复制" title="复制"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <h2 id="deploy">自行部署</h2>
 <p>任何人都可以在任一已完成上海升级的 EVM 链上部署相同的字节。部署后核对链上代码哈希与上表一致，再在应用的「设置 › 网络 › 编辑节点」里为这个身份填入链 ID、登记合约、起始区块与节点；只用来核验别人材料的，加进「只读网络」。</p>
 <div class="cmd block"><code>forge create src/ZikaronRegistry.sol:ZikaronRegistry \
@@ -80,7 +80,7 @@ cast keccak $(forge inspect ZikaronRegistry deployedBytecode)" aria-label="复�
 cast keccak $(cast code &lt;新地址&gt; --rpc-url &lt;节点&gt;)</code><button class="cp" type="button" data-copy="forge create src/ZikaronRegistry.sol:ZikaronRegistry \
   --rpc-url &lt;节点&gt; --private-key &lt;部署用的密钥&gt; --broadcast
 
-cast keccak $(cast code &lt;新地址&gt; --rpc-url &lt;节点&gt;)" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+cast keccak $(cast code &lt;新地址&gt; --rpc-url &lt;节点&gt;)" aria-label="复制" title="复制"><svg class="ic-copy" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg><svg class="ic-ok" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3,8.5 6.5,12 13,4.5"/></svg></button></div>
 <p>部署请用专门的密钥；身份密钥只用于签署账本和发送上链交易。</p>
 <p>这份固定构建使用 PUSH0 指令，适用于已完成上海升级的链。更早的链须另行构建，代码哈希也随之改变。法按核验方声明的合约地址读取日志，因此另一份构建只关乎部署的便利。应用对登记合约的代码哈希核两处：读只读网络之前，那里登记合约的代码须等于上面这一个，不符的整条网络这一次不用；保存主网络的链设置时，内置表之外的登记合约也先问节点它的代码，是钉定的那一版才保存，否则提示「登记合约 … 不是钉定构建，链设置没有保存」；节点还空着时照存，读数记作「未核：无节点」，配好节点时再核一次，不符即报出。所以应用里的只读网络与主网络，用的都是钉定的那一份代码。</p>
 <h2 id="gas">费用参考</h2>
@@ -104,6 +104,6 @@ cast keccak $(cast code &lt;新地址&gt; --rpc-url &lt;节点&gt;)" aria-label=
 <h2 id="proof">自含上链证明</h2>
 <p>法 §9.7 定义了自含的上链证明，记录包的 <code>proofs/</code> 目录用于携带。凭这样一份证明，核验方只需两个可信的区块哈希即可验证一条上链记录：区块头，交易与回执各自的默克尔证明，以及发送地址在前后两个区块中的账户证明。节点清理历史数据后，此类证明依然有效。</p>
 <div class="pn"><a href="law.html"><span>上一页</span>法文与一致性套件</a><a class="nx" href="formats.html"><span>下一页</span>文件与格式</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#iface">接口</a><a href="#deployed">已知部署</a><a href="#forms">两种上链形式</a><a href="#sender">对发送者的三项要求</a><a href="#codehash">代码哈希</a><a href="#deploy">自行部署</a><a href="#gas">费用参考</a><a href="#other">经其他合约上链</a><a href="#proof">自含上链证明</a></nav></div>
-<script src="../../site.js?v=fa6bc6e1" defer></script>
+<script src="../../site.js?v=e33906fb" defer></script>
 </body>
 </html>
