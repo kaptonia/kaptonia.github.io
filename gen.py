@@ -50,7 +50,12 @@ def Z(s): return s.replace("Zikaron", '<b class="zk">Zikaron</b>')
 
 # 标签页上的小图标:三块垒起的河石
 # 站不留标志:标签页给一个透明的空图标,只剩标题文字
-ICON = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3C/svg%3E"
+SITE = "https://kaptonia.github.io/"   # 站的公开地址,转发预览图与页面地址要写全
+ZPAGES_REL = ("zikaron", "start", "ledger", "anchoring", "grants", "kits", "verify", "evidence", "keys", "data", "alerts")
+def card(rel):   # 转发预览图:Zikaron 的页面用河石堆那张,其余用首屏的锚
+    z = rel == "zikaron.html" or (rel.startswith("docs/dev/") and rel != "docs/dev/index.html") or \
+        (rel.startswith("docs/wiki/") and rel[len("docs/wiki/"):-5] in ZPAGES_REL)
+    return f"{SITE}ill/og/{'zikaron' if z else 'site'}.{L}.jpg"
 DESC = ("一组开源的协议与工具:押下的钱由合约看管,争议由双方事先挑定的人裁断,证据由每个人自己留存、任何人都能核验。",
         "A set of open-source protocols and tools: staked money is held by a smart contract, disputes are decided by someone both sides picked beforehand, and evidence is kept by each person and checkable by anyone.")
 
@@ -70,7 +75,15 @@ def head(title, rel, depth, body_cls="", canvas="", desc=None):
 <meta property="og:title" content="{html.escape(title, quote=True)}">
 <meta property="og:description" content="{d}">
 <meta property="og:type" content="website">
-<link rel="icon" href="{ICON}">
+<meta property="og:url" content="{SITE}{'en/' if L == 'en' else ''}{rel}">
+<meta property="og:image" content="{card(rel)}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="{t("去中心化法权基础设施", "Decentralized Infrastructure of Right")}">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="{root(depth)}{ver('icon.svg')}" type="image/svg+xml">
+<link rel="icon" href="{root(depth)}{ver('favicon-32.png')}" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="{root(depth)}{ver('apple-touch-icon.png')}">
 <script>document.documentElement.classList.add('js'){WAIT if canvas else ""}</script>
 <link rel="alternate" hreflang="{alt}" href="{other(rel, depth)}">
 {FONTS}
@@ -652,7 +665,7 @@ def lost():
     """找不到的页:两语各一句,各给一条回去的路。GitHub Pages 对任何找不到的地址都回这一页,所以链接用绝对路径"""
     global L
     L = "zh"
-    return (head("404 · " + TITLE[0], "index.html", 0).replace('href="style.css', f'href="{BASE}style.css').replace('hreflang="en" href="en/index.html"', f'hreflang="en" href="{BASE}en/index.html"')
+    return (head("404 · " + TITLE[0], "index.html", 0).replace('href="style.css', f'href="{BASE}style.css').replace('href="icon.svg', f'href="{BASE}icon.svg').replace('href="favicon-32.png', f'href="{BASE}favicon-32.png').replace('href="apple-touch-icon.png', f'href="{BASE}apple-touch-icon.png').replace('hreflang="en" href="en/index.html"', f'hreflang="en" href="{BASE}en/index.html"')
             + f"""<main class="lost"><div class="frame-w">
 <span class="pno">404</span>
 <h1>这一页走散了</h1>
