@@ -68,11 +68,11 @@ fix(a);var t=d.querySelector('.toc');if(t)fix(t);var l=d.querySelector('.dtop .l
 a=document.adoptNode(a);a.__toc=t?t.innerHTML:'';a.__title=d.title;a.__lang=l?l.getAttribute('href'):null;return a})}
 function jump(y){try{scrollTo({top:y,behavior:'instant'})}catch(e){scrollTo(0,y)}}
 function more(){if(busy||done)return;var last=arts[arts.length-1],nx=last.getAttribute('data-next');if(!nx){done=true;return}busy=true;
-grab(nx).then(function(a){last.classList.add('gap');stream.insertBefore(a,sent);arts.push(a);pinit(a);psInit(a);prelay();fade();busy=false;if(!a.getAttribute('data-next'))done=true;
+grab(nx).then(function(a){last.classList.add('gap');stream.insertBefore(a,sent);arts.push(a);pinit(a);psInit(a);psGeo();prelay();fade();busy=false;if(!a.getAttribute('data-next'))done=true;
 if(sent.getBoundingClientRect().top<innerHeight+1600)more()}).catch(function(){busy=false;done=true;last.classList.add('keep')})}
 // 前一页接在上方:插进去之后把滚动位置补回来,眼前的画面一动不动
 function less(){if(busyUp||doneUp)return;var f=arts[0],pv=f.getAttribute('data-prev');if(!pv){doneUp=true;return}busyUp=true;
-grab(pv).then(function(a){var k=f.querySelector('.kick'),ref=k.getBoundingClientRect().top;a.classList.add('gap');stream.insertBefore(a,f);arts.unshift(a);pinit(a);psInit(a);prelay();var dy=k.getBoundingClientRect().top-ref;if(dy)jump(scrollY+dy);fade();busyUp=false;if(!a.getAttribute('data-prev'))doneUp=true;
+grab(pv).then(function(a){var k=f.querySelector('.kick'),ref=k.getBoundingClientRect().top;a.classList.add('gap');stream.insertBefore(a,f);arts.unshift(a);pinit(a);psInit(a);psGeo();prelay();var dy=k.getBoundingClientRect().top-ref;if(dy)jump(scrollY+dy);fade();busyUp=false;if(!a.getAttribute('data-prev'))doneUp=true;
 if(arts[0].getBoundingClientRect().top>-2*innerHeight)less()}).catch(function(){busyUp=false;doneUp=true})}
 new IntersectionObserver(function(es){if(es[0].isIntersecting)more()},{rootMargin:'0px 0px 1600px 0px'}).observe(sent);
 // 目录里点一节:平滑滚过去,地址写成那一页自己的锚点;侧栏里点已接上来的页,滚过去,不重新打开
