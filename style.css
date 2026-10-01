@@ -130,7 +130,7 @@ a.tool:hover{border-color:var(--ink3)}
 .dl .sec>h2{display:flex;align-items:baseline;gap:14px;font-size:22px;line-height:1.3;font-weight:600;letter-spacing:.03em;color:var(--ink-strong)}
 .dl .sec>h2 .opt{font:12px var(--mono);font-weight:400;letter-spacing:.1em;color:var(--ink3)}
 .dl .tbl{margin-top:22px}
-.dl .tr{grid-template-columns:170px minmax(0,1fr) 170px 80px}
+.dl .tr{grid-template-columns:220px minmax(0,1fr) 170px 80px}
 .dl .tr .os{font-size:15px;color:var(--ink)}
 .dl .tr .os i{margin-left:10px;font:12.5px var(--mono);font-style:normal;color:var(--ink3)}
 .dl .tr.h .os{font:12px var(--mono);color:var(--ink3)}
@@ -347,6 +347,8 @@ body.doc-page{background:var(--paper)}
 .portrait .tool{min-height:110px;padding:16px}
 .portrait .tools.t3{grid-template-columns:1fr;gap:10px}
 .portrait .t3 .tool{min-height:0;flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:2px 12px;padding:14px 16px}
+/* 手机上 Zikaron 页末的三张卡片只留名称,注释留给电脑版 */
+.portrait .cap[data-cap="zend"] .tool span{display:none}
 .portrait .t3 .tool em{margin:0 0 0 auto}
 @media (min-width:700px){
   .portrait .cap h2{font-size:30px}
@@ -794,6 +796,8 @@ html[lang="en"] .art .pt p{font-size:20px;line-height:1.8;letter-spacing:0}
 :root[data-theme="dark"] .fr img{filter:invert(1);mix-blend-mode:screen}
 /* 放得下时挂在字的右沿与窗口右沿之间的正中,中心对齐顶栏下沿(60)到窗口底边的正中,和字那一屏的中心同高;放不下时在字的下面 */
 .fr-side .pg:not(.solo) .fr{position:fixed;left:var(--gx);width:var(--gw);top:calc(50% + 30px);transform:translateY(-50%);margin:0;z-index:1}
+/* 字旁放不下画框时(手机、窄窗口):原理各页不放画,蒲公英那一屏也收起,页面停在最后一段字;画都是懒加载,藏起来的不会下载 */
+.ps-live:not(.fr-side) .pg .fr,.ps-live:not(.fr-side) .ps.solo{display:none}
 /* 全篇最后的蒲公英:画铺满全屏,这一屏两屏高,多一页留白;画在屏上停留到这一屏滚完 */
 .ps.solo{min-height:calc(200vh - 120px);min-height:calc(200svh - 120px)}
 .ps.solo .pbg{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:-1;pointer-events:none;opacity:0;mix-blend-mode:multiply;transition:opacity .9s ease}

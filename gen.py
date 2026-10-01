@@ -416,7 +416,7 @@ def docpage(space, slug):
         f = f"ill/principles/{m.group(3)}{'.solo' if solo else ''}.jpg"
         if not (HERE / f).exists(): return m.group(0)
         # 画的地址带内容指纹:换了画就换地址,浏览器不会沿用旧图
-        if solo: return m.group(1) + f'<img class="pbg" src="{root(depth)}{ver(f)}" alt="" aria-hidden="true" decoding="async"></section>'
+        if solo: return m.group(1) + f'<img class="pbg" src="{root(depth)}{ver(f)}" alt="" aria-hidden="true" loading="lazy" decoding="async"></section>'
         return m.group(1) + f'<figure class="fr"><span class="fr-m"><img src="{root(depth)}{ver(f)}" alt="" loading="lazy" decoding="async"></span></figure></section>'
     inner = re.sub(r'(<section class="ps pg([^"]*)" data-art="(\w+)">.*?)</section>', art, inner, flags=re.S)
     order = pages(space)
