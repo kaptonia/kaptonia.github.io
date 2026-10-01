@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/start.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -36,11 +36,11 @@
 <li><b>Windows</b>：第一次打开时出现「Windows 已保护你的电脑」，按「更多信息」，再按「仍要运行」。Windows 11 开着「智能应用控制」时，先照下载页把它关掉。</li>
 <li><b>Linux</b>：用 <code>.deb</code> 安装，或给 AppImage 加上可执行权限后直接运行。</li>
 </ul>
-<p>从早先版本升级时，先照下面的<a href="#upgrade">从早先版本升级</a>把账本带过来。</p>
+<p>从 0.1.3 升级，直接覆盖安装，原有的数据照用（Windows 上把解压的文件夹换成新版的）；从 0.1.2 或更早的版本升级，先照下面的<a href="#upgrade">从早先版本升级</a>把账本带过来。</p>
 <h2 id="agent">通过 AI Agent 使用</h2>
 <p>有云端电脑的 AI Agent，可以自己把 ZIKARON 装好并进入可用状态，你只需要与它简单对话就可以使用；你电脑上的 AI Agent 会带你装好客户端，打开一次之后不必再开。两种情形各有一份提示词，在<a href="../../use.html">使用页</a>，一键复制。各种用法的细节见<a href="cli.html">命令行</a>与<a href="ai.html">AI 代理与远程操作</a>。</p>
 <h2 id="upgrade">从早先版本升级</h2>
-<p>这一版只读它自己写的加密形式，从一个空的机器目录起步；早先版本留下的密钥库、身份、设置和数据原样留在原处。记录者的账本照下面五步带过来：</p>
+<p>从 0.1.3 升级：直接覆盖安装，原有的机器目录与数据目录照用，不必另做什么。从 0.1.2 或更早的版本升级：这一版从一个空的机器目录起步，那些版本留下的密钥库、身份、设置和数据原样留在原处。记录者的账本照下面五步带过来：</p>
 <ol>
 <li>在 0.1.2 里打开「设置 › 本机数据」，按「导出账本镜像」，存到机器目录之外的一个文件夹，然后退出。</li>
 <li>把早先版本的机器目录连同它的指针文件挪到别处。Mac 与 Linux 上，指针文件是主目录里的 <code>.zikaron-desk</code>，机器目录默认是 <code>.zikaron-desk.d</code>；Windows 上两样都在 <code>%LOCALAPPDATA%\ZIKARON\</code> 里。</li>
@@ -48,13 +48,13 @@
 <li>到「创建账本」一步，点「收编已有账本目录」，选镜像里 <code>ZIKARON-backup/&lt;地址&gt;/author</code> 那个文件夹，按「原位收编」。条目逐条重新核验，再与链上的上链记录核对，这一步即算完成。</li>
 <li>到「账本」页跑一趟账本检查，看它写「正常」。</li>
 </ol>
-<p>别的身份照样：从身份牌的「导入密钥」导入，再在「设置 › 本机数据」「高级选项」里用「收编已有账本目录」收它的镜像。收到的授权在「我的授权」里重新添加，网络等设置重新设一遍。升级之后，请一直用新版打开这份数据：新版写的文件，早先版本读不了。</p>
+<p>别的身份照样：从身份牌的「导入密钥」导入，再在「设置 › 本机数据」「高级选项」里用「收编已有账本目录」收它的镜像。收到的授权在「我的授权」里重新添加，网络等设置重新设一遍。升级之后，请一直用新版打开这份数据：新版写的文件，0.1.2 及更早的版本读不了。</p>
 <h2 id="wizard">第一次打开</h2>
 <p>应用会弹出一个向导，左边六步，一步一步做：</p>
 <ol>
 <li><b>设置口令。</b>8 位字母或数字，以后每次打开应用都要输入。</li>
 <li><b>创建身份。</b>应用生成 12 个助记词，抄在纸上，再按提示填回其中三个。已有密钥的，也可以导入，或从整机备份恢复。</li>
-<li><b>网络。</b>选「以太坊主网」即可，应用自带公共节点。想先免费试一试，选「自定义」，再到「设置 › 网络」按「编辑节点」，在「预设」里选「Sepolia 测试网」，按「保存节点」和「保存链设置」。</li>
+<li><b>网络。</b>选「以太坊主网」即可，应用自带公共节点。想先免费试一试，选「自定义」，再到「设置 › 网络」按「编辑节点」，在「编辑节点与链」里选「自定义」，在「预设」里选「Sepolia 测试网」，按「保存」。</li>
 <li><b>创建账本。</b>写一句说明（可以空着），按「创建账本」。免费。已有一本账（账本文件夹，或「导出账本镜像」写出的镜像）时，点旁边的「收编已有账本目录」，在「账本文件夹」里选它，按「原位收编」。</li>
 <li><b>充值 gas。</b>往页面上的地址转一点 ETH，或用钱包扫页面上的付款二维码（它写明所选的网络），按「我已转账」。可以「以后再说」。</li>
 <li><b>整机备份。</b>导出一个带密码的备份文件。可以以后再做，越早越好。</li>
@@ -64,7 +64,7 @@
 <h2 id="first">第一条记录</h2>
 <p>左栏顶上选「记录者」。</p>
 <ol>
-<li><b>存证。</b>把文件拖进首页，写「记录名称」，按「加入账本」，在确认卡上再按一次。</li>
+<li><b>存证。</b>把文件拖进首页，在「新建存证」卡上写「记录名称」，按「加入账本」。</li>
 <li><b>上链。</b>点首页的「待上链」卡，在弹出的「上链」卡上按「确认上链」。几分钟后，状态变成「已确认」。</li>
 <li><b>授权。</b>到「授权」按「新建授权」，填对方的地址，选这件记录，拖入条款文件，写进账本后同样上链。见<a href="grants.html">授权</a>。</li>
 </ol>
@@ -84,7 +84,7 @@
 <tr><td>记录存证、授权</td><td>我的授权</td></tr>
 <tr><td>核验、账本、提醒</td><td>核验、提醒</td></tr>
 </tbody></table></div>
-<p>凡是写进账本或发到链上的动作，都先出一张确认卡，写明要写什么、费用多少。按卡上红色的键才真正写入，按「取消」即作罢。</p>
+<p>凡是写进账本或发到链上的动作，都在一张卡片上完成：卡上写明要写什么、费用多少，按卡上红色的键才真正写入，按「取消」即作罢。</p>
 <div class="pn"><a href="zikaron.html"><span>上一页</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>下一页</span>存证与上链</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#install">安装</a><a href="#agent">通过 AI Agent 使用</a><a href="#upgrade">从早先版本升级</a><a href="#wizard">第一次打开</a><a href="#first">第一条记录</a><a href="#receive">收到别人的授权</a><a href="#window">窗口</a></nav></div>
 <script src="../../site.js?v=db416d51" defer></script>
 </body>

@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/kits.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -34,12 +34,19 @@
 <ol>
 <li>Press “Export record kit” on a record’s detail page; that record is already selected.</li>
 <li>To add more, press “Select” and pick the entries that bear on the matter; the rest stay with you.</li>
-<li>“Originals of the selected records” lists the files the records were made from. For any that is missing, drop the original into “Attachments (optional)”.</li>
-<li>Write a note and press “Verify and export”. The app checks the kit itself first and writes it once it passes, with “Record kit exported to …”.</li>
+<li>“Originals of the selected records” lists the files the records were made from. For any that is missing, press “Add” under “Attachments · Optional”, or drop the original onto the page.</li>
+<li>Write a note and press “Verify and export”; on the “Export record kit” card check where it is saved and press “Export”. The app checks the kit itself first and writes it once it passes, with “Record kit exported to …”.</li>
 </ol>
 <p>A record kit is one <code>.zkit</code> file with no size limit: attach it to an email, copy it to a USB stick, or hand it to an arbiter; it carries verification notes for the recipient in Chinese and English. For a folder, turn on “Export as a folder” before exporting. Before handing it over, glance at what the chosen entries say: record names and notes are inside.</p>
+<h2 id="sealed">For one person’s eyes</h2>
+<p>On the export page, turn on “Encrypt the record package”; on the “Export record kit” card, fill in either “Recipient address” or “Recipient public key” and press “Export”. The .zkit it writes opens for the recipient alone, and anyone else who gets it cannot even verify it. An encrypted kit is always one file, so “Export as a folder” greys out while encryption is on. “Encrypted record package exported” means it is done.</p>
+<ul>
+<li><b>By address:</b> the app looks on your network and your read-only networks for an anchoring transaction that address signed, and works out its public key from it. When the address has never anchored on chain, the app says “Encrypted record package not exported: this address has not anchored on chain”; ask the recipient for their public key and fill that in.</li>
+<li><b>By public key:</b> the recipient presses the copy key beside “Public key” under “Details” in Settings › Identity key and sends it to you.</li>
+<li>Once the recipient opens it, they can still pass the contents on; the encryption covers the way to them.</li>
+</ul>
 <h2 id="publish">Putting it online</h2>
-<p>You can also place a record kit at any https address for others to fetch. What goes online is a kit in folder form: turn on “Export as a folder” when exporting. You do the upload; fill in the “Published address” in Settings › Network, press “Save published address”, then “Check publication”, and the app checks that the copy online matches the one here.</p>
+<p>You can also place a record kit at any https address for others to fetch. What goes online is a kit in folder form: turn on “Export as a folder” when exporting. You do the upload; in Settings › Network, press “Edit” on the “Published address” row, fill it in and press “Save published address”; then press “Check publication” and “Check” in the dialog, and the app checks that the copy online matches the one here.</p>
 <h2 id="depth">Early and steady records weigh more</h2>
 <p>In “Readings and reference (not in the package)” in the export page’s side column, press “Calculate” for three numbers:</p>
 <dl>
@@ -49,8 +56,8 @@
 </dl>
 <p>A ledger that records the drafts, revisions and final version along the way convinces more than one with the final version alone.</p>
 <h2 id="recv">On receiving a record kit</h2>
-<p>Open Verify › Verify record and drop the kit in; see <a href="verify.html#record">Verifying a record kit</a>.</p>
-<div class="pn"><a href="grants.html"><span>Previous</span>Grants</a><a class="nx" href="verify.html"><span>Next</span>Verifying</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#export">Exporting a record kit</a><a href="#publish">Putting it online</a><a href="#depth">Early and steady records weigh more</a><a href="#recv">On receiving a record kit</a></nav></div>
+<p>Open Verify › Verify record and drop the kit in; see <a href="verify.html#record">Verifying a record kit</a>. A kit encrypted to you opens here too, and once it passes you can <a href="verify.html#originals">take out its originals</a>.</p>
+<div class="pn"><a href="grants.html"><span>Previous</span>Grants</a><a class="nx" href="verify.html"><span>Next</span>Verifying</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#export">Exporting a record kit</a><a href="#sealed">For one person’s eyes</a><a href="#publish">Putting it online</a><a href="#depth">Early and steady records weigh more</a><a href="#recv">On receiving a record kit</a></nav></div>
 <script src="../../../site.js?v=db416d51" defer></script>
 </body>
 </html>

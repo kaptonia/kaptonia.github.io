@@ -9,7 +9,7 @@ title: Verifying
 <li>If you also received the work and the terms file, put them in “File” and “Terms”.</li>
 <li>Press “Verify”.</li>
 </ol>
-<p>The app checks six things, each with a light:</p>
+<p>The app checks six things, one row each:</p>
 <dl>
 <div><dt>Grant signature</dt><dd>Signed by the issuer’s key.</dd></div>
 <div><dt>Issuer ledger intact</dt><dd>The issuer’s ledger links up entry by entry.</dd></div>
@@ -18,23 +18,28 @@ title: Verifying
 <div><dt>Within validity</dt><dd>Now falls within the period the grant states.</dd></div>
 <div><dt>Not revoked</dt><dd>Having read the issuer’s whole ledger, the grant still stands.</dd></div>
 </dl>
-<p>The result is one of three:</p>
+<p>The first line of the result card is the conclusion, one of three:</p>
 <div class="tw"><table>
-<thead><tr><th>Result</th><th>What to do</th></tr></thead>
+<thead><tr><th>Conclusion</th><th>What to do</th></tr></thead>
 <tbody>
-<tr><td>All six checks passed</td><td>You can rely on it. If you put in the file and terms, see that they read “Match”</td></tr>
-<tr><td>Has gaps</td><td>Some checks are still waiting for an answer; the grey light gives the reason. Check again in a few minutes, or ask the other side for what is missing</td></tr>
-<tr><td>Failed</td><td>A problem was found; hold off and talk to the other side</td></tr>
+<tr><td>All match</td><td>All six checks passed, and any file and terms you put in match; you can rely on it</td></tr>
+<tr><td>Not everything could be checked</td><td>Some checks are still waiting for an answer; the grey light gives the reason. Check again in a few minutes, or ask the other side for what is missing</td></tr>
+<tr><td>N do not match</td><td>A problem was found; hold off and talk to the other side</td></tr>
 </tbody></table></div>
 <p>A grant code alone allows checking the signature and the validity; for the full check, ask for the grant file.</p>
 <h2 id="record">Verifying a record kit</h2>
-<p>Open Verify › Verify record and drop the kit (a <code>.zkit</code> file or a folder) onto “Drop a record kit or record file”; the check starts as soon as it lands. The conclusion is one of two:</p>
+<p>Open Verify › Verify record and drop the kit (a <code>.zkit</code> file or a folder) onto “Drop a record kit or record file”; the check starts as soon as it lands. The conclusion is one of three:</p>
 <ul>
-<li><b>All match:</b> the kit is whole, the signatures hold and every record is on chain. Which originals the kit carries, and whether they match, shows in the “Original in kit” column of “Record by record” below.</li>
-<li><b>N mismatches:</b> something does not line up; confirm with the other side before accepting it.</li>
+<li><b>Record kit intact, signatures valid:</b> the kit passed its check and the originals match. When some records are not on chain yet, an “On-chain state” row below says “N not on chain”. For a single record file, a pass reads “All match”.</li>
+<li><b>N mismatches.:</b> something does not line up; confirm with the other side before accepting it.</li>
+<li><b>Record kit check failed:</b> followed by the reason; the kit itself does not hold.</li>
 </ul>
-<p>The “Record by record” table has one row per record, with whether it is on chain and when it first went there.</p>
+<p>“Record by record” has one row per record, saying whether it is on chain. When an original in the kit does not match its record, “Original in kit ✗” shows under the name; when the kit lacks the original, “Original in kit Missing”. When each first went on chain is under “First anchor location” in “Details”.</p>
+<p>A kit encrypted to you goes in here too. The app tries each identity on this computer; one that opens it is verified as usual, and when none does the app says “No identity on this machine is the recipient of this record package”. Dropped anywhere else, an encrypted kit brings “This is an encrypted record package. Open it on the verify page”.</p>
+<h2 id="originals">Taking out the originals</h2>
+<p>When a record kit passes and holds originals that match their records, “Take out originals” beside the conclusion can be pressed. In the dialog, look over the “Taking out” list, choose a folder with “Choose folder” at the left of the footer (the path shows on the “Take out to” row), and press “Take out”; “Took out N originals” means it is done. Each original comes out under its own name, and a signed folder comes out whole.</p>
+<p>When the chosen folder already holds an item with one of those names, the whole batch stays put and the folder is left exactly as it was; choose another folder, or move that item aside, and take them out again.</p>
 <h2 id="chains">When the other side uses another chain</h2>
-<p>A record kit states which chain it is anchored on. When that chain is missing from your settings, the page says so; press “Add” and fill in the nodes in Settings › Network. A check reads your main network plus every chain under “Read-only networks”.</p>
+<p>A record kit states which chain it is anchored on. When that chain is missing from your settings, the page says so; press “Add”, fill in the nodes in the “New network” dialog that opens, and press “Save”. A check reads your main network plus every chain under “Read-only networks”; when a node has not yet caught up to the block where the registry contract was deployed, the app reads from the other nodes.</p>
 <h2 id="others">Looking up a ledger</h2>
 <p>Verify › Look up a ledger: fill in the “Author address” and press “Read” to see the records that address put on chain and the grants it issued.</p>

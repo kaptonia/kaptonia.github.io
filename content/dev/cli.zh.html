@@ -1,12 +1,12 @@
 <!--
 title: 命令行
 -->
-<p class="lede"><code>zikaron</code> 提供与窗口相同的账本操作，一个动作一个子命令。它面向脚本：输出是单个 JSON 值，结论体现在退出码里。完整的输出形状、退出码、拒绝原因与参数，见源码里的 <code>CLI-SCHEMA.md</code>；<code>zikaron contract</code> 也把这份契约由代码里的同一张表输出成一个值。</p>
+<p class="lede"><code>zikaron</code> 提供与窗口相同的账本操作，一个动作一个子命令。它面向脚本：输出是单个 JSON 值，结论体现在退出码里。完整的输出形状、退出码、拒绝原因与参数，见源码里的 <code>CLI-SCHEMA.md</code>；<code>zikaron contract</code> 也把这份契约由代码里的同一张表输出成一个值。唯一的例外是 <code>zikaron mcp</code>：它在标准输入输出上按模型上下文协议一行一条消息，见下文<a href="#mcp">AI 应用</a>。</p>
 <h2 id="where">在哪里</h2>
 <dl>
-<div><dt>用 dmg 安装的</dt><dd><code>/Applications/ZIKARON.app/Contents/MacOS/zikaron</code>。在应用「设置 › 命令行」的「终端」里打开「启用 zikaron 命令」，它在 <code>/usr/local/bin/zikaron</code> 放一个链接，需要时 macOS 弹出管理员口令框；这个开关要在拖进「应用程序」之后的应用里打开。</dd></div>
+<div><dt>用 dmg 安装的</dt><dd><code>/Applications/ZIKARON.app/Contents/MacOS/zikaron</code>。在应用「设置 › 命令行与 AI 控制」的「终端」里打开「启用 zikaron 命令」，它在 <code>/usr/local/bin/zikaron</code> 放一个链接，需要时 macOS 弹出管理员口令框；这个开关要在拖进「应用程序」之后的应用里打开。</dd></div>
 <div><dt>用 pkg 安装的</dt><dd><code>/usr/local/bin/zikaron</code>，装完即可用；「启用 zikaron 命令」显示「被其他安装占用」，保持原样即可。</dd></div>
-<div><dt>用 deb 安装的</dt><dd><code>/usr/bin/zikaron</code>；「启用 zikaron 命令」显示「已由安装包提供」。用 AppImage 时，要用命令行请装 <code>.deb</code>，开关显示「此安装方式不支持」。</dd></div>
+<div><dt>用 deb 安装的</dt><dd><code>/usr/bin/zikaron</code>；「启用 zikaron 命令」显示「已由安装包提供」。用 AppImage 时，要用命令行请装 <code>.deb</code>，开关显示「此安装方式不支持」。「接入 AI 应用」的「复制配置」在 AppImage 与从磁盘映像里直接打开的应用里同样灰着。</dd></div>
 <div><dt>Windows</dt><dd>解压出的文件夹里的 <code>zikaron.exe</code>，在终端里运行，双击它只会一闪而过。「启用 zikaron 命令」把这个文件夹写进本用户的 <code>Path</code>，之后新开的终端才认得 <code>zikaron</code>。</dd></div>
 <div><dt>从源码构建的</dt><dd><code>target/release/zikaron</code>；「启用 zikaron 命令」在 macOS 上链到 <code>/usr/local/bin</code>，在 Linux 上链到 <code>~/.local/bin</code>，这个文件夹要在 <code>PATH</code> 里。</dd></div>
 </dl>
@@ -17,19 +17,19 @@ title: 命令行
 <div><dt>状态词原样传出</dt><dd><code>GREEN</code>、<code>PARTIAL</code>、<code>FAIL</code>、<code>COMPLETE</code>、<code>GAPS</code> 等由核写出，命令行原样传出。</dd></div>
 </dl>
 <p>写条目被法拒收时（<code>E_ENTRY</code>，其 <code>token</code> 为 <code>E_BODY_FIELD</code>，退出码 1），标准错误另有一行人话，点名是哪一项、由哪个参数给，例如 <code>statement_md: 缺或不成形,由 --statement 给</code>；这一行同样随系统语言，属于给人看的说明，标准输出与退出码与它无关。</p>
-<p>写文件只有一种方式：<code>--out</code> 先在旁边写完整个临时文件、落盘，再改名到位；同名文件已经存在时，这次写入作罢，原文件一个字节都保持原样。</p>
+<p>写文件只有一种方式：<code>--out</code> 先在旁边写完整个临时文件、落盘，再改名到位；同名文件已经存在时，这次写入作罢，原文件一个字节都保持原样。<code>kit-verify --originals-to</code> 取出原件也只有一种方式：先在所选文件夹里的暂存文件夹排好、逐份核过指纹，再逐个就位、绝不替换；所选文件夹里已有同名即整批不取，一个字节不写。</p>
 <h2 id="exit">退出码</h2>
 <div class="tw"><table>
 <thead><tr><th>码</th><th>含义</th><th>示例</th></tr></thead>
 <tbody>
 <tr><td>0</td><td>已答，答案肯定</td><td><code>GREEN</code>、<code>COMPLETE</code></td></tr>
-<tr><td>1</td><td>已答，答案否定</td><td>条目被拒，写入会把账本写断(<code>E_WOULD_BREAK</code>)，节点以关乎这一笔的理由拒绝估 gas 或估数超过 200,000(<code>E_GAS_REFUSED</code>)，交易入块而执行失败(<code>E_TX_STATUS</code>)，先前发出的那一笔已作废(<code>E_TX_VOID</code>)，授权文件拆不开(<code>E_GRANT_FILE</code>)，链上已有这把钥对所给哈希的锚(<code>E_ON_CHAIN</code>)，记录包不成立(<code>E_KIT</code>)或包里的原件对不上(<code>E_RECORDS</code>)，经桌面的 <code>attest</code> 与 <code>succeed</code>(<code>E_ON_DESKTOP</code>)，桌面拒绝这一动作(<code>E_DESKTOP_REFUSED</code>)或在发出之前拒绝上链(<code>E_SEND_REFUSED</code>)，网络方面的除外，凭据缺、过期或不成形(<code>E_CREDENTIAL_MISSING</code>、<code>E_CREDENTIAL_EXPIRED</code>、<code>E_CREDENTIAL_SHAPE</code>)，桌面此刻正在写这个数据目录(<code>E_HOME_HELD</code>)，写者标是别台机器(<code>E_HOME_OTHER_MACHINE</code>)，原目录已由桌面收编(<code>E_ADOPTED</code>)，数据目录只读或账本断了链(<code>E_READ_ONLY</code>)，账本已交出(<code>E_HANDED_OFF</code>)，交接件不收(<code>E_HANDOFF</code>)，或结论为 <code>FAIL</code>、<code>BROKEN_CHAIN</code>、<code>NO_LABEL</code></td></tr>
-<tr><td>2</td><td>误用</td><td>参数有误、路径读取失败、<code>--key</code> 与 <code>--key-file</code> 同给、密钥文件他人可读、<code>--form registry</code> 缺 <code>--registry</code>、给 <code>--home</code> 的动词或旗不收它、桌面数据目录的 <code>--ledger</code> 同给 <code>--key</code> 或 <code>--key-file</code>、<code>anchor --ledger</code> 同给 <code>--endpoint</code> 等它不收的八个旗、<code>--ledger</code> 指向数据目录之外的封存文件夹；标准输出为空</td></tr>
+<tr><td>1</td><td>已答，答案否定</td><td>条目被拒，写入会把账本写断(<code>E_WOULD_BREAK</code>)，节点以关乎这一笔的理由拒绝估 gas 或估数超过 200,000(<code>E_GAS_REFUSED</code>)，交易入块而执行失败(<code>E_TX_STATUS</code>)，先前发出的那一笔已作废(<code>E_TX_VOID</code>)，授权文件拆不开(<code>E_GRANT_FILE</code>)，链上已有这把钥对所给哈希的锚(<code>E_ON_CHAIN</code>)，记录包不成立(<code>E_KIT</code>)或包里的原件对不上(<code>E_RECORDS</code>)，取不出原件(<code>E_EXTRACT</code>，所选文件夹一个字节不写)，加密记录包打不开、坏了或接收方地址在链上没有锚(<code>E_ADDRESSED</code>)，经桌面的 <code>attest</code> 与 <code>succeed</code>(<code>E_ON_DESKTOP</code>)，桌面拒绝这一动作(<code>E_DESKTOP_REFUSED</code>)或在发出之前拒绝上链(<code>E_SEND_REFUSED</code>)，网络方面的除外，凭据缺、过期或不成形(<code>E_CREDENTIAL_MISSING</code>、<code>E_CREDENTIAL_EXPIRED</code>、<code>E_CREDENTIAL_SHAPE</code>)，桌面此刻正在写这个数据目录(<code>E_HOME_HELD</code>)，写者标是别台机器(<code>E_HOME_OTHER_MACHINE</code>)，原目录已由桌面收编(<code>E_ADOPTED</code>)，数据目录只读或账本断了链(<code>E_READ_ONLY</code>)，账本已交出(<code>E_HANDED_OFF</code>)，交接件不收(<code>E_HANDOFF</code>)，或结论为 <code>FAIL</code>、<code>BROKEN_CHAIN</code>、<code>NO_LABEL</code></td></tr>
+<tr><td>2</td><td>误用</td><td>参数有误、路径读取失败、<code>--key</code> 与 <code>--key-file</code> 同给、密钥文件他人可读、<code>--form registry</code> 缺 <code>--registry</code>、给 <code>--home</code> 的动词或旗不收它、桌面数据目录的 <code>--ledger</code> 同给 <code>--key</code> 或 <code>--key-file</code>、<code>anchor --ledger</code> 同给 <code>--endpoint</code> 等它不收的八个旗、<code>--ledger</code> 指向数据目录之外的封存文件夹、<code>--to</code> 与 <code>--to-key</code> 同给或任一与 <code>--as folder</code> 同给、地址或公钥不成形、打开加密包而没给钥匙(<code>E_ARGS --key --ledger --home</code>)、<code>kit-verify</code> 的 <code>--key</code> 与 <code>--ledger</code> 同给、<code>mcp</code> 带任何旗；标准输出为空</td></tr>
 <tr><td>3</td><td>已答，介于两者之间</td><td><code>PARTIAL</code>、<code>GAPS</code>、<code>UNAVAILABLE</code>；经桌面或经凭据的 <code>anchor</code> 只入了队(<code>E_QUEUED</code>)；记录包里有存证没上链、链没读成或原件缺(<code>E_RECORDS</code>)</td></tr>
-<tr><td>4</td><td>答案缺席</td><td>节点失联、多个节点读数相左、扫描被拒、取不到随机数、节点出于自身缘由拒绝估 gas(<code>E_UNREACHABLE</code>)、桌面没有答(<code>E_DESKTOP</code>)、桌面因网络拒绝(<code>E_DESKTOP_REFUSED</code>)、上链在发出之前因网络被拒(<code>E_SEND_REFUSED</code>)</td></tr>
+<tr><td>4</td><td>答案缺席</td><td>节点失联、多个节点读数相左、扫描被拒、取不到随机数、节点出于自身缘由拒绝估 gas(<code>E_UNREACHABLE</code>)、桌面没有答(<code>E_DESKTOP</code>)、桌面因网络拒绝(<code>E_DESKTOP_REFUSED</code>)、上链在发出之前因网络被拒(<code>E_SEND_REFUSED</code>)、找接收方公钥时没找到而有网络没读成(<code>E_ADDRESSED</code>，<code>token</code> 为 <code>ADDRESS_CHAIN_UNREAD</code>；经桌面为 <code>E_DESKTOP_REFUSED</code> 带同一码)</td></tr>
 </tbody></table></div>
 <p>3 与 4 各占一个码，是这张表的分量所在。把「尚未上链」并入 0，买方会把尚待锚定的授权当作放行；并入 1，一次「暂不可知」会被读成「伪造」。把「节点不通」并入 1，一次网络故障会被读成「这条链是假的」。扫描失败是答案缺席，调用方应重试或换节点。</p>
-<h2 id="verbs">二十五个子命令</h2>
+<h2 id="verbs">二十六个子命令</h2>
 <div class="tw"><table>
 <thead><tr><th>子命令</th><th>作用</th></tr></thead>
 <tbody>
@@ -44,27 +44,32 @@ title: 命令行
 <tr><td><code>annotate</code> ✦</td><td>写一条注记</td></tr>
 <tr><td><code>retract</code> ✦</td><td>写一条删除条目(目标须是本账本里一条现存的存证)</td></tr>
 <tr><td><code>anchor</code> ✦</td><td>把哈希锚定上链：调用登记合约，或自转账裸锚；签名之前先问链上已有没有，再估 gas，重跑先问；<code>--ledger</code> 指向桌面数据目录里的账本时，经凭据发它的待上链队列</td></tr>
-<tr><td><code>scan</code></td><td>按链设置扫描锚(<code>--endpoint</code> 收 http 与 https；<code>--ledger</code> 代替 <code>--basis</code> 时，扫描范围取自那个数据目录的设置与账本)</td></tr>
-<tr><td><code>audit</code></td><td>用扫描结果加账本做审计，输出报告与结论(<code>--ledger</code> 收账本目录、桌面数据目录里的账本(经凭据)、账本镜像或记录包(<code>.zkit</code> 文件或文件夹)；<code>--out</code> 另存这一趟的审计输入)</td></tr>
+<tr><td><code>scan</code></td><td>按链设置扫描锚(<code>--endpoint</code> 收 http 与 https；<code>--ledger</code> 代替 <code>--basis</code> 时，扫描范围取自那个数据目录的设置与账本；不给 <code>--endpoint</code> 时，经凭据用那个数据目录设置里的节点)</td></tr>
+<tr><td><code>audit</code></td><td>用扫描结果加账本做审计，输出报告与结论(<code>--ledger</code> 收账本目录、桌面数据目录里的账本(经凭据)、账本镜像或记录包(<code>.zkit</code> 文件或文件夹)；<code>--out</code> 另存这一趟的审计输入；加密记录包以 <code>E_ADDRESSED</code>(<code>ADDRESSED_ELSEWHERE</code>)拒，打开它用 <code>kit-verify</code>)</td></tr>
 <tr><td><code>check-grant</code></td><td>六项核验一份授权(<code>--grant</code> 收授权条目文件或 <code>.zkgrant</code> 授权文件；读桌面数据目录里的账本时读到签发方整本账，撤没撤销答得出)</td></tr>
 <tr><td><code>chain-check</code></td><td>逐跳核验转授权链(<code>--hop &lt;授权文件&gt;[=&lt;审计输入文件&gt;]</code>，可重复)</td></tr>
 <tr><td><code>depth</code></td><td>一件记录的深度读数</td></tr>
 <tr><td><code>fpm-sign</code></td><td>签指纹清单</td></tr>
 <tr><td><code>ack-sign</code></td><td>签收执</td></tr>
 <tr><td><code>badge</code></td><td>编码或解码凭证(<code>--encode</code> 与 <code>--decode</code> 二选一)</td></tr>
-<tr><td><code>kit-export</code> ✦</td><td>导出记录包，自验通过才写出；缺省写成一个文件，<code>--as folder</code> 写成文件夹</td></tr>
-<tr><td><code>kit-verify</code></td><td>逐条核验一份记录包(<code>--kit</code> 收 <code>.zkit</code> 文件或文件夹)：原件对不对、上没上链，与桌面「核验记录」同一判法；<code>--fragment</code> 给扫描结果，不给即每条都是 <code>unread</code></td></tr>
+<tr><td><code>kit-export</code> ✦</td><td>导出记录包，自验通过才写出；缺省写成一个文件，<code>--as folder</code> 写成文件夹；<code>--to &lt;地址&gt;</code> 或 <code>--to-key &lt;公钥&gt;</code> 把这一个文件加密给一个接收方</td></tr>
+<tr><td><code>kit-verify</code> ✦</td><td>逐条核验一份记录包(<code>--kit</code> 收 <code>.zkit</code> 文件或文件夹)：原件对不对、上没上链，与桌面「核验记录」同一判法；<code>--fragment</code> 给扫描结果，不给即每条都是 <code>unread</code>；<code>--originals-to</code> 把对得上的原件取到一个已有的文件夹；加密包用 <code>--ledger &lt;家&gt;/ledger</code>(经凭据以本机各身份)、<code>--key</code> 或 <code>--key-file</code> 打开</td></tr>
 <tr><td><code>hand-over</code></td><td>把整本账写成一份交接件(<code>--out</code>)，这一处随即停写</td></tr>
 <tr><td><code>take-over</code></td><td>收一份顺接的交接件(<code>--handoff</code>)，这一处随即复写</td></tr>
 <tr><td><code>show</code></td><td>显示一条条目的作者、ID、类型、上一条、序号与内容</td></tr>
+<tr><td><code>mcp</code></td><td>经模型上下文协议供 AI 应用调用命令行(标准输入输出，一行一条消息)，见下文<a href="#mcp">AI 应用</a></td></tr>
 <tr><td><code>contract</code></td><td>输出命令行自己的契约：动词、各动词的参数(带 <code>--home</code> 时的另一张)、退出码与拒因</td></tr>
 </tbody></table></div>
-<p>标 ✦ 的十一个收 <code>--home</code>：其中十个交给桌面去做，<code>succeed</code> 带 <code>--home</code> 一律答 <code>E_ON_DESKTOP</code>，见下文<a href="#home">经桌面</a>。子命令之外的第一个词按误用处理，退出码为 2。</p>
+<p>标 ✦ 的十二个收 <code>--home</code>：其中十一个交给桌面去做，<code>succeed</code> 带 <code>--home</code> 一律答 <code>E_ON_DESKTOP</code>，见下文<a href="#home">经桌面</a>。子命令之外的第一个词按误用处理，退出码为 2。</p>
 <h2 id="flags">参数</h2>
-<p>五十九个参数一律是长参数，且每个都带一个值；每个子命令有自己的一张参数表，表外参数按误用处理。条目正文中法所要求的成员，在命令行上都可以省略；省略后由核依法拒收，命令行只检查它自己做事所必需的几项。这样判断规则只在核里存在一份。</p>
+<p>六十二个参数一律是长参数，且每个都带一个值；每个子命令有自己的一张参数表，表外参数按误用处理。条目正文中法所要求的成员，在命令行上都可以省略；省略后由核依法拒收，命令行只检查它自己做事所必需的几项。这样判断规则只在核里存在一份。</p>
 <dl>
 <div><dt><code>--key-file</code></dt><dd>从文件读私钥，代替 <code>--key</code>，两者择一；文件须只本人可读。凡收 <code>--key</code> 的子命令都收它。</dd></div>
-<div><dt><code>--proxy</code></dt><dd><code>anchor</code> 与 <code>scan</code> 收：<code>system</code>（默认）、<code>none</code>，或一处代理地址 <code>协议://[用户名[:口令]@]主机:端口</code>，协议为 <code>http</code>、<code>https</code>、<code>socks5</code>（或 <code>socks5h</code>）、<code>socks4</code>（或 <code>socks4a</code>，只带用户 ID）；用户名与口令按百分号编码，各至多 255 字节，写在命令行上的口令在命令运行期间本机其他进程看得到。本机节点一律直连；给了代理地址时，私网、链路本地与 <code>.local</code> 的节点也直连。<code>system</code> 先读终端的代理变量：<code>https_proxy</code>、<code>http_proxy</code>、<code>all_proxy</code>（大小写两写）设了任一个即照它们走，连同 <code>no_proxy</code>，三个系统一样；都没设才读系统的代理设置：先是系统指定的自动配置脚本，再是手填的代理（macOS 读网络设置，Windows 读系统答的当前设置，Linux 读 KDE 或 GSettings 存在盘上的设置，读不到再看环境变量）；系统的「自动探测代理」不读。经凭据的 <code>anchor --ledger</code> 不收 <code>--proxy</code>，用这台机器设置里的代理。</dd></div>
+<div><dt><code>--originals-to</code></dt><dd><code>kit-verify</code> 收：一个已有的文件夹，把包里与记录对得上的原件全部取进去，要么全取，要么一个字节不写(<code>E_EXTRACT</code>)；签过的文件夹整个取出；取出时答里多 <code>taken</code>(名字)与 <code>path</code>。</dd></div>
+<div><dt><code>--originals</code></dt><dd><code>kit-export</code> 从桌面托管的数据目录导出时收(经凭据的 <code>--ledger</code>，或经桌面的 <code>--home</code>)：只认 <code>none</code>，所选存证的原件一件也不带。不给即照桌面导出页的同一取法带上，答里列出 <code>originals</code> 与 <code>leftOut</code>。普通账本文件夹给了即按误用拒，它的原件以 <code>--file</code> 逐个给。</dd></div>
+<div><dt><code>--to</code>、<code>--to-key</code></dt><dd><code>kit-export</code> 收，二者择一：<code>--to</code> 是接收方地址，命令行在链上找这个地址自己签过的上链交易、由签名恢复出公钥；<code>--to-key</code> 是 <code>0x</code> 加 66 或 130 位十六进制的公钥，须在曲线上。只加密单个文件，与 <code>--as folder</code> 同给即误用。直接对明文账本目录用 <code>--to</code> 时要给 <code>--endpoint</code>(链号须在内置部署表里)；对桌面数据目录的账本，用那个数据目录的网络与这台机器的只读网络，不收 <code>--endpoint</code>。</dd></div>
+<div><dt><code>--key</code>(<code>kit-verify</code>)</dt><dd>打开加密记录包的那把钥；普通包不要钥。与 <code>--ledger</code> 同给即误用。</dd></div>
+<div><dt><code>--proxy</code></dt><dd><code>anchor</code>、<code>scan</code> 与带 <code>--to</code> 的 <code>kit-export</code> 收：<code>system</code>（默认）、<code>none</code>，或一处代理地址 <code>协议://[用户名[:口令]@]主机:端口</code>，协议为 <code>http</code>、<code>https</code>、<code>socks5</code>（或 <code>socks5h</code>）、<code>socks4</code>（或 <code>socks4a</code>，只带用户 ID）；用户名与口令按百分号编码，各至多 255 字节，写在命令行上的口令在命令运行期间本机其他进程看得到。本机节点一律直连；给了代理地址时，私网、链路本地与 <code>.local</code> 的节点也直连。<code>system</code> 先读终端的代理变量：<code>https_proxy</code>、<code>http_proxy</code>、<code>all_proxy</code>（大小写两写）设了任一个即照它们走，连同 <code>no_proxy</code>，三个系统一样；都没设才读系统的代理设置：先是系统指定的自动配置脚本，再是手填的代理（macOS 读网络设置，Windows 读系统答的当前设置，Linux 读 KDE 或 GSettings 存在盘上的设置，读不到再看环境变量）；系统的「自动探测代理」不读。经凭据走数据目录的几条路(<code>anchor --ledger</code>、不给 <code>--endpoint</code> 的 <code>scan --ledger</code>、<code>kit-export --to --ledger</code>)不给 <code>--proxy</code> 时用这台机器设置里的代理，设为跟随系统时只读系统的代理设置，终端的代理变量一概不读；<code>anchor --ledger</code> 不收 <code>--proxy</code>。</dd></div>
 <div><dt><code>--home</code></dt><dd>交给正在运行的桌面应用代做，见下文。</dd></div>
 </dl>
 <p>各子命令的参数表与环境变量（每一问的总期限 <code>ZKA_TIMEOUT_SECS</code>，默认 30 秒；应答上限 <code>ZKA_MAX_ANSWER_BYTES</code>，默认 64 MiB 等）都写在 <code>CLI-SCHEMA.md</code> 里。</p>
@@ -97,34 +102,39 @@ echo $?
 <h2 id="gate">写之前先审</h2>
 <p>每个写条目的子命令（含 <code>init</code> 与 <code>retract</code>）都过同一道门：条目签好之后，核把「这个账本加上这一条」离线审一遍，会新添一条法 §8.3 的链上发现（换钥之后旧钥再写、跳号、同一位置写第二条、接错上一条）即拒 <code>E_WOULD_BREAK</code>，<code>names</code> 写明是哪几种，一个字节也不写。手给 <code>--seq</code>、<code>--prev</code> 也一样过这一道。账本有两个根而没给 <code>--root</code> 时，写入一律拒 <code>E_TIP_FORKED</code>。</p>
 <h2 id="home">经桌面</h2>
-<p>给 <code>--home &lt;桌面的数据目录&gt;</code> 时，<code>init</code>、<code>history</code>、<code>grant</code>、<code>revoke</code>、<code>adopt</code>、<code>attest</code>、<code>annotate</code>、<code>retract</code>、<code>anchor</code>、<code>kit-export</code> 十个子命令交给正在运行、已解锁、并以写者打开这个数据目录的 ZIKARON Desk 去做：条目以桌面的身份写进桌面的账本，窗口里随即可见；私钥与口令都留在桌面里，写入全由桌面完成。</p>
+<p>给 <code>--home &lt;桌面的数据目录&gt;</code> 时，<code>init</code>、<code>history</code>、<code>grant</code>、<code>revoke</code>、<code>adopt</code>、<code>attest</code>、<code>annotate</code>、<code>retract</code>、<code>anchor</code>、<code>kit-export</code>、<code>kit-verify</code> 十一个子命令交给正在运行、已解锁、并以写者打开这个数据目录的 ZIKARON Desk 去做：条目以桌面的身份写进桌面的账本，窗口里随即可见；<code>kit-verify</code> 由桌面在自己的网络上核验，加密给它某个身份的包先由那个身份打开；私钥与口令都留在桌面里，写入全由桌面完成。</p>
 <ul>
-<li>「设置 › 命令行」的「经桌面 App 操作」开着、桌面开着这个数据目录时，为它开一条本机通道：macOS 与 Linux 上是机器目录里一个只本人可读写的套接字文件，Windows 上是只本用户够得着的命名管道。连上之后两端各问系统对方以谁的身份运行，不是同一用户即拒。锁定、关掉或换掉数据目录、退出应用，通道随即关闭；「经凭据操作」开着时，桌面不开通道。</li>
+<li>「设置 › 命令行与 AI 控制」的「经桌面 App 操作」开着、桌面开着这个数据目录时，为它开一条本机通道：macOS 与 Linux 上是机器目录里一个只本人可读写的套接字文件，Windows 上是只本用户够得着的命名管道。连上之后两端各问系统对方以谁的身份运行，不是同一用户即拒。锁定、关掉或换掉数据目录、退出应用，通道随即关闭；「经凭据操作」开着时，桌面不开通道。</li>
 <li>参数照常先判误用；带 <code>--home</code> 时各子命令另有一张参数表，账本、密钥与序号由桌面自己定（如 <code>history</code> 收 <code>--file</code> 与 <code>--note</code>，<code>anchor</code> 只收 <code>--home</code>），表外的参数算误用。请求按到达的次序逐个做，在桌面里走与点按同一条动作路径。</li>
-<li><code>anchor</code> 照「设置 › 命令行」「上链操作」里的「命令行上链」：「自动发送」照队列页的「全部上链」发出，答与 <code>anchor --ledger</code> 同形；「仅加入队列」只入队，答 <code>E_QUEUED</code>（退出码 3）。</li>
-<li><code>attest</code> 与 <code>succeed</code> 一律答 <code>E_ON_DESKTOP</code>：连署要口令，口令只在桌面上输；把账本移交给另一把钥只在桌面上亲手做，<code>succeed</code> 不去问桌面。<code>kit-export</code> 收 <code>--entry</code>、<code>--note</code>、<code>--out</code>、<code>--as</code>（缺省一个文件），附件与证明包在桌面上选。</li>
-<li>桌面锁着、没开这个数据目录或已退出时答 <code>E_DESKTOP</code>（退出码 4）；「经凭据操作」开着时 <code>detail</code> 为 <code>ALONE</code>，去掉 <code>--home</code> 直写即可。<code>anchor</code> 在发出之前被拒答 <code>E_SEND_REFUSED</code>，链上已有答 <code>E_ON_CHAIN</code>；别的动词被桌面拒绝答 <code>E_DESKTOP_REFUSED</code>，<code>token</code> 是桌面自己的代码；网络方面的拒绝退出码为 4，其余为 1。</li>
+<li><code>anchor</code> 照「设置 › 命令行与 AI 控制」「上链操作」里的「命令行上链」：「自动发送」照队列页的「全部上链」发出，答与 <code>anchor --ledger</code> 同形；「仅加入队列」只入队，答 <code>E_QUEUED</code>（退出码 3）。</li>
+<li><code>attest</code> 与 <code>succeed</code> 一律答 <code>E_ON_DESKTOP</code>：连署要口令，口令只在桌面上输；把账本移交给另一把钥只在桌面上亲手做，<code>succeed</code> 不去问桌面。<code>kit-export</code> 收 <code>--entry</code>、<code>--note</code>、<code>--out</code>、<code>--as</code>(缺省一个文件)、<code>--to</code>、<code>--to-key</code>、<code>--originals</code>，所选存证的原件照桌面导出页带上(<code>--originals none</code> 即不带)，别的附件与证明包在桌面上选，<code>--to</code> 的公钥在桌面的网络与只读网络上找。<code>kit-verify</code> 收 <code>--kit</code> 与 <code>--originals-to</code>。</li>
+<li>桌面锁着、没开这个数据目录或已退出时答 <code>E_DESKTOP</code>（退出码 4）；「经凭据操作」开着时 <code>detail</code> 为 <code>ALONE</code>，去掉 <code>--home</code> 直写即可。<code>anchor</code> 在发出之前被拒答 <code>E_SEND_REFUSED</code>，链上已有答 <code>E_ON_CHAIN</code>；别的动词被桌面拒绝答 <code>E_DESKTOP_REFUSED</code>，<code>token</code> 是桌面自己的代码；网络方面的拒绝退出码为 4，其余为 1。<code>kit-verify</code> 取不出原件或打不开加密包时，<code>token</code> 是桌面的码(<code>EXTRACT_EXISTS</code>、<code>EXTRACT_LINK</code> 等，或 <code>E_ADDRESSED</code> 的各码)；<code>ADDRESS_CHAIN_UNREAD</code> 退出码为 4。</li>
 </ul>
 <p>带 <code>--home</code> 的命令行按桌面同一个规则找机器目录。各子命令带 <code>--home</code> 时收哪些参数，见 <code>CLI-SCHEMA.md</code> 第 11 节。</p>
 <h2 id="credential">经凭据</h2>
-<p>「设置 › 命令行」的「自动控制等级」有两个开关，任何时候只开着一条命令行路径。「经桌面 App 操作」开着时走 <code>--home</code>。「经凭据操作」开着时，「经桌面 App 操作」变灰，桌面关上通道；命令行不带 <code>--home</code>，凭机器目录里一份只本人可读写的凭据，直接读写桌面数据目录里封存的账本、发它的待上链队列，桌面开着、锁着或没开都行。打开「经凭据操作」要输口令并填有效期：天、小时、分钟三格合计一分钟到一年，或「不过期」。</p>
+<p>「设置 › 命令行与 AI 控制」的「自动控制等级」有两个开关，任何时候只开着一条命令行路径。「经桌面 App 操作」开着时走 <code>--home</code>。「经凭据操作」开着时，「经桌面 App 操作」变灰，桌面关上通道；命令行不带 <code>--home</code>，凭机器目录里一份只本人可读写的凭据，直接读写桌面数据目录里封存的账本、发它的待上链队列，桌面开着、锁着或没开都行。打开「经凭据操作」要输口令并填有效期：天、小时、分钟三格合计一分钟到一年，或「不过期」。</p>
 <ul>
 <li><b>写</b>：<code>history</code>、<code>grant</code>、<code>revoke</code>、<code>adopt</code>、<code>succeed</code>、<code>annotate</code>、<code>retract</code> 的 <code>--ledger</code> 指向数据目录里的 <code>ledger</code> 文件夹时，经凭据写进封存的账本，签名用桌面钥库里为这个身份与角色存的那把钥，不收 <code>--key</code>、<code>--key-file</code>。条目照样先审(<code>E_WOULD_BREAK</code>)，写进去之后照桌面的样子排进待上链队列；<code>history --file</code> 的那份文件记进本机签入索引，导出记录包时随包带上原件。<code>init</code> 不收，答 <code>E_NOT_EMPTY</code>。</li>
-<li><b>读</b>：<code>audit</code>、<code>check-grant</code>、<code>chain-check</code>、<code>depth</code>、<code>show --entry</code>、<code>kit-export</code> 照同一开法读那本账，读不拿写者锁。<code>kit-export</code> 照桌面带上原件、条款文件与 <code>anchored-on:</code> 那一行；<code>scan --ledger</code> 的扫描范围取自这个数据目录的设置与账本，末块是 <code>--endpoint</code> 报的链头。</li>
+<li><b>读</b>：<code>audit</code>、<code>check-grant</code>、<code>chain-check</code>、<code>depth</code>、<code>show --entry</code>、<code>kit-export</code> 照同一开法读那本账，读不拿写者锁。<code>kit-export</code> 照桌面带上原件、条款文件与 <code>anchored-on:</code> 那一行，给 <code>--originals none</code> 即不带原件；<code>scan --ledger</code> 的扫描范围取自这个数据目录的设置与账本，末块是所用节点报的链头；不给 <code>--endpoint</code> 时节点也取这个数据目录的设置。<code>kit-export --to</code> 在这个数据目录的网络与这台机器的只读网络上找接收方公钥。<code>kit-verify --ledger</code> 用同一份凭据取本机每个身份每种角色的钥匙，去打开加密记录包。</li>
 <li><b>发</b>：<code>anchor --ledger</code> 经凭据发这个数据目录的队列：链号、登记合约与节点取这个数据目录的设置，代理取这台机器的设置；不收 <code>--key</code>、<code>--key-file</code>、<code>--endpoint</code>、<code>--form</code>、<code>--registry</code>、<code>--hash</code>、<code>--calldata</code>、<code>--proxy</code>，<code>--wait-secs</code> 缺省 90 秒。「命令行上链」为「自动发送」时发出队里能发的全部、等收据、结清；为「仅加入队列」时答 <code>E_QUEUED</code>。队里没有可发的而有一批在途时，按交易哈希接着问那一批；那一批已不在任何节点池里而 nonce 仍空着，「自动发送」即在原 nonce 上照原样重签再发；都没有即答 <code>E_SEND_REFUSED</code>，<code>token</code> 为 <code>QUEUE_EMPTY</code>。「加价重发」只在桌面上按。</li>
 <li><b>轮流拿锁</b>：命令行每写一笔拿这个数据目录的写者锁，写完即放；这时桌面也一样，拿到锁时若命令行写过先重读。发送在备好与签发两段拿着锁，等收据时放开，结清时再拿；六十秒内拿不回即答 <code>E_HOME_HELD</code>，那一批留在途。</li>
 <li><b>写闸</b>：写条目、发送与交出之前先查。数据目录落着只读标记（<code>LEDGER_NOT_FETCHED</code>、<code>NEWER_ELSEWHERE</code>）或账本断了链（<code>BROKEN</code>），写条目与交出答 <code>E_READ_ONLY</code>，发送答 <code>E_SEND_REFUSED</code>，<code>token</code> 为那一码；账本已交出，写条目答 <code>E_HANDED_OFF</code>，发送答 <code>E_SEND_REFUSED</code>（<code>HANDED_OFF</code>）。</li>
 <li><b>拒因</b>，退出码都是 1，一个字节不写：<code>E_CREDENTIAL_MISSING</code>（开关关着）、<code>E_CREDENTIAL_EXPIRED</code>（过期，凭据随即删掉）、<code>E_CREDENTIAL_SHAPE</code>（读不出、打不开，或属于换主钥之前）、<code>E_HOME_HELD</code>（桌面此刻在写，稍后再试）、<code>E_HOME_OTHER_MACHINE</code>（写者标是别台机器）。读的动词遇凭据三种与 <code>E_HOME_OTHER_MACHINE</code> 同样拒。</li>
 <li><b>收编之后的原目录</b>：命令行自建的明文账本经桌面「导入密钥」与「收编已有账本目录」之后，命令行写原目录（含 <code>hand-over</code>、<code>take-over</code>）一律答 <code>E_ADOPTED</code>，「经凭据操作」开着关着都一样，原目录一个字节不动；要从命令行接着写，打开「经凭据操作」，改给数据目录里的 <code>ledger</code>。</li>
 </ul>
+<h2 id="kits">取出原件与加密记录包</h2>
+<p><code>kit-verify --kit &lt;包&gt; --originals-to &lt;文件夹&gt;</code> 先照常逐条核验，再把与记录对得上的原件取进那个文件夹，原名照还；签过的文件夹按它签时的路径整个取出。原件从包里重读，先排进所选文件夹里的暂存文件夹、逐份核过指纹，再逐个就位、绝不替换；同名已有、遇到链接、两份撞名或任何一步失败，都答 <code>E_EXTRACT</code>，已放下的撤回，所选文件夹保持原样。普通包不要家、不要钥。</p>
+<p><code>kit-export --to &lt;地址&gt;</code> 或 <code>--to-key &lt;公钥&gt;</code> 导出只有接收方打得开的单个 <code>.zkit</code>；答与普通包相同。<code>kit-verify</code> 打开它：经凭据给 <code>--ledger &lt;家&gt;/ledger</code> 用本机各身份，直接用时给 <code>--key</code> 或 <code>--key-file</code>，经桌面由桌面的身份打开；打开的明文放在系统临时目录里专用的文件夹，命令结束即删。没有钥匙打得开答 <code>ADDRESSED_NOT_RECIPIENT</code>，有一段核不过答 <code>ADDRESSED_BROKEN</code>，文件头读不成答 <code>ADDRESSED_HEAD</code>。格式见<a href="formats.html#addressed">文件与格式</a>。</p>
 <h2 id="handoff">交接账本</h2>
 <p>一本账可以在两处之间来回交，例如远程机上命令行的账本目录与本机桌面的数据目录，任何时候只一处在写。<code>hand-over --ledger &lt;这一处&gt; --out &lt;文件&gt;</code> 把整本账写成一份交接件(<code>.zkhand</code>)，这一处随即停写，写条目即答 <code>E_HANDED_OFF</code>；交出去的那一份丢了，再跑一次写出同一份。<code>take-over --ledger &lt;这一处&gt; --handoff &lt;文件&gt;</code> 只收顺接的交接件：这一处的每一条都在里面，里面的账是一条线，才按序号写进这一处没有的条目，这一处随即复写；交出过的这一处只收交回来的那一份。不收时答 <code>E_HANDOFF</code>，<code>token</code> 为 <code>NOT_BACK</code>、<code>AHEAD</code>、<code>NOT_ONE_LINE</code>、<code>E_HANDOFF_NOTE</code> 或文件格式的码。本机那一侧经凭据读写，桌面锁着也行，桌面开着时随即见到新条目。上链状态不随交接件走：桌面下一趟账本检查从链上现读，只把链上没有的排进待上链。</p>
+<h2 id="mcp">AI 应用</h2>
+<p><code>zikaron mcp</code> 让 AI 应用经模型上下文协议(MCP)调用命令行：AI 应用把它当子进程起，标准输入输出上每行一条 JSON-RPC 2.0 消息，每行是一个规范 JSON 值；不开端口、不开本机通道、不写文件；输入关上即退出，退出码 0。它不带旗，也不另有权限：每一次工具调用都另起一个本程序，照人在终端里敲的样子跑那个动词，答的字节与退出码与那条命令相同。写入的工具每次调用时看这台机器有没有凭据：有即走 <code>--ledger &lt;家&gt;/ledger</code>，没有即走 <code>--home &lt;家&gt;</code>。协议版本认 <code>2025-11-25</code> 与 <code>2025-06-18</code>；完整约定见 <code>CLI-SCHEMA.md</code> 第 13 节，接入方法见<a href="integrate.html#mcp">接入</a>。</p>
 <h2 id="now">时间由调用方注入</h2>
 <p>期限与时段只按链上时间和 <code>--now</code> 注入的时刻判断；省略 <code>--now</code> 即只用链上时间。时刻都由调用方给出，所以同一输入始终得到同一结论。</p>
 <h2 id="sealed">读应用自己的账本</h2>
-<p>ZIKARON Desk 数据目录里的账本是加密的（文件以 <code>zikaron-local/2</code> 开头），命令行不持口令。「设置 › 命令行」的「经凭据操作」开着时，命令行凭那份凭据读写桌面数据目录里的账本，见上文<a href="#credential">经凭据</a>。从数据目录里单拷出来的 <code>ledger</code> 文件夹读不了，按误用拒绝，退出码为 2：</p>
+<p>ZIKARON Desk 数据目录里的账本是加密的（文件以 <code>zikaron-local/2</code> 开头），命令行不持口令。「设置 › 命令行与 AI 控制」的「经凭据操作」开着时，命令行凭那份凭据读写桌面数据目录里的账本，见上文<a href="#credential">经凭据</a>。从数据目录里单拷出来的 <code>ledger</code> 文件夹读不了，按误用拒绝，退出码为 2：</p>
 {{code:
 E_UNREADABLE #3 (40 bytes)
 已锁定:这是 ZIKARON Desk 封存的本机数据;命令行只凭凭据读桌面所管之家的账本
 }}
-<p>要往应用自己的账本里写，打开「经凭据操作」后把 <code>--ledger</code> 指向数据目录里的 <code>ledger</code> 文件夹，或用 <code>--home</code> 交给桌面代做。要交给别处的命令行读，先在应用里导出「账本镜像」或「记录包」：<code>audit</code>（以及经它的 <code>check-grant</code>、<code>chain-check</code>、<code>depth</code>）和 <code>show --entry</code> 的 <code>--ledger</code> 可以直接指向镜像文件夹（含 <code>mirror.json</code> 的那一层）或记录包（<code>.zkit</code> 文件或文件夹）；记录包先按记录包的法核一遍，不成立即拒 <code>E_KIT</code>。写条目的子命令收账本目录与桌面数据目录里的账本，<code>init</code> 只收账本目录；要在两处之间轮流写一本账，用 <code>hand-over</code> 与 <code>take-over</code>，见上文<a href="#handoff">交接账本</a>。</p>
+<p>要往应用自己的账本里写，打开「经凭据操作」后把 <code>--ledger</code> 指向数据目录里的 <code>ledger</code> 文件夹，或用 <code>--home</code> 交给桌面代做。要交给别处的命令行读，先在应用里导出「账本镜像」或「记录包」：<code>audit</code>（以及经它的 <code>check-grant</code>、<code>chain-check</code>、<code>depth</code>）和 <code>show --entry</code> 的 <code>--ledger</code> 可以直接指向镜像文件夹（含 <code>mirror.json</code> 的那一层）或记录包（<code>.zkit</code> 文件或文件夹）；记录包先按记录包的法核一遍，不成立即拒 <code>E_KIT</code>；加密记录包以 <code>E_ADDRESSED</code>(<code>ADDRESSED_ELSEWHERE</code>)拒，打开它用 <code>kit-verify</code>。写条目的子命令收账本目录与桌面数据目录里的账本，<code>init</code> 只收账本目录；要在两处之间轮流写一本账，用 <code>hand-over</code> 与 <code>take-over</code>，见上文<a href="#handoff">交接账本</a>。</p>

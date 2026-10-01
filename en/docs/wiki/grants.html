@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/grants.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -34,22 +34,22 @@
 <ol>
 <li>Open “Grant” and press “New grant”, or press “Grant to someone” on a record’s detail page.</li>
 <li>Fill in the grantee: the other side’s <code>0x…</code> address. “Recent addresses” beside it lists addresses you have used.</li>
-<li>Press “Choose a record” and pick a work that is on chain.</li>
-<li>Drop in the terms file and choose the validity: 7, 30 or 90 days, or Custom.</li>
-<li>Press “Add to ledger”, press again on the confirmation card, then <a href="ledger.html#anchor">put it on chain</a> as with a record.</li>
+<li>Press “Choose a record”, search or filter by date in the dialog, and click a row to pick a work that is on chain; records you cannot grant are greyed out with the reason.</li>
+<li>Drop in the terms file and choose the validity: 7, 30 or 90 days, or Custom. The period counts from the chain’s present moment: the app reads the latest block’s time when the page opens. With Custom, click the start date tile to pick the day on a calendar, fill in the hour and minute, then the length in days, hours and minutes; the end follows from the two and shows on the date tile at the right.</li>
+<li>Press “Confirm” at the bottom of the page, press “Add to ledger” on the confirmation card, then <a href="ledger.html#anchor">put it on chain</a> as with a record.</li>
 </ol>
 <h2 id="terms">What the terms say</h2>
 <p>The ledger records the address, the work, the period and the terms file’s fingerprint. Whether the grant is exclusive, where the work may be used, the price and what happens on breach all go in the terms file. When the grantee recomputes the terms file’s fingerprint and it matches the one in the grant, they know it is the very file attached at signing.</p>
 <h2 id="hand">Sending it</h2>
 <p>On the grant’s detail page, pick one way to send it:</p>
 <dl>
-<div><dt>Grant file</dt><dd>Press “Export grant file” for a <code>.zkgrant</code> file. It carries your ledger, so the grantee can run the full check. This is the one to prefer.</dd></div>
+<div><dt>Grant file</dt><dd>Press “Export grant file”, choose where to save it on the card, and press “Export grant file” there for a <code>.zkgrant</code> file. It carries your ledger, so the grantee can run the full check. This is the one to prefer.</dd></div>
 <div><dt>Grant code</dt><dd>Press “Copy grant code” for a line of text starting with <code>zikaron-grant:</code>, easy to paste into a chat. It lets the grantee check the signature and the validity.</dd></div>
 </dl>
 <h2 id="revoke">Revoking</h2>
 <p>Press “Revoke grant” at the bottom of the grant’s detail page, confirm, and put it on chain as well. A revocation is final, and every grant passed on from this one ends with it.</p>
 <h2 id="library">Receiving a grant</h2>
-<p>As a User, open “My grants”, press “Add grant”, paste the grant code or drop in the grant file, and press “Verify and add”. Each grant gets a card showing its verdict:</p>
+<p>As a User, open “My grants”, press “Add grant”, paste the grant code or drop in the grant file, and press “Verify and add”. Each grant has a row showing its verdict:</p>
 <div class="tw"><table>
 <thead><tr><th>Verdict</th><th>Meaning</th></tr></thead>
 <tbody>
@@ -60,7 +60,7 @@
 </tbody></table></div>
 <p>The app re-verifies the whole collection on its own from time to time. When a grant is about to expire, gets revoked, or its issuer hands the ledger to a new key, the Alerts page tells you.</p>
 <h2 id="badge">Credentials</h2>
-<p>To show a grant to your customers, open it in “My grants” and press “Create credential” for a line of text and a QR code. Anyone can paste the text into Verify › Verify grant to check it.</p>
+<p>To show a grant to your customers, open it in “My grants” and press “Create credential”, then “Create credential” again on the card, for a line of text and a QR code. Anyone can paste the text into Verify › Verify grant to check it.</p>
 <h2 id="sub">Sublicensing</h2>
 <p>A grant that passed all six checks has “Sublicense to others” on its detail page, for granting it on to someone else. The sublicense goes into your own ledger and ends when the upstream grant expires or is revoked, so set its validity within the upstream’s.</p>
 <div class="pn"><a href="ledger.html"><span>Previous</span>Recording and anchoring</a><a class="nx" href="kits.html"><span>Next</span>Presenting records</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#issue">Issuing a grant</a><a href="#terms">What the terms say</a><a href="#hand">Sending it</a><a href="#revoke">Revoking</a><a href="#library">Receiving a grant</a><a href="#badge">Credentials</a><a href="#sub">Sublicensing</a></nav></div>

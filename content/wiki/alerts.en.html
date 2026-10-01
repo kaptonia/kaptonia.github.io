@@ -3,15 +3,15 @@ title: Settings and alerts
 -->
 <p class="lede">Whatever needs your attention gathers on the “Alerts” page in the sidebar; the number beside “Alerts” counts the amber and red items.</p>
 <h2 id="alerts">The Alerts page</h2>
-<p>Each row is one matter: a light, the item and where it stands. A row that needs action has “Open …” at its right, which takes you straight to where it is dealt with.</p>
+<p>The page lists only what needs your attention (amber and red), one matter per row: a light, the item and where it stands. Click a row to go where it is dealt with; the “Pending” and “Queue backlog” rows carry “Put all on chain” at their right. When nothing needs dealing with, the page says “Nothing needs your attention”.</p>
 <div class="tw"><table>
 <thead><tr><th>Recorder</th><th>User</th></tr></thead>
 <tbody>
 <tr><td>Pending, Queue backlog</td><td>My grants expiring</td></tr>
 <tr><td>Grants expiring</td><td>Grant revoked</td></tr>
-<tr><td>Whole-machine backup</td><td>Whole-machine backup</td></tr>
 <tr><td>Ledger check result</td><td>Ledger handover, Upstream issue</td></tr>
 </tbody></table></div>
+<p>Where your whole-machine backup stands shows at “Last backup” in Settings › Local data; see <a href="keys.html#backup">Whole-machine backup</a>.</p>
 <p>When something important comes up, the window alerts you once (on a Mac the Dock icon bounces) with a toast starting “Alert:”. Each matter alerts once.</p>
 <h2 id="sync">Syncing</h2>
 <p>The status line at the bottom of the sidebar shows “Last synced HH:MM” and the like. Click the sync icon at its right end and the app reads the chain in the background: it checks the balance, compares your ledger with the chain and re-verifies the grants you hold. It also runs on its own from time to time; set how often in Settings › Notifications.</p>
@@ -25,15 +25,16 @@ title: Settings and alerts
 <tr><td>Network</td><td>Nodes, auto put on chain, proxy, publish address and read-only networks</td></tr>
 <tr><td>Notifications</td><td>How often the automatic checks run</td></tr>
 <tr><td>Local data</td><td>Whole-machine backup and restore, ledger mirror, where data lives, adopting a ledger</td></tr>
-<tr><td>Command line</td><td>Enabling the zikaron command; whether the command line works through the desktop app or with a credential; putting on chain from the command line. See <a href="cli.html">Command line</a></td></tr>
-<tr><td>About</td><td>Version, third-party licences, setup check, running the wizard again</td></tr>
+<tr><td>Command line and AI control</td><td>Enabling the zikaron command; connecting an AI app; whether the command line works through the desktop app or with a credential; putting on chain from the command line. See <a href="cli.html">Command line</a> and <a href="ai.html">AI Agents and remote operation</a></td></tr>
+<tr><td>About</td><td>Version, setup check, running the wizard again, self-check, third-party licences</td></tr>
 </tbody></table></div>
-<p>The “Setup check” under About lights each item; anything still open is marked “To set up”, and you can finish it from there.</p>
+<p>“Setup check” under About has a row per item: done items are ticked, and an open item carries a key at its right to finish it, such as “Export backup” or “Edit nodes”.</p>
 <h2 id="buttons">Buttons</h2>
 <dl>
 <div><dt>Blue key</dt><dd>The main action on this screen.</dd></div>
-<div><dt>Solid red key</dt><dd>Writes to your ledger or sends to the chain the moment you press it; it appears on the final confirmation card alone.</dd></div>
-<div><dt>Other keys</dt><dd>Other actions, or opening the confirmation card or the next step. Writing to the ledger or the chain happens on the confirmation card alone.</dd></div>
+<div><dt>Solid red key</dt><dd>Writes to your ledger or sends to the chain the moment you press it; it appears on the card that writes alone.</dd></div>
+<div><dt>Red delete key</dt><dd>The last step of deleting an identity or a record, and the second confirmation when removing a local copy or a read-only network.</dd></div>
+<div><dt>Other keys</dt><dd>Other actions, or opening the confirmation card or the next step. Writing to the ledger or the chain happens with the solid red key on a card.</dd></div>
 </dl>
 <h2 id="keys">Shortcuts</h2>
 <div class="tw"><table>

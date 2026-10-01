@@ -26,23 +26,29 @@ title: Compatibility and evolution
 <li>This version’s own forms alone are read and written: local encrypted files in the present envelope, the key store as <code>zikaron-desk/keybox/3</code>, <code>machine.json</code> for the language and appearance. Plain files, other envelopes and other key store forms are left unread and unconverted: the reason is named and the file left as it is.</li>
 <li>A file that does not read is left as it is: the software names the file and which of six reasons applies; a write to it is refused by name, and once it is moved aside the next write makes it anew.</li>
 <li>Members this version does not know, in the encrypted machine settings and a data folder’s settings, are carried back as they are.</li>
-<li>Local encrypted files this version writes are unreadable to earlier versions.</li>
+<li>Local encrypted files this version writes are unreadable to 0.1.2 and earlier; 0.1.3 uses the same envelope as this version.</li>
 <li>A sealed file whose master key is gone, closed for good, is moved byte for byte into <code>set-aside</code> in the machine folder, numbered flat.</li>
 <li>When a backup comes from a newer version, the software says plainly to update the app first; for any other unreadable file, it names the file.</li>
 </ol>
 <p>A change made in bulk (renaming and resealing everything under a new master key, for one) writes its plan and its new files alongside first, reads them back and compares, and switches in one step once they match: after a power cut, the next launch finds either the complete old state or the complete new one; when any comparison fails, it stops and leaves the originals as they are.</p>
 <p>A data folder’s label and writer mark are written by the first window that opens it as the writer or writes into it; a reader writes neither.</p>
 <h3 id="upgrade">Upgrading from an earlier version</h3>
-<p>0.1.3 starts from an empty machine folder: an earlier version’s machine folder (key store, identity registry, settings) and data folders are left unread. A recorder’s ledger comes across through a ledger mirror, one step by hand:</p>
+<p>From 0.1.3: install over it; 0.1.3’s machine folder and data folders are used as they are, with nothing else to do.</p>
+<p>From 0.1.2 or earlier: those versions’ machine folder (key store, identity registry, settings) and data folders are left unread, and this version starts from an empty machine folder. A recorder’s ledger comes across through a ledger mirror, one step by hand:</p>
 <ol>
-<li>In 0.1.2, “Export ledger mirror” to a folder outside the machine folder, then quit.</li>
+<li>In 0.1.2 (or earlier), “Export ledger mirror” to a folder outside the machine folder, then quit.</li>
 <li>Move the earlier version’s machine folder aside together with its pointer file (where both are: <a href="formats.html#machine">The machine folder</a>).</li>
 <li>Start this version, set a passcode and import the identity with the same recovery phrase.</li>
 <li>When the wizard reaches “Create the ledger”, click “Adopt existing ledger folder”, choose the mirror’s <code>author</code> folder and press “Adopt in place”: every entry is checked again and the ledger is checked against this key’s records on chain, and the step is done. Adoption takes one whole ledger, with exactly one creation entry; a data folder that has its own ledger takes that same ledger alone.</li>
 <li>Run the ledger check on the Ledger page and see it answer “OK”.</li>
 </ol>
+<h3 id="across">Checking across versions</h3>
+<ul>
+<li>From this version a folder record’s manifest joins paths with <code>/</code> everywhere. A folder signed on Windows by an earlier version checks out under this version on every system; a folder this version signs on Windows fails to check out under 0.1.3 or earlier on Windows, so the other side should upgrade to this version.</li>
+<li>The encrypted record package is a format this version adds; 0.1.3 and earlier cannot open it, so its recipient needs this version.</li>
+</ul>
 <h2 id="cli">Command-line output</h2>
-<p>The output keys and the refusal reasons each form a closed table, and the exit codes are five fixed values; scripts depend on them. So the meanings of keys and exit codes stay stable, and new information comes as new keys; added refusals and changes to what a refusal covers are written into <code>CLI-SCHEMA.md</code> at the same time and listed in the change log; tests check that document against the code item by item. The first line of standard error, <code>&lt;REASON&gt; &lt;subject&gt;</code>, is part of the contract; the lines for people after it follow the system’s language, stay outside the contract, and their wording can improve at any time. <code>zikaron contract</code> prints this contract.</p>
+<p>The output keys and the refusal reasons each form a closed table, and the exit codes are five fixed values; scripts depend on them. So the meanings of keys and exit codes stay stable, and new information comes as new keys; added refusals and changes to what a refusal covers are written into <code>CLI-SCHEMA.md</code> at the same time and listed in the change log; tests check that document against the code item by item. The first line of standard error, <code>&lt;REASON&gt; &lt;subject&gt;</code>, is part of the contract; the lines for people after it follow the system’s language, stay outside the contract, and their wording can improve at any time. <code>zikaron contract</code> prints this contract. The messages of <code>mcp</code> are JSON-RPC and the Model Context Protocol’s own, outside both tables; the protocol versions it speaks are in section 13 of <code>CLI-SCHEMA.md</code>.</p>
 <h2 id="words">Verdict tokens stay as written</h2>
 <p><code>GREEN</code>, <code>PARTIAL</code>, <code>FAIL</code>, <code>COMPLETE</code>, <code>GAPS</code> and the like are written by the cores and stay as they are in machine-readable output. The interface renders them for people as “All passed”, “Has gaps” and so on, with the original token under Details.</p>
 <h2 id="time">Time</h2>

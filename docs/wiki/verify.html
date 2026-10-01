@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/verify.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -37,7 +37,7 @@
 <li>收到了作品文件和条款文件的，也一起放进「文件」和「条款」两格。</li>
 <li>按「核验」。</li>
 </ol>
-<p>应用逐项检查六件事，每项一盏灯：</p>
+<p>应用逐项检查六件事，每项一行：</p>
 <dl>
 <div><dt>授权签名</dt><dd>确由签发者的密钥签署。</dd></div>
 <div><dt>签发者账本完整</dt><dd>签发者的账本环环相扣。</dd></div>
@@ -46,27 +46,32 @@
 <div><dt>在有效期内</dt><dd>此刻落在授权写明的期限之内。</dd></div>
 <div><dt>未被撤销</dt><dd>读完签发者的整本账，这份授权依然有效。</dd></div>
 </dl>
-<p>结果是三种之一：</p>
+<p>结果卡头一行是结论，三种之一：</p>
 <div class="tw"><table>
-<thead><tr><th>结果</th><th>怎么办</th></tr></thead>
+<thead><tr><th>结论</th><th>怎么办</th></tr></thead>
 <tbody>
-<tr><td>六项全部通过</td><td>可以放心用。放了文件和条款的，再看它们是否「相符」</td></tr>
-<tr><td>有缺项</td><td>有的项还在等结果，灰灯旁写着原因。过几分钟再核一次，或请对方补齐材料</td></tr>
-<tr><td>未通过</td><td>查出了问题，暂缓使用，与对方核实</td></tr>
+<tr><td>全部相符</td><td>六项全部通过，放了的文件和条款也都相符，可以放心用</td></tr>
+<tr><td>未全部核成</td><td>有的项还在等结果，灰灯旁写着原因。过几分钟再核一次，或请对方补齐材料</td></tr>
+<tr><td>N 项不符</td><td>查出了问题，暂缓使用，与对方核实</td></tr>
 </tbody></table></div>
 <p>只有授权码时，能核对签名和有效期；要完整核验，请对方发授权文件。</p>
 <h2 id="record">核验记录包</h2>
-<p>打开「核验 › 核验记录」，把记录包（<code>.zkit</code> 文件或文件夹）拖进「拖入记录包或记录文件」，放进去即开始核验。结论是两种之一：</p>
+<p>打开「核验 › 核验记录」，把记录包（<code>.zkit</code> 文件或文件夹）拖进「拖入记录包或记录文件」，放进去即开始核验。结论是三种之一：</p>
 <ul>
-<li><b>全部相符：</b>记录包完整，签名有效，每件记录都已上链。包里带了哪些原件、是否相符，看下面「逐条记录」的「包内原件」一列。</li>
-<li><b>有 N 处不符：</b>有地方对不上，请与对方核实后再接收。</li>
+<li><b>记录包完整，签名有效：</b>记录包过了核验，原件都对得上。有记录还没上链时，下面另起一行「上链状态」，写「N 条未上链」。核的是单个记录文件时，通过写「全部相符」。</li>
+<li><b>有 N 处不符。：</b>有地方对不上，请与对方核实后再接收。</li>
+<li><b>记录包校验未通过：</b>后面写着原因，这个包本身不成立。</li>
 </ul>
-<p>「逐条记录」表每件记录一行，写着是否已上链和最早上链的时间。</p>
+<p>「逐条记录」每件记录一行，写着是否已上链。包里的原件与记录对不上时，名字下面写「包内原件 ✗」；包里没有原件时写「包内原件 缺」。最早上链的时间在「详细信息」的「首锚位置」里。</p>
+<p>加密给你的记录包同样拖进这里。应用用本机的各个身份逐个试开，打得开即照常核验；都打不开时提示「本机的身份都不是这份记录包的接收方」。在别处放入加密记录包，会提示「这是加密记录包，请在核验页打开」。</p>
+<h2 id="originals">取出原件</h2>
+<p>记录包核验通过、包里有与记录对得上的原件时，结论右边的「取出原件」可以按。在弹窗里看「将取出」的清单，按底栏左侧的「选择目录」选好文件夹（选好的路径写在「取出到」一行），按「确认取出」，提示「已取出 N 份原件」即完成。原件照原名取出，签过的文件夹整个取出。</p>
+<p>所选文件夹里已有同名的文件或文件夹时，这一批一份也不取，那个文件夹保持原样；换一个文件夹，或挪开同名的，再取一次。</p>
 <h2 id="chains">对方用的是别的链</h2>
-<p>记录包写明了它锚在哪条链。那条链还没加进你的设置时，页上会出现提示，按「添加」，到「设置 › 网络」补上节点即可。核验会读你的主网络，加上「只读网络」里的每一条链。</p>
+<p>记录包写明了它锚在哪条链。那条链还没加进你的设置时，页上会出现提示，按「添加」，在打开的「新网络」弹窗里填上节点，按「保存」。核验会读你的主网络，加上「只读网络」里的每一条链；某个节点还没同步到登记合约部署的那一块时，应用照其余节点读。</p>
 <h2 id="others">查看他人账本</h2>
 <p>「核验 › 查看他人账本」：填对方的「作者地址」，按「读取」，就能看到对方上链过的记录和签发过的授权。</p>
-<div class="pn"><a href="kits.html"><span>上一页</span>出示</a><a class="nx" href="evidence.html"><span>下一页</span>一条记录证明什么</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#grant">核验授权</a><a href="#record">核验记录包</a><a href="#chains">对方用的是别的链</a><a href="#others">查看他人账本</a></nav></div>
+<div class="pn"><a href="kits.html"><span>上一页</span>出示</a><a class="nx" href="evidence.html"><span>下一页</span>一条记录证明什么</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#grant">核验授权</a><a href="#record">核验记录包</a><a href="#originals">取出原件</a><a href="#chains">对方用的是别的链</a><a href="#others">查看他人账本</a></nav></div>
 <script src="../../site.js?v=db416d51" defer></script>
 </body>
 </html>

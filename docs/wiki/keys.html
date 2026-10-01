@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/keys.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -50,13 +50,14 @@
 <h2 id="backup">整机备份</h2>
 <ol>
 <li>打开「设置 › 本机数据」，按「导出备份」。</li>
-<li>输入口令，设一个备份密码（至少 8 位），选保存位置，按「导出」。</li>
+<li>设一个备份密码（至少 8 位）并再输一次，输入本机口令，按「导出」。保存位置默认是上次的目录，可按「选择目录」改。</li>
 </ol>
-<p>一个文件就能恢复整台机器的身份、账本和设置。应用写完会读回核对一遍，提示「已导出备份」才算成功。备份那盏灯：绿色是最新；黄色是之后又有新记录，写着几条还没备份；灰色是从没备份过；红色是上次失败了，请重新导出。</p>
+<p>一个文件就能恢复整台机器的身份、账本和设置。应用写完会读回核对一遍，提示「已导出备份」才算成功。备份到了哪里，看「设置 › 本机数据」顶上的「上次备份」：写着上次的时刻，从没备份过写「从未」；之后又有新记录时，时刻后面写着几条，这一格变成琥珀色。「关于」页「设置检查」的「整机备份」一行，没备份好时右边有「导出备份」。</p>
 <p>恢复时，在「设置 › 本机数据」按「从备份恢复」，选备份文件，填备份密码和本机口令。恢复之后，这台电脑上的内容换成备份里的；「经凭据操作」回到关，要用时重新打开。</p>
 <h2 id="identities">多个身份</h2>
 <p>点左栏顶上的身份牌，打开「切换身份」：可以切换、「新建身份」或「导入密钥」。每个身份有自己的密钥、网络和账本。</p>
 <p>在别处用过的密钥导入进来后，先只能读：应用把它在链上的记录和本机账本对一遍，对上了才能写。对不上时，从那台机器的整机备份「取回账本」，或在「设置 › 本机数据」「高级选项」里用「收编已有账本目录」接管那本账的文件夹或账本镜像。</p>
+<p>「设置 › 身份密钥」的「详细信息」里，密钥地址下面一行是「公钥」，旁边有复制键。别人要把记录包加密给你时，把它发给对方，见<a href="kits.html#sealed">只给一个人打开</a>。</p>
 <h2 id="handover">换一把新密钥</h2>
 <p>担心密钥泄露，或要把账本交给别人续写，用「账本 › 更多 › 换密钥或移交」：填新密钥的地址，确认后上链。之后这本账由新密钥接着写，本机只能读。</p>
 <h2 id="rules">身份密钥怎么用才安全</h2>

@@ -555,7 +555,8 @@
   function play(si, quick) {
     if (si === active) { pending = null; return; }
     // 滑到只有正文的一幕:沙不飞走,原地散开淡去;从那里滑回刚才那一幕,沙在原地聚回来
-    var tgt = SCENES[si];
+    // 新的一幕作数,还在等着备好的那一幕作罢:否则它备好后会补演出来,字叠在眼前这一幕上
+    var tgt = SCENES[si]; pending = null;
     if (tgt.vanish && to.data && !to.data.drain) { active = si; vanTo = reduced ? 0 : 1; if (reduced) van = 1; captionAt = time + .05; hideCaps(); return; }
     if (vanTo && to.data && to.data.sc === tgt) { active = si; vanTo = 0; captionAt = time + .1; hideCaps(); return; }
     // 同一片景(工具与深入了解的海滩):沙不动,只换字和卡片

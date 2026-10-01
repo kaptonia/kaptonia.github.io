@@ -11,11 +11,11 @@ title: 仓库结构与分层
 <tr><td><code>crates/zikaron-store</code></td><td>账本的磁盘读写，只用标准库与 <code>zikaron-os</code>。</td></tr>
 <tr><td><code>crates/zikaron-net</code></td><td>传输：到节点与远端文件的一趟 HTTP/HTTPS 问答，含代理、多地址拨号与连接复用，TLS 配置只在这一处，以及跑系统代理配置脚本的沙箱(QuickJS)。</td></tr>
 <tr><td><code>crates/zikaron-anchor</code></td><td>链上操作：扫描上链记录、JSON-RPC、估算与发送上链交易；几个节点之间怎样比对的判读表、限流时怎样再问的等待表、节点拒答的分类表，以及费用、gas 额度与加价重发的规则，都在这里，由应用与命令行共用。</td></tr>
-<tr><td><code>crates/zikaron-cli</code></td><td>命令行 <code>zikaron</code>：经桌面代做(<code>--home</code>)的一端，经凭据读写数据目录与发队列的一端，以及交接(<code>hand-over</code>、<code>take-over</code>)。</td></tr>
-<tr><td><code>crates/zikaron-glue</code></td><td>记录包与授权文件的读写、账本镜像、本机通道的报文格式、单文件容器(<code>.zkit</code>、<code>.zkgrant</code>、<code>.zkhand</code>)、一件记录的核验判法(<code>recordcheck</code>)，以及应用与命令行共用的约定。</td></tr>
-<tr><td><code>crates/zikaron-os</code></td><td>随操作系统而异的几样：系统随机数、只本人可读写的文件、落盘同步、替换式改名与只落在空名字上的落名、系统代理、只归本进程的锁、主目录与机器目录的位置、「启用 zikaron 命令」、抹去内存里的秘密，以及命令行与桌面之间的本机通道。</td></tr>
-<tr><td><code>crates/zikaron-seal</code></td><td>应用与命令行共用的封存层：每个本机文件的加封与文件名、密钥库、数据目录里加封的账本、机器设置里两端都读的几项、命令行的凭据、收编与交接清单。</td></tr>
-<tr><td><code>crates/zikaron-send</code></td><td>发送器：桌面的待上链队列、经桌面的 <code>anchor --home</code> 与经凭据的 <code>anchor --ledger</code> 共用的一个；读链、出口检查、写闸、队列的锁与步骤、签发与等收据，以及命令行直发 <code>anchor</code> 的记录(<code>cli-sent/</code>)。</td></tr>
+<tr><td><code>crates/zikaron-cli</code></td><td>命令行 <code>zikaron</code>：经桌面代做(<code>--home</code>)的一端，经凭据读写数据目录与发队列的一端，交接(<code>hand-over</code>、<code>take-over</code>)，以及经模型上下文协议供 AI 应用调用的 <code>zikaron mcp</code>(<code>mcp.rs</code>)。</td></tr>
+<tr><td><code>crates/zikaron-glue</code></td><td>记录包与授权文件的读写、账本镜像、本机通道的报文格式、单文件容器(<code>.zkit</code>、<code>.zkgrant</code>、<code>.zkhand</code>)、一件记录的核验判法(<code>recordcheck</code>)、取出原件(<code>extract</code>)、加密记录包的格式常量与文件头识别(<code>addressed</code>)、文件夹存证的清单写法(<code>recording</code>)，以及应用与命令行共用的约定。</td></tr>
+<tr><td><code>crates/zikaron-os</code></td><td>随操作系统而异的几样：系统随机数、只本人可读写的文件、落盘同步、替换式改名与只落在空名字上的落名、系统代理、只归本进程的锁、主目录与机器目录的位置、「启用 zikaron 命令」、抹去内存里的秘密、窗口底下的系统材质(macOS 的玻璃或活力材质、Windows 11 的 Mica)、系统的「减少动态效果」，以及命令行与桌面之间的本机通道。</td></tr>
+<tr><td><code>crates/zikaron-seal</code></td><td>应用与命令行共用的封存层：每个本机文件的加封与文件名、密钥库、数据目录里加封的账本、机器设置里两端都读的几项、命令行的凭据、收编与交接清单、加密记录包的加密与打开(<code>addressed</code>)、只读网络表的读法(<code>readnets</code>)。</td></tr>
+<tr><td><code>crates/zikaron-send</code></td><td>发送器：桌面的待上链队列、经桌面的 <code>anchor --home</code> 与经凭据的 <code>anchor --ledger</code> 共用的一个；读链、出口检查、写闸、队列的锁与步骤、签发与等收据，以及命令行直发 <code>anchor</code> 的记录(<code>cli-sent/</code>)；由地址在链上找接收方公钥(<code>recipient</code>)与只读网络的指纹闸(<code>fingerprint</code>)。</td></tr>
 <tr><td><code>crates/zikaron-pack</code></td><td>打包件：第三方许可清单生成器，去掉包里构建机信息的几步，路径映射与复核，AppImage 运行时核对，以及 Windows 包的排布。</td></tr>
 <tr><td><code>crates/zikaron-ui</code></td><td>控件库与外观。</td></tr>
 <tr><td><code>crates/app</code></td><td>桌面应用，含本机通道的桌面一端。<code>crates/app/local-data-standard.md</code> 写明本机加密文件的格式。</td></tr>
@@ -42,11 +42,11 @@ title: 仓库结构与分层
 <div><dt>界面只呈现</dt><dd>条目是否合法、授权是否有效，由核给出结论，界面负责呈现。界面中出现自行判断语法的代码，应移入核。命令行经 <code>--home</code> 交来的请求，在桌面里走与点按同一条动作路径。</dd></div>
 <div><dt>对接层只组装</dt><dd>命令行与胶水代码把参数组装成输入、调用核、选定退出码；核写出的字节原样传出，键名与取值保持不变。</dd></div>
 <div><dt>判据原样</dt><dd>两个冻结核由法文里的摘要钉住，登记合约由代码哈希钉住，这些字节保持原样。对其有异议，请提交议题，见<a href="compat.html">兼容与演进</a>。</dd></div>
-<div><dt>核验页只读链</dt><dd>核验授权、核验记录、查看他人账本三页读输入与链上数据，一笔交易也不发；写进本机的只有地址簿、快照和核验结果档。</dd></div>
-<div><dt>身份密钥只签账本</dt><dd>应用里的密钥只用于签署条目、为导入连署，以及发送上链交易；付款、钱包、委托等功能交由其他软件。</dd></div>
+<div><dt>核验页只读链</dt><dd>核验授权、核验记录、查看他人账本三页读输入与链上数据，一笔交易也不发；写进本机的只有地址簿、快照、核验结果档，以及用户按「取出原件」选定的文件夹里取出的原件。</dd></div>
+<div><dt>身份密钥只签账本</dt><dd>应用里的密钥只用于签署条目、为导入连署、发送上链交易，以及解开加密给这个身份的记录包(只做一次密钥协商，一个字节也不签)；付款、钱包、委托等功能交由其他软件。</dd></div>
 </dl>
 <h2 id="one">一处实现，处处复用</h2>
-<p>同一判断只实现一次。授权的六项核验由 <code>zikaron-kit</code> 提供，核验页、命令行与「我的授权」的定期复核共用这一实现，读数亦然。应用与命令行另外共用：授权文件的读法（<code>zikaron_glue::grantfile</code>）、账本镜像的布局（<code>zikaron_glue::mirror</code>）、记一份文件的约定（<code>zikaron_glue::recording</code>，<code>history --file</code> 用的就是它）、费用、估算 gas 与加价重发的规则（<code>zikaron-anchor</code>）、节点之间的判读表与限流再问表（<code>zikaron_anchor::judge</code>、<code>zikaron_anchor::patience</code>）、本机加密文件、密钥库与命令行的凭据（<code>zikaron-seal</code>）、待上链的发送（<code>zikaron-send</code>：桌面的队列、经桌面的 <code>anchor --home</code> 与经凭据的 <code>anchor --ledger</code> 同一个发送器）、一件记录的核验（<code>zikaron_glue::recordcheck</code>，桌面「核验记录」与 <code>kit-verify</code> 共用）、单文件记录包、授权文件与交接件的容器（<code>zikaron_glue::container</code>）、本机通道的两端（<code>zikaron_glue::door</code>、<code>zikaron_os::door</code>）、机器目录的查找（<code>zikaron_os::machine</code>），以及唯一的一份 TLS 配置与代理选择（<code>zikaron-net</code>）。因此同一输入在任何入口都得到同一结论。</p>
+<p>同一判断只实现一次。授权的六项核验由 <code>zikaron-kit</code> 提供，核验页、命令行与「我的授权」的定期复核共用这一实现，读数亦然。应用与命令行另外共用：授权文件的读法（<code>zikaron_glue::grantfile</code>）、账本镜像的布局（<code>zikaron_glue::mirror</code>）、记一份文件的约定（<code>zikaron_glue::recording</code>，<code>history --file</code> 用的就是它）、费用、估算 gas 与加价重发的规则（<code>zikaron-anchor</code>）、节点之间的判读表与限流再问表（<code>zikaron_anchor::judge</code>、<code>zikaron_anchor::patience</code>）、本机加密文件、密钥库与命令行的凭据（<code>zikaron-seal</code>）、待上链的发送（<code>zikaron-send</code>：桌面的队列、经桌面的 <code>anchor --home</code> 与经凭据的 <code>anchor --ledger</code> 同一个发送器）、一件记录的核验（<code>zikaron_glue::recordcheck</code>，桌面「核验记录」与 <code>kit-verify</code> 共用）、取出原件（<code>zikaron_glue::extract</code>，桌面「取出原件」与 <code>kit-verify --originals-to</code> 共用）、加密记录包的加密与打开（<code>zikaron_seal::addressed</code>）、由地址在链上找接收方公钥（<code>zikaron_send::recipient</code>）、只读网络的指纹闸（<code>zikaron_send::fingerprint</code>）、只读网络表的读法（<code>zikaron_seal::readnets</code>）、单文件记录包、授权文件与交接件的容器（<code>zikaron_glue::container</code>）、本机通道的两端（<code>zikaron_glue::door</code>、<code>zikaron_os::door</code>）、机器目录的查找（<code>zikaron_os::machine</code>），以及唯一的一份 TLS 配置与代理选择（<code>zikaron-net</code>）。因此同一输入在任何入口都得到同一结论。</p>
 <p>每一种账本条目都有对应的写入子命令。为应用新增操作时，先在命令行中跑通，再做界面。</p>
 <h2 id="cite">注释中的法条引用</h2>
 <p>代码注释以 <code>law §N</code> 指 zikaron/1 的条文(kit 一侧的代码里也写作 <code>parent law §N</code>)，以 <code>kit law §N</code> 指 zikaron.kit/1 的条文。修改一段实现之前，先读它所引的条文。</p>

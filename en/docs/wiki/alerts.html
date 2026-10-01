@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/alerts.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -31,15 +31,15 @@
 <div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Settings and alerts</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">A market of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">Recording and anchoring</a><a href="grants.html">Grants</a><a href="kits.html">Presenting records</a><a href="verify.html">Verifying</a><a href="evidence.html">What a record proves</a><a href="keys.html">Keys and backups</a><a href="cli.html">Command line</a><a href="ai.html">AI Agents and remote operation</a><a href="alerts.html" class=on aria-current=page>Settings and alerts</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
 <div class="stream"><article class="art" data-slug="alerts" data-prev="ai.html" data-next="faq.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Settings and alerts</h1><p class="lede">Whatever needs your attention gathers on the “Alerts” page in the sidebar; the number beside “Alerts” counts the amber and red items.</p>
 <h2 id="alerts">The Alerts page</h2>
-<p>Each row is one matter: a light, the item and where it stands. A row that needs action has “Open …” at its right, which takes you straight to where it is dealt with.</p>
+<p>The page lists only what needs your attention (amber and red), one matter per row: a light, the item and where it stands. Click a row to go where it is dealt with; the “Pending” and “Queue backlog” rows carry “Put all on chain” at their right. When nothing needs dealing with, the page says “Nothing needs your attention”.</p>
 <div class="tw"><table>
 <thead><tr><th>Recorder</th><th>User</th></tr></thead>
 <tbody>
 <tr><td>Pending, Queue backlog</td><td>My grants expiring</td></tr>
 <tr><td>Grants expiring</td><td>Grant revoked</td></tr>
-<tr><td>Whole-machine backup</td><td>Whole-machine backup</td></tr>
 <tr><td>Ledger check result</td><td>Ledger handover, Upstream issue</td></tr>
 </tbody></table></div>
+<p>Where your whole-machine backup stands shows at “Last backup” in Settings › Local data; see <a href="keys.html#backup">Whole-machine backup</a>.</p>
 <p>When something important comes up, the window alerts you once (on a Mac the Dock icon bounces) with a toast starting “Alert:”. Each matter alerts once.</p>
 <h2 id="sync">Syncing</h2>
 <p>The status line at the bottom of the sidebar shows “Last synced HH:MM” and the like. Click the sync icon at its right end and the app reads the chain in the background: it checks the balance, compares your ledger with the chain and re-verifies the grants you hold. It also runs on its own from time to time; set how often in Settings › Notifications.</p>
@@ -53,15 +53,16 @@
 <tr><td>Network</td><td>Nodes, auto put on chain, proxy, publish address and read-only networks</td></tr>
 <tr><td>Notifications</td><td>How often the automatic checks run</td></tr>
 <tr><td>Local data</td><td>Whole-machine backup and restore, ledger mirror, where data lives, adopting a ledger</td></tr>
-<tr><td>Command line</td><td>Enabling the zikaron command; whether the command line works through the desktop app or with a credential; putting on chain from the command line. See <a href="cli.html">Command line</a></td></tr>
-<tr><td>About</td><td>Version, third-party licences, setup check, running the wizard again</td></tr>
+<tr><td>Command line and AI control</td><td>Enabling the zikaron command; connecting an AI app; whether the command line works through the desktop app or with a credential; putting on chain from the command line. See <a href="cli.html">Command line</a> and <a href="ai.html">AI Agents and remote operation</a></td></tr>
+<tr><td>About</td><td>Version, setup check, running the wizard again, self-check, third-party licences</td></tr>
 </tbody></table></div>
-<p>The “Setup check” under About lights each item; anything still open is marked “To set up”, and you can finish it from there.</p>
+<p>“Setup check” under About has a row per item: done items are ticked, and an open item carries a key at its right to finish it, such as “Export backup” or “Edit nodes”.</p>
 <h2 id="buttons">Buttons</h2>
 <dl>
 <div><dt>Blue key</dt><dd>The main action on this screen.</dd></div>
-<div><dt>Solid red key</dt><dd>Writes to your ledger or sends to the chain the moment you press it; it appears on the final confirmation card alone.</dd></div>
-<div><dt>Other keys</dt><dd>Other actions, or opening the confirmation card or the next step. Writing to the ledger or the chain happens on the confirmation card alone.</dd></div>
+<div><dt>Solid red key</dt><dd>Writes to your ledger or sends to the chain the moment you press it; it appears on the card that writes alone.</dd></div>
+<div><dt>Red delete key</dt><dd>The last step of deleting an identity or a record, and the second confirmation when removing a local copy or a read-only network.</dd></div>
+<div><dt>Other keys</dt><dd>Other actions, or opening the confirmation card or the next step. Writing to the ledger or the chain happens with the solid red key on a card.</dd></div>
 </dl>
 <h2 id="keys">Shortcuts</h2>
 <div class="tw"><table>

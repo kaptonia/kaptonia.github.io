@@ -18,6 +18,7 @@ sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 
 }}
 <p>Linux 上的系统文件对话框走桌面门户，所以运行时要有 <code>xdg-desktop-portal</code> 和一个后端；缺少门户时，把文件直接拖进窗口即可。拖放经 X11：有 X 显示时（包括 Wayland 桌面上的 XWayland）窗口走 X11，拖放要在有 X 显示的会话里用。</p>
 <p>构建时，<code>crates/app/build.rs</code> 用 <code>cargo metadata --locked --offline</code> 按目标平台从 <code>Cargo.lock</code> 现生成第三方许可清单，随应用一起带着；清单生成不了，构建即失败。依赖增删之后，清单自动跟着变。工作区的发布构建开着整数溢出检查，溢出即具名停下；测试与持续集成都用发布构建跑，测的就是发出去的那一份。</p>
+<p>窗口在 macOS 上经 wgpu 走 Metal 绘制，在 Windows 与 Linux 上走 OpenGL。macOS 的构建在链接时记下 SDK 26(<code>crates/app/macos_sdk.rs</code>)，macOS 26 起窗角与窗口按钮照系统新规；最低运行版本取 <code>MACOSX_DEPLOYMENT_TARGET</code>，未设时 arm64 为 11.0。</p>
 <h2 id="build">构建与测试</h2>
 {{code:
 tar -xzf zikaron-{{VER}}-src.tar.gz
@@ -67,4 +68,4 @@ HOME=$T ./target/release/app
 <p>Windows 上先读 <code>USERPROFILE</code>：把它指向一个空目录后启动，机器数据落在其中的 <code>AppData\Local\ZIKARON\</code>，同样与日常数据隔离。命令行按同一规则找机器目录(<code>--home</code>、凭据、收编与交接清单、<code>cli-sent/</code> 都在那里)，隔离试用时给它同一个 <code>HOME</code> 或 <code>USERPROFILE</code>。「启用 zikaron 命令」写入的位置，可以用环境变量 <code>ZIKARON_CLI_LINK_DIR</code> 改到别处。</p>
 <p>试用时，在向导里选「自定义」，再到「设置 › 网络 › 编辑节点」的「预设」里选 Sepolia 测试网；或用「新建身份」，在「网络」里选「Sepolia 测试网」，见 Wiki 的<a href="../wiki/ledger.html#networks">网络</a>。测试用的密钥用 <code>zikaron keygen</code> 现场生成，用后即弃。</p>
 <h2 id="fonts">内嵌字体</h2>
-<p>界面的西文字体 Inter 与等宽字体 JetBrains Mono 内嵌于应用。中文在 macOS 上取自系统的苹方，在 Windows 上取自系统的微软雅黑（Microsoft YaHei UI，加粗用它的粗体），找不到时用内嵌的 Noto Sans SC，在 Linux 上用内嵌的 Noto Sans SC；所以 Noto Sans SC 只随 Windows 与 Linux 的构建内嵌。内嵌字体都以 SIL OFL 1.1 发布，许可文本在 <code>crates/zikaron-ui/fonts/</code>。</p>
+<p>界面的西文字体 Inter(常规、中等、半粗三个字重)与等宽字体 JetBrains Mono 内嵌于应用；中等与半粗两种文字里的西文字母、数字与符号取 Inter 的对应字重，中文随后取各角色自己的字体。中文在 macOS 上取自系统的苹方，在 Windows 上取自系统的微软雅黑（Microsoft YaHei UI，加粗用它的粗体），找不到时用内嵌的 Noto Sans SC，在 Linux 上用内嵌的 Noto Sans SC；所以 Noto Sans SC 只随 Windows 与 Linux 的构建内嵌。内嵌字体都以 SIL OFL 1.1 发布，许可文本在 <code>crates/zikaron-ui/fonts/</code>。</p>

@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/dev/fork.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -39,7 +39,7 @@
 <p>修改界面、增加功能、更换默认设置，都属工具层，尽可自由去做。请注意三点：</p>
 <dl>
 <div><dt>另取名称</dt><dd>让用户能区分两个软件。</dd></div>
-<div><dt>另设机器目录</dt><dd>让两个软件的密钥库与数据分开存放：macOS 与 Linux 上换掉 <code>~/.zikaron-desk</code> 与 <code>~/.zikaron-desk.d/</code> 这两个名字，Windows 上换掉 <code>%LOCALAPPDATA%</code> 下的 <code>ZIKARON</code> 文件夹名。要换的字面都登记在 <code>crates/app/family-literals.json</code> 里，例如本机加密文件的格式字面、本机通道的名字、「启用 zikaron 命令」放的链接名、<code>User-Agent</code>、指针文件名、记录包与交接件的扩展名（<code>zkit</code>、<code>zkhand</code>）、交接件里说明文件的名字、交接清单的文件名；不换的话，两个软件的本机通道与命令行链接会撞在一起。</dd></div>
+<div><dt>另设机器目录</dt><dd>让两个软件的密钥库与数据分开存放：macOS 与 Linux 上换掉 <code>~/.zikaron-desk</code> 与 <code>~/.zikaron-desk.d/</code> 这两个名字，Windows 上换掉 <code>%LOCALAPPDATA%</code> 下的 <code>ZIKARON</code> 文件夹名。要换的字面都登记在 <code>crates/app/family-literals.json</code> 里，例如本机加密文件的格式字面、本机通道的名字、「启用 zikaron 命令」放的链接名、<code>User-Agent</code>、指针文件名、记录包与交接件的扩展名（<code>zkit</code>、<code>zkhand</code>）、交接件里说明文件的名字、交接清单的文件名、加密记录包的格式标记与密钥派生信息串（<code>zikaron-kit-addressed</code>、<code>zikaron-kit-addressed/1</code>）；不换的话，两个软件的本机通道与命令行链接会撞在一起。</dd></div>
 <div><dt>保持对法合规</dt><dd>你的分叉写出的账本，原版可以读取；原版写出的账本，你的分叉也可以读取。</dd></div>
 </dl>
 <h2 id="rules">修改规则</h2>

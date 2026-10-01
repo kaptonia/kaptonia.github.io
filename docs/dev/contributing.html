@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/dev/contributing.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -35,7 +35,7 @@
 <thead><tr><th>改动内容</th><th>途径</th></tr></thead>
 <tbody>
 <tr><td>界面、文案、交互</td><td>合并请求，修改 <code>crates/app</code> 与 <code>crates/zikaron-ui</code>。</td></tr>
-<tr><td>命令行</td><td>合并请求。输出格式、参数、退出码或拒因变化时，同步修改 <code>CLI-SCHEMA.md</code>，测试会逐项对照；<code>zikaron contract</code> 由代码里的同一张表生成。经桌面的动词表在三处：<code>CLI-SCHEMA.md</code> 第 11 节、桌面的通道表与命令行的动词表，测试互相对照。</td></tr>
+<tr><td>命令行</td><td>合并请求。输出格式、参数、退出码或拒因变化时，同步修改 <code>CLI-SCHEMA.md</code>，测试会逐项对照；<code>zikaron contract</code> 由代码里的同一张表生成。经桌面的动词表在三处：<code>CLI-SCHEMA.md</code> 第 11 节、桌面的通道表与命令行的动词表，测试互相对照。<code>mcp</code> 的工具表由动词表读出，测试钉住工具清单，协议写在第 13 节。</td></tr>
 <tr><td>本机数据格式</td><td>合并请求，同步修改 <code>crates/app/local-data-standard.md</code>；测试向量在 <code>crates/app/tests/local_standard.rs</code>，逐字节核对。</td></tr>
 <tr><td>固定字面量</td><td>新增或改动文件魔数、格式名、通道名一类字面量时，登记在 <code>crates/app/family-literals.json</code>，测试双向对照每一项与代码里定义它的那一处。</td></tr>
 <tr><td>打包与持续集成</td><td>合并请求，修改 <code>packaging/</code>、<code>crates/zikaron-pack</code> 或 <code>.github/workflows/</code>。</td></tr>

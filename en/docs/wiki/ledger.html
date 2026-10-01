@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/ledger.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -33,10 +33,10 @@
 <h2 id="history">Recording</h2>
 <ol>
 <li>Drop a file onto Home or the Records page to open the “New record” card. Folders and Git repositories work too.</li>
-<li>Fill in “Record name”; left empty, the file name is used.</li>
-<li>Press “Add to ledger”, then press it again on the confirmation card.</li>
+<li>Fill in “Record name”; left empty, it takes the file’s full name, extension included.</li>
+<li>Press “Add to ledger” on the card; the record is written to the ledger and joins the pending queue.</li>
 </ol>
-<p>What the app records is the file’s <b>content fingerprint</b>: the same file always gives the same fingerprint, and changing one byte gives a wholly different one. The file itself stays where it is, and the app records its fingerprint. To record several files at once, drop them together into the drop area inside the “New record” card; each gets a record of its own.</p>
+<p>What the app records is the file’s <b>content fingerprint</b>: the same file always gives the same fingerprint, and changing one byte gives a wholly different one. The file itself stays where it is, and the app records its fingerprint. To record several files at once, drop them together onto the “New record” card while it is open; each gets a record of its own. A folder gives the same fingerprint on every system.</p>
 <ul>
 <li>Keep the original files safe. To prove something later, you show the very file that matches the fingerprint.</li>
 <li>Record names and notes travel with your ledger to whoever you give it to, and stay for good.</li>
@@ -46,13 +46,13 @@
 <p>Putting entries on chain sends your new records in one transaction to the blockchain. From then on, anyone can check that they existed by that moment.</p>
 <ol>
 <li>New records wait under “Pending”. Click the “Pending” card on Home, which opens the “Put on chain” card; or press “Put all on chain” in the “Pending” segment of the Records page.</li>
-<li>The card shows the number of entries and the gas cap.</li>
+<li>The card shows the number of entries, the gas estimate and the gas cap.</li>
 <li>Press “Confirm and send”. A few minutes later the state turns “Confirmed”.</li>
 </ol>
 <p>All the records in a batch travel in one transaction for the price of one, so sending several together costs less. You can close the app meanwhile; it picks up the wait when you open it again. The pending queue follows the ledger and the chain: entries the chain already holds leave the queue as on chain, and entries the chain lacks (adopted ones, say) join it after the next ledger check.</p>
 <ul>
 <li><b>When the balance falls short</b>, the message at the top says how much is needed and how much is there; press “Copy address” on it and send a little ETH.</li>
-<li><b>When a batch stays out of a block for long</b>, “Resend with higher fees” appears at the top of the Ledger page; it sends the batch again with higher fees, and the batch is paid for once.</li>
+<li><b>When a batch stays out of a block for long</b>, “Resend with higher fees” appears on the “Last batch” row of the ledger status card at the top of the Ledger page; it sends the batch again with higher fees, and the batch is paid for once.</li>
 <li><b>When some records in the batch are already on chain</b> (sent by the command line, say), the app sends nothing and says “Some records in this batch are already on chain; nothing was sent this time.”; once the ledger check takes those off the queue, send the rest.</li>
 <li><b>To send after every write</b>, turn on “Auto put on chain” in Settings › Network.</li>
 </ul>
@@ -67,7 +67,7 @@
 <tr><td>Confirmed</td><td>Checked against the chain: done</td></tr>
 <tr><td>Reverted, Not sent</td><td>This attempt did not go through; the record stays queued and can be sent again</td></tr>
 </tbody></table></div>
-<p>The ledger status at the top of the Ledger page reads “OK” or “Problems”. Every few minutes the app compares your ledger with the chain; when it says “Problems”, click it to see which item. The Ledger page’s “Unconfirmed” lists every entry the chain has not confirmed yet; with no ledger yet, a blue “Create the ledger” sits below the table.</p>
+<p>The ledger status card at the top of the Ledger page reads “OK” or “Problems”. Every few minutes the app compares your ledger with the chain; when it says “Problems”, open “Ledger check” on the card to see which item. The Ledger page’s “Unconfirmed” lists every entry the chain has not confirmed yet; with no ledger yet, a blue “Create the ledger” sits below the table.</p>
 <h2 id="fix">When something is wrong</h2>
 <p>A ledger only grows at the end. For an entry already written, there are two ways:</p>
 <ul>
@@ -83,7 +83,7 @@
 <tr><td>Arbitrum One, OP Mainnet</td><td>Fees usually a small fraction of mainnet’s</td></tr>
 <tr><td>Sepolia testnet</td><td>Free to try, with test coins</td></tr>
 </tbody></table></div>
-<p>Choose it in the “Network” field when you make an identity. The app comes with public nodes; to use nodes of your own, press “Edit nodes” in Settings › Network. To verify other people’s records anchored on another chain, add that chain under “Read-only networks” in Settings › Network.</p>
+<p>Choose it in the “Network” field when you make an identity. The app comes with public nodes; to use nodes of your own, press “Edit nodes” in Settings › Network, make the change in “Edit nodes and chain” and press “Save”. To verify other people’s records anchored on another chain, add that chain under “Read-only networks” in Settings › Network.</p>
 <p><b>VPN and proxy.</b> “Proxy” in Settings › Network decides how the app’s connections to nodes go out, one setting for every identity on this computer:</p>
 <dl>
 <div><dt>System</dt><dd>The default. Follows the system’s proxy settings: an automatic configuration script (PAC) address set in the system comes first, then a proxy entered in the system. The script has to be at an https address or on this computer; for a script served over http from another machine, fill in “Custom proxy”, or have it served over https.</dd></div>
@@ -97,7 +97,7 @@
 <li>Nodes still out of reach: find the VPN’s proxy address in the VPN app (HTTP, HTTPS, SOCKS5 or SOCKS4, with a user name and password if it has them) and enter it under “Custom proxy”.</li>
 <li>When the app says “The proxy cannot be reached.”, check the address; when it says “The proxy asks for a user name and password.” or “The proxy refused the user name and password.”, fill in the right ones under “Custom proxy”.</li>
 </ul>
-<p>When the command line works through the desktop app or puts entries on chain with a credential, it uses these settings too. On its own, the command line’s <code>--proxy system</code> (the default) follows the terminal’s <code>https_proxy</code>, <code>http_proxy</code>, <code>all_proxy</code> and <code>no_proxy</code> first, and the system’s proxy settings when none is set.</p>
+<p>When the command line works through the desktop app, or with a credential puts entries on chain, scans the chain or looks up an encryption recipient’s public key, it uses these settings too; with “System”, it follows the system’s proxy settings alone. On its own, the command line’s <code>--proxy system</code> (the default) follows the terminal’s <code>https_proxy</code>, <code>http_proxy</code> and <code>all_proxy</code> first (with <code>no_proxy</code>), and the system’s proxy settings when none of those three is set.</p>
 <div class="pn"><a href="start.html"><span>Previous</span>Getting started</a><a class="nx" href="grants.html"><span>Next</span>Grants</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#history">Recording</a><a href="#anchor">Putting it on chain</a><a href="#states">States</a><a href="#fix">When something is wrong</a><a href="#networks">Networks</a></nav></div>
 <script src="../../../site.js?v=db416d51" defer></script>
 </body>

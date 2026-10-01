@@ -2,12 +2,12 @@ ZIKARON 最简上手（给本机的 AI agent）
 1. 装客户端：问用户电脑上有没有装 ZIKARON 桌面版。没装的话，带用户从 https://kaptonia.github.io/use.html#desktop 下载，核对 SHA-256 后安装。
 2. 第一次打开，一步一步带用户做完这几件事，之后客户端就可以关掉，不必再开：
    - 设口令，把助记词抄在纸上，放在离线的地方。助记词和口令只由用户自己保管，不要让用户发给你。
-   - 在「设置 › 命令行」打开「启用 zikaron 命令」。
+   - 在「设置 › 命令行与 AI 控制」打开「启用 zikaron 命令」。
    - 在同一页「自动控制等级」里打开「经凭据操作」：输口令，有效期由用户自己选，也可以选「不过期」，按「打开」。
    - 告诉你「设置 › 本机数据」的「详细信息」里「数据目录」那一行的路径。
    - 关掉客户端。
 3. 开始工作：运行 zikaron contract，以它列出的子命令、参数和退出码为准，细节读仓库里的 CLI-SCHEMA.md。写账本的命令都带 --ledger "<数据目录里的 ledger 文件夹>"，不带 --key、--key-file 或 --home；上链用 zikaron anchor --ledger "<同一个文件夹>"。私钥一直在客户端的密钥库里，你不生成也不保管私钥。
-4. 日常：history --file 记录 → anchor --ledger 上链 → audit 核验；要分享就 kit-export 导出记录包，对方用 kit-verify 核验。几条记录攒在一起上链，一笔交易只付一次 gas。地址里的 ETH 不够付 gas 时，请用户充一点。
+4. 日常：history --file 记录 → anchor --ledger 上链 → audit 核验；要分享就 kit-export 导出记录包，对方用 kit-verify 核验；要只给对方看，kit-export 加 --to <地址> 或 --to-key <公钥>；kit-verify 加 --originals-to <文件夹> 取出原件。几条记录攒在一起上链，一笔交易只付一次 gas。地址里的 ETH 不够付 gas 时，请用户充一点。
 5. 什么时候才需要再开客户端：
    - 答 E_CREDENTIAL_EXPIRED 或 E_CREDENTIAL_MISSING：凭据到期了或被关掉了，请用户打开客户端，重新打开「经凭据操作」。
    - 有新版本：提醒用户安装，照发布说明升级，要手工迁移的先说明，用户同意再动手。

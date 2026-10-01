@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/keys.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -50,13 +50,14 @@
 <h2 id="backup">Whole-machine backup</h2>
 <ol>
 <li>Open Settings › Local data and press “Export backup”.</li>
-<li>Enter your passcode, set a backup password (at least 8 characters), choose where to save, and press “Export”.</li>
+<li>Set a backup password (at least 8 characters) and enter it again, enter your passcode, and press “Export”. It saves to the last folder used; “Choose folder” changes it.</li>
 </ol>
-<p>One file restores the identities, ledgers and settings of the whole computer. The app reads it back once written, and the backup counts once it says “Backup exported”. The backup light is green when up to date, amber when new records have come since (it says how many), grey when there has never been a backup, and red when the last one failed; export again.</p>
+<p>One file restores the identities, ledgers and settings of the whole computer. The app reads it back once written, and the backup counts once it says “Backup exported”. To see where your backups stand, look at “Last backup” at the top of Settings › Local data: it gives the time of the last one, or “Never”; when new records have come since, it adds how many and turns amber. The “Whole-machine backup” row of “Setup check” on the About page carries “Export backup” until the backup is up to date.</p>
 <p>To restore, press “Restore from backup” in Settings › Local data, choose the backup file, and enter the backup password and this computer’s passcode. Afterwards this computer holds what the backup holds, and “With a credential” is off; turn it on again when you need it.</p>
 <h2 id="identities">Several identities</h2>
 <p>Click the identity chip at the top of the sidebar to open “Switch identity”: switch, or use “New identity” or “Import key”. Each identity has its own keys, network and ledgers.</p>
 <p>A key used elsewhere starts read-only once imported: the app compares its records on chain with the ledger here, and writing opens once they line up. When they differ, fetch the ledger from that computer’s whole-machine backup with “Fetch ledger”, or take over that ledger’s folder or ledger mirror with “Adopt existing ledger folder” under “Advanced options” in Settings › Local data.</p>
+<p>Under “Details” in Settings › Identity key, the row below the key address is “Public key”, with a copy key beside it. When someone wants to encrypt a record kit to you, send them this; see <a href="kits.html#sealed">For one person’s eyes</a>.</p>
 <h2 id="handover">Moving to a new key</h2>
 <p>If you fear a key has leaked, or want someone else to carry on the ledger, use Ledger › More › “Key handover”: fill in the new key’s address, confirm, and put it on chain. From then on the new key writes this ledger, and this computer reads it.</p>
 <h2 id="rules">Using your identity key safely</h2>

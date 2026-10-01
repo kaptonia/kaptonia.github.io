@@ -20,8 +20,8 @@
 <link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=c218dafc">
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/ledger.html">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3a2be239">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=1787b408">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -33,10 +33,10 @@
 <h2 id="history">存证</h2>
 <ol>
 <li>把文件拖进首页或「记录存证」页，打开「新建存证」卡。文件夹和 Git 仓库也可以。</li>
-<li>写「记录名称」；空着时自动用文件名。</li>
-<li>按「加入账本」，在确认卡上再按一次。</li>
+<li>写「记录名称」；空着时自动填上文件的全名，扩展名照留。</li>
+<li>按卡上的「加入账本」，记录即写进账本、排进待上链。</li>
 </ol>
-<p>应用记下的是这份文件的<b>内容指纹</b>：同一份文件，算出的指纹永远相同；改动一个字节，指纹就全然不同。文件本身留在原处，应用只记下它的指纹。要一次记几份文件，把它们一起拖进「新建存证」卡里的拖放区，每份各记一条。</p>
+<p>应用记下的是这份文件的<b>内容指纹</b>：同一份文件，算出的指纹永远相同；改动一个字节，指纹就全然不同。文件本身留在原处，应用只记下它的指纹。要一次记几份文件，在「新建存证」卡开着时把它们一起拖到卡上，每份各记一条。文件夹在哪个系统上都算出同一个指纹。</p>
 <ul>
 <li>原文件请自己保管好。日后举证，要拿出与指纹一致的那一份。</li>
 <li>记录名称和注记会随账本交给别人看，写下之后一直保留。</li>
@@ -46,13 +46,13 @@
 <p>上链把账本里的新记录发进一笔交易，写进区块链。此后，任何人都能核对这些记录最迟在那一刻已经存在。</p>
 <ol>
 <li>新记录先进「待上链」。点首页的「待上链」卡，直接打开「上链」卡；或在「记录存证」页的「待上链」里按「全部上链」。</li>
-<li>卡上写着这一批的条数和 Gas 费上限。</li>
+<li>卡上写着这一批的条数、Gas 费估算和 Gas 费上限。</li>
 <li>按「确认上链」。几分钟后，状态变成「已确认」。</li>
 </ol>
 <p>一批记录装在同一笔交易里，只付一笔的费用，所以攒几条一起发更省。可以关掉应用，下次打开会接着等结果。待上链跟着账本与链走：链上已有的条目移出队列、记为已上链；账本里链上还没有的条目（例如收编进来的），在下一趟账本检查之后排进队列。</p>
 <ul>
 <li><b>余额不够时</b>，页顶的提示写着需要多少、现有多少，按提示上的「复制地址」去转一点 ETH。</li>
-<li><b>一批迟迟不入块时</b>，「账本」页顶上会出现「加价重发」，按它以更高的费用重发；同一批只付一次费。</li>
+<li><b>一批迟迟不入块时</b>，「账本」页顶上账本状态卡的「上一批」一行出现「加价重发」，按它以更高的费用重发；同一批只付一次费。</li>
 <li><b>这一批里有存证已在链上时</b>（例如命令行已把它送上链），应用一笔不发，提示「这一批里有存证已在链上，这一次一笔也没有发。」；等账本检查把那几条移出待上链，再发其余的。</li>
 <li><b>想每次写完就上链</b>，打开「设置 › 网络」的「自动上链」。</li>
 </ul>
@@ -67,7 +67,7 @@
 <tr><td>已确认</td><td>应用对着链核对过，完成</td></tr>
 <tr><td>已回滚、未发出</td><td>这一次没成，记录还在队里，可以再发</td></tr>
 </tbody></table></div>
-<p>「账本」页顶上有一行账本状态，写「正常」或「异常」。应用每隔几分钟把账本和链对一遍；写「异常」时，点开看是哪一项。「账本」页的「未确认」列出链上还没确认的每一条；还没有账本时，表下有蓝色的「创建账本」。</p>
+<p>「账本」页顶上的账本状态卡写「正常」或「异常」。应用每隔几分钟把账本和链对一遍；写「异常」时，点开卡上的「账本检查」看是哪一项。「账本」页的「未确认」列出链上还没确认的每一条；还没有账本时，表下有蓝色的「创建账本」。</p>
 <h2 id="fix">写错了怎么办</h2>
 <p>账本只往后添。已经写下的记录，用下面两种办法处理：</p>
 <ul>
@@ -83,7 +83,7 @@
 <tr><td>Arbitrum One、OP Mainnet</td><td>费用通常只有主网的零头</td></tr>
 <tr><td>Sepolia 测试网</td><td>免费试用，用的是测试币</td></tr>
 </tbody></table></div>
-<p>新建身份时在「网络」一格里选。应用自带公共节点；想用自己的节点，到「设置 › 网络」按「编辑节点」。核验别人锚在其他链上的记录，把那条链加进「设置 › 网络」的「只读网络」。</p>
+<p>新建身份时在「网络」一格里选。应用自带公共节点；想用自己的节点，到「设置 › 网络」按「编辑节点」，在「编辑节点与链」里改好，按「保存」。核验别人锚在其他链上的记录，把那条链加进「设置 › 网络」的「只读网络」。</p>
 <p><b>VPN 与代理。</b>「设置 › 网络」的「代理」决定应用连节点时从哪里出去，这台电脑上所有身份共用：</p>
 <dl>
 <div><dt>跟随系统代理</dt><dd>默认。照系统的代理设置走：系统填了自动配置脚本（PAC）地址时照脚本走，再是系统里手填的代理。脚本要在 https 地址上或本机上；在别的机器上、走 http 的脚本，改填「自定义代理」，或让网管改用 https 地址。</dd></div>
@@ -97,7 +97,7 @@
 <li>还是连不上节点：在 VPN 软件里找到它的代理地址（HTTP、HTTPS、SOCKS5 或 SOCKS4，带用户名与密码的也行），填进「自定义代理」。</li>
 <li>提示「连不上代理。」时，核对代理地址；提示「代理要用户名与密码。」或「代理不收所给的用户名与密码。」时，在「自定义代理」里填对用户名与密码。</li>
 </ul>
-<p>命令行经桌面 App 操作或经凭据上链时，用的也是这里的设置。纯命令行的 <code>--proxy system</code>（默认）先照终端的 <code>https_proxy</code>、<code>http_proxy</code>、<code>all_proxy</code>、<code>no_proxy</code> 走，这几项都没设才照系统的代理设置。</p>
+<p>命令行经桌面 App 操作，或经凭据上链、扫链、找加密接收方的公钥时，用的也是这里的设置；设为「跟随系统代理」时只照系统的代理设置。纯命令行的 <code>--proxy system</code>（默认）先照终端的 <code>https_proxy</code>、<code>http_proxy</code>、<code>all_proxy</code> 走（连同 <code>no_proxy</code>），这三项都没设才照系统的代理设置。</p>
 <div class="pn"><a href="start.html"><span>上一页</span>上手</a><a class="nx" href="grants.html"><span>下一页</span>授权</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#history">存证</a><a href="#anchor">上链</a><a href="#states">状态</a><a href="#fix">写错了怎么办</a><a href="#networks">网络</a></nav></div>
 <script src="../../site.js?v=db416d51" defer></script>
 </body>

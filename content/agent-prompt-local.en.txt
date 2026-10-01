@@ -2,12 +2,12 @@ ZIKARON quick start (for an AI agent on the user's computer)
 1. Install the app: ask whether ZIKARON Desk is on the user's computer. If not, walk them through downloading it from https://kaptonia.github.io/en/use.html#desktop, checking the SHA-256, then installing.
 2. At the first launch, walk the user through these steps; after them the app can be closed and stay closed:
    - Set a passcode and write the recovery words on paper, kept somewhere offline. The recovery words and the passcode stay with the user alone; ask them to keep both to themselves.
-   - Turn on "Enable the zikaron command" in Settings › Command line.
+   - Turn on "Enable the zikaron command" in Settings › Command line and AI control.
    - Under "Automation level" on the same page, turn on "With a credential": enter the passcode, let the user choose how long it lasts ("Does not expire" is one of the choices), and press "Turn on".
    - Tell you the path in the "Data folder" row under "Details" in Settings › Local data.
    - Close the app.
 3. Get to work: run zikaron contract and go by the subcommands, flags and exit codes it lists; the details are in the repository's CLI-SCHEMA.md. Every command that writes to the ledger carries --ledger "<the ledger folder in the data folder>", with no --key, --key-file or --home; put on chain with zikaron anchor --ledger "<the same folder>". The private key stays in the app's key store the whole time; you neither generate nor hold it.
-4. Every day: record with history --file → put on chain with anchor --ledger → check with audit; to share, export a record kit with kit-export, which the other side checks with kit-verify. Gather several records and put them on chain together, paying gas for one transaction. When the address runs short of ETH for gas, ask the user to top it up.
+4. Every day: record with history --file → put on chain with anchor --ledger → check with audit; to share, export a record kit with kit-export, which the other side checks with kit-verify; to show a kit to the recipient alone, add --to <address> or --to-key <public key> to kit-export; add --originals-to <folder> to kit-verify to take out the originals. Gather several records and put them on chain together, paying gas for one transaction. When the address runs short of ETH for gas, ask the user to top it up.
 5. When the app needs opening again:
    - E_CREDENTIAL_EXPIRED or E_CREDENTIAL_MISSING: the credential ran out or was turned off; ask the user to open the app and turn "With a credential" on again.
    - A new version: remind the user to install it and upgrade by the release notes; if they call for a migration by hand, explain it first and go ahead once the user agrees.
