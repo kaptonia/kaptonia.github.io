@@ -33,7 +33,7 @@ title: 发布
 <p>用户的核对方法见<a href="verify.html">校验</a>。</p>
 <h2 id="sign">系统签名</h2>
 <p>应用与 dmg 用项目自己的证书签名，证书的公用名为 Kaptonia；这张证书由项目自签，发布包在 Apple 公证之外、由项目直接发出。每个版本用同一张证书、同一个标识符 <code>com.kaptonia.zikaron.app</code> 签名，系统据此把各版本认作同一个应用。pkg 以 SHA-256 核对。Windows 的 zip 与 Linux 的两个包不签名，以 SHA-256 核对。</p>
-<p>从浏览器下载的文件带着隔离标记，macOS 会拒绝打开；在较新的 macOS 上，「仍要打开」时常失灵。<a href="../../download.html#install">下载页</a>与发布说明写明的做法是：先用 <code>shasum -a 256</code> 核对文件，再在终端里用 <code>xattr</code> 去掉隔离标记。Windows 首次打开时按「更多信息」再按「仍要运行」；Windows 11 开着「智能应用控制」时要先把它关掉。想确认文件来历的用户，可以核对签名者、证书指纹、校验值与 {{Z}} 证明，见<a href="verify.html">校验</a>。</p>
+<p>从浏览器下载的文件带着隔离标记，macOS 会拒绝打开；在较新的 macOS 上，「仍要打开」时常失灵。<a href="../../use.html#install">下载页</a>与发布说明写明的做法是：先用 <code>shasum -a 256</code> 核对文件，再在终端里用 <code>xattr</code> 去掉隔离标记。Windows 首次打开时按「更多信息」再按「仍要运行」；Windows 11 开着「智能应用控制」时要先把它关掉。想确认文件来历的用户，可以核对签名者、证书指纹、校验值与 {{Z}} 证明，见<a href="verify.html">校验</a>。</p>
 <h2 id="notes">发布说明</h2>
 <p>每个版本写明：新增、变更与修复；文件格式与命令行输出的变化；升级时用户需要做的事；已知限制。仓库里的 <code>CHANGELOG.md</code> 与 <code>CHANGELOG.en.md</code> 逐版记下，发布说明链到它们与这一版的手册。</p>
 <h2 id="contract">合约与网络</h2>

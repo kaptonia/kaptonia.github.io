@@ -178,9 +178,9 @@ if(!still)ws.forEach(play)})();
 // 使用页:视口里正在看的那一节实,其余几节淡成半透明;按视口 45% 那条线落在哪一节判断,滚到底时取最后一节
 (function(){var main=document.querySelector('main.dl');if(!main)return;main.classList.add('focus');var cur=null,tk=0;
 main.addEventListener('animationend',function(e){if(e.target.classList.contains('rise'))e.target.classList.add('done')});
-function pick(){tk=0;var all=[].filter.call(main.querySelectorAll('.herog,.sec'),function(x){return x.offsetParent}),ss=all.filter(function(x){return x.id!=='next'});if(!ss.length)return;var y=innerHeight*.45,best=ss[0],bd=1e9;
-if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)best=ss[ss.length-1];else ss.forEach(function(x){var r=x.getBoundingClientRect(),d=r.top>y?r.top-y:r.bottom<y?y-r.bottom:0;if(d<bd){bd=d;best=x}});
-if(best!==cur){var tail=ss[ss.length-1];all.forEach(function(x){x.classList.toggle('cur',x===best||(x.id==='next'&&best===tail))});cur=best}}
+function pick(){tk=0;var all=[].filter.call(main.querySelectorAll('.herog,.sec'),function(x){return x.offsetParent}),ss=all.filter(function(x){return x.id!=='next'&&x.id!=='files'});if(!ss.length)return;var y=innerHeight*.45,best=ss[0],bd=1e9;
+if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)best=ss[ss.length-1];else var fl=all.filter(function(x){return x.id==='files'})[0],nx=all.filter(function(x){return x.id==='next'})[0];ss.forEach(function(x,i){var r=x.getBoundingClientRect(),top=r.top,bot=r.bottom;if(i===0&&fl)bot=fl.getBoundingClientRect().bottom;if(i===ss.length-1&&nx)bot=nx.getBoundingClientRect().bottom;var d=top>y?top-y:bot<y?y-bot:0;if(d<bd){bd=d;best=x}});
+if(best!==cur){var tail=ss[ss.length-1];all.forEach(function(x){x.classList.toggle('cur',x===best||(x.id==='next'&&best===tail)||(x.id==='files'&&best===ss[0]))});cur=best}}
 function ask(){if(!tk)tk=requestAnimationFrame(pick)}
 addEventListener('scroll',ask,{passive:true});addEventListener('resize',ask);main.addEventListener('click',function(){setTimeout(function(){cur=null;pick()},260)});pick()})();
 var pb=document.querySelectorAll('.plats [data-plat]');if(pb.length)(function(){

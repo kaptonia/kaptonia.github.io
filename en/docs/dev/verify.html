@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/dev/verify.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=21f5efba">
+<link rel="stylesheet" href="../../../style.css?v=e8e6674a">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -44,7 +44,7 @@
 <div><dt>macOS</dt><dd><div class="cmd"><code>shasum -a 256 -c --ignore-missing SHA256SUMS.txt</code><button class="cp" type="button" data-copy="shasum -a 256 -c --ignore-missing SHA256SUMS.txt" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div></dd></div>
 <div><dt>Linux</dt><dd><div class="cmd"><code>sha256sum -c --ignore-missing SHA256SUMS.txt</code><button class="cp" type="button" data-copy="sha256sum -c --ignore-missing SHA256SUMS.txt" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div></dd></div>
 </dl>
-<p>The third-party licences of the three platforms, <code>THIRD-PARTY-LICENSES-macos.txt</code>, <code>THIRD-PARTY-LICENSES-linux.txt</code> and <code>THIRD-PARTY-LICENSES-windows.txt</code>, are published separately, byte for byte the same as the copy in each package, and stay outside the release list. The drop zone on the <a href="../../download.html#check">download page</a> does the same check: it computes the SHA-256 in the browser and compares it with the list.</p>
+<p>The third-party licences of the three platforms, <code>THIRD-PARTY-LICENSES-macos.txt</code>, <code>THIRD-PARTY-LICENSES-linux.txt</code> and <code>THIRD-PARTY-LICENSES-windows.txt</code>, are published separately, byte for byte the same as the copy in each package, and stay outside the release list. The drop zone on the <a href="../../use.html#check">download page</a> does the same check: it computes the SHA-256 in the browser and compares it with the list.</p>
 <h2 id="sign">Signature</h2>
 <p>On macOS the app and the dmg are signed with Kaptonia’s self-signed certificate; the pkg is checked by its SHA-256. Once installed, look at the app’s signature: <code>Authority</code> in the output should be Kaptonia, and <code>Identifier</code> should be <code>com.kaptonia.zikaron.app</code>:</p>
 <div class="cmd"><code>codesign -dvv /Applications/ZIKARON.app</code><button class="cp" type="button" data-copy="codesign -dvv /Applications/ZIKARON.app" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
@@ -81,6 +81,6 @@ shasum -a 256 codesign0" aria-label="Copy" title="Copy"><svg width="14" height="
 <div class="kv"><div><span class="k">Code hash</span><span class="hash">0xfa97a1d9b22fab2b52f4e27c9a965b32734c40001b565ab365d05c887118f57d</span></div><div><span class="k">Ethereum mainnet</span><span class="hash">0x36Ea8A857a5FE813429d4D9947000C644A88809A</span></div><div><span class="k">Arbitrum One</span><span class="hash">0x36Ea8A857a5FE813429d4D9947000C644A88809A</span></div><div><span class="k">OP Mainnet</span><span class="hash">0x36Ea8A857a5FE813429d4D9947000C644A88809A</span></div><div><span class="k">Sepolia</span><span class="hash">0xC29410B882c4C3b77e33659d2f06ac563e7B08a3</span></div></div>
 <p>How to recompute the hash from source is under <a href="contract.html#codehash">The registry contract and anchoring</a>.</p>
 <div class="pn"><a href="index.html"><span>Previous</span>Overview</a><a class="nx" href="build.html"><span>Next</span>Building from source</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#release">Release files</a><a href="#sign">Signature</a><a href="#anchored">Zikaron record</a><a href="#law">The law’s digests</a><a href="#contract">The registry contract</a></nav></div>
-<script src="../../../site.js?v=de5a52c3" defer></script>
+<script src="../../../site.js?v=fa6bc6e1" defer></script>
 </body>
 </html>

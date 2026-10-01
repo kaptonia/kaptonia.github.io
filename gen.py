@@ -106,7 +106,7 @@ def lang_link(rel, depth):
 
 def top(rel, depth, on=""):
     h = home(depth)
-    items = (("tools", t("工具", "Tools"), f"{h}index.html#tools"), ("download", t("使用", "Use"), f"{h}download.html"), ("wiki", "Wiki", f"{h}docs/wiki/index.html"), ("dev", DEV(), f"{h}docs/dev/index.html"))
+    items = (("tools", t("工具", "Tools"), f"{h}index.html#tools"), ("download", t("使用", "Use"), f"{h}use.html"), ("wiki", "Wiki", f"{h}docs/wiki/index.html"), ("dev", DEV(), f"{h}docs/dev/index.html"))
     nav = "".join(f'<a href="{u}"{" class=on" if k == on else ""}>{n}</a>' for k, n, u in items)
     return f"""<header class="top"><div class="frame-w">
   <a class="handle" href="{h}index.html">@kaptonia</a>
@@ -248,7 +248,7 @@ def zikaron():
     <p class="cite">{t("约书亚记 4:4–7", "Joshua 4:4–7")}</p>""", " etym-cap")
     go = t("打开 →", "Open →")
     end = cap("zend", "T", f"""<div class="tools t3">
-    <a class="tool" href="download.html"><b>{t("下载", "Download")}</b><span>Zikaron Desk {VER}</span><em>{go}</em></a>
+    <a class="tool" href="use.html"><b>{t("下载", "Download")}</b><span>Zikaron Desk {VER}</span><em>{go}</em></a>
     <a class="tool" href="docs/wiki/zikaron.html"><b>{t("使用说明", "User guide")}</b><span>Wiki</span><em>{go}</em></a>
     <a class="tool" href="docs/dev/index.html#map"><b>{t("开发者指南", "Developer guide")}</b><span>{t("校验、法文、命令行与合约", "Verification, law, command line, contract")}</span><em>{go}</em></a>
   </div>""")
@@ -295,7 +295,7 @@ PNAME = {"macos": "macOS", "windows": "Windows", "linux": "Linux"}
 def plat(k):   # 每种包属于哪个系统;源码包各系统都列
     return {"dmg": "macos", "pkg": "macos", "zip": "windows", "deb": "linux", "appimage": "linux"}.get(k)
 def download():
-    rel = "download.html"
+    rel = "use.html"
     url = lambda f: f"{REPO}/releases/download/v{VER}/{f}"
     plats = [p for p in ("macos", "windows", "linux") if any(plat(x[3]) == p for x in FILES)]
     first = plats[0]
@@ -789,9 +789,9 @@ if(!still)ws.forEach(play)})();
 // 使用页:视口里正在看的那一节实,其余几节淡成半透明;按视口 45% 那条线落在哪一节判断,滚到底时取最后一节
 (function(){var main=document.querySelector('main.dl');if(!main)return;main.classList.add('focus');var cur=null,tk=0;
 main.addEventListener('animationend',function(e){if(e.target.classList.contains('rise'))e.target.classList.add('done')});
-function pick(){tk=0;var all=[].filter.call(main.querySelectorAll('.herog,.sec'),function(x){return x.offsetParent}),ss=all.filter(function(x){return x.id!=='next'});if(!ss.length)return;var y=innerHeight*.45,best=ss[0],bd=1e9;
-if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)best=ss[ss.length-1];else ss.forEach(function(x){var r=x.getBoundingClientRect(),d=r.top>y?r.top-y:r.bottom<y?y-r.bottom:0;if(d<bd){bd=d;best=x}});
-if(best!==cur){var tail=ss[ss.length-1];all.forEach(function(x){x.classList.toggle('cur',x===best||(x.id==='next'&&best===tail))});cur=best}}
+function pick(){tk=0;var all=[].filter.call(main.querySelectorAll('.herog,.sec'),function(x){return x.offsetParent}),ss=all.filter(function(x){return x.id!=='next'&&x.id!=='files'});if(!ss.length)return;var y=innerHeight*.45,best=ss[0],bd=1e9;
+if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)best=ss[ss.length-1];else var fl=all.filter(function(x){return x.id==='files'})[0],nx=all.filter(function(x){return x.id==='next'})[0];ss.forEach(function(x,i){var r=x.getBoundingClientRect(),top=r.top,bot=r.bottom;if(i===0&&fl)bot=fl.getBoundingClientRect().bottom;if(i===ss.length-1&&nx)bot=nx.getBoundingClientRect().bottom;var d=top>y?top-y:bot<y?y-bot:0;if(d<bd){bd=d;best=x}});
+if(best!==cur){var tail=ss[ss.length-1];all.forEach(function(x){x.classList.toggle('cur',x===best||(x.id==='next'&&best===tail)||(x.id==='files'&&best===ss[0]))});cur=best}}
 function ask(){if(!tk)tk=requestAnimationFrame(pick)}
 addEventListener('scroll',ask,{passive:true});addEventListener('resize',ask);main.addEventListener('click',function(){setTimeout(function(){cur=null;pick()},260)});pick()})();
 var pb=document.querySelectorAll('.plats [data-plat]');if(pb.length)(function(){
@@ -848,6 +848,12 @@ def write(rel, page):
     p.parent.mkdir(parents=True, exist_ok=True)
     p.write_text(zh(page) if L == "zh" else page, encoding="utf-8")
 
+def moved(to):
+    """改名后的旧地址:带着地址里的 # 跳到新页"""
+    return (f'<!doctype html><html lang="{t("zh-CN", "en")}"><head><meta charset="utf-8"><title>{t("使用", "Use")}</title>'
+            f'<meta name="robots" content="noindex"><link rel="canonical" href="{to}"><meta http-equiv="refresh" content="0; url={to}">'
+            f'<script>location.replace("{to}"+location.hash)</script></head><body><p><a href="{to}">{to}</a></p></body></html>\n')
+
 def lost():
     """找不到的页:两语各一句,各给一条回去的路。GitHub Pages 对任何找不到的地址都回这一页,所以链接用绝对路径"""
     global L
@@ -869,7 +875,8 @@ if __name__ == "__main__":
     for L in LANGS:
         write("index.html", index())
         write("zikaron.html", zikaron())
-        write("download.html", download())
+        write("use.html", download())
+        write("download.html", moved("use.html"))
         for space in NAV:
             for slug in pages(space):
                 write(f"docs/{space}/{slug}.html", docpage(space, slug))

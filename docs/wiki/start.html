@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/start.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=21f5efba">
+<link rel="stylesheet" href="../../style.css?v=e8e6674a">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -30,7 +30,7 @@
 </div></header>
 <div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>上手</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序市场</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html" class=on aria-current=page>上手</a><a href="ledger.html">存证与上链</a><a href="grants.html">授权</a><a href="kits.html">出示</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html">密钥与备份</a><a href="cli.html">命令行</a><a href="ai.html">AI 代理与远程操作</a><a href="alerts.html">设置与提醒</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
 <div class="stream"><article class="art" data-slug="start" data-prev="zikaron.html" data-next="ledger.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>上手</h1><h2 id="install">安装</h2>
-<p>到<a href="../../download.html">下载页</a>下载你那个系统的安装包，每个系统的安装步骤都写在那里。</p>
+<p>到<a href="../../use.html">下载页</a>下载你那个系统的安装包，每个系统的安装步骤都写在那里。</p>
 <ul>
 <li><b>Mac</b>：第一次打开前，要先在「终端」里去掉下载时带上的隔离标记，下载页有可以照抄的命令。</li>
 <li><b>Windows</b>：第一次打开时出现「Windows 已保护你的电脑」，按「更多信息」，再按「仍要运行」。Windows 11 开着「智能应用控制」时，先照下载页把它关掉。</li>
@@ -48,7 +48,7 @@
 4. 日常：history --file 记录 → anchor 上链 → scan 后 audit 核验；要分享就 kit-export 导出记录包，对方用 kit-verify 核验。几条记录攒在一起上链，一笔交易只付一次 gas。
 5. 升级：定期查看 Releases。有新版本时，先读发布说明和 CHANGELOG 里的「升级」一节，再用 SHA256SUMS.txt 校验，然后照第 1 步覆盖安装。命令行的账本目录跨版本照常读写。发布说明要求手工迁移的话，先告诉用户，得到同意再动手。升级后运行 zikaron contract，确认命令有没有变化。每次升级时提醒用户下载一份账本备份（把账本目录打包成一个文件交给用户），并和用户约好以后定期备份。
 6. 用户想换用更安全的桌面版时，一步一步带用户做：
-   - 打开下载页 https://kaptonia.github.io/download.html，按用户的系统下载，先核对 SHA-256 再安装。Mac 第一次打开前要去掉隔离标记，下载页有可以照抄的命令。
+   - 打开下载页 https://kaptonia.github.io/use.html，按用户的系统下载，先核对 SHA-256 再安装。Mac 第一次打开前要去掉隔离标记，下载页有可以照抄的命令。
    - 第一次打开：设口令，把助记词抄在纸上，放在离线的地方。助记词只由用户自己保管，不要让用户发给你。
    - 把这本账带进桌面，二选一：
      · 把私钥交给用户，让用户在桌面版「导入密钥」，再用「收编已有账本目录」收进来。收编后，原目录由桌面接管。
@@ -63,7 +63,7 @@
 4. 日常：history --file 记录 → anchor 上链 → scan 后 audit 核验；要分享就 kit-export 导出记录包，对方用 kit-verify 核验。几条记录攒在一起上链，一笔交易只付一次 gas。
 5. 升级：定期查看 Releases。有新版本时，先读发布说明和 CHANGELOG 里的「升级」一节，再用 SHA256SUMS.txt 校验，然后照第 1 步覆盖安装。命令行的账本目录跨版本照常读写。发布说明要求手工迁移的话，先告诉用户，得到同意再动手。升级后运行 zikaron contract，确认命令有没有变化。每次升级时提醒用户下载一份账本备份（把账本目录打包成一个文件交给用户），并和用户约好以后定期备份。
 6. 用户想换用更安全的桌面版时，一步一步带用户做：
-   - 打开下载页 https://kaptonia.github.io/download.html，按用户的系统下载，先核对 SHA-256 再安装。Mac 第一次打开前要去掉隔离标记，下载页有可以照抄的命令。
+   - 打开下载页 https://kaptonia.github.io/use.html，按用户的系统下载，先核对 SHA-256 再安装。Mac 第一次打开前要去掉隔离标记，下载页有可以照抄的命令。
    - 第一次打开：设口令，把助记词抄在纸上，放在离线的地方。助记词只由用户自己保管，不要让用户发给你。
    - 把这本账带进桌面，二选一：
      · 把私钥交给用户，让用户在桌面版「导入密钥」，再用「收编已有账本目录」收进来。收编后，原目录由桌面接管。
@@ -118,6 +118,6 @@
 </tbody></table></div>
 <p>凡是写进账本或发到链上的动作，都先出一张确认卡，写明要写什么、费用多少。按卡上红色的键才真正写入，按「取消」即作罢。</p>
 <div class="pn"><a href="zikaron.html"><span>上一页</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>下一页</span>存证与上链</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#install">安装</a><a href="#agent">通过 AI Agent 使用</a><a href="#upgrade">从早先版本升级</a><a href="#wizard">第一次打开</a><a href="#first">第一条记录</a><a href="#receive">收到别人的授权</a><a href="#window">窗口</a></nav></div>
-<script src="../../site.js?v=de5a52c3" defer></script>
+<script src="../../site.js?v=fa6bc6e1" defer></script>
 </body>
 </html>

@@ -936,3 +936,5 @@ html[lang="en"] .art .pt p{font-size:20px;line-height:1.8;letter-spacing:0}
 .dl .hero-more .trio{margin-top:20px}
 .dl #talk{margin-top:120px}
 @media (max-width:860px){.dl .hero-more{margin-top:64px}.dl #talk{margin-top:90px}}
+.dl #files{margin-top:84px}
+@media (max-width:860px){.dl #files{margin-top:64px}}

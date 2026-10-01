@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/dev/release.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=21f5efba">
+<link rel="stylesheet" href="../../style.css?v=e8e6674a">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -61,7 +61,7 @@
 <p>用户的核对方法见<a href="verify.html">校验</a>。</p>
 <h2 id="sign">系统签名</h2>
 <p>应用与 dmg 用项目自己的证书签名，证书的公用名为 Kaptonia；这张证书由项目自签，发布包在 Apple 公证之外、由项目直接发出。每个版本用同一张证书、同一个标识符 <code>com.kaptonia.zikaron.app</code> 签名，系统据此把各版本认作同一个应用。pkg 以 SHA-256 核对。Windows 的 zip 与 Linux 的两个包不签名，以 SHA-256 核对。</p>
-<p>从浏览器下载的文件带着隔离标记，macOS 会拒绝打开；在较新的 macOS 上，「仍要打开」时常失灵。<a href="../../download.html#install">下载页</a>与发布说明写明的做法是：先用 <code>shasum -a 256</code> 核对文件，再在终端里用 <code>xattr</code> 去掉隔离标记。Windows 首次打开时按「更多信息」再按「仍要运行」；Windows 11 开着「智能应用控制」时要先把它关掉。想确认文件来历的用户，可以核对签名者、证书指纹、校验值与 <b class="zk">Zikaron</b> 证明，见<a href="verify.html">校验</a>。</p>
+<p>从浏览器下载的文件带着隔离标记，macOS 会拒绝打开；在较新的 macOS 上，「仍要打开」时常失灵。<a href="../../use.html#install">下载页</a>与发布说明写明的做法是：先用 <code>shasum -a 256</code> 核对文件，再在终端里用 <code>xattr</code> 去掉隔离标记。Windows 首次打开时按「更多信息」再按「仍要运行」；Windows 11 开着「智能应用控制」时要先把它关掉。想确认文件来历的用户，可以核对签名者、证书指纹、校验值与 <b class="zk">Zikaron</b> 证明，见<a href="verify.html">校验</a>。</p>
 <h2 id="notes">发布说明</h2>
 <p>每个版本写明：新增、变更与修复；文件格式与命令行输出的变化；升级时用户需要做的事；已知限制。仓库里的 <code>CHANGELOG.md</code> 与 <code>CHANGELOG.en.md</code> 逐版记下，发布说明链到它们与这一版的手册。</p>
 <h2 id="contract">合约与网络</h2>
@@ -81,6 +81,6 @@
 <li>发现发布包有误时，发布新的修订版本；已发布的文件与校验值保持原样。</li>
 </ul>
 <div class="pn"><a href="security.html"><span>上一页</span>安全</a><a class="nx" href="fork.html"><span>下一页</span>分叉与另起实现</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#version">版本号</a><a href="#before">发布前</a><a href="#build">构建</a><a href="#sums">校验值与 Zikaron 证明</a><a href="#sign">系统签名</a><a href="#notes">发布说明</a><a href="#contract">合约与网络</a><a href="#site">网站</a><a href="#after">发布后</a></nav></div>
-<script src="../../site.js?v=de5a52c3" defer></script>
+<script src="../../site.js?v=fa6bc6e1" defer></script>
 </body>
 </html>
