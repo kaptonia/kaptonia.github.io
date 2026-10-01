@@ -404,16 +404,23 @@ def download():
         return "".join(f'<div><span class="k">{kind(k)[0]}</span><span class="hash">{h}</span></div>' for f, size, h, k, u in FILES if plat(k) == p or k == "src")
     vmains = "".join(panel(p, f'<div class="kv sha">{sums(p)}</div>') for p in plats)
     vsides = "".join(panel(p, side(p)) for p in plats)
-    prompt = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "content", f"agent-prompt.{L}.txt"), encoding="utf-8").read().strip("\n")   # 交给 AI Agent 的提示词只此一份
+    def rd(n): return open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "content", f"{n}.{L}.txt"), encoding="utf-8").read().strip("\n")
+    prompts = {"cloud": rd("agent-prompt"), "local": rd("agent-prompt-local")}   # 交给 AI Agent 的提示词:云端电脑一份,本机一份,各只此一份
+    prompt = prompts["cloud"]
     pe = html.escape(prompt, quote=True)
+    pvn = {"cloud": t("云端电脑", "Cloud computer"), "local": t("本机", "This computer")}
+    needs = {"cloud": t("交给有云端电脑的 AI Agent，它会自己装好。", "Give it to an AI Agent with a cloud computer; it sets itself up."),
+             "local": t("交给你电脑上的 AI Agent，它会带你装好客户端，打开一次之后不必再开。", "Give it to the AI Agent on your computer; it walks you through the app, which you open once.")}
+    pvsw = ('<div class="pvsw" role="tablist">' + "".join(f'<button type="button" role="tab" data-pv="{k}" aria-selected="{"true" if k == "cloud" else "false"}">{pvn[k]}</button>' for k in prompts) + '</div>')
     modes = ('<div class="modes" role="tablist" aria-label="' + t("使用方式", "How to use") + '" style="--i:0"><span class="lens" aria-hidden="true"></span>'
              + f'<button type="button" role="tab" data-mode="agent" aria-selected="true">{t("通过 AI Agent", "Through an AI Agent")}</button>'
              + f'<button type="button" role="tab" data-mode="desktop" aria-selected="false">{t("桌面客户端", "Desktop app")}</button></div>')
-    agentcard = (f'<div class="get agent rise" style="--k:3"><div class="os">{t("交给 AI Agent", "For your AI Agent")}</div>'
-                 f'<button type="button" class="btn" data-copy="{pe}"><span>{COPY}{t("复制提示词", "Copy the prompt")}</span><span class="sz">{t("七条", "7 steps")}</span></button>'
-                 f'<code class="pv">{pe}</code>'
-                 f'<div class="alt"><a href="#prompt">{t("看全文", "Read it in full")}</a><a href="docs/wiki/ai.html">{t("AI 代理与远程操作", "AI Agents and remote operation")}</a></div>'
-                 f'<p class="need">{t("交给有云端电脑的 AI Agent，它会自己装好。", "Give it to an AI Agent with a cloud computer; it sets itself up.")}</p></div>')
+    def variant(k):
+        e = html.escape(prompts[k], quote=True)
+        return (f'<div class="pvv" data-pvv="{k}"><button type="button" class="btn" data-copy="{e}"><span>{COPY}{t("复制提示词", "Copy the prompt")}</span></button>'
+                f'<p class="need">{needs[k]}</p></div>')
+    agentcard = (f'<div class="get agent rise" style="--k:3">{pvsw}<div class="pvs">{variant("cloud")}{variant("local")}</div>'
+                 f'<div class="alt"><a href="#prompt">{t("看全文", "Read it in full")}</a><a href="docs/wiki/ai.html">{t("AI 代理与远程操作", "AI Agents and remote operation")}</a></div></div>')
     # 示意的附件:文件、插画、授权码、记录包、入块回执、条目、核验清单;颜色都取页面的色调
     DOC = '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M4 1.5h5.5L12.5 4.5V14.5H4z"/><path d="M9.5 1.5v3h3"/><path d="M6 8h4.5M6 10.5h4.5"/></svg>'
     BOX = '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M2 5l6-3 6 3v6.5l-6 3-6-3z"/><path d="M2 5l6 3 6-3M8 8v6.5"/></svg>'
@@ -477,16 +484,17 @@ def download():
     herotrio = f"""<div class="mlow hero-more" data-m="agent"><h2>{t("简单上手", "Getting started")}</h2>
     <ol class="trio">
       <li><b>{t("复制提示词", "Copy the prompt")}</b><span>{t("上面的按钮一次复制全文。", "The button above copies all of it.")}</span></li>
-      <li><b>{t("交给 AI Agent", "Give it to an AI Agent")}</b><span>{t("一个能在云端电脑上运行命令的 AI Agent。它会下载、校验、安装，再建好账本。", "One that runs commands on a cloud computer. It downloads, checks, installs, then sets up a ledger.")}</span></li>
+      <li><b>{t("交给 AI Agent", "Give it to an AI Agent")}</b><span>{t("云端电脑上的、或你电脑上的 AI Agent 都行，提示词各有一份。它会照着装好，进入可用状态。", "One on a cloud computer or on your own; there is a prompt for each. It follows it and gets ready to work.")}</span></li>
       <li><b>{t("和它对话", "Talk with it")}</b><span>{t("往它给你的地址充一点 ETH 付 gas，之后用平常的话让它做事。", "Send a little ETH for gas to the address it gives you, then ask in plain words.")}</span></li>
     </ol>
 </div>"""
     agentsecs = f"""<div class="mlow" data-m="agent">
   <div class="sec rise" id="talk" style="--k:4">{chatbox}</div>
-  <div class="sec rise" id="prompt" style="--k:5"><h2>{t("提示词全文", "The prompt in full")}</h2>{cmd(prompt, block=True).replace('class="cmd block"', 'class="cmd block wrap"')}</div>
+  <div class="sec rise" id="prompt" style="--k:5"><h2>{t("提示词全文", "The prompt in full")}</h2><div class="pvs">{"".join(f'<div class="pvv" data-pvv="{k}">' + cmd(prompts[k], block=True).replace('class="cmd block"', 'class="cmd block wrap"') + '</div>' for k in prompts)}</div></div>
   <div class="sec rise" id="safety" style="--k:6"><h2>{t("密钥与升级", "Keys and upgrades")}</h2>
     <ul class="notes">
-      <li>{t("AI Agent 在云端用一把专用的密钥写账本，地址里只放够付 gas 的少量 ETH。", "The AI Agent writes the ledger in the cloud with a dedicated key; keep only enough ETH for gas at its address.")}</li>
+      <li>{t("云端电脑上，AI Agent 用一把专用的密钥写账本，地址里只放够付 gas 的少量 ETH。", "On a cloud computer, the AI Agent writes the ledger with a dedicated key; keep only enough ETH for gas at its address.")}</li>
+      <li>{t("你电脑上，私钥留在客户端的密钥库里，AI Agent 凭「经凭据操作」的凭据工作。有效期由你自己选；这台电脑上以你的系统账户运行的程序都能用上这份凭据，用不着时到「设置 › 命令行」关掉。", "On your own computer, the private key stays in the app’s key store and the AI Agent works with the “With a credential” credential. You choose how long it lasts; any program running as your system account can use it, so turn it off in Settings › Command line when it is no longer needed.")}</li>
       <li>{t("想让私钥留在自己电脑上，装上", "To keep the private key on your own computer, install the ")}<button type="button" class="tomode" data-mode="desktop">{t("桌面客户端", "desktop app")}</button>{t("，再让 AI Agent 经「经凭据操作」或 --home 替你做。提示词第 6 条写了它怎样一步步带你换过去。", " and let the AI Agent work for you through “With a credential” or --home. Step 6 of the prompt has it walk you through the switch.")}</li>
       <li>{t("新版本发布时，AI Agent 照提示词第 5 条自己校验并升级。", "When a new version comes out, the AI Agent checks and upgrades by step 5 of the prompt.")}</li>
     </ul>
@@ -527,7 +535,7 @@ def download():
     </div>
   </div>
 </section>"""
-    body = f"""<main class="dl" data-scene="dl" data-mode="agent" data-low="agent"><div class="frame-w">
+    body = f"""<main class="dl" data-scene="dl" data-mode="agent" data-low="agent" data-pv="cloud"><div class="frame-w">
 <h1 class="rise" style="--k:0">{t("使用", "Use")}</h1>
 {projtabs(f'<div class="proj">{zk}</div><!--/proj-->').replace('class="ptabs"', 'class="ptabs pline"')}
 </div></main>
@@ -644,7 +652,7 @@ def docpage(space, slug):
 JS = """(function(){
 var en=document.documentElement.lang==='en',T=function(a,b){return en?b:a};
 var tp=document.querySelector('.top');if(tp){var on=function(){tp.classList.toggle('scrolled',scrollY>8)};on();addEventListener('scroll',on,{passive:true});}
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-copy]');if(!b)return;var t=b.getAttribute('data-copy'),ok=function(){b.classList.add('did');setTimeout(function(){b.classList.remove('did')},1600)},sel=function(){var r=document.createRange();r.selectNodeContents(b.parentNode.querySelector('code'));var s=getSelection();s.removeAllRanges();s.addRange(r);var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(ta);ta.select();var done=false;try{done=document.execCommand('copy')}catch(x){}document.body.removeChild(ta);if(done){s.removeAllRanges();ok()}else{s.removeAllRanges();s.addRange(r)}};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,sel);else sel();});
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-copy]');if(!b)return;var t=b.getAttribute('data-copy'),ok=function(){b.classList.add('did');setTimeout(function(){b.classList.remove('did')},1600)},sel=function(){var c=b.parentNode.querySelector('code'),r=document.createRange(),s=getSelection();if(c){r.selectNodeContents(c);s.removeAllRanges();s.addRange(r)}var ta=document.createElement('textarea');ta.value=t;ta.setAttribute('readonly','');ta.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(ta);ta.select();var done=false;try{done=document.execCommand('copy')}catch(x){}document.body.removeChild(ta);if(done){s.removeAllRanges();ok()}else if(c){s.removeAllRanges();s.addRange(r)}};if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(t).then(ok,sel);else sel();});
 document.addEventListener('click',function(e){if(document.documentElement.classList.contains('sand-on'))return;var o=e.target.closest&&e.target.closest('[data-etym]');if(!o)return;e.preventDefault();document.documentElement.classList.toggle('etym-open');});
 var sd=document.querySelector('[data-side]');if(sd)sd.addEventListener('click',function(){var o=sd.parentNode.classList.toggle('open');sd.setAttribute('aria-expanded',o)});
 // 文档侧栏:产品一组可折叠,折叠与否记在本机(每个空间各记各的);当前页所在的一组总是展开。当前一项在侧栏里露出来
@@ -827,6 +835,10 @@ if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)best=ss[ss.lengt
 if(best!==cur){var tail=ss[ss.length-1],chat=best.classList.contains('chatw');all.forEach(function(x){x.classList.toggle('cur',x===best||(x.id==='next'&&best===tail)||(x.id==='files'&&best===ss[0])||(x.id==='talk'&&chat))});if(chat&&window.__chatPick)window.__chatPick(best);cur=best}}
 function ask(){if(!tk)tk=requestAnimationFrame(pick)}
 addEventListener('scroll',ask,{passive:true});addEventListener('resize',ask);main.addEventListener('click',function(){setTimeout(function(){cur=null;pick()},260)});pick()})();
+// 使用页:提示词分云端电脑与本机两份,卡片上切换,全文跟着换;选中的记在本机
+(function(){var m=document.querySelector('main[data-pv]');if(!m)return;var k='pv';function set(v){m.setAttribute('data-pv',v);[].forEach.call(m.querySelectorAll('.pvsw [data-pv]'),function(b){b.setAttribute('aria-selected',b.getAttribute('data-pv')===v)})}
+try{var s=localStorage.getItem(k);if(s==='local'||s==='cloud')set(s)}catch(e){}
+m.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('.pvsw [data-pv]');if(!b)return;e.stopPropagation();set(b.getAttribute('data-pv'));try{localStorage.setItem(k,b.getAttribute('data-pv'))}catch(x){}})})();
 var pb=document.querySelectorAll('.plats [data-plat]');if(pb.length)(function(){
 var have=[].map.call(pb,function(b){return b.getAttribute('data-plat')});
 function guess(){var u=((navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'')+' '+navigator.userAgent;if(/mac|iphone|ipad/i.test(u))return'macos';if(/win/i.test(u))return'windows';return'linux'}

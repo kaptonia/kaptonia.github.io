@@ -972,3 +972,12 @@ html[lang="en"] .art .pt p{font-size:20px;line-height:1.8;letter-spacing:0}
 .ill .i4{fill:color-mix(in srgb,var(--accent) 70%,var(--ink2))}
 .ill .i3{fill:color-mix(in srgb,var(--accent) 34%,var(--paper))}
 .ill .i6{fill:color-mix(in srgb,var(--accent) 48%,var(--paper))}
+/* 使用页:提示词分云端电脑与本机两份;两份叠在同一格,切换只淡入淡出,高度不变 */
+.pvsw{display:inline-flex;gap:2px;padding:3px;border-radius:10px;background:var(--panel)}
+.pvsw button{border:0;background:none;font:inherit;font-size:12.5px;line-height:1.3;color:var(--ink3);padding:5px 12px;border-radius:7px;cursor:pointer;transition:color 200ms,background-color 200ms,box-shadow 200ms}
+.pvsw button:hover{color:var(--ink2)}
+.pvsw button[aria-selected="true"]{color:var(--ink);background:var(--paper);box-shadow:0 1px 2px rgba(60,45,30,.08),0 0 0 1px var(--line)}
+.pvs{display:grid}
+.pvs>.pvv{grid-area:1/1;min-width:0;transition:opacity 340ms var(--ease) 80ms,visibility 0s}
+.dl[data-pv="cloud"] .pvv[data-pvv="local"],.dl[data-pv="local"] .pvv[data-pvv="cloud"]{visibility:hidden;opacity:0;pointer-events:none;transition:opacity 180ms var(--ease),visibility 0s 180ms}
+.get.agent .pvsw+.pvs .btn{margin-top:14px}
