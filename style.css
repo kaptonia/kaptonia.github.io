@@ -142,6 +142,24 @@ a.tool:hover{border-color:var(--ink3)}
 .seg button:hover{color:var(--ink)}
 .seg button[aria-selected="true"]{color:var(--ink);background:var(--paper);box-shadow:0 1px 2px rgba(60,45,30,.08),0 0 0 1px var(--line)}
 .osp:not([hidden]){animation:pane-in 320ms var(--ease)}
+/* 下载页:三个系统的标志。一整块圆角的毛玻璃板,里面一块更实的玻璃罩;选哪个,罩子就滑到哪个上面,另外两个半透明 */
+.plats{--w:52px;--h:42px;position:relative;isolation:isolate;margin-top:26px;display:inline-flex;padding:4px;border-radius:17px;border:1px solid color-mix(in srgb,var(--ink) 8%,transparent);background:color-mix(in srgb,var(--paper) 38%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 55%,transparent),inset 0 -1px 0 color-mix(in srgb,var(--ink) 3%,transparent),0 10px 28px -20px rgba(60,45,30,.35)}
+.plats::before{content:"";position:absolute;inset:0;z-index:-2;border-radius:inherit;background:linear-gradient(180deg,color-mix(in srgb,#fff 30%,transparent),transparent 60%);pointer-events:none}
+.plats .lens{position:absolute;z-index:-1;top:4px;left:4px;width:var(--w);height:var(--h);border-radius:13px;border:1px solid color-mix(in srgb,var(--ink) 11%,transparent);background:linear-gradient(180deg,color-mix(in srgb,var(--paper) 96%,transparent),color-mix(in srgb,var(--paper) 78%,transparent));box-shadow:inset 0 1px 0 color-mix(in srgb,#fff 90%,transparent),0 1px 1px rgba(60,45,30,.06),0 6px 16px -8px rgba(60,45,30,.32);transform:translateX(calc(var(--i) * var(--w)));transition:transform 460ms cubic-bezier(.32,.72,.2,1)}
+.plats button{width:var(--w);height:var(--h);display:grid;place-items:center;padding:0;border:0;border-radius:13px;background:none;cursor:pointer;color:color-mix(in srgb,var(--ink) 38%,var(--paper));transition:color 260ms var(--ease),background-color 260ms var(--ease)}
+.plats button svg{width:20px;height:20px;fill:currentColor;transition:transform 260ms var(--ease)}
+.plats button svg.tux{width:23px;height:23px}
+.plats button:hover{color:color-mix(in srgb,var(--ink) 62%,var(--paper));background:color-mix(in srgb,var(--paper) 30%,transparent)}
+.plats button:hover svg{transform:translateY(-.5px)}
+.plats button[aria-selected="true"]{color:var(--ink-strong);background:none}
+.plats button:active svg{transform:scale(.94);transition-duration:120ms}
+.plats button:focus-visible{outline:1.5px solid color-mix(in srgb,var(--accent) 70%,transparent);outline-offset:1px}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .plats{box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 10px 28px -20px rgba(0,0,0,.8)}:root:not([data-theme="light"]) .plats::before{background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 60%)}:root:not([data-theme="light"]) .plats .lens{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05));border-color:rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 16px -8px rgba(0,0,0,.7)}}
+:root[data-theme="dark"] .plats{box-shadow:inset 0 1px 0 rgba(255,255,255,.06),0 10px 28px -20px rgba(0,0,0,.8)}
+:root[data-theme="dark"] .plats::before{background:linear-gradient(180deg,rgba(255,255,255,.05),transparent 60%)}
+:root[data-theme="dark"] .plats .lens{background:linear-gradient(180deg,rgba(255,255,255,.12),rgba(255,255,255,.05));border-color:rgba(255,255,255,.1);box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 6px 16px -8px rgba(0,0,0,.7)}
+@media (prefers-reduced-motion:reduce){.plats .lens,.plats button,.plats button svg{transition:none}}
+.pl:not([hidden]){animation:pane-in 320ms var(--ease)}
 .dl .steps{margin-top:30px;list-style:none;padding:0;counter-reset:s;display:grid;gap:30px;max-width:780px}
 .dl .steps li{position:relative;padding-left:48px;font-size:16px;line-height:1.75}
 .dl .steps li::before{counter-increment:s;content:counter(s,decimal-leading-zero);position:absolute;left:0;top:4px;font:12px/1.4 var(--mono);letter-spacing:.12em;color:var(--ink3)}

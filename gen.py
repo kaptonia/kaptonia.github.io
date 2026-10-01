@@ -10,16 +10,21 @@ REPO = "https://github.com/kaptonia/zikaron"
 CORE = "0xbecfb6f0d0f8b71c314f1b2efef414abfb6df74b711ca8f81efdef685d0132fc"
 KIT = "0x3f8368ebc8b5b7c97e4b5c4240f57f6fc06421b4effbd5a7446d128434a20535"
 CODEHASH = "0xfa97a1d9b22fab2b52f4e27c9a965b32734c40001b565ab365d05c887118f57d"
-VER = "0.1.0"
-# 0.1.0 的发布物,照发布清单 SHA256SUMS.txt 与实物抄录:(文件名, 大小, SHA-256, 种类, 指纹上链的那笔交易)
-# 最后一项在记入项目的 Zikaron 账本、上链之后填上区块浏览器上的地址;留空时显示「发布时写入」
-ANCHOR_TX = "https://etherscan.io/tx/0x028fdb5591635442bb0ca30dced70305438dac34434b7a02c9daa7f9054fd329"   # 0.1.0 的指纹上链的那笔交易(发布说明)
-FILES = [(f"ZIKARON-{VER}-macos-arm64.dmg", "6.0 MB", "033cccae949d3d37d6c2c8674ae32419a01790c523ab34b84ea54211cc78d1dd", "dmg", ANCHOR_TX),
-         (f"ZIKARON-{VER}-macos-arm64.pkg", "6.6 MB", "6f49a4cb35b7e7aeaa2fc724382ff650bd9a6e6a6a5347d598533e8ee5f5464a", "pkg", ANCHOR_TX),
-         (f"zikaron-{VER}-src.tar.gz", "10.0 MB", "383b08847004b3409275c388dd6e1b8bb76c63fab1e73d0d2734e6c6720b81f5", "src", ANCHOR_TX)]
-# 登记合约的两处已知部署(应用内置,README 与手册附录 A)
+VER = "0.1.1"
+# 当前版本的发布物,照发布清单 SHA256SUMS.txt 与实物抄录:(文件名, 大小, SHA-256, 种类, 指纹上链的那笔交易)
+# 最后一项是这个版本记入项目的 Zikaron 账本、上链的那笔交易在区块浏览器上的地址;没有时这一格写一道横线
+ANCHOR_TX = "https://etherscan.io/tx/0x95d355b2d4456df3161965945e5267504cd8251c29beb2c06ae7a83cbd062034"   # 这个版本的指纹上链的那笔交易:一笔锚定十条存证
+FILES = [(f"ZIKARON-{VER}-macos-arm64.dmg", "7.7 MB", "c3c7284e3af626ab6c95f84fdd1a9b4c72e8256459d3225bf9c9cb6597598db3", "dmg", ANCHOR_TX),
+         (f"ZIKARON-{VER}-macos-arm64.pkg", "8.4 MB", "b58cfbd5e03460a453677c02c793ec126b800126ceb596f50441b117b9dee15d", "pkg", ANCHOR_TX),
+         (f"ZIKARON-{VER}-windows-x86_64.zip", "14.6 MB", "73a0dc1a7edbf8a70809426e9f6143d69525f244e35f12fb7ec38f72fc08ca00", "zip", ANCHOR_TX),
+         (f"zikaron-desk_{VER}_amd64.deb", "15.7 MB", "ddccd5f814338c7fdef94ea5a2d9716a60acff92b53dc62cb53a129e664bb29d", "deb", ANCHOR_TX),
+         (f"ZIKARON-{VER}-x86_64.AppImage", "15.9 MB", "c5f1fbce5ef7949f92492284db63dc35d3fab543402549244a5fa909aceb1d6c", "appimage", ANCHOR_TX),
+         (f"zikaron-{VER}-src.tar.gz", "10.2 MB", "ae7986324c31b47b6cc9f95d4eb10665e18230ddc1e8bb455ad5fb2f26500a6e", "src", ANCHOR_TX)]
+# 登记合约的已知部署(应用内置,README 与手册附录 A):主网、Arbitrum One、OP Mainnet 同一个地址
 MAINNET = ("0x36Ea8A857a5FE813429d4D9947000C644A88809A", "26087229")
 SEPOLIA = ("0xC29410B882c4C3b77e33659d2f06ac563e7B08a3", "11715660")
+ARB = ("0x36Ea8A857a5FE813429d4D9947000C644A88809A", "511445184")
+OP = ("0x36Ea8A857a5FE813429d4D9947000C644A88809A", "157735914")
 BASE = os.environ.get("SITE_BASE", "/")              # 站在域名下的根路径,只有 404 页用它
 def ver(name):  # 引用带内容指纹,改了就换地址,不吃旧缓存
     data = JS.encode() if name == "site.js" else (HERE / name).read_bytes()
@@ -263,88 +268,158 @@ def zikaron():
     return head(f"Zikaron · {t(*TITLE)}", rel, 0, canvas=canvas("zikaron", 0), desc=t(*ZPAGES[0][1])) + top(rel, 0, "tools") + body + close(0, ("paint.js", "scenes.js", "sand.js", "site.js", "desk.js"))
 
 # ───────── 下载:每个产品一个选项卡(现在只有 Zikaron) ─────────
-# 发布包里的名字,照 0.1.0 的实物核对
+# 发布包里的名字,照当前版本的实物核对
 APP = "ZIKARON"                 # macOS 上是 ZIKARON.app
-SIGNER = "Kaptonia"             # 发布包签名证书的 CN(自签,未经 Apple 公证)
+SIGNER = "Kaptonia"             # macOS 发布包签名证书的 CN(自签,未经 Apple 公证);Windows 与 Linux 的包不签名
 CERT = "a6ddc371e855197c5021ef44ab0802749cda318bc12d0138ccac9f46a4d46905"   # 这张证书的 SHA-256 指纹(DER)
 CERT_TO = "2036-09-23"          # 证书有效期至
 ARROW = '<svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 2.5v8M4.5 7 8 10.5 11.5 7M3 13.5h10"/></svg>'
 FILEICON = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8l4 4v14H6z"/><path d="M14 3v4h4"/><path d="M9 13h6M9 16.5h4"/></svg>'
-def anchor(u):   # 这个文件的指纹上链的那笔交易;还没上链时留着这一格
+def anchor(u):   # 这个文件的指纹上链的那笔交易;没有时写一道横线
     lab = t("Zikaron 证明", "Zikaron record")   # 窄屏上这一格换到文件名下面,前面带上栏名
-    if not u: return f'<span class="an dim" data-l="{lab}">{t("发布时写入", "Written at release")}</span>'
+    if not u: return f'<span class="an dim" data-l="{lab}">—</span>'
     h = u.rstrip("/").rsplit("/", 1)[-1]
     return f'<span class="an" data-l="{lab}"><a href="{u}">{h[:8]}…{h[-6:]}</a></span>'
 def kind(k):   # 种类的说法:(类型, 小注, 挑这个包时的说法)
     return {"dmg": (t("磁盘映像", "Disk image"), "Apple 芯片" if L == "zh" else "Apple silicon", t(".dmg 磁盘映像", ".dmg disk image")),
             "pkg": (t("安装包", "Installer"), "Apple 芯片" if L == "zh" else "Apple silicon", t(".pkg 安装包,连同命令行", ".pkg installer, with the command line")),
+            "zip": (t("压缩包", "Zip archive"), "x86_64", t(".zip 压缩包,解压即用", ".zip archive, unzip and run")),
+            "deb": (t("软件包", "Package"), "x86_64", t(".deb 软件包,连同命令行", ".deb package, with the command line")),
+            "appimage": ("AppImage", "x86_64", t("AppImage,不用安装", "AppImage, no install")),
             "src": (t("源码", "Source"), "tar.gz", t("源码包", "Source archive"))}[k]
+# 三个系统的标志,只用图形,不带字(苹果与企鹅取自 Simple Icons,CC0;视窗是四块方格)
+PICON = {"macos": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>',
+         "windows": '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 2h9.5v9.5H2zM12.5 2H22v9.5h-9.5zM2 12.5h9.5V22H2zM12.5 12.5H22V22h-9.5z"/></svg>',
+         "linux": '<svg viewBox="0 0 24 24" aria-hidden="true" class="tux"><path d="M12.504 0c-.155 0-.315.008-.48.021-4.226.333-3.105 4.807-3.17 6.298-.076 1.092-.3 1.953-1.05 3.02-.885 1.051-2.127 2.75-2.716 4.521-.278.832-.41 1.684-.287 2.489a.424.424 0 00-.11.135c-.26.268-.45.6-.663.839-.199.199-.485.267-.797.4-.313.136-.658.269-.864.68-.09.189-.136.394-.132.602 0 .199.027.4.055.536.058.399.116.728.04.97-.249.68-.28 1.145-.106 1.484.174.334.535.47.94.601.81.2 1.91.135 2.774.6.926.466 1.866.67 2.616.47.526-.116.97-.464 1.208-.946.587-.003 1.23-.269 2.26-.334.699-.058 1.574.267 2.577.2.025.134.063.198.114.333l.003.003c.391.778 1.113 1.132 1.884 1.071.771-.06 1.592-.536 2.257-1.306.631-.765 1.683-1.084 2.378-1.503.348-.199.629-.469.649-.853.023-.4-.2-.811-.714-1.376v-.097l-.003-.003c-.17-.2-.25-.535-.338-.926-.085-.401-.182-.786-.492-1.046h-.003c-.059-.054-.123-.067-.188-.135a.357.357 0 00-.19-.064c.431-1.278.264-2.55-.173-3.694-.533-1.41-1.465-2.638-2.175-3.483-.796-1.005-1.576-1.957-1.56-3.368.026-2.152.236-6.133-3.544-6.139zm.529 3.405h.013c.213 0 .396.062.584.198.19.135.33.332.438.533.105.259.158.459.166.724 0-.02.006-.04.006-.06v.105a.086.086 0 01-.004-.021l-.004-.024a1.807 1.807 0 01-.15.706.953.953 0 01-.213.335.71.71 0 00-.088-.042c-.104-.045-.198-.064-.284-.133a1.312 1.312 0 00-.22-.066c.05-.06.146-.133.183-.198.053-.128.082-.264.088-.402v-.02a1.21 1.21 0 00-.061-.4c-.045-.134-.101-.2-.183-.333-.084-.066-.167-.132-.267-.132h-.016c-.093 0-.176.03-.262.132a.8.8 0 00-.205.334 1.18 1.18 0 00-.09.4v.019c.002.089.008.179.02.267-.193-.067-.438-.135-.607-.202a1.635 1.635 0 01-.018-.2v-.02a1.772 1.772 0 01.15-.768c.082-.22.232-.406.43-.533a.985.985 0 01.594-.2zm-2.962.059h.036c.142 0 .27.048.399.135.146.129.264.288.344.465.09.199.14.4.153.667v.004c.007.134.006.2-.002.266v.08c-.03.007-.056.018-.083.024-.152.055-.274.135-.393.2.012-.09.013-.18.003-.267v-.015c-.012-.133-.04-.2-.082-.333a.613.613 0 00-.166-.267.248.248 0 00-.183-.064h-.021c-.071.006-.13.04-.186.132a.552.552 0 00-.12.27.944.944 0 00-.023.33v.015c.012.135.037.2.08.334.046.134.098.2.166.268.01.009.02.018.034.024-.07.057-.117.07-.176.136a.304.304 0 01-.131.068 2.62 2.62 0 01-.275-.402 1.772 1.772 0 01-.155-.667 1.759 1.759 0 01.08-.668 1.43 1.43 0 01.283-.535c.128-.133.26-.2.418-.2zm1.37 1.706c.332 0 .733.065 1.216.399.293.2.523.269 1.052.468h.003c.255.136.405.266.478.399v-.131a.571.571 0 01.016.47c-.123.31-.516.643-1.063.842v.002c-.268.135-.501.333-.775.465-.276.135-.588.292-1.012.267a1.139 1.139 0 01-.448-.067 3.566 3.566 0 01-.322-.198c-.195-.135-.363-.332-.612-.465v-.005h-.005c-.4-.246-.616-.512-.686-.71-.07-.268-.005-.47.193-.6.224-.135.38-.271.483-.336.104-.074.143-.102.176-.131h.002v-.003c.169-.202.436-.47.839-.601.139-.036.294-.065.466-.065zm2.8 2.142c.358 1.417 1.196 3.475 1.735 4.473.286.534.855 1.659 1.102 3.024.156-.005.33.018.513.064.646-1.671-.546-3.467-1.089-3.966-.22-.2-.232-.335-.123-.335.59.534 1.365 1.572 1.646 2.757.13.535.16 1.104.021 1.67.067.028.135.06.205.067 1.032.534 1.413.938 1.23 1.537v-.043c-.06-.003-.12 0-.18 0h-.016c.151-.467-.182-.825-1.065-1.224-.915-.4-1.646-.336-1.77.465-.008.043-.013.066-.018.135-.068.023-.139.053-.209.064-.43.268-.662.669-.793 1.187-.13.533-.17 1.156-.205 1.869v.003c-.02.334-.17.838-.319 1.35-1.5 1.072-3.58 1.538-5.348.334a2.645 2.645 0 00-.402-.533 1.45 1.45 0 00-.275-.333c.182 0 .338-.03.465-.067a.615.615 0 00.314-.334c.108-.267 0-.697-.345-1.163-.345-.467-.931-.995-1.788-1.521-.63-.4-.986-.87-1.15-1.396-.165-.534-.143-1.085-.015-1.645.245-1.07.873-2.11 1.274-2.763.107-.065.037.135-.408.974-.396.751-1.14 2.497-.122 3.854a8.123 8.123 0 01.647-2.876c.564-1.278 1.743-3.504 1.836-5.268.048.036.217.135.289.202.218.133.38.333.59.465.21.201.477.335.876.335.039.003.075.006.11.006.412 0 .73-.134.997-.268.29-.134.52-.334.74-.4h.005c.467-.135.835-.402 1.044-.7zm2.185 8.958c.037.6.343 1.245.882 1.377.588.134 1.434-.333 1.791-.765l.211-.01c.315-.007.577.01.847.268l.003.003c.208.199.305.53.391.876.085.4.154.78.409 1.066.486.527.645.906.636 1.14l.003-.007v.018l-.003-.012c-.015.262-.185.396-.498.595-.63.401-1.746.712-2.457 1.57-.618.737-1.37 1.14-2.036 1.191-.664.053-1.237-.2-1.574-.898l-.005-.003c-.21-.4-.12-1.025.056-1.69.176-.668.428-1.344.463-1.897.037-.714.076-1.335.195-1.814.12-.465.308-.797.641-.984l.045-.022zm-10.814.049h.01c.053 0 .105.005.157.014.376.055.706.333 1.023.752l.91 1.664.003.003c.243.533.754 1.064 1.189 1.637.434.598.77 1.131.729 1.57v.006c-.057.744-.48 1.148-1.125 1.294-.645.135-1.52.002-2.395-.464-.968-.536-2.118-.469-2.857-.602-.369-.066-.61-.2-.723-.4-.11-.2-.113-.602.123-1.23v-.004l.002-.003c.117-.334.03-.752-.027-1.118-.055-.401-.083-.71.043-.94.16-.334.396-.4.69-.533.294-.135.64-.202.915-.47h.002v-.002c.256-.268.445-.601.668-.838.19-.201.38-.336.663-.336zm7.159-9.074c-.435.201-.945.535-1.488.535-.542 0-.97-.267-1.28-.466-.154-.134-.28-.268-.373-.335-.164-.134-.144-.333-.074-.333.109.016.129.134.199.2.096.066.215.2.36.333.292.2.68.467 1.167.467.485 0 1.053-.267 1.398-.466.195-.135.445-.334.648-.467.156-.136.149-.267.279-.267.128.016.034.134-.147.332a8.097 8.097 0 01-.69.468zm-1.082-1.583V5.64c-.006-.02.013-.042.029-.05.074-.043.18-.027.26.004.063 0 .16.067.15.135-.006.049-.085.066-.135.066-.055 0-.092-.043-.141-.068-.052-.018-.146-.008-.163-.065zm-.551 0c-.02.058-.113.049-.166.066-.047.025-.086.068-.14.068-.05 0-.13-.02-.136-.068-.01-.066.088-.133.15-.133.08-.031.184-.047.259-.005.019.009.036.03.03.05v.02h.003z"/></svg>'}
+PNAME = {"macos": "macOS", "windows": "Windows", "linux": "Linux"}
+def plat(k):   # 每种包属于哪个系统;源码包各系统都列
+    return {"dmg": "macos", "pkg": "macos", "zip": "windows", "deb": "linux", "appimage": "linux"}.get(k)
 def download():
     rel = "download.html"
     url = lambda f: f"{REPO}/releases/download/v{VER}/{f}"
-    pk = [x for x in FILES if x[3] in ("dmg", "pkg")]
-    def variant(n, f, size, k):
-        alt = "".join(f'<button type="button" data-to="{g}">{kind(gk)[2]}</button>' for g, _, _, gk, _ in pk if g != f)
-        return (f'<div class="get-v" data-f="{f}" data-os="{k}"{"" if n == 0 else " hidden"}>'
-                f'<div class="os">macOS · {t("Apple 芯片", "Apple silicon")} · {kind(k)[2]}</div>'
-                f'<a class="btn" href="{url(f)}"><span>{ARROW}{t("下载", "Download")} {APP} Desk</span><span class="sz">{size}</span></a>'
-                f'<div class="fn">{f}</div>'
-                f'<div class="alt"><span>{t("另有", "Also")}</span>{alt}<a href="#files">{t("全部文件", "All files")}</a></div></div>')
-    card = ('<div class="get rise" style="--k:3">' + "".join(variant(n, f, size, k) for n, (f, size, _, k, _) in enumerate(pk))
-            + f'<p class="need">{t("需要 Apple 芯片的 Mac，macOS 11 或更新的版本。x86_64 的 Linux 从源码构建,见", "Needs a Mac with Apple silicon and macOS 11 or later. On x86_64 Linux, build from source; see")} <a href="docs/dev/build.html">{t("从源码构建", "Building from source")}</a>{t("。", ".")}</p></div>')
-    rows = "".join(f'<div class="tr" data-file="{f}" data-sha="{h}"><span class="os">{kind(k)[0]}<i>{kind(k)[1]}</i></span><span class="fl"><a href="{url(f)}">{f}</a></span>{anchor(u)}<span class="r">{size}</span></div>' for f, size, h, k, u in FILES)
-    table = (f'<div class="tbl"><div class="tr h"><span class="os">{t("类型", "Type")}</span><span class="fl">{t("文件", "File")}</span><span class="an">{t("Zikaron 证明", "Zikaron record")}</span><span class="r">{t("大小", "Size")}</span></div>{rows}</div>'
-             f'<p class="t sums">{t("发布清单:", "Release list: ")}<a href="{url("SHA256SUMS.txt")}">SHA256SUMS.txt</a>{t(" · 第三方许可:", " · Third-party licences: ")}<a href="{url("THIRD-PARTY-LICENSES.txt")}">THIRD-PARTY-LICENSES.txt</a></p>')
-    dmg, pkg = pk[0][0], pk[1][0]
+    plats = [p for p in ("macos", "windows", "linux") if any(plat(x[3]) == p for x in FILES)]
+    first = plats[0]
+    pkgs = lambda p: [x for x in FILES if plat(x[3]) == p]
+    def panel(p, inner): return f'<div class="pl" data-plat="{p}"{"" if p == first else " hidden"}>{inner}</div>'
+    def variants(p):
+        pk = pkgs(p)
+        out = ""
+        for n, (f, size, _, k, _) in enumerate(pk):
+            alt = "".join(f'<button type="button" data-to="{g}">{kind(gk)[2]}</button>' for g, _, _, gk, _ in pk if g != f)
+            out += (f'<div class="get-v" data-f="{f}" data-pk="{k}"{"" if n == 0 else " hidden"}>'
+                    f'<div class="os">{PNAME[p]} · {kind(k)[1]} · {kind(k)[2]}</div>'
+                    f'<a class="btn" href="{url(f)}"><span>{ARROW}{t("下载", "Download")} {APP} Desk</span><span class="sz">{size}</span></a>'
+                    f'<div class="fn">{f}</div>'
+                    f'<div class="alt">{"<span>" + t("另有", "Also") + "</span>" + alt if alt else ""}<a href="#files">{t("全部文件", "All files")}</a></div></div>')
+        return out
+    need = {"macos": t("需要 Apple 芯片的 Mac，macOS 11 或更新的版本。", "Needs a Mac with Apple silicon and macOS 11 or later."),
+            "windows": t("需要 x86_64 的 Windows 10 或 11。", "Needs Windows 10 or 11 on x86_64."),
+            "linux": t("需要 x86_64 的 Linux，glibc 2.31 或更新（Ubuntu 20.04、Debian 11 起）。其他架构从源码构建。", "Needs x86_64 Linux with glibc 2.31 or later (Ubuntu 20.04, Debian 11 and up). On other architectures, build from source.")}
+    cards = '<div class="get rise" style="--k:3">' + "".join(panel(p, variants(p) + f'<p class="need">{need[p]}</p>') for p in plats) + '</div>'
+    bar = (f'<div class="plats" style="--i:0;--n:{len(plats)}" role="tablist" aria-label="' + t("系统", "System") + '">'
+           + '<span class="lens" aria-hidden="true"></span>'
+           + "".join(f'<button type="button" role="tab" data-plat="{p}" aria-label="{PNAME[p]}" title="{PNAME[p]}" aria-selected="{"true" if p == first else "false"}">{PICON[p]}</button>' for p in plats) + '</div>')
+    def rows(p):
+        return "".join(f'<div class="tr" data-file="{f}" data-sha="{h}"><span class="os">{kind(k)[0]}<i>{kind(k)[1]}</i></span><span class="fl"><a href="{url(f)}">{f}</a></span>{anchor(u)}<span class="r">{size}</span></div>'
+                       for f, size, h, k, u in FILES if plat(k) == p or k == "src")
+    head_row = f'<div class="tr h"><span class="os">{t("类型", "Type")}</span><span class="fl">{t("文件", "File")}</span><span class="an">{t("Zikaron 证明", "Zikaron record")}</span><span class="r">{t("大小", "Size")}</span></div>'
+    def sums_line(p):
+        lic = f"THIRD-PARTY-LICENSES-{p}.txt"
+        return f'<p class="t sums">{t("发布清单:", "Release list: ")}<a href="{url("SHA256SUMS.txt")}">SHA256SUMS.txt</a>{t(" · 第三方许可:", " · Third-party licences: ")}<a href="{url(lic)}">{lic}</a></p>'
+    tables = "".join(panel(p, f'<div class="tbl">{head_row}{rows(p)}</div>{sums_line(p)}') for p in plats)
     path = t("命令里的路径按你实际下载的位置改。", "Change the paths to wherever you downloaded the files.")
-    def sumstep(f): return f'<li><b>{t("核对 SHA-256,结果应与下方「核对」里列出的一致:", "Check the SHA-256; it should match the value listed under Check below:")}</b>{cmd(f"shasum -a 256 ~/Downloads/{f}")}</li>'
-    def qstep(f, then): return f'<li><b>{t("在「终端」里去掉下载时系统加上的隔离标记:", "In Terminal, remove the quarantine flag macOS adds to downloads:")}</b>{cmd(f"xattr -d com.apple.quarantine ~/Downloads/{f}")}<p class="t">{then}</p></li>'
-    mac_dmg = f"""<ol class="steps">
-      {sumstep(dmg)}
-      {qstep(dmg, t("这一步在打开 dmg 之前做。", "Do this before you open the dmg."))}
+    def seg(p, label):   # 一个系统有两种包时,安装分两页
+        pk = pkgs(p)
+        tabs = "".join(f'<button type="button" role="tab" data-pk="{k}" aria-selected="{"true" if n == 0 else "false"}">{".dmg" if k == "dmg" else ".pkg" if k == "pkg" else ".deb" if k == "deb" else "AppImage"}</button>' for n, (_, _, _, k, _) in enumerate(pk))
+        return f'<div class="seg" role="tablist" aria-label="{label}">{tabs}</div>'
+    def osp(k, inner, n): return f'<div class="osp" data-pk="{k}"{"" if n == 0 else " hidden"}>{inner}</div>'
+    def install(p):
+        f = {x[3]: x[0] for x in FILES}
+        if p == "macos":
+            def sumstep(g): return f'<li><b>{t("核对 SHA-256,结果应与下方「核对」里列出的一致:", "Check the SHA-256; it should match the value listed under Check below:")}</b>{cmd(f"shasum -a 256 ~/Downloads/{g}")}</li>'
+            def qstep(g, then): return f'<li><b>{t("在「终端」里去掉下载时系统加上的隔离标记:", "In Terminal, remove the quarantine flag macOS adds to downloads:")}</b>{cmd(f"xattr -d com.apple.quarantine ~/Downloads/{g}")}<p class="t">{then}</p></li>'
+            dmg = f"""<ol class="steps">
+      {sumstep(f["dmg"])}
+      {qstep(f["dmg"], t("这一步在打开 dmg 之前做。", "Do this before you open the dmg."))}
       <li><b>{t(f"打开 dmg,把 {APP}.app 拖进「应用程序」,再打开它。", f"Open the dmg, drag {APP}.app to Applications, then open it.")}</b>
         <p class="t">{t("已经先拖进去了的,改为运行这一条:", "If you dragged the app in first, run this instead:")}</p>{cmd(f"xattr -dr com.apple.quarantine /Applications/{APP}.app")}
         <p class="t">{t(f"命令行 zikaron 在应用包内:{APP}.app/Contents/MacOS/zikaron。", f"The zikaron command line is inside the app bundle: {APP}.app/Contents/MacOS/zikaron.")}</p></li>
-    </ol>
-    <p class="t path">{path}</p>"""
-    mac_pkg = f"""<ol class="steps">
-      {sumstep(pkg)}
-      {qstep(pkg, t("这一步在双击安装之前做。", "Do this before you double-click it."))}
+    </ol>"""
+            pkg = f"""<ol class="steps">
+      {sumstep(f["pkg"])}
+      {qstep(f["pkg"], t("这一步在双击安装之前做。", "Do this before you double-click it."))}
       <li><b>{t("双击安装。", "Double-click the pkg to install.")}</b>
-        <p class="t">{t(f"安装程序把应用装进 /Applications,把命令行装到 /usr/local/bin/zikaron。", f"The installer puts the app in /Applications and the command line at /usr/local/bin/zikaron.")}</p></li>
-    </ol>
-    <p class="t path">{path}</p>"""
-    why = t(f"为什么有这一步:应用由 {SIGNER} 的自签证书签名,在 Apple 公证之外发出。从浏览器下载的文件带着 macOS 的隔离标记,系统会拒绝打开;在较新的 macOS 上,「系统设置 › 隐私与安全性」里的「仍要打开」时常失灵。先核对文件,再去掉隔离标记,就是向系统确认你信任这份核对过的文件。",
-            f"Why this step: the app is signed with {SIGNER}’s self-signed certificate and is outside Apple’s notarization. Files downloaded in a browser carry macOS’s quarantine flag, and macOS refuses to open them; on recent macOS, Open Anyway in System Settings › Privacy & Security works only some of the time. Checking the file and then removing the flag tells the system you trust the file you have checked.")
-    sums = "".join(f'<div><span class="k">{kind(k)[0]}</span><span class="hash">{h}</span></div>' for f, size, h, k, u in FILES)
+        <p class="t">{t("安装程序把应用装进 /Applications,把命令行装到 /usr/local/bin/zikaron。", "The installer puts the app in /Applications and the command line at /usr/local/bin/zikaron.")}</p></li>
+    </ol>"""
+            why = t(f"为什么有这一步:应用由 {SIGNER} 的自签证书签名,在 Apple 公证之外发出。从浏览器下载的文件带着 macOS 的隔离标记,系统会拒绝打开;在较新的 macOS 上,「系统设置 › 隐私与安全性」里的「仍要打开」时常失灵。先核对文件,再去掉隔离标记,就是向系统确认你信任这份核对过的文件。",
+                    f"Why this step: the app is signed with {SIGNER}’s self-signed certificate and is outside Apple’s notarization. Files downloaded in a browser carry macOS’s quarantine flag, and macOS refuses to open them; on recent macOS, Open Anyway in System Settings › Privacy & Security works only some of the time. Checking the file and then removing the flag tells the system you trust the file you have checked.")
+            up = t("升级时,用新版覆盖安装即可;账本与本机数据不在应用里,照常保留。", "To upgrade, install the new version over the old one; your ledgers and local data live outside the app and stay as they are.")
+            return (seg(p, t("安装包", "Package")) + osp("dmg", dmg, 0) + osp("pkg", pkg, 1)
+                    + f'<p class="t path">{path}</p><p class="why">{why}</p><p class="t">{up}</p>')
+        if p == "windows":
+            z = f["zip"]
+            steps = f"""<ol class="steps">
+      <li><b>{t("在 PowerShell 里核对 SHA-256,结果应与下方「核对」里列出的一致:", "In PowerShell, check the SHA-256; it should match the value listed under Check below:")}</b>{cmd(f"Get-FileHash ~\\Downloads\\{z} -Algorithm SHA256")}<p class="t">{t("PowerShell 用大写字母显示,比对时不分大小写。", "PowerShell prints the value in capitals; compare it without regard to case.")}</p></li>
+      <li><b>{t("解压到任意文件夹,双击 zikaron-desk.exe。", "Unzip it to any folder and double-click zikaron-desk.exe.")}</b>
+        <p class="t">{t("不用安装,程序自带运行库。命令行是同一文件夹里的 zikaron.exe。", "There is nothing to install, and the runtime comes with the program. The command line is zikaron.exe in the same folder.")}</p></li>
+      <li><b>{t("首次打开时如果提示「Windows 已保护你的电脑」,按「更多信息」,再按「仍要运行」。", "If the first launch shows “Windows protected your PC”, click More info, then Run anyway.")}</b></li>
+    </ol>"""
+            why = t("为什么有这一步:程序没有签名。Windows 11 开着「智能应用控制」时,未签名的程序会被直接拦下,没有「仍要运行」,也不能单独放行这一个程序;要用就先在「Windows 安全中心 › 应用和浏览器控制 › 智能应用控制设置」里把它关掉。",
+                    "Why this step: the program is unsigned. On Windows 11 with Smart App Control on, unsigned programs are blocked outright, with no Run anyway and no way to allow this one program; to use it, first turn Smart App Control off under Windows Security › App & browser control › Smart App Control settings.")
+            up = t("升级时,用新版的文件夹替换旧的。本机数据在 %LOCALAPPDATA%\\ZIKARON\\,删掉解压的文件夹不会删掉它。开始菜单项、桌面快捷方式和把命令行加进 PATH,都要自己加。",
+                   "To upgrade, replace the old folder with the new one. Your local data lives in %LOCALAPPDATA%\\ZIKARON\\, so deleting the unzipped folder leaves it in place. Start menu entries, desktop shortcuts and adding the command line to PATH are up to you.")
+            return steps + f'<p class="t path">{path}</p><p class="why">{why}</p><p class="t">{up}</p>'
+        d, a = f["deb"], f["appimage"]
+        def sumstep(g): return f'<li><b>{t("核对 SHA-256,结果应与下方「核对」里列出的一致:", "Check the SHA-256; it should match the value listed under Check below:")}</b>{cmd(f"sha256sum ~/Downloads/{g}")}</li>'
+        deb = f"""<ol class="steps">
+      {sumstep(d)}
+      <li><b>{t("安装:", "Install it:")}</b>{cmd(f"sudo apt install ~/Downloads/{d}")}
+        <p class="t">{t("用于 Debian、Ubuntu 及其衍生版。窗口程序是 zikaron-desk,应用菜单里也有;命令行是 zikaron。", "For Debian, Ubuntu and their derivatives. The window program is zikaron-desk, also in the applications menu; the command line is zikaron.")}</p></li>
+    </ol>"""
+        app = f"""<ol class="steps">
+      {sumstep(a)}
+      <li><b>{t("加上可执行权限,再运行:", "Make it executable, then run it:")}</b>{cmd(f"chmod +x ~/Downloads/{a}" + chr(10) + f"~/Downloads/{a}", True)}
+        <p class="t">{t("不用安装,打开的是窗口程序。系统没有 FUSE 时,在命令后面加 --appimage-extract-and-run。包里的命令行不能直接调用,要用命令行请装 .deb。", "There is nothing to install; it opens the window program. If the system lacks FUSE, add --appimage-extract-and-run to the command. The command line inside cannot be called directly; for the command line, install the .deb.")}</p></li>
+    </ol>"""
+        why = t("两个包都没有签名,以 SHA-256 核对。系统的选档框经由桌面门户,需要装 xdg-desktop-portal 和一个后端,如 xdg-desktop-portal-gtk;没有门户时,可以把文件直接拖进窗口。",
+                "Neither package is signed; check them by their SHA-256. The system file dialog goes through the desktop portal, so install xdg-desktop-portal and a backend such as xdg-desktop-portal-gtk; without a portal, drag files straight into the window.")
+        other = t('别的架构或发行版:按<a href="docs/dev/build.html">开发者指南 · 从源码构建</a>构建。', 'Other architectures or distributions: build from source; see <a href="docs/dev/build.html">Developer guide · Building from source</a>.')
+        return (seg(p, t("安装包", "Package")) + osp("deb", deb, 0) + osp("appimage", app, 1)
+                + f'<p class="t path">{path}</p><p class="why">{why}</p><p class="t">{other}</p>')
+    installs = "".join(panel(p, install(p)) for p in plats)
+    more = t('终端里的更多核对方法,见<a href="docs/dev/verify.html">开发者指南 · 校验</a>。', 'For more checks in the terminal, see <a href="docs/dev/verify.html">Developer guide · Checksums</a>.')
+    def side(p):
+        if p == "macos":
+            return (f'<div class="kv"><div><span class="k">{t("签名者", "Signer")}</span><span>{SIGNER}</span></div><div><span class="k">{t("证书指纹", "Certificate")}</span><span class="hash">{CERT}</span></div><div><span class="k">{t("有效期至", "Valid until")}</span><span>{CERT_TO}</span></div></div>'
+                    f'<p class="t">{t(f"应用和 dmg 都由这张证书签名。装好之后在终端里查看,输出里的 Authority 应为 {SIGNER}:", f"Both the app and the dmg are signed with this certificate. Once installed, check in Terminal; the Authority in the output should read {SIGNER}:")}</p>'
+                    f'{cmd(f"codesign -dvv /Applications/{APP}.app")}'
+                    f'<p class="t">{t("pkg 以 SHA-256 核对。", "Check the pkg by its SHA-256.")}{more}</p>')
+        if p == "windows":
+            return (f'<p class="t">{t("程序没有签名,以 SHA-256 核对。解压出的文件夹里有 zikaron-desk.exe、zikaron.exe、LICENSE.txt 与 THIRD-PARTY-LICENSES.txt。", "The program is unsigned; check it by its SHA-256. The unzipped folder holds zikaron-desk.exe, zikaron.exe, LICENSE.txt and THIRD-PARTY-LICENSES.txt.")}{more}</p>')
+        return (f'<p class="t">{t("两个包都没有签名,以 SHA-256 核对。把发布清单和下载的文件放在同一个文件夹,可以一次核对:", "Neither package is signed; check them by their SHA-256. With the release list and the downloads in one folder, check them all at once:")}</p>'
+                f'{cmd("sha256sum -c --ignore-missing SHA256SUMS.txt")}<p class="t">{more}</p>')
+    def sums(p):
+        return "".join(f'<div><span class="k">{kind(k)[0]}</span><span class="hash">{h}</span></div>' for f, size, h, k, u in FILES if plat(k) == p or k == "src")
+    vmains = "".join(panel(p, f'<div class="kv sha">{sums(p)}</div>') for p in plats)
+    vsides = "".join(panel(p, side(p)) for p in plats)
     zk = f"""<section data-p="zikaron">
   <div class="hero-dl">
     <div class="rise" style="--k:2">
       <h2 class="pname"><span class="zk">Zikaron</span><span class="d">Desk</span></h2>
       <p class="tag">{t("留证基础设施", "Evidence infrastructure")}</p>
       <p class="meta"><span>{t("版本", "Version")} {VER}</span><a href="{REPO}/releases/tag/v{VER}">{t("发布说明", "Release notes")}</a><a href="{REPO}/releases">{t("历史版本", "All releases")}</a><a href="{REPO}">{t("源码", "Source")}</a></p>
+      {bar}
     </div>
-    {card}
+    {cards}
   </div>
-  <div class="sec rise" id="files" style="--k:4"><h2>{t("全部文件", "All files")}</h2>{table}</div>
-  <div class="sec rise" id="install" style="--k:5"><h2>{t("安装", "Install")}</h2>
-    <div class="seg" role="tablist" aria-label="{t("安装包", "Package")}"><button type="button" role="tab" data-os="dmg" aria-selected="true">.dmg</button><button type="button" role="tab" data-os="pkg" aria-selected="false">.pkg</button></div>
-    <div class="osp" data-os="dmg">{mac_dmg}</div>
-    <div class="osp" data-os="pkg" hidden>{mac_pkg}</div>
-    <p class="why">{why}</p>
-    <p class="t">{t('x86_64 的 Linux:0.1.0 从源码构建,见<a href="docs/dev/build.html">开发者指南 · 从源码构建</a>。', 'x86_64 Linux: build 0.1.0 from source; see <a href="docs/dev/build.html">Developer guide · Building from source</a>.')}</p>
-  </div>
+  <div class="sec rise" id="files" style="--k:4"><h2>{t("全部文件", "All files")}</h2>{tables}</div>
+  <div class="sec rise" id="install" style="--k:5"><h2>{t("安装", "Install")}</h2>{installs}</div>
   <div class="sec rise" id="check" style="--k:6"><h2>{t("核对", "Check")}</h2>
     <div class="vgrid">
       <div class="vmain"><label class="drop" data-verify>{FILEICON}<b>{t("把下载的文件拖到这里", "Drop the downloaded file here")}</b><span>{t("在浏览器里算 SHA-256,与发布清单比对;文件留在这台机器上", "SHA-256 is computed in your browser and compared with the release list; the file stays on this machine")}</span><input type="file"></label>
       <div class="out" id="verify-out" hidden></div>
-      <div class="kv sha">{sums}</div></div>
-      <div class="vside">
-        <div class="kv"><div><span class="k">{t("签名者", "Signer")}</span><span>{SIGNER}</span></div><div><span class="k">{t("证书指纹", "Certificate")}</span><span class="hash">{CERT}</span></div><div><span class="k">{t("有效期至", "Valid until")}</span><span>{CERT_TO}</span></div></div>
-        <p class="t">{t(f"应用和 dmg 都由这张证书签名。装好之后在终端里查看,输出里的 Authority 应为 {SIGNER}:", f"Both the app and the dmg are signed with this certificate. Once installed, check in Terminal; the Authority in the output should read {SIGNER}:")}</p>
-        {cmd(f'codesign -dvv /Applications/{APP}.app')}
-        <p class="t">{t('pkg 以 SHA-256 核对。终端里的更多核对方法,见<a href="docs/dev/verify.html">开发者指南 · 校验</a>。', 'Check the pkg by its SHA-256. For more checks in the terminal, see <a href="docs/dev/verify.html">Developer guide · Checksums</a>.')}</p>
-      </div>
+      {vmains}</div>
+      <div class="vside">{vsides}</div>
     </div>
   </div>
   <div class="sec rise" id="next" style="--k:6"><h2>{t("接下来", "Next")}</h2>
@@ -616,12 +691,20 @@ var rt=null;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(
 if(window.ResizeObserver)new ResizeObserver(function(){stops=null}).observe(th);
 setTimeout(function(){cur=inF(scrollY)?-1:near(scrollY);settle()},300);
 })();
-// 下载页:在 dmg 与 pkg 两种安装包之间切换,安装步骤跟着换
+// 下载页:三个系统的标志切换整页;macOS 里再在 dmg 与 pkg 之间切换,安装步骤跟着换
+var pb=document.querySelectorAll('.plats [data-plat]');if(pb.length)(function(){
+var have=[].map.call(pb,function(b){return b.getAttribute('data-plat')});
+function guess(){var u=((navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'')+' '+navigator.userAgent;if(/mac|iphone|ipad/i.test(u))return'macos';if(/win/i.test(u))return'windows';return'linux'}
+function set(p,mark){if(have.indexOf(p)<0)p=have[0];[].forEach.call(pb,function(b){b.setAttribute('aria-selected',b.getAttribute('data-plat')===p)});var bar=pb[0].parentNode;bar.style.setProperty('--i',have.indexOf(p));[].forEach.call(document.querySelectorAll('.pl[data-plat]'),function(x){x.hidden=x.getAttribute('data-plat')!==p});if(mark&&location.hash!=='#'+p)history.replaceState(null,'','#'+p)}
+var h=location.hash.slice(1);set(have.indexOf(h)>=0?h:guess(),false);
+[].forEach.call(pb,function(b){b.addEventListener('click',function(){set(b.getAttribute('data-plat'),true)})});
+addEventListener('hashchange',function(){var h=location.hash.slice(1);if(have.indexOf(h)>=0)set(h,false)});
+})();
 var gv=document.querySelectorAll('.get [data-f]');if(gv.length)(function(){
-function pick(f){if(!f)return;[].forEach.call(gv,function(v){v.hidden=v.getAttribute('data-f')!==f})}
-function os(o){[].forEach.call(document.querySelectorAll('.seg [data-os]'),function(b){b.setAttribute('aria-selected',b.getAttribute('data-os')===o)});[].forEach.call(document.querySelectorAll('.osp[data-os]'),function(p){p.hidden=p.getAttribute('data-os')!==o})}
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-to]');if(b){e.preventDefault();var f=b.getAttribute('data-to');pick(f);var v=document.querySelector('.get [data-f="'+f+'"]');if(v)os(v.getAttribute('data-os'));return}
-var s=e.target.closest&&e.target.closest('.seg [data-os]');if(s){os(s.getAttribute('data-os'));var w=[].filter.call(gv,function(x){return x.getAttribute('data-os')===s.getAttribute('data-os')})[0];if(w)pick(w.getAttribute('data-f'))}});
+function pick(f){if(!f)return;var v=document.querySelector('.get [data-f="'+f+'"]');if(!v)return;[].forEach.call(v.parentNode.querySelectorAll('[data-f]'),function(x){x.hidden=x!==v})}
+function pk(o){[].forEach.call(document.querySelectorAll('.seg'),function(g){if(!g.querySelector('[data-pk="'+o+'"]'))return;[].forEach.call(g.querySelectorAll('[data-pk]'),function(b){b.setAttribute('aria-selected',b.getAttribute('data-pk')===o)});[].forEach.call(g.parentNode.querySelectorAll('.osp[data-pk]'),function(p){p.hidden=p.getAttribute('data-pk')!==o})})}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-to]');if(b){e.preventDefault();var f=b.getAttribute('data-to');pick(f);var v=document.querySelector('.get [data-f="'+f+'"]');if(v)pk(v.getAttribute('data-pk'));return}
+var s=e.target.closest&&e.target.closest('.seg [data-pk]');if(s){pk(s.getAttribute('data-pk'));var w=[].filter.call(gv,function(x){return x.getAttribute('data-pk')===s.getAttribute('data-pk')})[0];if(w)pick(w.getAttribute('data-f'))}});
 })();
 var z=document.querySelector('.drop[data-verify]');if(!z)return;
 var inp=z.querySelector('input'),out=document.getElementById('verify-out'),list={};
@@ -633,8 +716,8 @@ inp.addEventListener('change',function(){if(inp.files[0])run(inp.files[0])});
 function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function row(k,v){return '<div><span class="k">'+k+'</span>'+v+'</div>'}
 function run(f){out.hidden=false;out.innerHTML=row(T('结果','Result'),'<span>'+T('正在计算…','Computing…')+'</span>');
-f.arrayBuffer().then(function(b){return crypto.subtle.digest('SHA-256',b)}).then(function(d){var h=Array.prototype.map.call(new Uint8Array(d),function(x){return('0'+x.toString(16)).slice(-2)}).join(''),w=list[f.name];
-var v=w===undefined?'<span class="bad">'+T('这个文件在发布清单之外','This file is outside the release list')+'</span>':w===h?'<span class="ok">'+T('与发布清单一致','Matches the release list')+'</span>':'<span class="bad">'+T('与发布清单不一致。请删掉它，重新下载。','Does not match the release list. Delete it and download again.')+'</span>';
+f.arrayBuffer().then(function(b){return crypto.subtle.digest('SHA-256',b)}).then(function(d){var h=Array.prototype.map.call(new Uint8Array(d),function(x){return('0'+x.toString(16)).slice(-2)}).join(''),w=list[f.name],same=Object.keys(list).filter(function(k){return list[k]===h})[0];
+var v=w===h?'<span class="ok">'+T('与发布清单一致','Matches the release list')+'</span>':same?'<span class="ok">'+T('与发布清单里的 ','Matches ')+esc(same)+T(' 一致',' in the release list')+'</span>':w===undefined?'<span class="bad">'+T('这个文件在发布清单之外','This file is outside the release list')+'</span>':'<span class="bad">'+T('与发布清单不一致。请删掉它，重新下载。','Does not match the release list. Delete it and download again.')+'</span>';
 out.innerHTML=row(T('结果','Result'),v)+row(T('文件','File'),'<span>'+esc(f.name)+'</span>')+row('SHA-256','<span class="hash">'+h+'</span>');},function(){out.innerHTML=row(T('结果','Result'),'<span class="bad">'+T('这个文件读取失败','This file could not be read')+'</span>');});}
 })();
 """

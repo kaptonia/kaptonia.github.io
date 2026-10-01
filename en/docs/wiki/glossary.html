@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/glossary.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -46,12 +46,15 @@
 </dl>
 <h2 id="chain">Anchoring</h2>
 <dl>
-<div><dt>Put on chain (anchor)</dt><dd>Send entries in an Ethereum transaction. (anchor)</dd></div>
-<div><dt>Registry contract</dt><dd>A small contract on chain that emits an event for every fingerprint it receives, shared by everyone. (registry)</dd></div>
+<div><dt>Put on chain (anchor)</dt><dd>Send entries in a transaction on the network this identity chose. (anchor)</dd></div>
+<div><dt>Registry contract</dt><dd>A small contract on chain that emits an event for every 32-byte hash it receives, shared by everyone; the app sends entry IDs. (registry)</dd></div>
 <div><dt>Pending</dt><dd>Entries written to the ledger and queued to be sent.</dd></div>
 <div><dt>First anchor block time</dt><dd>The time of the block in which an entry first went on chain.</dd></div>
 <div><dt>Ledger check</dt><dd>The result of comparing every local entry with the anchors on chain; “Confirmed” rests on it. (audit)</dd></div>
 <div><dt>Auto put on chain</dt><dd>A setting that, when on, opens the “Put on chain” card right after writing.</dd></div>
+<div><dt>Network</dt><dd>Four things together: chain ID, registry contract, start block and nodes. Each identity keeps its own network, shared by both roles; the presets are Ethereum mainnet, Sepolia testnet, Arbitrum One and OP Mainnet.</dd></div>
+<div><dt>Read-only network</dt><dd>A network used only to check other people’s material, never to send transactions; the code fingerprint of its registry is checked before each read.</dd></div>
+<div><dt>Gas limit</dt><dd>The gas a transaction carries: one and a half times the nodes’ estimate, at most 200,000.</dd></div>
 </dl>
 <h2 id="grant">Grants</h2>
 <dl>
@@ -71,6 +74,7 @@
 <div><dt>All passed, Has gaps, Failed</dt><dd>The three verdicts of a check. (GREEN, PARTIAL, FAIL)</dd></div>
 <div><dt>Depth readings</dt><dd>Three numbers: first recorded, max depth and continuity. (depth)</dd></div>
 <div><dt>Published address</dt><dd>The https address where you put record kits online.</dd></div>
+<div><dt>Verification result file</dt><dd>A result written under <code>kits/verified/</code> in the machine folder after a record kit is verified, for other apps to read. (zikaron.kit-verification/1)</dd></div>
 <div><dt>Due diligence</dt><dd>Before taking a grant, checking whether active grants already in the other side’s ledger overlap the period you need.</dd></div>
 </dl>
 <h2 id="key">Identities and data</h2>
@@ -87,10 +91,11 @@
 <div><dt>Whole-machine backup</dt><dd>One encrypted file holding every identity, key, data and setting, with the extension <code>.zikaron</code>.</dd></div>
 <div><dt>Ledger mirror</dt><dd>A copy of the ledger exported for other tools to read.</dd></div>
 <div><dt>Machine folder</dt><dd>Where the key store, the identity registry and the machine settings live; one per machine.</dd></div>
+<div><dt>Checked facts</dt><dd>Anchors several nodes confirmed alike, kept on this machine with their block time and verdict so that later syncs stop asking about them one by one.</dd></div>
 <div><dt>Data folder</dt><dd>Where one role of one identity keeps its ledger and settings.</dd></div>
 </dl>
 </section></div>
 <div class="pn"><a href="faq.html"><span>Previous</span>Common questions</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#ledger" data-p=zikaron>The ledger</a><a href="#chain" data-p=zikaron>Anchoring</a><a href="#grant" data-p=zikaron>Grants</a><a href="#verify" data-p=zikaron>Presenting and verifying</a><a href="#key" data-p=zikaron>Identities and data</a></nav></div>
-<script src="../../../site.js?v=4bcd3fcb" defer></script>
+<script src="../../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

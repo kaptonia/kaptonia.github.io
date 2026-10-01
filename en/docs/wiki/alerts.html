@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/alerts.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -43,13 +43,15 @@
 </tbody></table></div>
 <ul>
 <li>“Whole-machine backup” reads “Not backed up yet” until the first export, and “N not backed up” when ledger entries or received grants have been added since the last one.</li>
+<li>When “Pending” and “Queue backlog” speak of the same thing, they merge into one row.</li>
 <li>Revocation watch alerts come at the end of the table, one row each, listed in the session that found them; a revoked grant keeps the mark “Revoked by issuer” in My grants.</li>
+<li>The full message of the last failed chain read is under “Details”.</li>
 </ul>
 <h2 id="notify">How alerts reach you</h2>
 <p>When one of the following newly appears, the window asks the system for attention once (on macOS the Dock icon bounces) and a toast starting with “Alert:” appears: for the Recorder, “Grants expiring”, “Whole-machine backup”, and a ledger check result of a broken chain; for the User, “My grants expiring” (expired ones included), “Whole-machine backup”, “Upstream issue”, and revocation watch. The other amber and red rows show on the Alerts page and in the sidebar count.</p>
-<p>Each matter alerts once. When the situation changes, for example a new deadline or new entries in an upstream ledger, it counts as a new matter and alerts again. Network errors show as “Sync failed” in the status line.</p>
+<p>Each matter alerts once, and the matters already alerted are kept in the data folder’s settings. When the situation changes, for example a new deadline, a ledger broken elsewhere or new entries in an upstream ledger, it counts as a new matter and alerts again. Network errors show as “Sync failed” in the status line. These alerts are always on, with no switch in Settings.</p>
 <h2 id="sync">Sync and the status line</h2>
-<p>The status line shows the most pressing of these: “In progress: …” (click it to return to the page where the task started), “Syncing…”, “Sync failed”, “Last synced HH:MM” and “Not synced yet”. Click the sync icon at the right end of the status line to read the chain in the background for the current role: both roles read the signing key’s balance once; a Recorder whose ledger exists also runs a ledger check; a User also re-verifies My grants.</p>
+<p>The status line shows the most pressing of these: “In progress: …” (with several at once, “In progress: … and others (N)”; click it to return to the page where the task started), “Syncing…”, “Sync failed”, “Last synced HH:MM” (followed by “UTC” when the time zone is UTC) and “Not synced yet”. Click the sync icon at the right end of the status line to read the chain in the background for the current role: both roles read the signing key’s balance once; a Recorder whose ledger exists also runs a ledger check; a User also re-verifies My grants. When everything has come back, one summary toast appears. The chain is asked only what is needed; see <a href="anchoring.html#audit">Ledger check</a>.</p>
 <h2 id="periods">Check intervals</h2>
 <p>Settings › Notifications: the Recorder’s “Ledger check” interval is 300 seconds out of the box, and the User’s “Grant verification interval” is 600 seconds. Press “Change interval…” and save a number of seconds; 0 turns the timer off, and the ledger check still runs at once whenever the ledger has changed or has no result yet.</p>
 <h2 id="settings">The seven sections</h2>
@@ -59,23 +61,23 @@
 <tr><td>Language and time</td><td>“中文” or “English”; time zone “UTC” (the default) or “Follow the system”, used for every time shown in the window</td></tr>
 <tr><td>Appearance</td><td>“Light” (the default), “Dark” or “Follow the system”</td></tr>
 <tr><td>Identity key</td><td>Identities, passcode and key backup; see <a href="keys.html">Identities and keys</a></td></tr>
-<tr><td>Network</td><td>Nodes, registry contract, auto put on chain and publish address; see <a href="anchoring.html#networks">Networks</a></td></tr>
+<tr><td>Network</td><td>Nodes, registry contract, auto put on chain, publish address and read-only networks; see <a href="anchoring.html#networks">Networks</a></td></tr>
 <tr><td>Notifications</td><td>How often the ledger is checked and grants re-verified</td></tr>
 <tr><td>Local data</td><td>Encryption, backup and data folder; see <a href="data.html">Local data and backups</a></td></tr>
-<tr><td>About</td><td>Version, setup check, run wizard again and diagnostics</td></tr>
+<tr><td>About</td><td>Version, third-party licences, setup check, run wizard again and diagnostics</td></tr>
 </tbody></table></div>
-<p>Appearance, auto-lock, language, the chosen network and the record of the last whole-machine backup are kept on this machine; they apply to every identity and are used on the passcode gate too. All other settings are kept in the current data folder.</p>
-<p>“Setup check” on the About page has a light for each item, with unfinished ones marked “To set up”; “Run self-check” in the “Details” fold at the bottom runs a self-check in the background.</p>
+<p>Appearance, auto-lock, language and the record of the last whole-machine backup are kept on this machine; they apply to every identity and are used on the passcode gate too. The read-only networks are kept on this machine as well, shared by every identity, and so is the network last chosen in the wizard, which only decides what a new identity selects first. All other settings are kept in the current data folder, each identity’s network among them.</p>
+<p>The About page shows the version, <code>ZIKARON Desk 0.1.1</code>; the “Third-party licences” fold lists every third-party component the app uses, with its name, version and licence text, generated at build time from the components this platform actually uses. “Setup check” has a light for each item, with unfinished ones marked “To set up”; “Run self-check” under “Details” runs a self-check in the background, and the fonts item reports where each face comes from (Chinese uses the system’s PingFang on macOS and Microsoft YaHei on Windows, and the bundled Noto Sans SC on Linux).</p>
 <h2 id="keys">Keyboard shortcuts</h2>
 <div class="tw"><table>
 <thead><tr><th>Keys</th><th>Action</th></tr></thead>
 <tbody>
-<tr><td>⌘1 to ⌘6</td><td>Open the sidebar pages in order</td></tr>
+<tr><td>⌘1 onward</td><td>Open the sidebar pages in order (⌘1 to ⌘6 for a Recorder, ⌘1 to ⌘4 for a User)</td></tr>
 <tr><td>⌘[ / ⌘]</td><td>Back / forward</td></tr>
 <tr><td>⌘,</td><td>Settings</td></tr>
 <tr><td>⌘L</td><td>Lock</td></tr>
 </tbody></table></div>
-<p>On Linux, use Ctrl in place of ⌘. Shortcuts pause while the passcode gate, the wizard or a card is open.</p>
+<p>⌘ is the Command key on macOS; on Windows and Linux use Ctrl, so ⌘L is Ctrl+L. Shortcuts pause while the passcode gate, the wizard or a card is open.</p>
 <h2 id="buttons">Button colours</h2>
 <dl>
 <div><dt>Blue</dt><dd>The main action on the screen, at most one per screen.</dd></div>
@@ -84,6 +86,6 @@
 <div><dt>Solid red</dt><dd>Writes to the ledger or sends to the chain the moment it is pressed; it appears on the final confirmation card alone.</dd></div>
 </dl>
 <div class="pn"><a href="data.html"><span>Previous</span>Local data and backups</a><a class="nx" href="faq.html"><span>Next</span>Common questions</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#alerts">The Alerts page</a><a href="#notify">How alerts reach you</a><a href="#sync">Sync and the status line</a><a href="#periods">Check intervals</a><a href="#settings">The seven sections</a><a href="#keys">Keyboard shortcuts</a><a href="#buttons">Button colours</a></nav></div>
-<script src="../../../site.js?v=4bcd3fcb" defer></script>
+<script src="../../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

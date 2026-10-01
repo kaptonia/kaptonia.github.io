@@ -14,12 +14,12 @@ zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
 <thead><tr><th>Exit code</th><th>What your app does</th></tr></thead>
 <tbody>
 <tr><td>0</td><td>Proceed</td></tr>
-<tr><td>1</td><td>Refuse. When checks failed, list the failed checks; when the ledger or input is at fault, show the reason</td></tr>
+<tr><td>1</td><td>Refuse. When checks failed, list the failed checks; when a grant file does not open (<code>E_GRANT_FILE</code>) or the ledger or input is at fault, show the reason</td></tr>
 <tr><td>3</td><td>Hold. Tell the user which check has yet to return a result, and retry later</td></tr>
 <tr><td>4</td><td>Answer absent: <code>scan</code> or <code>anchor</code> failed to read the chain, or <code>keygen</code> failed to get randomness; retry, or change nodes</td></tr>
 <tr><td>2</td><td>Your call is wrong; check the arguments</td></tr>
 </tbody></table></div>
-<p><code>--grant</code> takes an entry file. Each segment of a grant code is an entry’s bytes in base64url (padding left off); decode it and save it as a file; check a multi-segment grant code (a sublicense chain) hop by hop with <code>chain-check --hop</code>. An issuer ledger folder can be made from a ledger mirror; see <a href="cli.html#sealed">Command line</a>. A <code>.zkgrant</code> grant file is a container; how to unpack it is in <a href="formats.html#zkgrant">Files and formats</a>. The command line reads the chain through <code>http://</code> nodes alone; point it at a local node or a local proxy.</p>
+<p><code>--grant</code> takes a grant entry file, and also a <code>.zkgrant</code> grant file the user exported: the command line opens it by the reading the app uses and checks the hop the file is for. Each segment of a grant code is an entry’s bytes in base64url (padding left off); decode it and save it as a file; check a multi-segment grant code (a sublicense chain) hop by hop with <code>chain-check --hop</code>. <code>--ledger</code> can point straight at a ledger mirror or record kit the user exported; see <a href="cli.html#sealed">Command line</a>. Node addresses may be <code>http://</code> or <code>https://</code>.</p>
 <p>Handle 3 as a level of its own: “no result yet”, “passed” and “failed” are three states, and your interface shows them in three styles.</p>
 <h2 id="lib">Calling the cores directly</h2>
 <p>A Rust project can depend on the two crates <code>zikaron</code> and <code>zikaron-kit</code>. They only judge: your code reads the chain and hands the bytes to the cores; a record kit folder can go to <code>zikaron_kit::kitdir::verify_kit</code>, which reads and checks it from disk. In another language, implement the law text yourself and validate it with the conformance suite; see <a href="law.html#run">Testing an implementation</a>.</p>
@@ -27,11 +27,12 @@ zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
 <p>An app on the same machine can list the record kits the user has exported and let the user choose one to submit. Find the machine folder in the app’s own order:</p>
 <ol>
 <li>The directory the user set in your app’s settings.</li>
-<li>The path written in the pointer file <code>~/.zikaron-desk</code>. When the pointer exists it decides: if its target fails to read, tell the user plainly that the {{Z}} data has moved, and ask them to point to it again.</li>
-<li>With no pointer, the earlier location <code>~/Library/Application Support/ZIKARON</code> when it exists, then the default location <code>~/.zikaron-desk.d/</code>.</li>
+<li>The path written in the pointer file: <code>~/.zikaron-desk</code> on macOS and Linux, <code>%LOCALAPPDATA%\ZIKARON\.zikaron-desk</code> on Windows. When the pointer exists it decides: if its target fails to read, tell the user plainly that the {{Z}} data has moved, and ask them to point to it again.</li>
+<li>With no pointer: on macOS, first <code>~/Library/Application Support/ZIKARON</code> when it exists; then the default location, <code>~/.zikaron-desk.d/</code> on macOS and Linux and <code>%LOCALAPPDATA%\ZIKARON\.zikaron-desk.d\</code> on Windows.</li>
 </ol>
 <p>The single test for “valid”: <code>kits/index.json</code> there can be read, and its format name is <code>zikaron.kits-index/1</code>.</p>
-<p>Your app’s permission on {{Z}} data is limited to reading: <code>kits/index.json</code> in the machine folder, and the record kit folders that the index rows’ <code>path</code> points to (they sit under each data folder’s <code>kits/</code>). Once you have a record kit, verify it yourself before using the files inside.</p>
+<p>An index row’s <code>anchoredOn</code> names the chain the kit is anchored on (chain ID, registry contract, start block). For a kit the user has verified in {{Z}}, the machine folder holds a verification result file, <code>kits/verified/&lt;kit ID&gt;.json</code>: whether the kit holds, each record’s earliest counted anchor, and the networks read and not read this time; the format is in <a href="formats.html#verified">Verification result files</a>. An app that reads this file and never the chain learns from it which chain a kit is anchored on and whether it holds.</p>
+<p>Your app’s permission on {{Z}} data is limited to reading: <code>kits/index.json</code> and <code>kits/verified/</code> in the machine folder, and the record kit folders that the index rows’ <code>path</code> points to (they sit under each data folder’s <code>kits/</code>). Once you have a record kit, verify it yourself before using the files inside.</p>
 <h2 id="for">Pointing a record at your transaction</h2>
 <p>When a user keeps evidence for a transaction in your app, they can fill in “Recorded for (optional)” with your app’s name, the other party’s identity, their reference and optionally their role; these are written as given into the entry’s <code>for</code> member (the role as <code>seat</code>), and the identity must be <code>0x</code> followed by 40 hexadecimal digits. Whoever reads the record later can match it to the transaction.</p>
 <p>Show these values in your interface for the user to copy: a fixed short string for the app name, and the transaction’s ID in your system for the reference.</p>

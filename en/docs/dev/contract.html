@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/dev/contract.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -40,14 +40,16 @@ function anchor(bytes32 hash) external;
 function anchorMany(bytes32[] calldata hashes) external;" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
 <p><code>anchor</code> emits one event; <code>anchorMany</code> emits one for each element of the array, and zero for an empty array. The <code>author</code> in the event is the caller’s address. The contract has zero storage, zero owners and zero upgrade paths, and treats every caller alike. The source is <code>base/zikaron-core/contracts/src/ZikaronRegistry.sol</code>, licensed CC0-1.0.</p>
 <h2 id="deployed">Known deployments</h2>
-<p>The app comes with two deployments of the same pinned build, with the same code hash:</p>
+<p>The app comes with four deployments of the same pinned build, with the same code hash; on Ethereum mainnet, Arbitrum One and OP Mainnet they also share one deployer, one set of deployment bytes and one address:</p>
 <div class="tw"><table>
 <thead><tr><th>Network</th><th>Chain ID</th><th>Registry contract</th><th>Start block</th></tr></thead>
 <tbody>
 <tr><td>Ethereum mainnet (default)</td><td>1</td><td><code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code></td><td>26087229</td></tr>
 <tr><td>Sepolia testnet</td><td>11155111</td><td><code>0xC29410B882c4C3b77e33659d2f06ac563e7B08a3</code></td><td>11715660</td></tr>
+<tr><td>Arbitrum One</td><td>42161</td><td><code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code></td><td>511445184</td></tr>
+<tr><td>OP Mainnet</td><td>10</td><td><code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code></td><td>157735914</td></tr>
 </tbody></table></div>
-<p>The start block is where scanning begins, earlier than the first anchor on that contract.</p>
+<p>The start block is where scanning begins, earlier than the first anchor on that contract. Each identity keeps the one it uses, shared by both roles; “default” means the one the first-run wizard and “New identity” select first. The preset nodes and how they are chosen are in <a href="release.html#contract">Releasing · Contract and networks</a>.</p>
 <h2 id="forms">Two forms of anchor</h2>
 <dl>
 <div><dt>Registry form</dt><dd>The transaction succeeds, and its receipt holds a log emitted by a registry contract with exactly three topics and empty data: topic 0 is the keccak256 of <code>Anchored(address,bytes32)</code>, topic 1 is the transaction’s sender, topic 2 is the fingerprint. The same fingerprint also appears in the transaction’s calldata, at an offset that is a multiple of 32, or 4 plus a multiple of 32.</dd></div>
@@ -71,7 +73,7 @@ cast keccak $(forge inspect ZikaronRegistry deployedBytecode)</code><button clas
 forge build
 cast keccak $(forge inspect ZikaronRegistry deployedBytecode)" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
 <h2 id="deploy">Deploying your own</h2>
-<p>Anyone may deploy the same bytes on any EVM chain that has passed the Shanghai upgrade. After deploying, check that the hash of the code on chain matches the table above, then enter the chain ID, registry contract and start block in the app under Settings › Network › “Edit nodes…”.</p>
+<p>Anyone may deploy the same bytes on any EVM chain that has passed the Shanghai upgrade. After deploying, check that the hash of the code on chain matches the table above, then enter the chain ID, registry contract, start block and nodes for the identity in the app under Settings › Network › “Edit nodes…”; to use it only for checking other people’s material, add it as a read-only network.</p>
 <div class="cmd block"><code>forge create src/ZikaronRegistry.sol:ZikaronRegistry \
   --rpc-url &lt;node&gt; --private-key &lt;deployment key&gt; --broadcast
 
@@ -80,23 +82,26 @@ cast keccak $(cast code &lt;new address&gt; --rpc-url &lt;node&gt;)</code><butto
 
 cast keccak $(cast code &lt;new address&gt; --rpc-url &lt;node&gt;)" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
 <p>Deploy with a dedicated key; the identity key signs the ledger and sends anchors.</p>
-<p>This pinned build uses the PUSH0 instruction and suits chains that have passed the Shanghai upgrade. An earlier chain needs its own build, with its own code hash. The law reads logs by the contract addresses a verifier declares, so a second build is purely a deployment convenience.</p>
+<p>This pinned build uses the PUSH0 instruction and suits chains that have passed the Shanghai upgrade. An earlier chain needs its own build, with its own code hash. The law reads logs by the contract addresses a verifier declares, so a second build is purely a deployment convenience. Before reading a read-only network, the app checks that the code hash of its registry equals the one above, and a network that differs sits out that read; a contract built separately can therefore serve in the app only as an identity’s main network.</p>
 <h2 id="gas">Gas, for reference</h2>
 <div class="tw"><table>
-<thead><tr><th>Call</th><th>Gas used by the contract</th></tr></thead>
+<thead><tr><th>Call</th><th>Gas used by the contract</th><th>Estimate for the whole transaction (Ethereum mainnet)</th></tr></thead>
 <tbody>
-<tr><td><code>anchor</code></td><td>2,352</td></tr>
-<tr><td><code>anchorMany</code>, 1 element</td><td>2,776</td></tr>
-<tr><td><code>anchorMany</code>, 10 elements</td><td>17,746</td></tr>
-<tr><td><code>anchorMany</code>, 100 elements</td><td>167,661</td></tr>
+<tr><td><code>anchor</code></td><td>2,352</td><td>about 23,600</td></tr>
+<tr><td><code>anchorMany</code>, 1 element</td><td>2,776</td><td>about 24,050</td></tr>
+<tr><td><code>anchorMany</code>, 10 elements</td><td>17,746</td><td>about 42,900</td></tr>
+<tr><td><code>anchorMany</code>, 50 elements</td><td></td><td>about 127,300</td></tr>
+<tr><td><code>anchorMany</code>, 83 elements</td><td></td><td>about 198,000</td></tr>
+<tr><td><code>anchorMany</code>, 100 elements</td><td>167,661</td><td>about 233,800</td></tr>
 </tbody></table></div>
-<p>The table covers the contract’s execution as measured in forge; the transaction’s 21,000 base cost and calldata cost come on top. The more elements, the less each one costs. The app sends with a gas limit of 200,000.</p>
+<p>The second column is the contract’s execution as measured in forge; the third is a node’s estimate for the whole transaction, including the 21,000 base cost and the calldata cost, which shifts a little with the hashes’ bytes (each zero byte in a hash saves about 12 gas). The more elements, the less each one costs.</p>
+<p>The app and the command line set gas by one rule: the transaction carries one and a half times the node’s estimate, rounded up, at most 200,000, and an estimate above 200,000 is refused with nothing sent (the app says the gas cannot be estimated, the command line reports <code>E_GAS_REFUSED</code>). On Ethereum mainnet one transaction therefore safely holds 83 entries; the estimate for 84 sits right at 200,000, and whether it passes depends on the zero bytes in the hashes. The fee cap is twice the base fee plus the tip, the tip being the median of the last 20 blocks’ median paid tips, at most 1 gwei; when the base fee cannot be read, the fallback is 3 gwei and 1 gwei.</p>
 <h2 id="other">Anchoring through other contracts</h2>
 <p>Any contract that emits a log of the same format can serve as a registry. The log counts as an anchor when three conditions hold together: the transaction is sent by the ledger’s key itself; the fingerprint appears in that transaction’s own calldata, at an offset as stated above; and the log is emitted by the contract that was called. When a contract reaches a registry through an inner call, the log names that contract’s address, and to every ledger it is an ordinary log.</p>
-<p>A verifier should list in its scan range only contract addresses whose source it has read and whose code is fixed.</p>
+<p>A verifier should list in its scan range only contract addresses whose source it has read and whose code is fixed. The app enforces this for read-only networks: a registry whose code hash differs from the pinned one is not read.</p>
 <h2 id="proof">Self-contained anchor proofs</h2>
 <p>Law §9.7 defines self-contained anchor proofs, and the <code>proofs/</code> directory of a record kit carries them. With such a proof a verifier checks an anchor from two trusted block hashes alone: the block headers, Merkle proofs of the transaction and of its receipt, and account proofs of the sending address at the two blocks. Such proofs stay valid after nodes prune their history.</p>
 <div class="pn"><a href="law.html"><span>Previous</span>The law and the conformance suite</a><a class="nx" href="formats.html"><span>Next</span>Files and formats</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#iface">Interface</a><a href="#deployed">Known deployments</a><a href="#forms">Two forms of anchor</a><a href="#sender">Three requirements on the sender</a><a href="#codehash">The code hash</a><a href="#deploy">Deploying your own</a><a href="#gas">Gas, for reference</a><a href="#other">Anchoring through other contracts</a><a href="#proof">Self-contained anchor proofs</a></nav></div>
-<script src="../../../site.js?v=4bcd3fcb" defer></script>
+<script src="../../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

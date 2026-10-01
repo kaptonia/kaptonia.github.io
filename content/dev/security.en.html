@@ -10,10 +10,10 @@ title: Security
 <thead><tr><th>Adversary</th><th>Defence</th></tr></thead>
 <tbody>
 <tr><td>Someone who sits down at the machine while you are away</td><td>The passcode gate; a lock after five wrong tries; auto-lock when idle; the master key cleared from memory on lock.</td></tr>
-<tr><td>Someone who obtains the disk or a backup file</td><td>Ledgers, settings, the queue, the identity registry and received grants are stored encrypted, and the key store is encrypted separately under the passcode; the machine settings read before unlocking and the exports meant for others are plain. What holds against offline guessing is the strength of the passcode and the backup password, and the scrypt (N=262144, r=8, p=1) every try has to run.</td></tr>
+<tr><td>Someone who obtains the disk or a backup file</td><td>Ledgers, settings, the queue, the identity registry, checked facts and received grants are stored encrypted, and the key store is encrypted separately under the passcode; the machine settings read before unlocking, the read-only network list and the exports meant for others (verification result files among them) are plain. What holds against offline guessing is the strength of the passcode and the backup password, and the scrypt (N=262144, r=8, p=1) every try has to run.</td></tr>
 <tr><td>Someone who hands you forged records</td><td>Signatures, the ledger’s chain and the records on the blockchain confirm one another, and verification gives a result for each check.</td></tr>
 <tr><td>Someone who fabricates evidence after the fact</td><td>An anchor gives an upper bound on time; a continuous ledger has every position already taken.</td></tr>
-<tr><td>A node that lies</td><td>Readings from several nodes are compared; a single source is marked as such.</td></tr>
+<tr><td>A node that lies</td><td>For your own ledger and grant checks, readings from several nodes are compared on the fields a verdict needs; Verify record and Look up a ledger ask one node per chain, and a single source is always marked as such. Before each read, a read-only network’s registry code hash is checked, and a network that differs sits out that read. With one node alone, logs and receipts cannot be cross-checked, and that is stated as it is.</td></tr>
 <tr><td>A web page or app that lures you into signing</td><td>The identity key is used in {{Z}} alone, and the app signs in two of the four domains alone: <code>zikaron/1</code> and <code>zikaron/1-adoption</code>.</td></tr>
 </tbody></table></div>
 <p>Out of scope: malicious software running on an unlocked machine, memory reads, and compromise of the operating system or hardware. For these, the software states its limits as they are.</p>
@@ -21,6 +21,7 @@ title: Security
 <dl>
 <div><dt>Deterministic signatures</dt><dd>RFC 6979 deterministic nonces with low-s values. One key signing the same bytes produces the same signature on every conforming tool.</dd></div>
 <div><dt>Four independent domains</dt><dd>The domain literal is written inside the signed message, so a signature under one domain is valid in that domain alone. A new domain takes a literal wholly distinct from the existing ones.</dd></div>
+<div><dt>Imported keys start read-only</dt><dd>An imported identity may have written a ledger elsewhere, so it stays read-only until the ledger here matches this key’s records on chain. A private key imported as the primary identity on first run exports its key file at the same time, and the identity is created once that file reads back and checks.</dd></div>
 <div><dt>Sign what the app assembled</dt><dd>The app signs content it assembled itself and the user has seen on a confirm card; the signing entry point is open to such content alone.</dd></div>
 <div><dt>Keys stay in memory briefly</dt><dd>They are cleared after use. Logs and error messages carry addresses alone.</dd></div>
 <div><dt>Cryptography in one place</dt><dd>Calls for elliptic curves, hashes and key derivation are gathered in designated modules, and other code goes through them.</dd></div>
@@ -30,8 +31,10 @@ title: Security
 <div><dt>Failure is an absent answer</dt><dd>When a node is out of reach, readings differ or a scan is interrupted, the conclusion is recorded as absent, and the interface shows it so. A network fault and a forged record have to be told apart at a glance.</dd></div>
 <div><dt>Green comes from a complete check</dt><dd>A transaction in a block counts as “Confirming”; the green lamp lights once the ledger check’s report has read it.</dd></div>
 <div><dt>Leave the queue on a successful receipt</dt><dd>An entry leaves the queue once its receipt confirms success; entries whose send failed or timed out stay queued. Deleting a record that is still unsent also takes it out of the queue.</dd></div>
-<div><dt>Check before resending</dt><dd>Entries already on chain are kept out of the queue. After a restart, the app resumes waiting for the same transaction’s receipt.</dd></div>
-<div><dt>Certificates checked every time</dt><dd>For <code>https</code> nodes, the certificate chain and host name are checked on every connection. TLS uses rustls, with root certificates built into the app and kept apart from the system’s certificate store.</dd></div>
+<div><dt>Check before resending</dt><dd>Entries already on chain are kept out of the queue. After a restart, the app resumes waiting for the same transaction’s receipt, carrying on through a node’s brief outage.</dd></div>
+<div><dt>Read the chain before writing out</dt><dd>Before anchoring, exporting a record kit, exporting a grant file or creating a credential, the chain is read once more; if it holds records this machine lacks, the step is refused with “Ledger is not up to date”.</dd></div>
+<div><dt>Keep only what was checked</dt><dd>For an anchor several nodes confirmed alike with a decided verdict, the machine keeps its block time and verdict and stops asking about it one by one; a replaced block or a differing log is asked about again. A reading from one node, or an unproven verdict, is never kept. “Check everything again” clears it at any time.</dd></div>
+<div><dt>Certificates checked every time</dt><dd>For <code>https</code> nodes, the certificate chain and host name are checked on every connection. TLS is gathered in one place, <code>zikaron-net</code>, using rustls, with root certificates compiled into every program and kept apart from the system’s certificate store; the app and the command line take the same path.</dd></div>
 <div><dt>Bounded inputs</dt><dd>Each chain read is limited to 30 seconds and a response of at most 64 MiB. Record kits fetched from a publish address travel over <code>https</code> alone: 20 seconds and 32 MiB per file, at most 64 MiB per kit, and at most 3 same-origin redirects.</dd></div>
 </dl>
 <h2 id="privacy">Privacy</h2>
@@ -45,10 +48,10 @@ title: Security
 <h2 id="deps">Dependencies and the supply chain</h2>
 <ul>
 <li><code>Cargo.lock</code> is committed, and release builds use <code>--locked</code>.</li>
-<li>Dependencies are kept few; the cores and storage use the standard library wherever they can.</li>
+<li>Dependencies are kept few; the cores and storage use the standard library wherever they can; the transport’s only direct third-party dependencies are rustls, ring and webpki-roots, and <code>zikaron-os</code> and <code>zikaron-pack</code> use the standard library alone.</li>
 <li>An upgrade of a cryptographic dependency gets its own pull request with a change note, and every conformance comparison is run again.</li>
 <li>A new dependency comes with its purpose, maintenance status and licence.</li>
-<li>Embedded fonts are released with their licence texts.</li>
+<li>Embedded fonts are released with their licence texts. Every platform’s package carries a third-party licence list generated from <code>Cargo.lock</code>, also shown in the app’s About; if the list cannot be generated, the build fails.</li>
 </ul>
 <h2 id="files">Rules for writing files</h2>
 <ul>
@@ -57,7 +60,9 @@ title: Security
 <li>Read back and compare after writing, above all for key files and backups: report success once the read-back matches.</li>
 <li>Changes such as restoring a backup or changing the primary identity complete as one step: either all of it takes effect or everything stays as it was. A batch of signatures stops at the first failure and keeps what it has signed.</li>
 <li>Old data whose master key is gone, closed for good, is moved byte for byte into a <code>set-aside</code> directory.</li>
-<li>Key files are written with mode 0600.</li>
+<li>On restoring a backup, each member’s path is checked, and a member whose path climbs out of its place is refused. “Change data folder” takes an existing data folder or an empty one, and a move goes to a place outside the current folder.</li>
+<li>Before the command line writes an entry, it audits “this ledger plus this entry” offline and refuses any write that would break the ledger (<code>E_WOULD_BREAK</code>).</li>
+<li>Key files are readable and writable by their owner alone: mode 0600 on macOS and Linux, owner-only on Windows, set by <code>zikaron-os</code>. Replacing renames all go through <code>zikaron-os</code>.</li>
 </ul>
 <h2 id="fail">Failures have to be visible</h2>
 <p>Whenever an operation falls through, the interface says so plainly. The costliest defect in software of this kind is a failure the user takes for a success: evidence believed to be on chain turns out, on the day it is needed, to be missing. When reviewing a pull request, ask of every new action: what does the user see when it fails?</p>

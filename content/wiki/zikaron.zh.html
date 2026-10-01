@@ -2,7 +2,7 @@
 title: Zikaron
 nav: 简介
 -->
-<p class="lede">留证基础设施。ZIKARON Desk 是一个本机桌面应用：把作品或文件记进一本只增的账本，把账本锚定到以太坊上，再凭账本签发授权；收到授权的一方可以在任何一台机器上独立核验。</p>
+<p class="lede">留证基础设施。ZIKARON Desk 是一个本机桌面应用：把作品或文件记进一本只增的账本，把账本锚定到以太坊（或所选的二层网络）上，再凭账本签发授权；收到授权的一方可以在任何一台机器上独立核验。</p>
 <h2 id="name">名字</h2>
 <p>Zikaron(希伯来语 <span lang="he" dir="rtl">זִכָּרוֹן</span>)意为「纪念」。以色列人过约旦河时，约书亚命十二人各从河中取一块石头带过河去，立作纪念：约柜进入约旦河时，河水在约柜前断流，这些石头要让以色列人永远记得这件事(约书亚记 4:4–7)。</p>
 <h2 id="why">为何先做留证</h2>
@@ -11,7 +11,7 @@ nav: 简介
 <h2 id="how">流程</h2>
 <ol>
 <li><b>存证。</b>把文件拖进应用，应用算出它的内容指纹，写成账本里的一条存证，由你的密钥签名。文件留在本机。</li>
-<li><b>上链。</b>把条目发到以太坊上。此后即可证明：这份内容最迟在那一刻已经存在。</li>
+<li><b>上链。</b>把条目发到这个身份所选的链上：以太坊主网，或 Arbitrum One、OP Mainnet。此后即可证明：这份内容最迟在那一刻已经存在。</li>
 <li><b>授权或出示。</b>授权作品，就签发一条授权；出示证据，就导出一个记录包。</li>
 <li><b>核验。</b>对方拿到授权文件，自行逐项核验签名、账本、上链、有效期与撤销；拿到记录包，核验签名、账本与上链；只有授权码时，核验签名与有效期。</li>
 </ol>
@@ -35,8 +35,8 @@ nav: 简介
 </ul>
 <h2 id="release">版本</h2>
 <dl>
-<div><dt>当前版本</dt><dd>ZIKARON Desk 0.1.0。</dd></div>
-<div><dt>安装包</dt><dd>Apple 芯片的 Mac，macOS 11 或更新的版本，见<a href="../../download.html">下载页</a>。x86_64 的 Linux 从源码构建，见<a href="../dev/build.html">开发者指南 · 从源码构建</a>。</dd></div>
+<div><dt>当前版本</dt><dd>ZIKARON Desk {{VER}}。</dd></div>
+<div><dt>安装包</dt><dd>Apple 芯片的 macOS（11 或更新）、x86_64 的 Windows 10 与 11、x86_64 的 Linux（<code>.deb</code> 与 AppImage），见<a href="../../download.html">下载页</a>。其他平台从源码构建，见<a href="../dev/build.html">开发者指南 · 从源码构建</a>。</dd></div>
 <div><dt>命令行</dt><dd>随应用附带的 <code>zikaron</code>，一个操作对应一个子命令，见<a href="../dev/cli.html">命令行</a>。</dd></div>
 <div><dt>许可</dt><dd>MIT，源码在 GitHub 公开。</dd></div>
 </dl>

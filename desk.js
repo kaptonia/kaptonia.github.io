@@ -164,7 +164,7 @@ function bar() {
   if (!n && !busy) return `<div class="zd-card zd-bar"><span class="zd-small">${T('没有待上链的条目', 'Nothing pending')}</span></div>`;
   const k = n || E.filter(e => e.lamp === 'sub' || e.lamp === 'inc').length;
   return `<div class="zd-card zd-bar"><div class="grow"><div>${T(`本批 ${k} 条 · 一笔上链`, `This batch: ${N(k, 'entry', 'entries')} · one transaction`)}</div>
-    ${busy ? `<div class="zd-stage"><span class="dot"></span>${S.send}</div>` : `<div class="zd-small">${T('Gas 费上限约 0.0012 ETH', 'Gas cap about 0.0012 ETH')}</div>`}</div>
+    ${busy ? `<div class="zd-stage"><span class="dot"></span>${S.send}</div>` : `<div class="zd-small">${T('Gas 费上限约 0.0001 ETH', 'Gas cap about 0.0001 ETH')}</div>`}</div>
     <button class="zd-btn guide ${busy ? 'is-busy' : ''}" data-act="anchor"><span class="lbl">${T('全部上链', 'Put all on chain')}</span><span class="busy"><i></i></span></button></div>`;
 }
 function drawRecord() {

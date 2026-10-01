@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/ledger.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -56,7 +56,7 @@
 <h2 id="append">Append only</h2>
 <p>A ledger does one thing: it appends at the end. For a mistake, add a note; to retire a record, add a deletion; to take a grant back, add a revocation. Earlier entries stay exactly as they are, and that is what settles a ledger’s past.</p>
 <h2 id="history">Recording</h2>
-<p>On Home or the Records page, drop a file, a folder or a Git repository into the drop zone, or click it to choose one. The “New record” card opens. The content fingerprint is computed this way:</p>
+<p>On Home or the Records page, drop a file, a folder or a Git repository into the drop zone, or click it to choose one. The “New record” card opens. The fingerprint is computed in the background, and until it is ready “Add to ledger” reads “Computing the fingerprint”. The content fingerprint is computed this way:</p>
 <div class="tw"><table>
 <thead><tr><th>Kind</th><th>How</th></tr></thead>
 <tbody>
@@ -66,44 +66,48 @@
 </tbody></table></div>
 <ol>
 <li>Fill in “Record name”. Left empty, it is filled in for you: a file’s name minus its extension, or a folder’s or repository’s full name. The record name is written into the record entry.</li>
-<li>The optional “Recorded for (optional)” fold has four fields: “App”, “Their identity (0x…)”, “Their reference” and “Their role (optional)”. Once any of them is filled in, the first three are required, and their identity is written as <code>0x</code> followed by 40 hexadecimal digits. These words go into the record entry as they are, so that whoever reads the record later can tie it to a specific transaction.</li>
+<li>The optional “Recorded for (optional)” fold has four fields: “App”, “Their identity (0x…)”, “Their reference” and “Their role (optional)”. Once any of them is filled in, the first three are required, and their identity is written as <code>0x</code> followed by 40 hexadecimal digits. These words go into the record entry as they are, so that whoever reads the record later can tie it to a specific transaction; the app itself writes them and leaves the reading to others.</li>
 <li>Under “Advanced options” you may link a Git repository; later, “Check commits” shows how many commits have been made since the last record.</li>
-<li>Press “Add to ledger”, check “File” and “Cost” on the confirmation card, then press the solid red “Add to ledger”. The entry is written to the ledger and joins the pending queue.</li>
+<li>Press “Add to ledger”, check “File”, “Recorded for (optional)” and “Cost” on the confirmation card, then press the solid red “Add to ledger”. The entry is written to the ledger and joins the pending queue.</li>
 </ol>
-<p><b>Batches.</b> Drop two or more files into the card’s drop zone at once to make a batch: each file becomes one record, and the one “Record name” goes into every entry. The batch stops at the first failure; entries already signed stay in the ledger and the remaining files stay in the list, ready for another press once the problem is fixed. A batch takes files only.</p>
-<p><b>Check a file.</b> “Check a file”, beside the search field on the Records page: choose a file, and the app computes its SHA-256, looks for a record with the same fingerprint in the current ledger, and answers with the entry number, its on-chain state and its block time.</p>
+<p><b>Batches.</b> Drop two or more files into the card’s drop zone at once to make a batch: each file becomes one record, the one “Record name” goes into every entry, and after confirming the key reads “Recording” until they are written. The batch stops at the first failure; entries already signed stay in the ledger and the remaining files stay in the list, ready for another press once the problem is fixed. A batch takes files only.</p>
+<p><b>Is a file in the ledger?</b> Type its SHA-256 into the search field “Find by record name or content fingerprint” on the Records page. “Start date” and “End date” beside it filter by first anchor block time.</p>
 <h2 id="public">Written means public</h2>
-<p class="call">Where each file was when it was signed lives on this machine alone. Record names, note text, the “Recorded for” fields and a grant’s scope are written into entries: anyone who holds your ledger can read them (a grant file carries the whole ledger), for good. Write them with care; when “Record name” is left empty, the file name goes into the entry.</p>
+<p class="call">Where each file was when it was signed lives on this machine alone. Record names, note text, the “Recorded for (optional)” fields and a grant’s scope are written into entries: anyone who holds your ledger can read them (a grant file carries the whole ledger), for good. Write them with care; when “Record name” is left empty, the file name goes into the entry.</p>
 <p>A fingerprint answers one question: are these two contents the same. When the content is short and easy to guess (a date, an amount), others can compute the fingerprint of each candidate and compare. Before recording such content, combine it with a stretch of random text in one file.</p>
 <h2 id="retract">Deleting a record</h2>
-<p>Press “Delete record…” at the bottom of the record’s detail page. The card reads “The record will be marked as deleted. Grants already issued are not affected.” Press “Delete”: a “Deletion” entry pointing at the record is added to the ledger, and the original entry stays exactly as it was, byte for byte. From then on the record is struck through, its page says it was deleted, and New grant leaves it out of the choice.</p>
+<p>Press “Delete record…” at the bottom of the record’s detail page. The card reads “The record will be marked as deleted. Grants already issued are not affected.” Press “Delete”: a “Deletion” entry pointing at the record is added to the ledger, and the original entry stays exactly as it was, byte for byte. From then on the record is struck through, its page says “Deleted by entry #N. It can no longer be granted.”, the grant and export buttons leave its page, and New grant no longer offers it.</p>
 <div class="tw"><table>
 <thead><tr><th>The deleted record</th><th>Result</th></tr></thead>
 <tbody>
-<tr><td>Still waiting in the queue, or local all along</td><td>The record leaves the queue and the deletion stays local, shown as “Deleted locally”</td></tr>
+<tr><td>Still waiting in the queue, or local all along</td><td>The record leaves the queue and the deletion stays local; the two rows show “Deleted” and “Deleted locally”</td></tr>
 <tr><td>Already sent, in a block or on chain</td><td>The deletion entry joins the pending queue and goes on chain like any other entry; the chain record stays as it is and still counts towards depth</td></tr>
 </tbody></table></div>
+<p>The two rows kept on this machine alone can be folded out of the Records and Ledger lists with “Hide entries deleted on this machine” in Settings › Local data; entry numbers, counts, the ledger check and detail pages stay as they are, and turning it off brings the rows back. With a network set up and no ledger check yet, a record outside the queue can be deleted once you press Sync and the check has run.</p>
 <p>The format of a deletion entry and how it is read are this app’s convention, set out in <a href="../dev/formats.html#retraction">Files and formats</a>.</p>
 <h2 id="annotate">Notes</h2>
-<p>“Add note…” in the “More” menu of the Ledger page, or “Note…” on an entry’s detail page: write the “Note text”, pick the “Target entry” and press “Add note”. The note is saved as a new entry, and the original entry stays as it is.</p>
+<p>“Add note…” in the “More” menu of the Ledger page, or “Note…” on an entry’s detail page: write the “Note text”, press “Choose…” beside “Target entry”, find the entry in the floating card by number, type, summary or first anchor date, and press “Add note”. The note is saved as a new entry, and the original entry stays as it is.</p>
+<p>On an entry’s detail page, an entry that is neither on chain nor queued has “Add to pending”; an entry that has been on chain before stays out of the queue.</p>
 <h2 id="adopt">Importing anchor proofs</h2>
 <p>This brings anchors that a key put on chain earlier, outside the ledger, into the ledger. Open Ledger › More › “Import existing records…”:</p>
 <ul>
-<li>With “Key address” empty, it lists anchors this machine’s key sent earlier that the ledger lacks. The list comes from the last ledger check.</li>
+<li>With “Key address” empty, it lists anchors this machine’s key sent earlier that the ledger lacks. The list comes from the last ledger check, so the network must be set up and checked once.</li>
 <li>With an address filled in, it scans the chain for the anchors that key sent. Rows marked “Passed” are switched on by default, and only these can be imported.</li>
-<li>To import another person’s address, the holder of that key signs for it: send them the “Text” from the card; they sign it in their own app with More › “Sign a claim for someone…” and this machine’s passcode, and send the signature back; you paste it in and it is checked on the spot. Importing also works with the signature missing, and those anchors are then recorded as unproven.</li>
+<li>To import another person’s address, the holder of that key signs for it: send them the “Text” from the card; they sign it in their own app with More › “Sign a claim for someone…” and their own passcode, and send the signature back; you paste it in and it is checked on the spot. Importing also works with the signature missing, and those anchors are then recorded as unproven; once the ledger gets new entries, they sign again.</li>
+<li>The “By hand” fold takes anchors typed one per line; press “Check these rows”.</li>
 </ul>
 <p>Press “Import N”. One adoption entry is written and joins the pending queue.</p>
 <h2 id="handover">Handing over a ledger</h2>
 <p>Ledger › More › “Change key or hand over…”: fill in the “New key address” (the new key must have zero anchor proofs on chain, and the reading must show zero to continue), choose “Key change only” or “Hand over to someone”, add a statement if you like, and press the solid red “Hand over”. From then on the new key continues the ledger and this machine becomes read-only. A handover goes one way.</p>
 <h2 id="one">One key, one ledger</h2>
-<p>A key writes one ledger. If one key signs two differing entries at the same sequence number, every verifier can see it, and the ledger check judges it “Failed”. Therefore:</p>
+<p>A key writes one ledger. If one key signs two differing entries at the same sequence number, every verifier can see it: with both in one ledger, the ledger check judges it “Failed”; with only one of them in the ledger here, the other one’s anchor on chain counts as “Mismatched on chain”, and sending is stopped with “Ledger is not up to date”. Therefore:</p>
 <ul>
 <li>One window at a time writes to a data folder. A window opened later can only read, and shows the read-only bar at the top of the page.</li>
-<li>An identity restored on another machine from its recovery phrase, private key or key file first pauses writing; it resumes once its ledger has been fetched from a whole-machine backup and matched against the chain. See <a href="data.html#retrieve">Fetching the ledger</a>.</li>
+<li>An identity imported from recovery words, a private key or a key file starts read-only: writing opens once every record this key has on chain is in the ledger here. If the chain holds records the ledger lacks, fetch the ledger from a whole-machine backup; see <a href="data.html#retrieve">Fetching the ledger</a>.</li>
 <li>Before changing keys, record a handover; the new key continues the ledger on the strength of it.</li>
+<li>The command line, too, audits “this ledger plus this entry” offline before it writes, and refuses any write that would break the ledger, writing nothing at all.</li>
 </ul>
 <div class="pn"><a href="start.html"><span>Previous</span>Getting started</a><a class="nx" href="anchoring.html"><span>Next</span>Anchoring and networks</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#entry">What an entry holds</a><a href="#types">Entry types</a><a href="#append">Append only</a><a href="#history">Recording</a><a href="#public">Written means public</a><a href="#retract">Deleting a record</a><a href="#annotate">Notes</a><a href="#adopt">Importing anchor proofs</a><a href="#handover">Handing over a ledger</a><a href="#one">One key, one ledger</a></nav></div>
-<script src="../../../site.js?v=4bcd3fcb" defer></script>
+<script src="../../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

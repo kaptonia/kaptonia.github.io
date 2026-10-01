@@ -3,7 +3,7 @@ title: Forks and independent implementations
 -->
 <p class="lede">The code is released under MIT and the law texts are open to all. Forks are welcome, and so are implementations in any language. There is one request: keep differences visible.</p>
 <h2 id="license">Licence</h2>
-<p>Code and documents are under the MIT licence: you may use, modify, redistribute and sell them, keeping the licence text. The registry contract’s source is under CC0, and the embedded fonts are each under SIL OFL 1.1.</p>
+<p>Code and documents are under the MIT licence: you may use, modify, redistribute and sell them, keeping the licence text. The registry contract’s source is under CC0, the embedded fonts are each under SIL OFL 1.1, and third-party crates are each under their own licence, listed in the <code>THIRD-PARTY-LICENSES.txt</code> in every package.</p>
 <h2 id="impl">An implementation of your own</h2>
 <p>The law text is self-contained: every judgment verification needs is stated in it. Write an implementation from the text in the language you choose, then validate it with the conformance suite; with zero divergences against the frozen core it is a conforming implementation, on the same footing as the one in this repository.</p>
 <p>The more independent implementations, the sturdier the law: each one written from the text alone is one more chance to find an ambiguity in it. When you find two implementations diverging outside the corpus, open an issue.</p>
@@ -11,7 +11,7 @@ title: Forks and independent implementations
 <p>Changing the interface, adding features and changing defaults all belong to the tooling layer, and you are free to do them. Please attend to three points:</p>
 <dl>
 <div><dt>Take another name</dt><dd>So that users can tell the two programs apart.</dd></div>
-<div><dt>Take another machine folder</dt><dd>So that the two programs keep their key stores and data apart.</dd></div>
+<div><dt>Take another machine folder</dt><dd>So that the two programs keep their key stores and data apart: on macOS and Linux, change the names <code>~/.zikaron-desk</code> and <code>~/.zikaron-desk.d/</code> (and, on macOS, <code>~/Library/Application Support/ZIKARON</code>, which the app also takes up); on Windows, change the <code>ZIKARON</code> folder name under <code>%LOCALAPPDATA%</code>.</dd></div>
 <div><dt>Stay conforming to the law</dt><dd>The original can read ledgers your fork writes, and your fork can read ledgers the original writes.</dd></div>
 </dl>
 <h2 id="rules">Changing the rules</h2>
@@ -22,7 +22,7 @@ title: Forks and independent implementations
 <li>Write ledgers under the new rules with a new key.</li>
 </ul>
 <h2 id="registry">The registry contract</h2>
-<p>The contract is shared by everyone. Anyone can deploy the same bytes on any EVM chain that has passed the Shanghai upgrade and get the same code hash. A verifier states in its scan range which addresses it accepts; a contract you deploy and one someone else deploys stand equal before the law.</p>
+<p>The contract is shared by everyone. Anyone can deploy the same bytes on any EVM chain that has passed the Shanghai upgrade and get the same code hash. A verifier states in its scan range which addresses it accepts; a contract you deploy and one someone else deploys stand equal before the law. ZIKARON Desk’s read-only networks accept the one pinned code hash alone; a contract built separately can serve in it only as an identity’s main network.</p>
 <h2 id="govern">Who decides</h2>
 <dl>
 <div><dt>The law</dt><dd>The frozen core decides. Maintainers, like everyone else, can only start a new version.</dd></div>

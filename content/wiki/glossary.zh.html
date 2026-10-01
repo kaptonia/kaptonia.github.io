@@ -6,7 +6,7 @@ title: 词汇表
 <h2 id="ledger">账本</h2>
 <dl>
 <div><dt>账本</dt><dd>按顺序写成的一串签名条目，只能追加；移交之后由新密钥续写。每种角色一本。(ledger)</dd></div>
-<div><dt>条目</dt><dd>账本里的一项，带着作者签名和前一条的编号。(entry)</dd></div>
+<div><dt>条目</dt><dd>账本里的一项，带着作者签名和前一条的条目 ID。(entry)</dd></div>
 <div><dt>内容指纹</dt><dd>由一段字节算出的 32 字节摘要；内容改动一个字节，指纹即面目全非。(digest，SHA-256)</dd></div>
 <div><dt>创建账本</dt><dd>账本的根，第一条。(genesis)</dd></div>
 <div><dt>存证</dt><dd>记下一件记录的内容指纹的条目。(history)</dd></div>
@@ -18,12 +18,15 @@ title: 词汇表
 </dl>
 <h2 id="chain">上链</h2>
 <dl>
-<div><dt>上链(锚定)</dt><dd>把条目发进一笔以太坊交易。(anchor)</dd></div>
-<div><dt>登记合约</dt><dd>链上的一份小合约，收到指纹即发出一条事件，人人共用。(registry)</dd></div>
+<div><dt>上链(锚定)</dt><dd>把条目发进一笔交易，发到这个身份所选的网络。(anchor)</dd></div>
+<div><dt>登记合约</dt><dd>链上的一份小合约，收到一个 32 字节的哈希即发出一条事件，人人共用；应用发的是条目 ID。(registry)</dd></div>
 <div><dt>待上链</dt><dd>已写进账本、排队等待发出的条目。</dd></div>
 <div><dt>首锚区块时刻</dt><dd>条目最早一次上链所在区块的时间。</dd></div>
 <div><dt>账本检查</dt><dd>把本机账本逐条和链上的锚对一遍后给出的结论；「已确认」以此为准。(audit)</dd></div>
 <div><dt>自动上链</dt><dd>开着时，写入后直接打开「上链」卡的设置。</dd></div>
+<div><dt>网络</dt><dd>链号、登记合约、起始区块与节点这四样。每个身份记着自己的网络，两种角色同用；预置以太坊主网、Sepolia 测试网、Arbitrum One、OP Mainnet。</dd></div>
+<div><dt>只读网络</dt><dd>只用来核验别人材料的网络，不在上面发交易；读之前先核登记合约的代码指纹。</dd></div>
+<div><dt>Gas 额度</dt><dd>一笔交易所带的 gas 数，取节点估数的 1.5 倍，最多 200,000。</dd></div>
 </dl>
 <h2 id="grant">授权</h2>
 <dl>
@@ -43,6 +46,7 @@ title: 词汇表
 <div><dt>全部通过、有缺项、未通过</dt><dd>核验的三种结论。(GREEN、PARTIAL、FAIL)</dd></div>
 <div><dt>深度读数</dt><dd>首次存证、最大深度、连续上链三个数。(depth)</dd></div>
 <div><dt>发布地址</dt><dd>你把记录包放到网上的 https 地址。</dd></div>
+<div><dt>核验结果档</dt><dd>核验记录包后写在机器目录 <code>kits/verified/</code> 里的一份结果，供别的应用读取。(zikaron.kit-verification/1)</dd></div>
 <div><dt>尽调</dt><dd>取得授权之前，检查对方账本中现有的有效授权是否与所需期限重叠。</dd></div>
 </dl>
 <h2 id="key">身份与数据</h2>
@@ -59,6 +63,7 @@ title: 词汇表
 <div><dt>整机备份</dt><dd>含全部身份、密钥、数据与设置的单个加密文件，扩展名 <code>.zikaron</code>。</dd></div>
 <div><dt>账本镜像</dt><dd>导出给别的工具读的账本副本。</dd></div>
 <div><dt>机器目录</dt><dd>存放密钥库、身份登记与机器设置的位置，每台机器一个。</dd></div>
+<div><dt>已核对事实</dt><dd>几个节点一致确认过的锚，本机记下它的区块时间与判词，下次同步不再逐条追问。</dd></div>
 <div><dt>数据目录</dt><dd>某一身份某一角色存放账本与设置的位置。</dd></div>
 </dl>
 </section></div><!--/proj-->

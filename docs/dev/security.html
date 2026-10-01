@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/dev/security.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -38,10 +38,10 @@
 <thead><tr><th>对手</th><th>防护</th></tr></thead>
 <tbody>
 <tr><td>趁你离开时坐到机器前的人</td><td>口令门；输错五次锁定；闲置自动锁定；锁定时从内存清除主钥。</td></tr>
-<tr><td>取得磁盘或备份文件的人</td><td>账本、设置、队列、身份登记与收到的授权都加密存放，密钥库另以口令加密；开锁前要读的机器设置与给别人读的导出件是明文。抵御离线穷举的，是口令与备份密码本身的强度，以及每次尝试都要跑的 scrypt（N=262144、r=8、p=1）。</td></tr>
+<tr><td>取得磁盘或备份文件的人</td><td>账本、设置、队列、身份登记、已核对事实与收到的授权都加密存放，密钥库另以口令加密；开锁前要读的机器设置、只读网络列表与给别人读的导出件（含核验结果档）是明文。抵御离线穷举的，是口令与备份密码本身的强度，以及每次尝试都要跑的 scrypt（N=262144、r=8、p=1）。</td></tr>
 <tr><td>伪造记录交给你的人</td><td>签名、账本链条与链上记录相互印证，核验逐项给出结论。</td></tr>
 <tr><td>事后补造证据的人</td><td>上链给出时间上限；连续的账本占满了每一个位置。</td></tr>
-<tr><td>说谎的节点</td><td>多个节点的读数相互对照；单一来源时明确标注。</td></tr>
+<tr><td>说谎的节点</td><td>自己的账本与授权核验对照多个节点的读数，只比判定用得到的字段；核验记录与查看他人账本每条链问一个节点，单一来源时一律明确标注。只读网络每次读之前先核登记合约的代码哈希，不符的整条网络这一次不用。只配一个节点时，日志与回执无从交叉核对，这一点如实标明。</td></tr>
 <tr><td>诱导你签名的网页或应用</td><td>身份密钥只在 <b class="zk">Zikaron</b> 中使用；应用只签四个域里的两个：<code>zikaron/1</code> 与 <code>zikaron/1-adoption</code>。</td></tr>
 </tbody></table></div>
 <p>以下情形在防护范围之外：已解锁机器上运行的恶意软件、内存读取、操作系统或硬件层面的攻破。对此，软件如实声明自身的边界。</p>
@@ -49,6 +49,7 @@
 <dl>
 <div><dt>签名确定</dt><dd>采用 RFC 6979 确定性随机数与低 s 值。同一把密钥对同一份字节，在任何合规工具上都签出同一个签名。</dd></div>
 <div><dt>四个域相互独立</dt><dd>域的字面量写在被签消息中，一个域下的签名只在该域内有效。新增域时，选用与现有字面量全然相异的字面量。</dd></div>
+<div><dt>导入的密钥先只读</dt><dd>导入的身份可能在别处写过账本，所以在本机账本与链上这把密钥的上链记录核对相符之前只读。首次启动导入私钥作主身份时，同时导出它的密钥文件，读回核对过才建成身份。</dd></div>
 <div><dt>只签自己组装的字节</dt><dd>应用只对自己组装、且用户已在确认卡上看过的内容签名；签名入口仅对此类内容开放。</dd></div>
 <div><dt>密钥在内存中短暂停留</dt><dd>用后即清除。日志与错误信息中只写地址。</dd></div>
 <div><dt>密码学调用集中一处</dt><dd>椭圆曲线、哈希、密钥派生的调用集中在指定模块，其他代码经由该模块使用。</dd></div>
@@ -58,8 +59,10 @@
 <div><dt>失败即答案缺席</dt><dd>节点连接失败、读数相异、扫描中断时，结论记为缺席，界面照此显示。网络故障与伪造记录，须让用户一眼分清。</dd></div>
 <div><dt>绿灯只来自完整的检查</dt><dd>交易进入区块只算「确认中」；账本检查的报告读到它，才点亮绿灯。</dd></div>
 <div><dt>回执成功才出队</dt><dd>条目在回执确认成功后离开队列；发送失败、等待超时的条目留在队列中。删除尚未发出的存证时，它也随之出队。</dd></div>
-<div><dt>重发前先查</dt><dd>已上链的条目挡在队列之外。重启后继续等待原交易的回执。</dd></div>
-<div><dt>逐次核对证书</dt><dd>每次连接都核对 <code>https</code> 节点的证书链与主机名。TLS 用 rustls，根证书随应用内置，与系统的证书库分开。</dd></div>
+<div><dt>重发前先查</dt><dd>已上链的条目挡在队列之外。重启后继续等待原交易的回执；中途节点一时不通不算失败，照样接着问。</dd></div>
+<div><dt>写出之前现读一次链</dt><dd>上链、导出记录包、导出授权文件、生成凭证之前，都先现读一次链；链上有本机没有的记录时拒绝，提示「账本不是最新」。</dd></div>
+<div><dt>核对过的才记下</dt><dd>几个节点一致确认过、判词已定的锚，本机记下它的区块时间与判词，下次不再逐条追问；区块被替换或日志不同即重新问。只一个节点读到的、判词未证的一概不记。「全部重新核对」随时清掉重来。</dd></div>
+<div><dt>逐次核对证书</dt><dd>每次连接都核对 <code>https</code> 节点的证书链与主机名。TLS 集中在 <code>zikaron-net</code> 一处，用 rustls，根证书编进每个程序，与系统的证书库分开；应用与命令行走的是同一条路。</dd></div>
 <div><dt>输入设上限</dt><dd>每次读链 30 秒为限，应答至多 64 MiB。从发布地址取记录包只走 <code>https</code>，每个文件 20 秒、32 MiB，一个包至多 64 MiB，同源跳转至多 3 次。</dd></div>
 </dl>
 <h2 id="privacy">隐私</h2>
@@ -73,10 +76,10 @@
 <h2 id="deps">依赖与供应链</h2>
 <ul>
 <li><code>Cargo.lock</code> 随仓库提交，发布构建使用 <code>--locked</code>。</li>
-<li>依赖保持精简，核与存储尽量只用标准库。</li>
+<li>依赖保持精简，核与存储尽量只用标准库；传输层直接依赖的第三方只有 rustls、ring 与 webpki-roots，<code>zikaron-os</code> 与 <code>zikaron-pack</code> 只用标准库。</li>
 <li>升级密码学相关依赖时单独提交合并请求，附变更说明，并重跑全部一致性比对。</li>
 <li>新增依赖须说明用途、维护状况与许可。</li>
-<li>内嵌字体与其许可文本一并发布。</li>
+<li>内嵌字体与其许可文本一并发布。每个平台的包都附按 <code>Cargo.lock</code> 现生成的第三方许可清单，应用的「关于」里也能看到；清单生成不了，构建即失败。</li>
 </ul>
 <h2 id="files">文件写入规范</h2>
 <ul>
@@ -85,11 +88,13 @@
 <li>写完读回核对，密钥文件与备份尤其如此：读回相符才向用户报告成功。</li>
 <li>恢复备份、更换主身份这类改动整步完成：要么全部生效，要么保持原状。批量签名在第一处失败停下，已签的保留。</li>
 <li>主钥已失、永久封存的旧数据，字节原样移入 <code>set-aside</code> 目录。</li>
-<li>密钥文件权限设为 0600。</li>
+<li>恢复备份时逐个检查成员的路径，带路径穿越的成员一概拒收。「更换数据目录」只收已有的数据目录或空文件夹，迁移的新位置要在原目录之外。</li>
+<li>命令行写条目之前，先离线审「账本加上这一条」，会把账本写断的一概拒收（<code>E_WOULD_BREAK</code>）。</li>
+<li>密钥文件只本人可读写：macOS 与 Linux 上权限 0600，Windows 上只授所有者，由 <code>zikaron-os</code> 设置。改名覆盖统一经由 <code>zikaron-os</code>。</li>
 </ul>
 <h2 id="fail">失败必须可见</h2>
 <p>每次操作落空，界面都给出明确提示。这类软件中代价最高的缺陷，是被用户当作成功的失败：一份以为已经上链的证据，到要用时才发现缺失。评审合并请求时，对每个新操作都问一句：它失败时，用户看到什么？</p>
 <div class="pn"><a href="compat.html"><span>上一页</span>兼容与演进</a><a class="nx" href="release.html"><span>下一页</span>发布</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#report">报告漏洞</a><a href="#model">威胁模型</a><a href="#keys">密钥规范</a><a href="#chain">读链规范</a><a href="#privacy">隐私</a><a href="#deps">依赖与供应链</a><a href="#files">文件写入规范</a><a href="#fail">失败必须可见</a></nav></div>
-<script src="../../site.js?v=4bcd3fcb" defer></script>
+<script src="../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/kits.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -31,26 +31,28 @@
 <div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>记录包</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html">上手</a><a href="ledger.html">账本与条目</a><a href="anchoring.html">上链与网络</a><a href="grants.html">授权</a><a href="kits.html" class=on aria-current=page>记录包</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html">身份与密钥</a><a href="data.html">本机数据与备份</a><a href="alerts.html">提醒与设置</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
 <div class="stream"><article class="art" data-slug="kits" data-prev="grants.html" data-next="verify.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>记录包</h1><p class="lede">记录包是从账本导出的一个文件夹，含所选条目、原文件和上链证明，交给别人离线核验。</p>
 <h2 id="range">条目范围</h2>
-<p>从记录详情或条目详情的「导出记录包」进入，那一条已经选上。「条目范围」一行显示「全部 N 条」（选择为空即整本）或「已选 N 条」。按「选择…」可以任挑几条，只出示与本事相关的条目，其余留在你手中。</p>
+<p>从记录详情或条目详情的「导出记录包」进入，那一条已经选上。「条目范围」一行显示「全部 N 条」（选择为空即整本）或「已选 N 条」。按「选择…」打开「选择条目」，顶上一格搜索和「开始日期」「结束日期」，每条一个开关，可以任挑几条，只出示与本事相关的条目，其余留在你手中。「全部」选上搜索与日期留下的那几条，「取消选择」全清。</p>
 <ul>
 <li>所选授权的撤销条目、账本的创建条目和移交条目自动一并带上，核验方靠它们认出这是谁的账本。</li>
 <li>所选里有尚待上链的条目时，红字提示包里缺这几条的上链证明，旁边有「现在上链」。</li>
 </ul>
-<p class="call">条目整条带进包里，其中的记录名称、注记和「为谁留证」也在内。交出前，请看一眼所选条目写了什么。</p>
+<p class="call">条目整条带进包里，其中的记录名称、注记和「为谁留证（可选）」也在内。交出前，请看一眼所选条目写了什么。</p>
 <h2 id="files">原件与附件</h2>
 <dl>
 <div><dt>所选记录的原件</dt><dd>列出所选存证当初在这台机器上签入的文件，可以逐件「移除」。文件已离开原位置，或被改动过，页面会注明，这份文件就留在包外。</dd></div>
 <div><dt>附件</dt><dd>拖入文件或文件夹，每项显示它在包里的名字（「导出为 files/…」）。附件要是所选记录的原件。</dd></div>
 <div><dt>附言与保存位置</dt><dd>写一段附言；保存位置默认是数据目录里的 <code>kits</code>。</dd></div>
 </dl>
-<p>包内文件名只用小写字母、数字、<code>.</code>、<code>_</code>、<code>-</code>，以保证在任何系统上都解得开、对得上。其余名字自动转写：转小写，一段其他字符换成一个 <code>-</code>，去掉首尾的 <code>-</code> 和 <code>.</code>，在扩展名前加上原名摘要的前八位（如 <code>name-1a2b3c4d.pdf</code>）。改过名时，包里附一份原名对照表 <code>files/zikaron-names.json</code>。</p>
+<p>包内文件名只用小写字母、数字、<code>.</code>、<code>_</code>、<code>-</code>，以保证在任何系统上都解得开、对得上。其余名字自动转写：转小写，一段其他字符换成一个 <code>-</code>，去掉首尾的 <code>-</code> 和 <code>.</code>，在扩展名前加上 <code>-</code> 和原名摘要的前八位（如 <code>name-1a2b3c4d.pdf</code>）。改过名时，包里附一份原名对照表 <code>files/zikaron-names.json</code>。</p>
 <h2 id="export">核验并导出</h2>
 <ol>
 <li>按「核验并导出」，应用先现读一次链。</li>
-<li>在保存位置建一个 <code>kit-</code> 加所选最早一件记录指纹前八位的文件夹，同名已有即往后编号。</li>
+<li>链上有本机没有的记录时拒绝，提示「账本不是最新」。</li>
+<li>在保存位置建一个 <code>kit-</code> 加所选最早一件记录指纹前八位的文件夹（所选里没有记录即 <code>kit</code>），同名已有即往后编号。</li>
 <li>包先自验，通过才写出，提示「记录包已导出到 …」。</li>
 </ol>
-<p>收件方跑的是同一套核验，所以在你这边通过的包，在对方那里同样通过。</p>
+<p>包的自验与收件方对包本身的核验用同一套规则，所以在你这边成立的包，在对方那里同样成立；收件方还要和链比对，所以对方要能读到锚所在的那条链。写不成时按原因提示：「无法写入这个位置。」「保存位置已有同名的东西。」「有文件名无法放进包内。」「包内有两份文件用了同一个名字。」「包没有通过自验，没有保存。」</p>
+<p><b>包里写明锚在哪条链。</b>导出时，附言末尾自动加一行 <code>anchored-on: eip155:&lt;链 ID&gt; · registry &lt;登记合约&gt; · from &lt;起始区块&gt;</code>，取自导出那一刻这个数据目录的网络，不随界面语言变；没配网络就不加。再导出时先去掉旧的一行再加，不会重复。这一行只是指路：核验时据它提示要添加哪个网络，判定照旧只看链上读到的锚。</p>
 <h2 id="side">旁栏</h2>
 <dl>
 <div><dt>收件方如何核验</dt><dd>对方在「核验 › 核验记录」拖入记录包即可。</dd></div>
@@ -64,13 +66,13 @@
 <div><dt>最大深度</dt><dd>记下这份内容、且已上链的存证条数。</dd></div>
 <div><dt>连续上链</dt><dd>写作「已上链 / 跨度」：跨度是从第一条到最后一条这份内容的存证之间的位置数，已上链是其中直接上链的位置数。两数越接近，记录越连贯。</dd></div>
 </dl>
-<p>记录者在导出页的旁栏看得到；使用方在「记录核验器」填了记录哈希时看得到；尽调时在「查看他人账本」填了记录哈希，「详细信息」里有最大深度。命令行的 <code>depth</code> 用的是同一套算法：输入相同，读数相同，出示方与查验方算的是同一道题。</p>
+<p>记录者在导出页的旁栏看得到；在「记录核验器」填了记录哈希时看得到；尽调时在「查看他人账本」填了记录哈希，「详细信息」里有最大深度。核验时有链没读成，缺了读数的那几格写「未读链」。命令行的 <code>depth</code> 用的是同一套算法：输入相同，读数相同，出示方与查验方算的是同一道题。</p>
 <h2 id="publish">公开发布</h2>
 <p>记录包可以放到任何支持静态文件的 https 地址。在「设置 › 网络」填好「发布地址」并保存，再按「检查发布」：应用从发布地址逐个文件取回记录包，与本地那一份比对，答「已发布」「发布不完整」或「无法访问发布地址」。上传由你自己完成，应用只负责核对。</p>
 <p>核验方填入这个地址后，应用逐个文件取回、核对指纹，通过包验证后才用。</p>
 <h2 id="recv">收到记录包之后</h2>
-<p>切换到「使用方」，打开「核验」的「核验记录」，把记录包拖进去，见<a href="verify.html#record">记录核验器</a>。</p>
+<p>打开「核验」的「核验记录」（记录者与使用方都有），把记录包拖进去，见<a href="verify.html#record">记录核验器</a>。包写明的网络还没添加时，页上会提示链名，按「添加」即带着链号、登记合约和起始区块去设置页。</p>
 <div class="pn"><a href="grants.html"><span>上一页</span>授权</a><a class="nx" href="verify.html"><span>下一页</span>核验</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#range">条目范围</a><a href="#files">原件与附件</a><a href="#export">核验并导出</a><a href="#side">旁栏</a><a href="#depth">深度</a><a href="#publish">公开发布</a><a href="#recv">收到记录包之后</a></nav></div>
-<script src="../../site.js?v=4bcd3fcb" defer></script>
+<script src="../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

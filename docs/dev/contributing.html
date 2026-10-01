@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/dev/contributing.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -35,7 +35,8 @@
 <thead><tr><th>改动内容</th><th>途径</th></tr></thead>
 <tbody>
 <tr><td>界面、文案、交互</td><td>合并请求，修改 <code>crates/app</code> 与 <code>crates/zikaron-ui</code>。</td></tr>
-<tr><td>命令行</td><td>合并请求。输出格式或参数变化时，同步修改 <code>CLI-SCHEMA.md</code>。</td></tr>
+<tr><td>命令行</td><td>合并请求。输出格式、参数或拒因变化时，同步修改 <code>CLI-SCHEMA.md</code>，测试会逐项对照。</td></tr>
+<tr><td>打包与持续集成</td><td>合并请求，修改 <code>packaging/</code>、<code>crates/zikaron-pack</code> 或 <code>.github/workflows/</code>。</td></tr>
 <tr><td>核的实现（缺陷、性能）</td><td>合并请求，附一致性比对零分歧的结果。</td></tr>
 <tr><td>新的条目读法</td><td>先在讨论区确定约定，再实现。</td></tr>
 <tr><td>法文措辞</td><td>议题。散文可以修订，核的摘要保持不变。</td></tr>
@@ -51,8 +52,8 @@
 </ol>
 <h2 id="check">提交前检查</h2>
 <ul class="chk">
-<li><code>cargo test --workspace</code> 全部通过。</li>
-<li><code>cargo build --release --locked</code> 通过；依赖有增减时，一并提交 <code>Cargo.lock</code>。</li>
+<li><code>cargo test --workspace</code> 全部通过；合并请求上的持续集成在 macOS、Linux 与 Windows 上各跑一遍，macOS 与 Linux 两格必须通过。</li>
+<li><code>cargo build --release --locked</code> 通过；依赖有增减时，一并提交 <code>Cargo.lock</code>，第三方许可清单在构建时随之重生成。</li>
 <li>修改了 <code>zikaron</code> 或 <code>zikaron-kit</code>：比对器在至少三个种子的语料上零分歧，语料在仓库之外的副本中生成。</li>
 <li>修改了 <code>zikaron-anchor</code>：全部链面录制回放一致。</li>
 <li>两部法的摘要与合约代码哈希重算相符。</li>
@@ -84,6 +85,6 @@
 <h2 id="private">保持仓库干净</h2>
 <p>提交中只放产品源码与文档；本机路径、邮箱、密钥、节点访问令牌、个人测试数据都留在仓库之外。提交前请检查差异。</p>
 <div class="pn"><a href="integrate.html"><span>上一页</span>接入</a><a class="nx" href="compat.html"><span>下一页</span>兼容与演进</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#where">改动的去向</a><a href="#flow">流程</a><a href="#check">提交前检查</a><a href="#judge">判断放在核中</a><a href="#test">测试规范</a><a href="#ui">界面约定</a><a href="#words">文字</a><a href="#private">保持仓库干净</a></nav></div>
-<script src="../../site.js?v=4bcd3fcb" defer></script>
+<script src="../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

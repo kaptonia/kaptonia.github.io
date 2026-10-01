@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/dev/cli.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -34,24 +34,27 @@
 <dl>
 <div><dt>Installed from the dmg</dt><dd><code>/Applications/ZIKARON.app/Contents/MacOS/zikaron</code></dd></div>
 <div><dt>Installed from the pkg</dt><dd><code>/usr/local/bin/zikaron</code></dd></div>
+<div><dt>Installed from the deb</dt><dd><code>/usr/bin/zikaron</code>; the AppImage carries the command line too, but it cannot be called directly</dd></div>
+<div><dt>Windows</dt><dd><code>zikaron.exe</code> in the unpacked folder; to call it from anywhere, add that folder to <code>PATH</code> yourself</dd></div>
 <div><dt>Built from source</dt><dd><code>target/release/zikaron</code></dd></div>
 </dl>
 <h2 id="contract">Three conventions</h2>
 <dl>
 <div><dt>Standard output is one canonical JSON value</dt><dd>Each call prints one value, ending at the value’s last character. The byte format follows law §3.4: compact, members sorted by bytes.</dd></div>
-<div><dt>Misuse leaves standard output empty</dt><dd>For wrong arguments or an unreadable path, the exit code is 2, standard output has zero bytes, and the first line of standard error reads <code>&lt;reason&gt; &lt;subject&gt;</code>, as in <code>E_UNREADABLE /nowhere/at/all</code>. Whether standard output holds any bytes tells a caller an answer from a misuse.</dd></div>
+<div><dt>Misuse leaves standard output empty</dt><dd>For wrong arguments or an unreadable path, the exit code is 2, standard output has zero bytes, and the first line of standard error reads <code>&lt;reason&gt; &lt;subject&gt;</code>, as in <code>E_UNREADABLE /nowhere/at/all</code>, the subject being only the flag, value or path at fault; a second line explains it for people and is outside the contract. Whether standard output holds any bytes tells a caller an answer from a misuse.</dd></div>
 <div><dt>Status words pass through unchanged</dt><dd><code>GREEN</code>, <code>PARTIAL</code>, <code>FAIL</code>, <code>COMPLETE</code>, <code>GAPS</code> and the like are written by the cores and passed on by the command line as they are.</dd></div>
 </dl>
+<p>When the law refuses an entry being written (<code>E_ENTRY</code> with the <code>token</code> <code>E_BODY_FIELD</code>, exit code 1), standard error carries one more line for people, naming the member and the flag that gives it, for example <code>mode: 缺或不成形,由 --mark 与 --toolchain(或 --file) 给</code>; this line is outside the contract too, and standard output and the exit code are the same with or without it.</p>
 <p>Files are written one way: <code>--out</code> first writes a whole temporary file alongside, syncs it to disk, then renames it into place; when a file of that name already exists, the write stops and the existing file keeps every byte.</p>
 <h2 id="exit">Exit codes</h2>
 <div class="tw"><table>
 <thead><tr><th>Code</th><th>Meaning</th><th>Example</th></tr></thead>
 <tbody>
 <tr><td>0</td><td>Answered, affirmative</td><td><code>GREEN</code>, <code>COMPLETE</code></td></tr>
-<tr><td>1</td><td>Answered, negative</td><td>The entry was refused, or the verdict is <code>FAIL</code>, <code>BROKEN_CHAIN</code> or <code>NO_LABEL</code></td></tr>
+<tr><td>1</td><td>Answered, negative</td><td>The entry was refused, the write would break the ledger (<code>E_WOULD_BREAK</code>), the node says the transaction would fail or estimates it above 200,000 (<code>E_GAS_REFUSED</code>), a grant file does not open (<code>E_GRANT_FILE</code>), a record kit does not hold (<code>E_KIT</code>), or the verdict is <code>FAIL</code>, <code>BROKEN_CHAIN</code> or <code>NO_LABEL</code></td></tr>
 <tr><td>2</td><td>Misuse</td><td>Wrong arguments or an unreadable path; standard output is empty</td></tr>
 <tr><td>3</td><td>Answered, in between</td><td><code>PARTIAL</code>, <code>GAPS</code>, <code>UNAVAILABLE</code></td></tr>
-<tr><td>4</td><td>Answer absent</td><td>Node unreachable, nodes disagreeing, scan refused</td></tr>
+<tr><td>4</td><td>Answer absent</td><td>Node unreachable, nodes disagreeing, scan refused, no randomness available</td></tr>
 </tbody></table></div>
 <p>The weight of this table is that 3 and 4 each have a code of their own. Fold “not yet on chain” into 0, and a buyer takes an unanchored grant as cleared; fold it into 1, and a passing “not yet known” reads as “forged”. Fold “node unreachable” into 1, and a network fault reads as “this chain is fake”. A failed scan is an absent answer, and the caller retries or changes nodes.</p>
 <h2 id="verbs">Twenty-one subcommands</h2>
@@ -60,7 +63,7 @@
 <tbody>
 <tr><td><code>keygen</code></td><td>Generate a key and print its address and private key</td></tr>
 <tr><td><code>init</code></td><td>Write the ledger’s creation entry into an empty ledger</td></tr>
-<tr><td><code>history</code></td><td>Append an anchored record</td></tr>
+<tr><td><code>history</code></td><td>Append an anchored record (<code>--file</code> records a file by the app’s convention)</td></tr>
 <tr><td><code>grant</code></td><td>Sign a grant and write it to the ledger</td></tr>
 <tr><td><code>revoke</code></td><td>Sign a revocation and write it to the ledger (ruling file digest optional)</td></tr>
 <tr><td><code>adopt</code></td><td>Write an adoption entry</td></tr>
@@ -68,10 +71,10 @@
 <tr><td><code>succeed</code></td><td>Write a key change or handover entry</td></tr>
 <tr><td><code>annotate</code></td><td>Write a note</td></tr>
 <tr><td><code>retract</code></td><td>Write a deletion entry (the target must be a record in this ledger that is still undeleted)</td></tr>
-<tr><td><code>anchor</code></td><td>Anchor a hash on chain, through the registry contract or as a bare self-transfer</td></tr>
-<tr><td><code>scan</code></td><td>Scan for anchors using the chain settings</td></tr>
-<tr><td><code>audit</code></td><td>Audit a ledger against scan results and print a report and verdict</td></tr>
-<tr><td><code>check-grant</code></td><td>Run the six checks on a grant</td></tr>
+<tr><td><code>anchor</code></td><td>Anchor a hash on chain, through the registry contract or as a bare self-transfer; it estimates gas before sending</td></tr>
+<tr><td><code>scan</code></td><td>Scan for anchors using the chain settings (<code>--endpoint</code> takes http and https)</td></tr>
+<tr><td><code>audit</code></td><td>Audit a ledger against scan results and print a report and verdict (<code>--ledger</code> takes a ledger folder, a ledger mirror or a record kit; <code>--out</code> saves this run’s audit input)</td></tr>
+<tr><td><code>check-grant</code></td><td>Run the six checks on a grant (<code>--grant</code> takes a grant entry file or a <code>.zkgrant</code> grant file)</td></tr>
 <tr><td><code>chain-check</code></td><td>Check a sublicense chain hop by hop (<code>--hop &lt;grant file&gt;[=&lt;audit input file&gt;]</code>, repeatable)</td></tr>
 <tr><td><code>depth</code></td><td>Depth readings for a record</td></tr>
 <tr><td><code>fpm-sign</code></td><td>Sign a fingerprint manifest</td></tr>
@@ -82,7 +85,7 @@
 </tbody></table></div>
 <p>Any other first word counts as misuse, with exit code 2.</p>
 <h2 id="flags">Flags</h2>
-<p>All fifty-three flags are long flags, and each takes a value; every subcommand has its own table of flags, and a flag outside it counts as misuse. Members the law requires in an entry’s body may all be left off the command line; the core then refuses the entry under the law, and the command line checks the few items it needs for its own work. That way each rule of judgment exists once, in the core.</p>
+<p>All fifty-three flags are long flags, and each takes a value; every subcommand has its own table of flags, and a flag outside it counts as misuse. Members the law requires in an entry’s body may all be left off the command line; the core then refuses the entry under the law, and the command line checks the few items it needs for its own work. That way each rule of judgment exists once, in the core. Each subcommand’s flags and the environment variables (the chain-read timeout <code>ZKA_TIMEOUT_SECS</code>, 30 seconds by default; the answer limit <code>ZKA_MAX_ANSWER_BYTES</code>, 64 MiB by default; and so on) are listed in <code>CLI-SCHEMA.md</code>.</p>
 <h2 id="walk">Example</h2>
 <p>Generate a key, create a ledger, record a file, anchor it, audit:</p>
 <div class="cmd block"><code>zikaron keygen
@@ -90,10 +93,7 @@
 
 zikaron init --ledger ./ledger --key &lt;private key&gt; --statement &quot;Records of my work&quot;
 
-zikaron history --ledger ./ledger --key &lt;private key&gt; \
-  --content 0x$(shasum -a 256 manuscript.pdf | cut -d&#x27; &#x27; -f1) \
-  --mark bytes-sha256/1 \
-  --toolchain 0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d
+zikaron history --ledger ./ledger --key &lt;private key&gt; --file manuscript.pdf
 # {&quot;entryId&quot;:&quot;0x…&quot;,&quot;ledger&quot;:&quot;…&quot;,&quot;ok&quot;:true,&quot;seq&quot;:1,&quot;written&quot;:true}
 
 zikaron anchor --key &lt;private key&gt; --endpoint &lt;chain-id&gt;=&lt;node&gt; \
@@ -108,10 +108,7 @@ echo $?</code><button class="cp" type="button" data-copy="zikaron keygen
 
 zikaron init --ledger ./ledger --key &lt;private key&gt; --statement &quot;Records of my work&quot;
 
-zikaron history --ledger ./ledger --key &lt;private key&gt; \
-  --content 0x$(shasum -a 256 manuscript.pdf | cut -d&#x27; &#x27; -f1) \
-  --mark bytes-sha256/1 \
-  --toolchain 0xb7f3c4a226684d6da684b0ac82d36ed5bcba7bb61d09c955bff9437f84a52a4d
+zikaron history --ledger ./ledger --key &lt;private key&gt; --file manuscript.pdf
 # {&quot;entryId&quot;:&quot;0x…&quot;,&quot;ledger&quot;:&quot;…&quot;,&quot;ok&quot;:true,&quot;seq&quot;:1,&quot;written&quot;:true}
 
 zikaron anchor --key &lt;private key&gt; --endpoint &lt;chain-id&gt;=&lt;node&gt; \
@@ -122,14 +119,20 @@ zikaron scan --endpoint &lt;chain-id&gt;=&lt;node one&gt; --endpoint &lt;chain-i
 
 zikaron audit --ledger ./ledger --fragment fragment.json
 echo $?" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
-<p>The value of <code>--toolchain</code> is the SHA-256 of the literal <code>bytes-sha256/1</code>, meaning “the content fingerprint is the SHA-256 of a run of bytes”. The command line’s chain layer accepts node addresses of the form <code>http://host:port</code> alone, so point it at a local node or a local proxy; <code>anchor</code> takes exactly one <code>--endpoint</code>. <code>basis.json</code> states the scan range: which chains, which registry contract, which senders, and the start and end blocks; the format is in law §9.4.</p>
+<p><code>history --file</code> fills the entry by the convention the app uses to record a file: <code>content</code> is the SHA-256 of the file’s bytes, and <code>mode</code> is <code>{"mark":"bytes-sha256/1","toolchain":&lt;the SHA-256 of the text "bytes-sha256/1"&gt;}</code>; for one file, the command line and the app write these two members alike. You can also leave out <code>--file</code> and give <code>--content</code>, <code>--mark</code> and <code>--toolchain</code> yourself; the two ways cannot be mixed.</p>
+<p>Node addresses may be <code>http://</code> or <code>https://</code>, in any case; https checks the certificate chain and host name against the roots compiled into the program, the same transport the app uses. <code>anchor</code> takes exactly one <code>--endpoint</code>: it reads that node’s base fee and the paid tips of the last 20 blocks, sets the fee by the app’s rule, then asks the node to estimate gas for this very transaction and carries one and a half times the estimate, rounded up, at most 200,000; if the node says the transaction would fail or estimates it above 200,000, it refuses with <code>E_GAS_REFUSED</code>, and if the node does not answer, it reports <code>E_UNREACHABLE</code>; either way nothing is sent. Once sent, it asks for the receipt round after round until <code>--wait-secs</code> runs out.</p>
+<p>Each question <code>scan</code> asks names the senders in the scan range, so only their logs come back; when a node declines, the same question is asked again, and only after three refusals is the range split. <code>basis.json</code> states the scan range: which chains, which registry contract, which senders, and the start and end blocks; the format is in law §9.4. The command line keeps no record of facts checked before, and every scan asks about every log.</p>
+<h2 id="gate">Audited before written</h2>
+<p>Every subcommand that writes an entry (<code>init</code> and <code>retract</code> included) passes through one gate: once the entry is signed, the core audits “this ledger plus this entry” offline, and any chain finding of law §8.3 the ledger did not already have (an old key writing after a key change, a sequence gap, a second entry at one place, a link to the wrong entry) refuses the write with <code>E_WOULD_BREAK</code>, <code>names</code> listing the findings, and not one byte is written. <code>--seq</code> and <code>--prev</code> given by hand pass the same gate. When a ledger holds two roots and no <code>--root</code> is given, every write is refused with <code>E_TIP_FORKED</code>.</p>
 <h2 id="now">Time is injected by the caller</h2>
 <p>Deadlines and periods are judged by chain time and the moment injected with <code>--now</code>; when <code>--now</code> is left off, chain time alone applies. Every moment comes from the caller, so the same input always reaches the same verdict.</p>
 <h2 id="sealed">Reading the app’s own ledger</h2>
-<p>A ledger in ZIKARON Desk’s data folder is encrypted and the passcode lives in the app, so the command line refuses to read one, with exit code 2 and this line on standard error (“locked: this is ZIKARON Desk’s sealed local data; the command line does not read it”):</p>
-<div class="cmd block"><code>E_UNREADABLE 已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读</code><button class="cp" type="button" data-copy="E_UNREADABLE 已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
-<p>To hand a ledger to the command line, export a “Ledger mirror” in the app first: each file in the mirror’s <code>entries/</code> is one entry’s bytes, named with exactly its 64 hexadecimal digits. A single entry can be read by file with <code>show --path</code>; to use them as a <code>--ledger</code> folder, copy the files into an empty folder and add <code>.entry</code> to each file name.</p>
-<div class="pn"><a href="layout.html"><span>Previous</span>Repository layout and layers</a><a class="nx" href="law.html"><span>Next</span>The law and the conformance suite</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#where">Where it is</a><a href="#contract">Three conventions</a><a href="#exit">Exit codes</a><a href="#verbs">Twenty-one subcommands</a><a href="#flags">Flags</a><a href="#walk">Example</a><a href="#now">Time is injected by the caller</a><a href="#sealed">Reading the app’s own ledger</a></nav></div>
-<script src="../../../site.js?v=4bcd3fcb" defer></script>
+<p>A ledger in ZIKARON Desk’s data folder is encrypted and the passcode lives in the app, so the command line refuses it as misuse, with exit code 2 and these lines on standard error (the second reads “locked: this is ZIKARON Desk’s sealed local data; the command line does not read it”):</p>
+<div class="cmd block"><code>E_UNREADABLE &lt;ledger path&gt;
+已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读</code><button class="cp" type="button" data-copy="E_UNREADABLE &lt;ledger path&gt;
+已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>To hand a ledger to the command line, export a “Ledger mirror” or a “Record kit” in the app first. The <code>--ledger</code> of <code>audit</code> (and, through it, <code>check-grant</code>, <code>chain-check</code> and <code>depth</code>) and of <code>show --entry</code> can point straight at the mirror folder (the level holding <code>mirror.json</code>) or the kit folder; a kit is first checked under the kit law and refused with <code>E_KIT</code> if it does not hold. The subcommands that write entries, and <code>init</code>, take ledger folders alone: to carry on writing, copy the files in the mirror’s <code>entries/</code> into an empty folder and add <code>.entry</code> to each file name.</p>
+<div class="pn"><a href="layout.html"><span>Previous</span>Repository layout and layers</a><a class="nx" href="law.html"><span>Next</span>The law and the conformance suite</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#where">Where it is</a><a href="#contract">Three conventions</a><a href="#exit">Exit codes</a><a href="#verbs">Twenty-one subcommands</a><a href="#flags">Flags</a><a href="#walk">Example</a><a href="#gate">Audited before written</a><a href="#now">Time is injected by the caller</a><a href="#sealed">Reading the app’s own ledger</a></nav></div>
+<script src="../../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

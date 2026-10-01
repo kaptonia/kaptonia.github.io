@@ -3,42 +3,39 @@ title: Getting started
 -->
 <p class="lede">From installation to your first record on chain takes about ten minutes, half of it spent writing down the recovery words.</p>
 <h2 id="install">Installation</h2>
-<p>Version 0.1.0 comes as two packages for Macs with Apple silicon, available on the <a href="../../download.html">download page</a>:</p>
+<p>Version {{VER}} comes as packages for three systems, available on the <a href="../../download.html">download page</a> together with the full steps for each. Every package carries the third-party licences, which also appear in the app under Settings › About.</p>
 <dl>
-<div><dt><code>.dmg</code></dt><dd>Open it and drag <code>ZIKARON.app</code> to Applications. The <code>zikaron</code> command line is inside the app bundle at <code>ZIKARON.app/Contents/MacOS/zikaron</code>.</dd></div>
-<div><dt><code>.pkg</code></dt><dd>An installer that puts the app in <code>/Applications</code> and the command line at <code>/usr/local/bin/zikaron</code>.</dd></div>
+<div><dt>macOS</dt><dd>Apple silicon, macOS 11 or later. Open the <code>.dmg</code> and drag <code>ZIKARON.app</code> to Applications; the command line is inside the app bundle at <code>ZIKARON.app/Contents/MacOS/zikaron</code>. The <code>.pkg</code> puts the app in <code>/Applications</code> and the command line at <code>/usr/local/bin/zikaron</code>. The app is signed with Kaptonia’s self-signed certificate and is outside Apple’s notarization: check the SHA-256 first, then remove the quarantine flag the download carries in Terminal, and macOS opens it.</dd></div>
+<div><dt>Windows</dt><dd>Windows 10 and 11 on x86_64. Unpack the zip into any folder and double-click <code>zikaron-desk.exe</code>; the command line is <code>zikaron.exe</code> in the same folder, and the programs carry their own runtime. The programs are unsigned: on first start Windows says “Windows protected your PC”; click “More info”, then “Run anyway”. On Windows 11 with Smart App Control on, turn it off in Windows Security first.</dd></div>
+<div><dt>Linux</dt><dd>x86_64 with glibc 2.31 or later (Ubuntu 20.04, Debian 11 and later). Install the <code>.deb</code> with <code>sudo apt install</code>; the window program is <code>zikaron-desk</code> and the command line is <code>zikaron</code>. Make the AppImage executable and run it; it opens the window program. Both packages are unsigned. File dialogs go through the desktop portal, so install <code>xdg-desktop-portal</code> and a backend such as <code>xdg-desktop-portal-gtk</code>.</dd></div>
 </dl>
-<p>The app is signed with Kaptonia’s self-signed certificate and is outside Apple’s notarization. Files downloaded in a browser carry macOS’s quarantine flag, and macOS refuses to open them; on recent macOS, “Open Anyway” in System Settings › Privacy &amp; Security works only some of the time. The reliable way is to check the file first, then remove the quarantine flag in Terminal:</p>
-<ol>
-<li><b>Check the SHA-256.</b> The result should match the one on the download page: {{cmd:shasum -a 256 ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg}}</li>
-<li><b>With the dmg:</b> before opening the dmg, run the command below, then open the dmg and drag <code>ZIKARON.app</code> to Applications: {{cmd:xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.dmg}}If you have already dragged the app in, run this instead: {{cmd:xattr -dr com.apple.quarantine /Applications/ZIKARON.app}}</li>
-<li><b>With the pkg:</b> run the command below, then double-click the pkg to install: {{cmd:xattr -d com.apple.quarantine ~/Downloads/ZIKARON-0.1.0-macos-arm64.pkg}}</li>
-</ol>
-<p>Change the paths to wherever you downloaded the files.</p>
+<p>On Linux and Windows, a drop zone that takes either a file or a folder (such as New record) opens a dialog that picks files; drag a folder straight in. For other architectures or distributions, see <a href="../dev/build.html">Building from source</a>.</p>
+<p>The window program opens the window and nothing else; started with arguments, it only says why. To work with a file, open the window and drop the file on it; leave command-line work to <code>zikaron</code>. If the window cannot open (usually the graphics driver lacks the OpenGL it needs, or it runs in a virtual machine or remote desktop without 3D acceleration), it says why as well.</p>
 <h2 id="wizard">First run</h2>
-<p>The first time the app opens, the wizard appears by itself, with six steps listed down the left and the current step on the right. Whether a step is done depends on the actual state.</p>
+<p>When the app starts with no passcode yet, no signing key, or a Recorder whose ledger has not been created, the wizard opens at the first unfinished step. The six steps are listed down the left and the current step fills the right; whether a step is done depends on the actual state.</p>
 <ol>
-<li><b>Set a passcode.</b> 8 letters or digits, case-sensitive, entered twice. A passcode that is too simple is refused on the spot: eight identical characters, or digits that run in sequence or read as a date. The passcode comes before the identity because keys are stored in a key store that the passcode opens.</li>
-<li><b>Create an identity.</b> One of three ways: generate 12 recovery words, write them on paper and fill in three of them picked at random; import an existing key; or restore from a whole-machine backup. The first identity created on this machine is its primary identity.</li>
-<li><b>Network.</b> “Ethereum mainnet” is selected by default; or choose “Custom” and fill in the chain ID, registry contract and nodes yourself. Anchoring on mainnet costs real ETH in gas.</li>
-<li><b>Create the ledger.</b> Write a ledger description (optional), press “Create the ledger”, then press it again on the confirmation card. This step is free and writes locally.</li>
-<li><b>Add gas.</b> The page shows the key address and a payment QR code. Send a little ETH from your wallet and press “I have sent it”; the wizard reads the balance on chain once, and above zero the step is done. You may choose “Later”.</li>
+<li><b>Set a passcode.</b> 8 letters or digits, case-sensitive, entered twice. A passcode that is too simple is refused on the spot: eight identical characters, or digits that run in sequence or read as a date. The passcode comes before the identity because keys are stored in a key store that the passcode opens; keys live in the app’s own key store alone, and the system keychain stays out of it.</li>
+<li><b>Create an identity.</b> One of three ways: generate 12 recovery words, write them on paper and fill in three of them picked at random; import an existing key; or restore from a whole-machine backup. The first identity created on this machine is its primary identity. A private key imported here exports its key file on the same form, and a forgotten passcode is recovered with that file.</li>
+<li><b>Network.</b> “Ethereum mainnet” is marked “Recommended” and is selected by default until this machine has chosen a network; the other choice, “Custom”, leaves it to Settings › Network, filled in by hand or from a preset. This is the network of the identity made in step 2, and both its roles, Recorder and User, use it. For Sepolia testnet, Arbitrum One or OP Mainnet, choose “Custom” and pick it under “Preset” in Settings › Network. Anchoring on mainnet and on the two layer-2 networks costs real ETH in gas.</li>
+<li><b>Create the ledger.</b> Write a ledger description (optional), press “Create the ledger”, then press it again on the confirmation card. This step is free and writes locally. An imported identity creates its ledger once it has been checked against the chain after step 3.</li>
+<li><b>Add gas.</b> The page shows the key address and a payment QR code. Send a little ETH from your wallet and press “I have sent it”; the wizard reads the balance on chain once, and above zero the step is done. Reading the balance needs nodes; if you chose “Custom” in step 3, set them up first. You may choose “Later”.</li>
 <li><b>Whole-machine backup.</b> Export a password-protected backup file; one file restores everything. You may choose “Do it later”; do it soon.</li>
 </ol>
-<p>Once a passcode and an identity are set, “Exit setup” at the bottom of the step list, or Esc, returns you to where you were, and finished steps stay finished. For unfinished steps, “Run wizard again” in Settings › About picks up where you left off.</p>
+<p>“Exit setup” at the bottom of the step list, or Esc, returns you to where you were before the wizard opened, and finished steps stay finished; fresh recovery words that have not been checked yet are discarded on exit. A true first run (no passcode and no identity when the wizard opened) has no way out for that whole run. For unfinished steps, “Run wizard again” in Settings › About picks up where you left off.</p>
 <p class="call">Write the recovery words on paper and keep them where you alone can reach them. The recovery words bring back keys; this machine’s ledgers, received grants and settings come back from a whole-machine backup; keep the original files yourself.</p>
 <h2 id="recorder">A full walkthrough for the Recorder</h2>
 <p>Choose “Recorder” at the top of the sidebar.</p>
 <ol>
 <li><b>Record.</b> Drop the work’s file onto the drop zone on Home, fill in “Record name”, press “Add to ledger”, then press “Add to ledger” again on the confirmation card.</li>
 <li><b>Put it on chain.</b> Click the “Pending” card on Home, or press “Put all on chain” under the “Pending” segment of Records, then press “Confirm and send” on the “Put on chain” card. A few minutes later the state turns “Confirmed”.</li>
-<li><b>Grant.</b> Open “Grant” and press “New grant”: fill in the grantee’s address, choose a record that is on chain, drop in the terms file, choose a validity period, press “Add to ledger” and again on the confirmation card, then put it on chain as in step 2.</li>
+<li><b>Grant.</b> Open “Grant” and press “New grant”: fill in the grantee’s address, press “Choose a record” and pick one that is on chain, drop in the terms file, choose a validity period, press “Add to ledger” and again on the confirmation card, then put it on chain as in step 2.</li>
 <li><b>Hand it over.</b> On the grant’s detail page, press “Copy grant code” or “Export grant file…” and send it to the grantee. The grant file carries your ledger, so they can run the full check.</li>
 <li><b>Day to day.</b> Watch the Alerts page; when needed, press “Revoke grant…” on a grant’s detail page.</li>
 </ol>
 <p>A record is final once written; to add to it, append a note. Keep the original files safe: to prove something later, you show the original, byte for byte identical to its fingerprint.</p>
 <h2 id="user">A full walkthrough for the User</h2>
 <ol>
+<li>The first time the app opens, the wizard runs as for a Recorder: set a passcode, create an identity, choose a network, create the ledger (free, local only); the rest can wait.</li>
 <li>Switch to “User” at the top of the sidebar. A User ledger is needed only to sublicense; when you get there, press “Set up ledger…” on the sublicense page.</li>
 <li>Paste the grant code you received into the “Verify a grant” card on Home, press “Start check” and read the result.</li>
 <li>Open “My grants”, press “Add grant”, paste the grant code or drop in the grant file, and press “Verify and add” to keep it.</li>
@@ -46,7 +43,7 @@ title: Getting started
 <li>Watch the Alerts page: grants about to expire, revoked grants and issuer ledgers that were handed over all show up there.</li>
 </ol>
 <h2 id="window">The window</h2>
-<p>The sidebar is on the left and the page on the right. The sidebar, top to bottom: the identity chip (the current identity’s name and kind; click it to switch or create identities), the role switch “Recorder” | “User”, that role’s pages, and at the bottom “Settings”, “Lock” and the status line. The small icon at the right end of the status line is “Sync”; click it to read the chain in the background.</p>
+<p>The sidebar is on the left and the page on the right. The sidebar, top to bottom: the identity chip (the current identity’s name and kind; click it for the identity menu, with a search field, to switch, create or import identities), the role switch “Recorder” | “User”, that role’s pages, and at the bottom “Settings”, “Lock” and the status line. The small icon at the right end of the status line is “Sync”; click it to read the chain in the background.</p>
 <div class="tw"><table>
 <thead><tr><th>Recorder</th><th>User</th></tr></thead>
 <tbody>
@@ -54,4 +51,5 @@ title: Getting started
 <tr><td><b>Record</b>: Records, Grant</td><td><b>Grant</b>: My grants</td></tr>
 <tr><td><b>Look up</b>: Verify, Ledger, Alerts</td><td><b>Look up</b>: Verify, Alerts</td></tr>
 </tbody></table></div>
-<p>Every action that writes to the ledger or the chain first shows a confirmation card, listing what will be written, where, and at what cost; the solid red key on the card writes, and “Cancel” or Esc leaves everything as it was. Shortcuts and the other settings are covered in <a href="alerts.html">Alerts and settings</a>.</p>
+<p>List pages have a search field at the top; Records, Ledger, Grant and My grants also have “Start date” and “End date”, each opening a month calendar, and with dates set the list keeps the rows whose anchor block time falls between the two days. Wherever you choose one item from a list (choosing a record, recent addresses, the address books, an annotation’s target entry, switching identity), a floating card opens with a search field.</p>
+<p>Every action that writes to the ledger or the chain first shows a confirmation card, listing what will be written, where, and at what cost; the solid red key on the card writes, and “Cancel” or Esc leaves everything as it was. Slow work (estimating gas, putting entries on chain, computing fingerprints, moving a data folder) runs in the background with progress in the button, and the window stays usable. Shortcuts and the other settings are covered in <a href="alerts.html">Alerts and settings</a>.</p>

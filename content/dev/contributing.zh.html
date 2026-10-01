@@ -7,7 +7,8 @@ title: 参与贡献
 <thead><tr><th>改动内容</th><th>途径</th></tr></thead>
 <tbody>
 <tr><td>界面、文案、交互</td><td>合并请求，修改 <code>crates/app</code> 与 <code>crates/zikaron-ui</code>。</td></tr>
-<tr><td>命令行</td><td>合并请求。输出格式或参数变化时，同步修改 <code>CLI-SCHEMA.md</code>。</td></tr>
+<tr><td>命令行</td><td>合并请求。输出格式、参数或拒因变化时，同步修改 <code>CLI-SCHEMA.md</code>，测试会逐项对照。</td></tr>
+<tr><td>打包与持续集成</td><td>合并请求，修改 <code>packaging/</code>、<code>crates/zikaron-pack</code> 或 <code>.github/workflows/</code>。</td></tr>
 <tr><td>核的实现(缺陷、性能)</td><td>合并请求，附一致性比对零分歧的结果。</td></tr>
 <tr><td>新的条目读法</td><td>先在讨论区确定约定，再实现。</td></tr>
 <tr><td>法文措辞</td><td>议题。散文可以修订，核的摘要保持不变。</td></tr>
@@ -23,8 +24,8 @@ title: 参与贡献
 </ol>
 <h2 id="check">提交前检查</h2>
 <ul class="chk">
-<li><code>cargo test --workspace</code> 全部通过。</li>
-<li><code>cargo build --release --locked</code> 通过；依赖有增减时，一并提交 <code>Cargo.lock</code>。</li>
+<li><code>cargo test --workspace</code> 全部通过；合并请求上的持续集成在 macOS、Linux 与 Windows 上各跑一遍，macOS 与 Linux 两格必须通过。</li>
+<li><code>cargo build --release --locked</code> 通过；依赖有增减时，一并提交 <code>Cargo.lock</code>，第三方许可清单在构建时随之重生成。</li>
 <li>修改了 <code>zikaron</code> 或 <code>zikaron-kit</code>：比对器在至少三个种子的语料上零分歧，语料在仓库之外的副本中生成。</li>
 <li>修改了 <code>zikaron-anchor</code>：全部链面录制回放一致。</li>
 <li>两部法的摘要与合约代码哈希重算相符。</li>

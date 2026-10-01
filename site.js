@@ -145,12 +145,20 @@ var rt=null;addEventListener('resize',function(){clearTimeout(rt);rt=setTimeout(
 if(window.ResizeObserver)new ResizeObserver(function(){stops=null}).observe(th);
 setTimeout(function(){cur=inF(scrollY)?-1:near(scrollY);settle()},300);
 })();
-// 下载页:在 dmg 与 pkg 两种安装包之间切换,安装步骤跟着换
+// 下载页:三个系统的标志切换整页;macOS 里再在 dmg 与 pkg 之间切换,安装步骤跟着换
+var pb=document.querySelectorAll('.plats [data-plat]');if(pb.length)(function(){
+var have=[].map.call(pb,function(b){return b.getAttribute('data-plat')});
+function guess(){var u=((navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'')+' '+navigator.userAgent;if(/mac|iphone|ipad/i.test(u))return'macos';if(/win/i.test(u))return'windows';return'linux'}
+function set(p,mark){if(have.indexOf(p)<0)p=have[0];[].forEach.call(pb,function(b){b.setAttribute('aria-selected',b.getAttribute('data-plat')===p)});var bar=pb[0].parentNode;bar.style.setProperty('--i',have.indexOf(p));[].forEach.call(document.querySelectorAll('.pl[data-plat]'),function(x){x.hidden=x.getAttribute('data-plat')!==p});if(mark&&location.hash!=='#'+p)history.replaceState(null,'','#'+p)}
+var h=location.hash.slice(1);set(have.indexOf(h)>=0?h:guess(),false);
+[].forEach.call(pb,function(b){b.addEventListener('click',function(){set(b.getAttribute('data-plat'),true)})});
+addEventListener('hashchange',function(){var h=location.hash.slice(1);if(have.indexOf(h)>=0)set(h,false)});
+})();
 var gv=document.querySelectorAll('.get [data-f]');if(gv.length)(function(){
-function pick(f){if(!f)return;[].forEach.call(gv,function(v){v.hidden=v.getAttribute('data-f')!==f})}
-function os(o){[].forEach.call(document.querySelectorAll('.seg [data-os]'),function(b){b.setAttribute('aria-selected',b.getAttribute('data-os')===o)});[].forEach.call(document.querySelectorAll('.osp[data-os]'),function(p){p.hidden=p.getAttribute('data-os')!==o})}
-document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-to]');if(b){e.preventDefault();var f=b.getAttribute('data-to');pick(f);var v=document.querySelector('.get [data-f="'+f+'"]');if(v)os(v.getAttribute('data-os'));return}
-var s=e.target.closest&&e.target.closest('.seg [data-os]');if(s){os(s.getAttribute('data-os'));var w=[].filter.call(gv,function(x){return x.getAttribute('data-os')===s.getAttribute('data-os')})[0];if(w)pick(w.getAttribute('data-f'))}});
+function pick(f){if(!f)return;var v=document.querySelector('.get [data-f="'+f+'"]');if(!v)return;[].forEach.call(v.parentNode.querySelectorAll('[data-f]'),function(x){x.hidden=x!==v})}
+function pk(o){[].forEach.call(document.querySelectorAll('.seg'),function(g){if(!g.querySelector('[data-pk="'+o+'"]'))return;[].forEach.call(g.querySelectorAll('[data-pk]'),function(b){b.setAttribute('aria-selected',b.getAttribute('data-pk')===o)});[].forEach.call(g.parentNode.querySelectorAll('.osp[data-pk]'),function(p){p.hidden=p.getAttribute('data-pk')!==o})})}
+document.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-to]');if(b){e.preventDefault();var f=b.getAttribute('data-to');pick(f);var v=document.querySelector('.get [data-f="'+f+'"]');if(v)pk(v.getAttribute('data-pk'));return}
+var s=e.target.closest&&e.target.closest('.seg [data-pk]');if(s){pk(s.getAttribute('data-pk'));var w=[].filter.call(gv,function(x){return x.getAttribute('data-pk')===s.getAttribute('data-pk')})[0];if(w)pick(w.getAttribute('data-f'))}});
 })();
 var z=document.querySelector('.drop[data-verify]');if(!z)return;
 var inp=z.querySelector('input'),out=document.getElementById('verify-out'),list={};
@@ -162,7 +170,7 @@ inp.addEventListener('change',function(){if(inp.files[0])run(inp.files[0])});
 function esc(s){return s.replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function row(k,v){return '<div><span class="k">'+k+'</span>'+v+'</div>'}
 function run(f){out.hidden=false;out.innerHTML=row(T('结果','Result'),'<span>'+T('正在计算…','Computing…')+'</span>');
-f.arrayBuffer().then(function(b){return crypto.subtle.digest('SHA-256',b)}).then(function(d){var h=Array.prototype.map.call(new Uint8Array(d),function(x){return('0'+x.toString(16)).slice(-2)}).join(''),w=list[f.name];
-var v=w===undefined?'<span class="bad">'+T('这个文件在发布清单之外','This file is outside the release list')+'</span>':w===h?'<span class="ok">'+T('与发布清单一致','Matches the release list')+'</span>':'<span class="bad">'+T('与发布清单不一致。请删掉它，重新下载。','Does not match the release list. Delete it and download again.')+'</span>';
+f.arrayBuffer().then(function(b){return crypto.subtle.digest('SHA-256',b)}).then(function(d){var h=Array.prototype.map.call(new Uint8Array(d),function(x){return('0'+x.toString(16)).slice(-2)}).join(''),w=list[f.name],same=Object.keys(list).filter(function(k){return list[k]===h})[0];
+var v=w===h?'<span class="ok">'+T('与发布清单一致','Matches the release list')+'</span>':same?'<span class="ok">'+T('与发布清单里的 ','Matches ')+esc(same)+T(' 一致',' in the release list')+'</span>':w===undefined?'<span class="bad">'+T('这个文件在发布清单之外','This file is outside the release list')+'</span>':'<span class="bad">'+T('与发布清单不一致。请删掉它，重新下载。','Does not match the release list. Delete it and download again.')+'</span>';
 out.innerHTML=row(T('结果','Result'),v)+row(T('文件','File'),'<span>'+esc(f.name)+'</span>')+row('SHA-256','<span class="hash">'+h+'</span>');},function(){out.innerHTML=row(T('结果','Result'),'<span class="bad">'+T('这个文件读取失败','This file could not be read')+'</span>');});}
 })();

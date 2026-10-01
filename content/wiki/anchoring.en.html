@@ -1,7 +1,7 @@
 <!--
 title: Anchoring and networks
 -->
-<p class="lede">Putting entries on chain means sending them in an Ethereum transaction. It gives a settled upper bound on time: once an entry is on chain, anyone can check against the chain that the ledger held it at that moment.</p>
+<p class="lede">Putting entries on chain means sending them in a transaction on the network this identity chose: Ethereum mainnet, or a layer-two network such as Arbitrum One or OP Mainnet. It gives a settled upper bound on time: once an entry is on chain, anyone can check against the chain that the ledger held it at that moment.</p>
 <h2 id="what">What anchoring proves</h2>
 <p>What goes on chain is the entry ID, the SHA-256 of all the entry’s bytes, and the entry in turn records the content fingerprint. The content comes first, then the entry, then the ID. An entry ID that appears in a block therefore proves that the entry, and the content it records, existed by that block’s time at the latest.</p>
 <p>Every entry carries the ID of the one before it. Once the latest entry is on chain, every entry before it, and the content each one records, gains the same upper bound.</p>
@@ -14,18 +14,28 @@ title: Anchoring and networks
 <h2 id="queue">The pending queue</h2>
 <p>New entries join the “Pending” queue first. The “Pending N” segment in the Records toolbar lists them, and the “This batch” card below the table gives the entry count and the gas estimate. Press “Put all on chain”, or “Put on chain now” on one entry’s detail page, and the “Put on chain” card opens:</p>
 <ol>
-<li>The card shows “Entry count” and the “Gas cap”; the gas estimate is under “Details”.</li>
-<li>Once the estimate is in, press “Confirm and send”: the app signs, sends the transaction and waits for the receipt.</li>
+<li>The card shows “Entry count” and the “Gas cap”; the gas estimate is under “Details”. The gas is estimated afresh each time the card opens, in the background, and meanwhile “Confirm and send” reads “Estimating”.</li>
+<li>Once the estimate is in, press “Confirm and send”: the app signs, sends the transaction and waits for the receipt, with “Sending” on the key.</li>
 </ol>
-<p>All entries in a batch travel in one transaction for the cost of one transaction; the more entries, the smaller each one’s share.</p>
-<p><b>The gas cap</b> is worked out from the base fee of the latest block: (base fee × 2 + tip) × gas limit. If reading the base fee fails, it is taken as 0.0006 ETH. The transaction goes out once the balance covers the cap; when it falls short, the message gives the amount needed and the balance at hand, with “Copy address” for topping it up.</p>
+<p>All entries in a batch travel in one transaction for the cost of one transaction; the more entries, the smaller each one’s share. A transaction carries at most 200,000 gas, which on Ethereum mainnet safely holds 83 entries; with more in the queue, press “Put on chain now” on the detail page of an earlier entry to send up to that one (“Sent together” reads “First N”), and send the rest in the next batch.</p>
+<p>Three checks come before sending. The transaction goes out once the balance covers the cap; when it falls short, the message gives the amount needed and the balance at hand, with “Copy address” for topping it up. If the estimate fails, the card becomes “Cannot estimate gas” with the reason, and “Retry” tries again. Last, the chain is read once more, and if it holds records this machine lacks, sending is refused with “Ledger is not up to date”. Sending also waits while the ledger is locked or its chain is broken.</p>
+<h2 id="gas">Gas</h2>
+<p>Gas is worked out from the chain’s actual fees:</p>
+<dl>
+<div><dt>Cap</dt><dd>(base fee × 2 + tip) × the gas limit this transaction carries. The balance check, the cap on the confirmation card and the transaction actually sent all use this one figure.</dd></div>
+<div><dt>Limit</dt><dd>One and a half times the gas the nodes estimate, rounded up, at most 200,000. An estimate above 200,000 is refused and nothing is sent.</dd></div>
+<div><dt>Base fee</dt><dd>Read at the block every node has reached; when nodes differ in height, the lowest one. Nodes are compared on the base fee alone.</dd></div>
+<div><dt>Tip</dt><dd>The median, over the 20 blocks up to that block, of each block’s median paid tip, at most 1 gwei; when the nodes give no answer, refuse or disagree, it is 1 gwei.</dd></div>
+</dl>
+<p>If the base fee cannot be read, the fallback applies: a 3 gwei cap and a 1 gwei tip, with the limit still following the estimate, so at most 0.0006 ETH; the chain is asked again the next time the card opens. On Arbitrum One and OP Mainnet the tip is likewise what the chain actually paid, usually far below 1 gwei, so what is set aside and what is paid are a small fraction of mainnet’s.</p>
 <h2 id="after">After sending</h2>
 <ul>
 <li>In a block within 30 seconds: the toast reads “Put N on chain”.</li>
-<li>Still outside a block after that: the toast reads “Submitted N, waiting for confirmation”, and the app asks for the receipt again every 15 seconds.</li>
+<li>Still outside a block after that: the toast reads “Submitted N, waiting for confirmation”, and the app asks for the receipt again every 15 seconds, carrying on through a node’s brief outage.</li>
 <li>Quit and reopen the app, and it keeps waiting for that transaction’s receipt; each batch is sent once.</li>
-<li>If the receipt shows the transaction failed, the entries stay in the queue and can be sent again.</li>
+<li>If the receipt shows the transaction failed, the toast reads “The transaction was sent but failed on chain.”, and the entries stay in the queue to be sent again.</li>
 </ul>
+<p>When a node refuses, the message names the cause: the transaction itself (such as “Gas price too low.” or “The registry contract rejected the transaction.”), the node’s limits or setup (such as “The node is rate-limiting requests.” or “The node is on a different network.”), or the connection (such as “Cannot reach any node.” or “Could not open a secure connection to the node.”); the node’s own words are under details.</p>
 <h2 id="states">On-chain states</h2>
 <div class="tw"><table>
 <thead><tr><th>State</th><th>Meaning</th></tr></thead>
@@ -38,29 +48,51 @@ title: Anchoring and networks
 <tr><td>Reverted</td><td>The transaction failed on chain; the entry stays queued and can be sent again</td></tr>
 <tr><td>Not sent</td><td>Refused before sending (for example, a balance below the cap); the entry stays queued</td></tr>
 <tr><td>Not on chain</td><td>Outside the queue and off the chain</td></tr>
+<tr><td>Deleted, Deleted locally</td><td>See <a href="ledger.html#retract">Deleting a record</a></td></tr>
 </tbody></table></div>
 <p>Anything that requires “Confirmed”, such as choosing a record when drafting a grant, accepts this session’s check alone.</p>
-<p><b>Auto put on chain.</b> The “Auto put on chain” switch in Settings › Network is off out of the box. When it is on, the write button reads “Send to chain now”, and after writing the app estimates gas and opens the “Put on chain” card straight away. It applies to every kind of write: records, grants, revocations and so on.</p>
+<p><b>Auto put on chain.</b> The “Auto put on chain” switch in Settings › Network is off out of the box and is kept separately for each data folder. When it is on, the write button reads “Send to chain now”, and after writing the app estimates gas and opens the “Put on chain” card straight away. It applies to every kind of write: records, grants, revocations and so on.</p>
 <h2 id="audit">Ledger check</h2>
-<p>The ledger check compares every local entry with the anchors on chain. It runs on the interval in Settings › Notifications, 300 seconds out of the box; straight away whenever the ledger has changed (a new entry written, a batch put on chain); and whenever you press Sync. It needs nodes, chain ID and registry contract all set.</p>
+<p>The ledger check compares every local entry with the anchors on chain. It runs on the interval in Settings › Notifications, 300 seconds out of the box, and on demand alone with the interval at 0; straight away when this ledger has no check result yet or has changed (a new entry written, a batch put on chain); and whenever you press Sync. It needs nodes, chain ID and registry contract all set.</p>
 <p>The ledger status line at the top of the Ledger page reads “OK” or “Problems”; click it for the check card, with a light and a count for each item: on chain, not on chain yet, mismatched on chain, imports unproven, unrecognized types, malformed entries and so on. The ledger is “OK” when there is a check result, the chain is intact and every problem item is zero; entries still waiting to go on chain count as fine. When the result is a broken chain, the whole ledger becomes read-only and the broken-chain bar appears at the top of the page, with “Go to Restore”.</p>
+<p><b>How the chain is read.</b> Only anchors sent by this ledger’s own addresses (the keys that wrote in it) are asked for, and each one that comes back is still checked on this machine item by item, so a sync takes time in step with your own ledger, whatever the number of records on chain. When a node declines, the same question is asked again; only after three refusals is the range split. For an anchor several nodes confirmed alike, this machine keeps its block time and verdict and stops asking about it one by one; if the block changes, or a node returns a log that differs from what was kept, it is asked about again. To ask about everything again, use “Check everything again” in Settings › Local data.</p>
 <h2 id="dense">Frequency and precision</h2>
 <p>Entries written between two anchorings all take the later anchoring as their upper bound. Anchor once a month and time is precise to a month; once a day, to a day. More frequent anchoring costs more and dates more precisely. A ledger anchored every few days over several years carries a different weight from one begun yesterday; the readings on the record kit export page give three numbers for this, see <a href="kits.html#depth">Depth</a>.</p>
 <h2 id="networks">Networks</h2>
-<p>Step 3 of the wizard sets this machine’s network. The app comes with two networks, each with two public nodes from different providers so that their answers can be cross-checked:</p>
+<p>Each identity keeps the network it uses, and both its roles, Recorder and User, share it; different identities on one machine may be on different chains. The app comes with four networks, each with two public nodes from different providers so that their answers can be cross-checked; on the three production networks the registry contract is the same build at the same address.</p>
 <div class="tw"><table>
-<thead><tr><th></th><th>Ethereum mainnet (default)</th><th>Sepolia testnet</th></tr></thead>
+<thead><tr><th>Network</th><th>Chain ID</th><th>Registry contract</th><th>Start block</th></tr></thead>
 <tbody>
-<tr><td>Chain ID</td><td>1</td><td>11155111</td></tr>
-<tr><td>Registry contract</td><td><code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code></td><td><code>0xC29410B882c4C3b77e33659d2f06ac563e7B08a3</code></td></tr>
-<tr><td>Start block</td><td>26087229</td><td>11715660</td></tr>
-<tr><td>Nodes</td><td><code>https://mainnet.gateway.tenderly.co</code><br><code>https://rpc.flashbots.net</code></td><td><code>https://sepolia.gateway.tenderly.co</code><br><code>https://rpc.sepolia.ethpandaops.io</code></td></tr>
+<tr><td>Ethereum mainnet (default)</td><td>1</td><td><code>{{MAINNET}}</code></td><td>26087229</td></tr>
+<tr><td>Sepolia testnet</td><td>11155111</td><td><code>{{SEPOLIA}}</code></td><td>11715660</td></tr>
+<tr><td>Arbitrum One</td><td>42161</td><td><code>{{MAINNET}}</code></td><td>511445184</td></tr>
+<tr><td>OP Mainnet</td><td>10</td><td><code>{{MAINNET}}</code></td><td>157735914</td></tr>
 </tbody></table></div>
-<p>With “Ethereum mainnet”, when the current data folder still lacks chain settings, the app fills in the chain ID, registry contract, start block and two public nodes for you. Anchoring on mainnet costs real ETH.</p>
-<p><b>Trying it on the testnet.</b> Choose “Custom” in wizard step 3, then in Settings › Network press “Edit nodes…”, enter <code>11155111=https://sepolia.gateway.tenderly.co 11155111=https://rpc.sepolia.ethpandaops.io</code> and press “Save nodes”; then fill in the chain ID, registry contract and start block and press “Save chain settings”.</p>
-<p><b>Custom.</b> Nodes are written as <code>chain-id=node-url</code>, separated by spaces. Once you have saved your own values, the “Network” row reads “Custom”.</p>
+<div class="tw"><table>
+<thead><tr><th>Network</th><th>Preset nodes</th></tr></thead>
+<tbody>
+<tr><td>Ethereum mainnet</td><td><code>https://mainnet.gateway.tenderly.co</code><br><code>https://rpc.mevblocker.io</code></td></tr>
+<tr><td>Sepolia testnet</td><td><code>https://sepolia.gateway.tenderly.co</code><br><code>https://rpc.sepolia.ethpandaops.io</code></td></tr>
+<tr><td>Arbitrum One</td><td><code>https://arb1.arbitrum.io/rpc</code><br><code>https://arbitrum.gateway.tenderly.co</code></td></tr>
+<tr><td>OP Mainnet</td><td><code>https://mainnet.optimism.io</code><br><code>https://optimism.gateway.tenderly.co</code></td></tr>
+</tbody></table></div>
+<p>Each preset node was measured to hold the registry’s complete logs since its start block, both nodes of a network matching entry for entry. Anchoring on mainnet and on the two layer-two networks costs real ETH.</p>
+<ul>
+<li><b>Choosing.</b> The “Network” field of “New identity…” and “Import key…” lists the four presets and “Custom”. Step 3 of the first-run wizard lists “Ethereum mainnet” and “Custom”, plus another preset when this machine or the current identity has chosen it.</li>
+<li><b>Trying it on the testnet.</b> Choose “Sepolia testnet” under “Network” when making the identity.</li>
+<li><b>Custom.</b> In Settings › Network press “Edit nodes…”: pick a preset network under “Preset” and the four cells fill in, or type them yourself, with nodes written as <code>chain-id=node-url</code> separated by spaces. “Save nodes” and “Save chain settings” make it take effect. Nodes, chain ID and contract typed by hand belong to this identity, and other identities leave them alone; for an identity made with “Custom”, once they are complete in one role, the other role takes them when it opens.</li>
+<li><b>The “Network” row</b> says where this data folder’s network came from: a preset’s name when all four cells match it, “Custom” once you have changed them, and an amber “No network set yet” when there is none.</li>
+</ul>
+<h2 id="readonly">Read-only networks</h2>
+<p>The “Read-only networks” section under the main network in Settings › Network is for checking other people’s material: Verify record, Look up a ledger, grant verification and due diligence read the main network and every network listed here. Writing the ledger, putting on chain, the balance and the ledger check use the main network alone. The list is shared by every identity on this machine.</p>
+<ul>
+<li>Press “Add” for a new row, pick a preset network under “Preset” or fill in “Name”, “Chain ID”, “Registry contract”, “Start block” and the nodes (one per line) yourself, and press “Save”. Saving writes on this machine alone; the chain is read later.</li>
+<li>Before a read-only network is read, the code at its registry is checked against the build ZIKARON pins, every time. “Read the chain” gives “Agreed”, “Single source”, “Unreachable” or “Fingerprint mismatch”; a row with a fingerprint mismatch sits out that read, and not one anchor on it counts.</li>
+<li>Rows on the same chain are read as one window: every registry contract, from the earliest start block.</li>
+</ul>
+<p>The result of a check names the chains it read; when a chain could not be read, a record whose anchor is missing from the chains that were read shows “Chain not read”, to be judged once that chain reads. See <a href="verify.html#chains">Which networks a check reads</a>.</p>
 <h2 id="nodes">Nodes</h2>
-<p>The app reads the chain and sends transactions through the nodes you configure. The “Chain reading” row in Settings › Network says how many nodes agree; when a single node responds, it says the reading comes from one source. For <code>https://</code> nodes the certificate and host name are checked on every connection, and the chain is read once the certificate passes.</p>
+<p>The app reads the chain and sends transactions through the nodes you configure. A node address starts with <code>https://</code> or <code>http://</code>; for https nodes the certificate and host name are checked on every connection, and the chain is read once the certificate passes. The “Chain reading” row in Settings › Network says how many nodes agree; when a single node responds, it reads “Only 1 node responded; no cross-check”.</p>
 <p class="call">Public nodes can see the addresses and contracts you query. If that concerns you, switch to a node of your own.</p>
 <h2 id="final">After anchoring</h2>
 <p>Anchoring goes one way. What stays on chain is a 32-byte entry ID and the sending address; the content, file names and record names all stay off chain. The sending address is public, and anyone can look up which IDs it has sent.</p>

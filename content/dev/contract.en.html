@@ -11,14 +11,16 @@ function anchorMany(bytes32[] calldata hashes) external;
 }}
 <p><code>anchor</code> emits one event; <code>anchorMany</code> emits one for each element of the array, and zero for an empty array. The <code>author</code> in the event is the caller’s address. The contract has zero storage, zero owners and zero upgrade paths, and treats every caller alike. The source is <code>base/zikaron-core/contracts/src/ZikaronRegistry.sol</code>, licensed CC0-1.0.</p>
 <h2 id="deployed">Known deployments</h2>
-<p>The app comes with two deployments of the same pinned build, with the same code hash:</p>
+<p>The app comes with four deployments of the same pinned build, with the same code hash; on Ethereum mainnet, Arbitrum One and OP Mainnet they also share one deployer, one set of deployment bytes and one address:</p>
 <div class="tw"><table>
 <thead><tr><th>Network</th><th>Chain ID</th><th>Registry contract</th><th>Start block</th></tr></thead>
 <tbody>
 <tr><td>Ethereum mainnet (default)</td><td>1</td><td><code>{{MAINNET}}</code></td><td>26087229</td></tr>
 <tr><td>Sepolia testnet</td><td>11155111</td><td><code>{{SEPOLIA}}</code></td><td>11715660</td></tr>
+<tr><td>Arbitrum One</td><td>42161</td><td><code>{{MAINNET}}</code></td><td>511445184</td></tr>
+<tr><td>OP Mainnet</td><td>10</td><td><code>{{MAINNET}}</code></td><td>157735914</td></tr>
 </tbody></table></div>
-<p>The start block is where scanning begins, earlier than the first anchor on that contract.</p>
+<p>The start block is where scanning begins, earlier than the first anchor on that contract. Each identity keeps the one it uses, shared by both roles; “default” means the one the first-run wizard and “New identity” select first. The preset nodes and how they are chosen are in <a href="release.html#contract">Releasing · Contract and networks</a>.</p>
 <h2 id="forms">Two forms of anchor</h2>
 <dl>
 <div><dt>Registry form</dt><dd>The transaction succeeds, and its receipt holds a log emitted by a registry contract with exactly three topics and empty data: topic 0 is the keccak256 of <code>Anchored(address,bytes32)</code>, topic 1 is the transaction’s sender, topic 2 is the fingerprint. The same fingerprint also appears in the transaction’s calldata, at an offset that is a multiple of 32, or 4 plus a multiple of 32.</dd></div>
@@ -42,7 +44,7 @@ forge build
 cast keccak $(forge inspect ZikaronRegistry deployedBytecode)
 }}
 <h2 id="deploy">Deploying your own</h2>
-<p>Anyone may deploy the same bytes on any EVM chain that has passed the Shanghai upgrade. After deploying, check that the hash of the code on chain matches the table above, then enter the chain ID, registry contract and start block in the app under Settings › Network › “Edit nodes…”.</p>
+<p>Anyone may deploy the same bytes on any EVM chain that has passed the Shanghai upgrade. After deploying, check that the hash of the code on chain matches the table above, then enter the chain ID, registry contract, start block and nodes for the identity in the app under Settings › Network › “Edit nodes…”; to use it only for checking other people’s material, add it as a read-only network.</p>
 {{code:
 forge create src/ZikaronRegistry.sol:ZikaronRegistry \
   --rpc-url <node> --private-key <deployment key> --broadcast
@@ -50,19 +52,22 @@ forge create src/ZikaronRegistry.sol:ZikaronRegistry \
 cast keccak $(cast code <new address> --rpc-url <node>)
 }}
 <p>Deploy with a dedicated key; the identity key signs the ledger and sends anchors.</p>
-<p>This pinned build uses the PUSH0 instruction and suits chains that have passed the Shanghai upgrade. An earlier chain needs its own build, with its own code hash. The law reads logs by the contract addresses a verifier declares, so a second build is purely a deployment convenience.</p>
+<p>This pinned build uses the PUSH0 instruction and suits chains that have passed the Shanghai upgrade. An earlier chain needs its own build, with its own code hash. The law reads logs by the contract addresses a verifier declares, so a second build is purely a deployment convenience. Before reading a read-only network, the app checks that the code hash of its registry equals the one above, and a network that differs sits out that read; a contract built separately can therefore serve in the app only as an identity’s main network.</p>
 <h2 id="gas">Gas, for reference</h2>
 <div class="tw"><table>
-<thead><tr><th>Call</th><th>Gas used by the contract</th></tr></thead>
+<thead><tr><th>Call</th><th>Gas used by the contract</th><th>Estimate for the whole transaction (Ethereum mainnet)</th></tr></thead>
 <tbody>
-<tr><td><code>anchor</code></td><td>2,352</td></tr>
-<tr><td><code>anchorMany</code>, 1 element</td><td>2,776</td></tr>
-<tr><td><code>anchorMany</code>, 10 elements</td><td>17,746</td></tr>
-<tr><td><code>anchorMany</code>, 100 elements</td><td>167,661</td></tr>
+<tr><td><code>anchor</code></td><td>2,352</td><td>about 23,600</td></tr>
+<tr><td><code>anchorMany</code>, 1 element</td><td>2,776</td><td>about 24,050</td></tr>
+<tr><td><code>anchorMany</code>, 10 elements</td><td>17,746</td><td>about 42,900</td></tr>
+<tr><td><code>anchorMany</code>, 50 elements</td><td></td><td>about 127,300</td></tr>
+<tr><td><code>anchorMany</code>, 83 elements</td><td></td><td>about 198,000</td></tr>
+<tr><td><code>anchorMany</code>, 100 elements</td><td>167,661</td><td>about 233,800</td></tr>
 </tbody></table></div>
-<p>The table covers the contract’s execution as measured in forge; the transaction’s 21,000 base cost and calldata cost come on top. The more elements, the less each one costs. The app sends with a gas limit of 200,000.</p>
+<p>The second column is the contract’s execution as measured in forge; the third is a node’s estimate for the whole transaction, including the 21,000 base cost and the calldata cost, which shifts a little with the hashes’ bytes (each zero byte in a hash saves about 12 gas). The more elements, the less each one costs.</p>
+<p>The app and the command line set gas by one rule: the transaction carries one and a half times the node’s estimate, rounded up, at most 200,000, and an estimate above 200,000 is refused with nothing sent (the app says the gas cannot be estimated, the command line reports <code>E_GAS_REFUSED</code>). On Ethereum mainnet one transaction therefore safely holds 83 entries; the estimate for 84 sits right at 200,000, and whether it passes depends on the zero bytes in the hashes. The fee cap is twice the base fee plus the tip, the tip being the median of the last 20 blocks’ median paid tips, at most 1 gwei; when the base fee cannot be read, the fallback is 3 gwei and 1 gwei.</p>
 <h2 id="other">Anchoring through other contracts</h2>
 <p>Any contract that emits a log of the same format can serve as a registry. The log counts as an anchor when three conditions hold together: the transaction is sent by the ledger’s key itself; the fingerprint appears in that transaction’s own calldata, at an offset as stated above; and the log is emitted by the contract that was called. When a contract reaches a registry through an inner call, the log names that contract’s address, and to every ledger it is an ordinary log.</p>
-<p>A verifier should list in its scan range only contract addresses whose source it has read and whose code is fixed.</p>
+<p>A verifier should list in its scan range only contract addresses whose source it has read and whose code is fixed. The app enforces this for read-only networks: a registry whose code hash differs from the pinned one is not read.</p>
 <h2 id="proof">Self-contained anchor proofs</h2>
 <p>Law §9.7 defines self-contained anchor proofs, and the <code>proofs/</code> directory of a record kit carries them. With such a proof a verifier checks an anchor from two trusted block hashes alone: the block headers, Merkle proofs of the transaction and of its receipt, and account proofs of the sending address at the two blocks. Such proofs stay valid after nodes prune their history.</p>

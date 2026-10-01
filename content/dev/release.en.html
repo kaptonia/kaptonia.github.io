@@ -3,10 +3,10 @@ title: Releasing
 -->
 <p class="lede">A release has to be checkable byte for byte by anyone: its checksums, its signature, and the match between the source archive and the tag. These are the steps a maintainer follows.</p>
 <h2 id="version">Version numbers</h2>
-<p>Three parts, <code>major.minor.patch</code>. When a file format read or written, or the command line’s output format, changes, the minor version goes up and the release notes list the change; a release of defect fixes alone raises the patch number. The law’s version is written in its spec name and is independent of the software version.</p>
+<p>Three parts, <code>major.minor.patch</code>. Every version’s changes go into the change log: what was added, changed and fixed, changes to file formats and command-line output, and what users have to do when upgrading. The ledgers, record kits and data folders an earlier version wrote are read and written as usual by a new one. The law’s version is written in its spec name and is independent of the software version.</p>
 <h2 id="before">Before a release</h2>
 <ul class="chk">
-<li>Every test passes on main, on each released system.</li>
+<li>Every test passes on main: continuous integration builds and tests on macOS, Linux and Windows, and each platform’s packages are then installed and opened once on a real machine.</li>
 <li>Both digests of the law recompute to their values.</li>
 <li>The cores show zero divergences against the frozen cores, and every chain-facing recording replays identically.</li>
 <li>The contract’s code hash recomputes correctly.</li>
@@ -16,32 +16,34 @@ title: Releasing
 <li>A whole-machine backup exported on one system is restored once on each of the others.</li>
 </ul>
 <h2 id="build">Build</h2>
-<p>Release files are built from the tagged commit. The macOS packages come from the packaging script, with the signing identity:</p>
-{{code:
-git tag v{{VER}}
-packaging/macos/build.sh --identity Kaptonia
-}}
-<p>The script builds the app and the command line with <code>--locked</code>, puts the window program <code>zikaron-desk</code> and the command line <code>zikaron</code> into <code>ZIKARON.app</code>, signs and verifies each one, then makes <code>dist/ZIKARON-&lt;version&gt;-macos-&lt;arch&gt;.dmg</code> (with a link to Applications) and a <code>.pkg</code> (the app into <code>/Applications</code>, the command line into <code>/usr/local/bin</code>), and writes <code>SHA256SUMS-macos-&lt;arch&gt;.txt</code>. Binaries are stripped of symbols; the home, source and build directory paths are mapped away at compile time, so the product is independent of the build machine. The Linux <code>.deb</code> and AppImage come from <code>packaging/linux/build.sh</code>, or from <code>cross-build.sh</code> on another host.</p>
+<p>Release files are built from the tagged commit, each system with its own tool:</p>
+{{cmd:git tag v{{VER}}}}
+<dl>
+<div><dt>macOS</dt><dd>{{cmd:packaging/macos/build.sh --identity Kaptonia}}The script builds the app and the command line with <code>--locked</code>, puts the window program <code>zikaron-desk</code>, the command line <code>zikaron</code> and the third-party licences into <code>ZIKARON.app</code>, signs and verifies each one, then makes <code>dist/ZIKARON-&lt;version&gt;-macos-&lt;arch&gt;.dmg</code> (with a link to Applications) and a <code>.pkg</code> (the app into <code>/Applications</code>, the command line into <code>/usr/local/bin</code>), and writes <code>SHA256SUMS-macos-&lt;arch&gt;.txt</code>. Extended attributes are stripped, and the owners, dates and partition names in the dmg and the owners and dates in the pkg are made neutral.</dd></div>
+<div><dt>Linux</dt><dd>{{cmd:packaging/linux/build.sh}}On another host, use <code>cross-build.sh</code>, targeting glibc 2.31. It makes the <code>.deb</code> and the AppImage, puts the third-party licences in <code>/usr/share/doc/zikaron-desk/</code>, and empties the binaries’ <code>.comment</code> section.</dd></div>
+<div><dt>Windows</dt><dd>{{cmd:cargo run --release --locked -p zikaron-pack -- windows --out dist}}Built on Windows with MSVC, it lays out the folder <code>dist/ZIKARON-&lt;version&gt;-windows-x86_64/</code>, which is then zipped for the release page.</dd></div>
+</dl>
+<p>Binaries are stripped of symbols; the home, source and build directory paths are mapped away at compile time, and every date in a package comes from <code>SOURCE_DATE_EPOCH</code> (the commit time by default), so the product is independent of the build machine.</p>
 <h2 id="sums">Checksums and {{Z}} record</h2>
 <ol>
-<li>Compute the SHA-256 of every release file (each platform’s packages and the source archive) and gather them into one release list, <code>SHA256SUMS.txt</code>.</li>
-<li>At commit time, record the commit in the project’s Zikaron ledger, together with each release file’s fingerprint, and anchor them on chain; the release notes state the transaction, block, recorder address and each fingerprint.</li>
+<li>Compute the SHA-256 of every release file (each platform’s packages and the source archive) and gather them into one release list, <code>SHA256SUMS.txt</code>; the three platforms’ third-party licences are published separately.</li>
+<li>Before publishing, record the commit and each release file’s fingerprint in the project’s Zikaron ledger and anchor them on chain; the transaction, block, recorder address and each fingerprint are on the <a href="verify.html#anchored">Checksums</a> page.</li>
 <li>The release page, the website’s download page and the list agree in all three places; the download page’s “Zikaron record” column carries each file’s anchoring transaction.</li>
 </ol>
 <p>How users check them is under <a href="verify.html">Checksums</a>.</p>
 <h2 id="sign">System signing</h2>
-<p>The app and the dmg are signed with the project’s own certificate, whose common name is Kaptonia; the project issues this certificate itself, the release is outside Apple’s notarization, and the project publishes it directly. Every version is signed with the same certificate and the same identifier, <code>com.kaptonia.zikaron.app</code>, so the system recognizes each version as the same app. The pkg is checked by its SHA-256.</p>
-<p>Files downloaded in a browser carry a quarantine flag, and macOS refuses to open them; on recent macOS, “Open Anyway” works only some of the time. The way the <a href="../../download.html#install">download page</a> and the release notes give is: check the file with <code>shasum -a 256</code> first, then remove the quarantine flag in Terminal with <code>xattr</code>. Users who want to confirm where a file came from can check its signer, certificate fingerprint, checksum and {{Z}} record; see <a href="verify.html">Checksums</a>.</p>
+<p>The app and the dmg are signed with the project’s own certificate, whose common name is Kaptonia; the project issues this certificate itself, the release is outside Apple’s notarization, and the project publishes it directly. Every version is signed with the same certificate and the same identifier, <code>com.kaptonia.zikaron.app</code>, so the system recognizes each version as the same app. The pkg is checked by its SHA-256. The Windows zip and the two Linux packages are unsigned and checked by their SHA-256.</p>
+<p>Files downloaded in a browser carry a quarantine flag, and macOS refuses to open them; on recent macOS, “Open Anyway” works only some of the time. The way the <a href="../../download.html#install">download page</a> and the release notes give is: check the file with <code>shasum -a 256</code> first, then remove the quarantine flag in Terminal with <code>xattr</code>. On Windows, the first start takes “More info”, then “Run anyway”; on Windows 11 with Smart App Control on, turn it off first. Users who want to confirm where a file came from can check its signer, certificate fingerprint, checksum and {{Z}} record; see <a href="verify.html">Checksums</a>.</p>
 <h2 id="notes">Release notes</h2>
-<p>For every version, state what was added, changed and fixed; changes to file formats and command-line output; and what users have to do when upgrading. State what holds now.</p>
+<p>For every version, state what was added, changed and fixed; changes to file formats and command-line output; what users have to do when upgrading; and known limitations. <code>CHANGELOG.md</code> and <code>CHANGELOG.en.md</code> in the repository record each version, and the release notes link to them and to that version’s manual.</p>
 <h2 id="contract">Contract and networks</h2>
-<p>The app carries a table of known deployments: chain ID, registry contract address, start block, default nodes. Before adding a row:</p>
+<p>The app carries a table of known deployments, now four rows (Ethereum mainnet, Sepolia testnet, Arbitrum One, OP Mainnet), each with a chain ID, registry contract address, start block and two preset nodes. Before adding a row:</p>
 <ol>
 <li>Read the code from the chain and check its code hash.</li>
 <li>Confirm that the start block comes before the first anchor on that contract.</li>
-<li>Choose two default nodes from different sources, both with TLS, both answering the right chain ID.</li>
+<li>Choose two preset nodes from different sources, both with TLS, both answering the right chain ID, each measured to hold the complete logs since the start block, matching entry for entry, and refusing too wide a query range in words; nodes that serve only a recent window, charge, or rate-limit are left out.</li>
 </ol>
-<p>Rows are only added; released rows stay as they are, and old ledgers go on being verified by them.</p>
+<p>Once a row is released, its chain ID, registry contract and start block stay as they are, and old ledgers go on being verified by them. A preset node that stops holding the complete logs can be replaced: a data folder whose nodes are still the old pair, letter for letter, switches to the new pair when it opens, and nodes a user changed are left alone.</p>
 <h2 id="site">The website</h2>
 <p>With every version the website updates the file names, sizes, checksums and Zikaron records on its download page. The pages are generated by a script in the repository, and the output is committed with it.</p>
 <h2 id="after">After a release</h2>

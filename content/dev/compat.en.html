@@ -30,8 +30,9 @@ title: Compatibility and evolution
 <li>When a backup comes from a newer version, the software says plainly to update the app first; for any other unreadable file, it names the file.</li>
 </ol>
 <p>The whole process happens in one step: after a power cut, the next launch finds either the complete old state or the complete new one.</p>
+<p>When a new version opens old data, it fills in missing settings and leaves values a user set as they are: an identity made by an earlier version, with no network recorded, gets the network this machine chose in the wizard recorded once, the first time its data folder opens (nothing is recorded if that was “Custom”, if the machine never chose, or if the data folder already holds another chain); a data folder whose nodes are still the earlier preset pair, letter for letter, moves to the new pair with the preset table, and nodes a user changed are left alone.</p>
 <h2 id="cli">Command-line output</h2>
-<p>The output keys form a closed table and the exit codes are five fixed values, and scripts depend on them. So the meanings of keys and exit codes stay stable; new information comes as new keys; new subcommands and flags are added to <code>CLI-SCHEMA.md</code> at the same time.</p>
+<p>The output keys and the refusal reasons each form a closed table, and the exit codes are five fixed values; scripts depend on them. So the meanings of keys and exit codes stay stable, and new information comes as new keys; added refusals and changes to what a refusal covers are written into <code>CLI-SCHEMA.md</code> at the same time and listed in the change log; tests check that document against the code item by item. The lines for people on standard error are outside the contract, and their wording can improve at any time.</p>
 <h2 id="words">Verdict tokens stay as written</h2>
 <p><code>GREEN</code>, <code>PARTIAL</code>, <code>FAIL</code>, <code>COMPLETE</code>, <code>GAPS</code> and the like are written by the cores and stay as they are in machine-readable output. The interface renders them for people as “All passed”, “Has gaps” and so on, with the original token under Details.</p>
 <h2 id="time">Time</h2>

@@ -2,7 +2,7 @@
 title: Zikaron
 nav: Introduction
 -->
-<p class="lede">Evidence infrastructure. ZIKARON Desk is a desktop application for your own machine: it records your works or files in an append-only ledger, anchors that ledger to Ethereum, and lets you issue grants from it. Whoever receives a grant can verify it independently, on any machine.</p>
+<p class="lede">Evidence infrastructure. ZIKARON Desk is a desktop application for your own machine: it records your works or files in an append-only ledger, anchors that ledger to Ethereum (or a chosen layer-two network), and lets you issue grants from it. Whoever receives a grant can verify it independently, on any machine.</p>
 <h2 id="name">The name</h2>
 <p>Zikaron (Hebrew <span lang="he" dir="rtl">זִכָּרוֹן</span>) means “memorial”. When Israel crossed the Jordan, Joshua had twelve men each carry a stone out of the river to be set up as a memorial: when the ark of the covenant entered the Jordan, the waters were cut off before it, and the stones were to keep that day in Israel’s memory for ever (Joshua 4:4–7).</p>
 <h2 id="why">Why evidence comes first</h2>
@@ -11,7 +11,7 @@ nav: Introduction
 <h2 id="how">How it works</h2>
 <ol>
 <li><b>Record.</b> Drop a file into the app. It computes the file’s content fingerprint and writes it as an anchored record in your ledger, signed by your key. The file stays on your machine.</li>
-<li><b>Put on chain.</b> The entries are sent to Ethereum. From then on it can be shown that the content existed by that moment at the latest.</li>
+<li><b>Put on chain.</b> The entries are sent to the chain this identity chose: Ethereum mainnet, Arbitrum One or OP Mainnet. From then on it can be shown that the content existed by that moment at the latest.</li>
 <li><b>Grant or present.</b> To grant rights in a work, issue a grant; to present evidence, export a record kit.</li>
 <li><b>Verify.</b> With a grant file, the other side checks it themselves, item by item: signature, ledger, anchoring, validity and revocation; with a record kit, signature, ledger and anchoring; with a grant code alone, signature and validity.</li>
 </ol>
@@ -35,8 +35,8 @@ nav: Introduction
 </ul>
 <h2 id="release">Release</h2>
 <dl>
-<div><dt>Current version</dt><dd>ZIKARON Desk 0.1.0.</dd></div>
-<div><dt>Packages</dt><dd>Macs with Apple silicon, macOS 11 or later; see the <a href="../../download.html">download page</a>. On x86_64 Linux, build from source; see <a href="../dev/build.html">Developer guide · Building from source</a>.</dd></div>
+<div><dt>Current version</dt><dd>ZIKARON Desk {{VER}}.</dd></div>
+<div><dt>Packages</dt><dd>macOS on Apple silicon (11 or later), Windows 10 and 11 on x86_64, and x86_64 Linux (<code>.deb</code> and AppImage); see the <a href="../../download.html">download page</a>. On other platforms, build from source; see <a href="../dev/build.html">Developer guide · Building from source</a>.</dd></div>
 <div><dt>Command line</dt><dd>The <code>zikaron</code> that comes with the app, one verb per action; see <a href="../dev/cli.html">Command line</a>.</dd></div>
 <div><dt>Licence</dt><dd>MIT; the source is public on GitHub.</dd></div>
 </dl>

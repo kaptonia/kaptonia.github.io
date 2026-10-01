@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/dev/contributing.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=1869dd54">
+<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -35,7 +35,8 @@
 <thead><tr><th>Change</th><th>Route</th></tr></thead>
 <tbody>
 <tr><td>Interface, wording, interaction</td><td>A pull request, in <code>crates/app</code> and <code>crates/zikaron-ui</code>.</td></tr>
-<tr><td>The command line</td><td>A pull request. When the output format or flags change, update <code>CLI-SCHEMA.md</code> with it.</td></tr>
+<tr><td>The command line</td><td>A pull request. When the output format, flags or refusals change, update <code>CLI-SCHEMA.md</code> with it; tests check it item by item.</td></tr>
+<tr><td>Packaging and continuous integration</td><td>A pull request, changing <code>packaging/</code>, <code>crates/zikaron-pack</code> or <code>.github/workflows/</code>.</td></tr>
 <tr><td>A core’s implementation (defects, performance)</td><td>A pull request, with the zero-divergence result of the conformance comparison.</td></tr>
 <tr><td>A new reading of entries</td><td>Settle the convention in the discussions first, then implement it.</td></tr>
 <tr><td>Wording of a law text</td><td>An issue. Prose may be revised while the core’s digest keeps its value.</td></tr>
@@ -51,8 +52,8 @@
 </ol>
 <h2 id="check">Checks before submitting</h2>
 <ul class="chk">
-<li><code>cargo test --workspace</code> passes.</li>
-<li><code>cargo build --release --locked</code> passes; when dependencies are added or removed, commit <code>Cargo.lock</code> with the change.</li>
+<li><code>cargo test --workspace</code> passes; continuous integration on the pull request runs on macOS, Linux and Windows, and the macOS and Linux cells must pass.</li>
+<li><code>cargo build --release --locked</code> passes; when dependencies are added or removed, commit <code>Cargo.lock</code> with the change, and the third-party licence list regenerates with the build.</li>
 <li>If <code>zikaron</code> or <code>zikaron-kit</code> changed: the comparer shows zero divergences on corpora from at least three seeds, generated in a copy outside the repository.</li>
 <li>If <code>zikaron-anchor</code> changed: every chain-facing recording replays identically.</li>
 <li>Both digests of the law and the contract’s code hash recompute to their values.</li>
@@ -84,6 +85,6 @@
 <h2 id="private">Keeping the repository clean</h2>
 <p>Commits hold product source and documents alone; local paths, e-mail addresses, keys, node access tokens and personal test data stay outside the repository. Read the diff before you commit.</p>
 <div class="pn"><a href="integrate.html"><span>Previous</span>Integration</a><a class="nx" href="compat.html"><span>Next</span>Compatibility and evolution</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#where">Where a change goes</a><a href="#flow">Process</a><a href="#check">Checks before submitting</a><a href="#judge">Judgment belongs in the cores</a><a href="#test">Rules for tests</a><a href="#ui">Interface conventions</a><a href="#words">Wording</a><a href="#private">Keeping the repository clean</a></nav></div>
-<script src="../../../site.js?v=4bcd3fcb" defer></script>
+<script src="../../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>
