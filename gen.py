@@ -106,7 +106,7 @@ def lang_link(rel, depth):
 
 def top(rel, depth, on=""):
     h = home(depth)
-    items = (("tools", t("工具", "Tools"), f"{h}index.html#tools"), ("download", t("下载", "Download"), f"{h}download.html"), ("wiki", "Wiki", f"{h}docs/wiki/index.html"), ("dev", DEV(), f"{h}docs/dev/index.html"))
+    items = (("tools", t("工具", "Tools"), f"{h}index.html#tools"), ("download", t("使用", "Use"), f"{h}download.html"), ("wiki", "Wiki", f"{h}docs/wiki/index.html"), ("dev", DEV(), f"{h}docs/dev/index.html"))
     nav = "".join(f'<a href="{u}"{" class=on" if k == on else ""}>{n}</a>' for k, n, u in items)
     return f"""<header class="top"><div class="frame-w">
   <a class="handle" href="{h}index.html">@kaptonia</a>
@@ -403,16 +403,79 @@ def download():
         return "".join(f'<div><span class="k">{kind(k)[0]}</span><span class="hash">{h}</span></div>' for f, size, h, k, u in FILES if plat(k) == p or k == "src")
     vmains = "".join(panel(p, f'<div class="kv sha">{sums(p)}</div>') for p in plats)
     vsides = "".join(panel(p, side(p)) for p in plats)
+    src = open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "content", "wiki", f"start.{L}.html"), encoding="utf-8").read()
+    prompt = re.search(r'<h2 id="agent">.*?\{\{code:\n(.*?)\n\}\}', src, re.S).group(1)
+    pe = html.escape(prompt, quote=True)
+    modes = ('<div class="modes" role="tablist" aria-label="' + t("使用方式", "How to use") + '" style="--i:0"><span class="lens" aria-hidden="true"></span>'
+             + f'<button type="button" role="tab" data-mode="agent" aria-selected="true">{t("通过 AI Agent", "Through an AI Agent")}</button>'
+             + f'<button type="button" role="tab" data-mode="desktop" aria-selected="false">{t("桌面客户端", "Desktop app")}</button></div>')
+    agentcard = (f'<div class="get agent rise" style="--k:3"><div class="os">{t("交给 AI Agent", "For your AI Agent")}</div>'
+                 f'<button type="button" class="btn" data-copy="{pe}"><span>{COPY}{t("复制提示词", "Copy the prompt")}</span><span class="sz">{t("七条", "7 steps")}</span></button>'
+                 f'<code class="pv">{pe}</code>'
+                 f'<div class="alt"><a href="#prompt">{t("看全文", "Read it in full")}</a><a href="docs/wiki/ai.html">{t("AI 代理与远程操作", "AI Agents and remote operation")}</a></div>'
+                 f'<p class="need">{t("交给有云端电脑的 AI Agent，它会自己装好。", "Give it to an AI Agent with a cloud computer; it sets itself up.")}</p></div>')
+    rec = [
+        (t("把这份合同记一条存证。", "Record this contract."), t("📎 采购合同-v3.pdf", "📎 purchase-contract-v3.pdf"),
+         t("记好了：采购合同-v3.pdf 是第 12 条，内容指纹 0x3fa9…c2e1。等你说上链时一起发。", "Done: purchase-contract-v3.pdf is entry 12, content fingerprint 0x3fa9…c2e1. It goes on chain with your next batch.")),
+        (t("把今天记的几条一起上链。", "Put today’s records on chain together."), "",
+         t("第 12 到 14 条装进一笔交易发出，已经入块，这笔花了不到 0.001 ETH。", "Entries 12 to 14 went out in one transaction and are in a block; it cost under 0.001 ETH.")),
+        (t("有人说我抄了他的图。这张图最早什么时候已经存在？", "Someone says I copied their picture. When did mine already exist?"), "",
+         t("它是你账本的第 3 条，9 月 14 日上的链，那一刻它已经存在。要我导出记录包给对方吗？", "It is entry 3 in your ledger, anchored on 14 September, so it already existed then. Shall I export a record kit for them?")),
+        (t("导出吧。", "Yes, export it."), "",
+         t("好了：kit-3fa9c2e1.zkit。对方用 kit-verify 就能逐条核对，原件和上链时间都在里面。", "Done: kit-3fa9c2e1.zkit. They can check it item by item with kit-verify; the originals and the anchoring times are inside.")),
+    ]
+    grt = [
+        (t("这张插画授权给 0x7d2e…19b4 商用，期限一年。", "Grant this illustration to 0x7d2e…19b4 for commercial use, for a year."), "",
+         t("授权签好写进账本了，到明年今天为止。授权码在这里，转给对方就行。", "The grant is signed and in the ledger, valid until this day next year. Here is the grant code to pass on.")),
+        (t("这张插画现在授权给了哪些人？", "Who holds grants for this illustration now?"), "",
+         t("两份：0x7d2e…19b4 商用到明年 10 月；0x51ac…e0f3 那份上个月已经到期。", "Two: 0x7d2e…19b4 for commercial use until next October; the one to 0x51ac…e0f3 expired last month.")),
+        (t("对方发来一份授权码，帮我核验一下。", "Someone sent me a grant code. Check it for me."), "",
+         t("六项核验全部通过：签名对得上，没有撤销，还在期限内，链上记录一致。", "All six checks pass: the signature holds, it is unrevoked, within its period, and the chain agrees.")),
+        (t("撤销给 0x7d2e…19b4 的那份授权。", "Revoke the grant to 0x7d2e…19b4."), "",
+         t("已撤销，撤销是第 15 条，下次上链一起发。对方再核验时会看到这份授权已撤销。", "Revoked. The revocation is entry 15 and goes on chain with the next batch; the next check on their side shows the grant as revoked.")),
+    ]
+    import json as _json
+    def bub(u, f, r): return (f'<div class="msg me in"><p>{u}</p>{f"<span class=att>{f}</span>" if f else ""}</div>'
+                              f'<div class="msg ai in"><span class="who">AI Agent</span><p>{r}</p></div>')
+    def win(name, cv, on):
+        d = html.escape(_json.dumps([[u, f, r] for u, f, r in cv], ensure_ascii=False), quote=True)
+        return (f'<div class="chatw{" on" if on else ""}" tabindex="0" role="button" aria-pressed="{"true" if on else "false"}"><div class="chat-top"><span class="dot"></span><b>{name}</b><span class="eg"><span class="e1">{t("示例", "Example")}</span><span class="e2">{t("点一下播放", "Tap to play")}</span></span></div>'
+                f'<div class="chat" data-convo="{d}" aria-live="off"><div class="stream">{"".join(bub(*x) for x in cv[:2])}</div></div></div>')
+    chatbox = f'<div class="chat2">{win(t("存证", "Record"), rec, True)}{win(t("授权", "Grant"), grt, False)}</div>'
+    herotrio = f"""<div class="mlow hero-more" data-m="agent"><h2>{t("简单上手", "Getting started")}</h2>
+    <ol class="trio">
+      <li><b>{t("复制提示词", "Copy the prompt")}</b><span>{t("上面的按钮一次复制全文。", "The button above copies all of it.")}</span></li>
+      <li><b>{t("交给 AI Agent", "Give it to an AI Agent")}</b><span>{t("一个能在云端电脑上运行命令的 AI Agent。它会下载、校验、安装，再建好账本。", "One that runs commands on a cloud computer. It downloads, checks, installs, then sets up a ledger.")}</span></li>
+      <li><b>{t("和它对话", "Talk with it")}</b><span>{t("往它给你的地址充一点 ETH 付 gas，之后用平常的话让它做事。", "Send a little ETH for gas to the address it gives you, then ask in plain words.")}</span></li>
+    </ol>
+</div>"""
+    agentsecs = f"""<div class="mlow" data-m="agent">
+  <div class="sec rise" id="talk" style="--k:4">{chatbox}</div>
+  <div class="sec rise" id="prompt" style="--k:5"><h2>{t("提示词全文", "The prompt in full")}</h2>{cmd(prompt, block=True).replace('class="cmd block"', 'class="cmd block wrap"')}</div>
+  <div class="sec rise" id="safety" style="--k:6"><h2>{t("密钥与升级", "Keys and upgrades")}</h2>
+    <ul class="notes">
+      <li>{t("AI Agent 在云端用一把专用的密钥写账本，地址里只放够付 gas 的少量 ETH。", "The AI Agent writes the ledger in the cloud with a dedicated key; keep only enough ETH for gas at its address.")}</li>
+      <li>{t("想让私钥留在自己电脑上，装上", "To keep the private key on your own computer, install the ")}<button type="button" class="tomode" data-mode="desktop">{t("桌面客户端", "desktop app")}</button>{t("，再让 AI Agent 经「经凭据操作」或 --home 替你做。提示词第 6 条写了它怎样一步步带你换过去。", " and let the AI Agent work for you through “With a credential” or --home. Step 6 of the prompt has it walk you through the switch.")}</li>
+      <li>{t("新版本发布时，AI Agent 照提示词第 5 条自己校验并升级。", "When a new version comes out, the AI Agent checks and upgrades by step 5 of the prompt.")}</li>
+    </ul>
+  </div>
+</div>"""
     zk = f"""<section data-p="zikaron">
+  <div class="herog">
   <div class="hero-dl">
     <div class="rise" style="--k:2">
-      <h2 class="pname"><span class="zk">Zikaron</span><span class="d">Desk</span></h2>
+      <h2 class="pname"><span class="zk">Zikaron</span><span class="d" data-m="desktop">Desk</span></h2>
       <p class="tag">{t("留证基础设施", "Evidence infrastructure")}</p>
       <p class="meta"><span>{t("版本", "Version")} {VER}</span><a href="{REPO}/releases/tag/v{VER}">{t("发布说明", "Release notes")}</a><a href="{REPO}/releases">{t("历史版本", "All releases")}</a><a href="{REPO}">{t("源码", "Source")}</a></p>
-      {bar}
+      {modes}
+      <div class="mslot"><div data-m="agent"></div><div data-m="desktop">{bar}</div></div>
     </div>
-    {cards}
+    <div class="hero-r"><div data-m="agent">{agentcard}</div><div data-m="desktop">{cards}</div></div>
   </div>
+  {herotrio}
+  </div>
+  {agentsecs}
+  <div class="mlow" data-m="desktop">
   <div class="sec rise" id="files" style="--k:4"><h2>{t("全部文件", "All files")}</h2>{tables}</div>
   <div class="sec rise" id="install" style="--k:5"><h2>{t("安装", "Install")}</h2>{installs}</div>
   <div class="sec rise" id="check" style="--k:6"><h2>{t("核对", "Check")}</h2>
@@ -423,6 +486,7 @@ def download():
       <div class="vside">{vsides}</div>
     </div>
   </div>
+  </div>
   <div class="sec rise" id="next" style="--k:6"><h2>{t("接下来", "Next")}</h2>
     <div class="tools t3">
       <a class="tool" href="docs/wiki/start.html"><b>{t("上手", "Getting started")}</b><span>Wiki</span><em>{t("打开 →", "Open →")}</em></a>
@@ -431,12 +495,12 @@ def download():
     </div>
   </div>
 </section>"""
-    body = f"""<main class="dl" data-scene="dl"><div class="frame-w">
-<h1 class="rise" style="--k:0">{t("下载", "Download")}</h1>
-{projtabs(f'<div class="proj">{zk}</div><!--/proj-->')}
+    body = f"""<main class="dl" data-scene="dl" data-mode="agent" data-low="agent"><div class="frame-w">
+<h1 class="rise" style="--k:0">{t("使用", "Use")}</h1>
+{projtabs(f'<div class="proj">{zk}</div><!--/proj-->').replace('class="ptabs"', 'class="ptabs pline"')}
 </div></main>
 """
-    return head(f'{t("下载", "Download")} · {t(*TITLE)}', rel, 0, canvas=canvas("download", 0), desc=t("各个客户端的下载、安装与核对。", "Downloads, installation and checks for each client.")) + top(rel, 0, "download") + body + close(0, ("paint.js", "scenes.js", "sand.js", "site.js"))
+    return head(f'{t("使用", "Use")} · {t(*TITLE)}', rel, 0, canvas=canvas("download", 0), desc=t("通过 AI Agent 使用，或下载桌面客户端。", "Use it through an AI Agent, or download the desktop app.")) + top(rel, 0, "download") + body + close(0, ("paint.js", "scenes.js", "sand.js", "site.js"))
 
 # ───────── 文档:两个空间,一页一档 ─────────
 # 每组:(中文组名, 英文组名, [页名…]);页的标题写在各档档头
@@ -693,12 +757,51 @@ if(window.ResizeObserver)new ResizeObserver(function(){stops=null}).observe(th);
 setTimeout(function(){cur=inF(scrollY)?-1:near(scrollY);settle()},300);
 })();
 // 下载页:三个系统的标志切换整页;macOS 里再在 dmg 与 pkg 之间切换,安装步骤跟着换
+// 使用页:两种用法。地址带 #agent 或 #desktop 选中那一种;带系统名的进桌面客户端;默认通过 AI Agent
+var mm=document.querySelector('main[data-mode]');if(mm)(function(){var mb=mm.querySelectorAll('.modes [data-mode]'),bar=mm.querySelector('.modes'),plat=['macos','windows','linux'];
+function xin(els){[].forEach.call(els,function(x){x.classList.remove('x-out','x-in');void x.offsetWidth;x.classList.add('x-in')})}
+var busy=0;function setm(m,mark,anim){[].forEach.call(mb,function(b){b.setAttribute('aria-selected',b.getAttribute('data-mode')===m)});if(bar)bar.style.setProperty('--i',m==='desktop'?1:0);if(mark&&location.hash!=='#'+m)history.replaceState(null,'','#'+m);
+var cur=mm.getAttribute('data-low');mm.setAttribute('data-mode',m);clearTimeout(busy);
+if(!anim||cur===m||!cur){mm.setAttribute('data-low',m);return}
+var lo=mm.querySelectorAll('.mlow[data-m="'+cur+'"]');[].forEach.call(lo,function(x){x.classList.add('x-out')});
+busy=setTimeout(function(){mm.setAttribute('data-low',m);[].forEach.call(lo,function(x){x.classList.remove('x-out')});xin(mm.querySelectorAll('.mlow[data-m="'+m+'"]'))},170)}
+function fromHash(){var h=location.hash.slice(1);if(h==='desktop'||plat.indexOf(h)>=0||h==='files'||h==='install'||h==='check')return'desktop';if(h==='agent')return'agent';return null}
+setm(fromHash()||'agent',false);
+mm.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-mode]');if(!b||b===mm)return;setm(b.getAttribute('data-mode'),true,true);if(b.classList.contains('tomode'))scrollTo({top:0,behavior:'smooth'})});
+addEventListener('hashchange',function(){var m=fromHash();if(m)setm(m,false)})})();
+// 使用页:模拟和 AI Agent 的一段对话,一句句浮现,旧的往上推走;看不见时停,播完一轮从头再来;偏好减少动效的只给静态的几句
+(function(){var ws=[].slice.call(document.querySelectorAll('.chatw'));if(!ws.length)return;var still=matchMedia('(prefers-reduced-motion:reduce)').matches,vis=false,gate=[];
+new IntersectionObserver(function(es){vis=es.some(function(e){return e.isIntersecting})||vis&&!es.length;vis=ws.some(function(w){var r=w.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight});flush()},{threshold:[0,.25]}).observe(ws[0].parentNode);
+function flush(){gate=gate.filter(function(g){if(vis&&g.w.classList.contains('on')){g.r();return false}return true})}
+function esc(s){return s.replace(/[&<>]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;'}[c]})}
+function play(w){var box=w.querySelector('.chat'),st=box.querySelector('.stream'),cv=JSON.parse(box.getAttribute('data-convo'));
+function nap(ms){return new Promise(function(r){setTimeout(function(){gate.push({w:w,r:r});flush()},ms)})}
+function el(cls,h){var d=document.createElement('div');d.className='msg '+cls;d.innerHTML=h;st.appendChild(d);void d.offsetWidth;d.classList.add('in');while(st.children.length>9)st.removeChild(st.firstElementChild);return d}
+(async function(){await nap(400);for(;;){st.classList.add('out');await nap(500);st.innerHTML='';st.classList.remove('out');await nap(500);
+for(var i=0;i<cv.length;i++){var u=cv[i];el('me','<p>'+esc(u[0])+'</p>'+(u[1]?'<span class="att">'+esc(u[1])+'</span>':''));await nap(900);
+var ty=el('ai typing','<span class="who">AI Agent</span><p><i></i><i></i><i></i></p>');await nap(1100+Math.min(1400,u[2].length*18));
+ty.innerHTML='<span class="who">AI Agent</span><p>'+esc(u[2])+'</p>';ty.classList.remove('typing');await nap(1700+Math.min(1600,u[2].length*22))}
+await nap(1800)}})()}
+function pick(w){ws.forEach(function(x){var on=x===w;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});flush()}
+ws.forEach(function(w){w.addEventListener('click',function(){if(!w.classList.contains('on'))pick(w)});w.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();pick(w)}})});
+addEventListener('scroll',function(){var v=ws.some(function(w){var r=w.getBoundingClientRect();return r.bottom>0&&r.top<innerHeight});if(v!==vis){vis=v;flush()}},{passive:true});
+if(!still)ws.forEach(play)})();
+// 使用页:视口里正在看的那一节实,其余几节淡成半透明;按视口 45% 那条线落在哪一节判断,滚到底时取最后一节
+(function(){var main=document.querySelector('main.dl');if(!main)return;main.classList.add('focus');var cur=null,tk=0;
+main.addEventListener('animationend',function(e){if(e.target.classList.contains('rise'))e.target.classList.add('done')});
+function pick(){tk=0;var all=[].filter.call(main.querySelectorAll('.herog,.sec'),function(x){return x.offsetParent}),ss=all.filter(function(x){return x.id!=='next'});if(!ss.length)return;var y=innerHeight*.45,best=ss[0],bd=1e9;
+if(innerHeight+scrollY>=document.documentElement.scrollHeight-4)best=ss[ss.length-1];else ss.forEach(function(x){var r=x.getBoundingClientRect(),d=r.top>y?r.top-y:r.bottom<y?y-r.bottom:0;if(d<bd){bd=d;best=x}});
+if(best!==cur){var tail=ss[ss.length-1];all.forEach(function(x){x.classList.toggle('cur',x===best||(x.id==='next'&&best===tail))});cur=best}}
+function ask(){if(!tk)tk=requestAnimationFrame(pick)}
+addEventListener('scroll',ask,{passive:true});addEventListener('resize',ask);main.addEventListener('click',function(){setTimeout(function(){cur=null;pick()},260)});pick()})();
 var pb=document.querySelectorAll('.plats [data-plat]');if(pb.length)(function(){
 var have=[].map.call(pb,function(b){return b.getAttribute('data-plat')});
 function guess(){var u=((navigator.userAgentData&&navigator.userAgentData.platform)||navigator.platform||'')+' '+navigator.userAgent;if(/mac|iphone|ipad/i.test(u))return'macos';if(/win/i.test(u))return'windows';return'linux'}
-function set(p,mark){if(have.indexOf(p)<0)p=have[0];[].forEach.call(pb,function(b){b.setAttribute('aria-selected',b.getAttribute('data-plat')===p)});var bar=pb[0].parentNode;bar.style.setProperty('--i',have.indexOf(p));[].forEach.call(document.querySelectorAll('.pl[data-plat]'),function(x){x.hidden=x.getAttribute('data-plat')!==p});if(mark&&location.hash!=='#'+p)history.replaceState(null,'','#'+p)}
+var pt=0;function set(p,mark,anim){if(have.indexOf(p)<0)p=have[0];[].forEach.call(pb,function(b){b.setAttribute('aria-selected',b.getAttribute('data-plat')===p)});var bar=pb[0].parentNode;bar.style.setProperty('--i',have.indexOf(p));var all=document.querySelectorAll('.pl[data-plat]');
+if(anim){var out=[].filter.call(all,function(x){return !x.hidden&&x.getAttribute('data-plat')!==p});out.forEach(function(x){x.classList.add('x-out')});clearTimeout(pt);pt=setTimeout(function(){[].forEach.call(all,function(x){x.classList.remove('x-out');var s=x.getAttribute('data-plat')===p;if(s&&x.hidden){x.hidden=false;x.classList.remove('x-in');void x.offsetWidth;x.classList.add('x-in')}else if(!s)x.hidden=true})},170)}
+else[].forEach.call(all,function(x){x.hidden=x.getAttribute('data-plat')!==p});if(mark&&location.hash!=='#'+p)history.replaceState(null,'','#'+p)}
 var h=location.hash.slice(1);set(have.indexOf(h)>=0?h:guess(),false);
-[].forEach.call(pb,function(b){b.addEventListener('click',function(){set(b.getAttribute('data-plat'),true)})});
+[].forEach.call(pb,function(b){b.addEventListener('click',function(){set(b.getAttribute('data-plat'),true,true)})});
 addEventListener('hashchange',function(){var h=location.hash.slice(1);if(have.indexOf(h)>=0)set(h,false)});
 })();
 var gv=document.querySelectorAll('.get [data-f]');if(gv.length)(function(){

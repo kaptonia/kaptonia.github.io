@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/start.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=4188f64f">
+<link rel="stylesheet" href="../../../style.css?v=21f5efba">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -37,6 +37,40 @@
 <li><b>Linux</b>: install the <code>.deb</code>, or make the AppImage executable and run it.</li>
 </ul>
 <p>When you upgrade from an earlier version, bring your ledger across first as <a href="#upgrade">Upgrading from an earlier version</a> below describes.</p>
+<h2 id="agent">Using it through an AI Agent</h2>
+<p>An AI Agent with a cloud computer can install ZIKARON and get it ready to work by itself, and you use it simply by talking with the agent. Hand it this text:</p>
+<div class="cmd block"><code>ZIKARON quick start (for an AI agent)
+1. Fetch and install: download the latest package from the Releases of https://github.com/kaptonia/zikaron, check it against SHA256SUMS.txt, then install. On Linux: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -o Dpkg::Options::=--force-confold ./zikaron-desk_*_amd64.deb
+2. Read: README.md (networks and contract addresses) and CLI-SCHEMA.md (how to use each command). Once installed, run zikaron contract and go by the subcommands, flags and exit codes it lists.
+3. Get to work:
+   - If the user already runs ZIKARON Desk on their own computer, prefer --home or &quot;With a credential&quot;, so the private key stays on the user&#x27;s computer.
+   - Otherwise: generate a key with zikaron keygen, save it in a file with mode 600 and keep it out of sight; ask the user whether they want a copy of the key file to keep; if so, hand it over as a file, never pasted into the chat, and remind them to store it offline; then create a ledger with zikaron init; ask the user to send a little ETH to the address for gas.
+4. Every day: record with history --file → put on chain with anchor → check with scan, then audit; to share, export a record kit with kit-export, which the other side checks with kit-verify. Gather several records and put them on chain together, paying gas for one transaction.
+5. Upgrading: check Releases regularly. For a new version, first read the release notes and the upgrading part of CHANGELOG, check the package against SHA256SUMS.txt, then install it over the old one as in step 1. Command-line ledger folders keep working across versions. If the release notes call for a migration by hand, tell the user first and go ahead once they agree. After upgrading, run zikaron contract to see whether any command changed. At every upgrade, remind the user to download a ledger backup (pack the ledger folder into one file and hand it over), and agree with them on regular backups from then on.
+6. When the user wants the safer desktop app, walk them through it step by step:
+   - Open the download page https://kaptonia.github.io/en/download.html, download for the user&#x27;s system, check the SHA-256, then install. On a Mac, the quarantine mark comes off before the first launch; the download page has the command to copy.
+   - First launch: set a passcode and write the recovery words on paper, kept somewhere offline. The recovery words stay with the user alone; ask them to keep the words to themselves.
+   - Bring the ledger into the desktop, one of two ways:
+     · Hand the private key to the user, who imports it with &quot;Import key&quot; in the desktop app and takes the ledger in with &quot;Adopt existing ledger folder&quot;. After adoption, the desktop writes the original folder&#x27;s ledger.
+     · Write the ledger into a handoff file with hand-over and give it to the user, who takes it on the desktop side with take-over; from then on the ledger is written by turns in the two places.
+   - Then ask the user to turn on &quot;Through the desktop app&quot; or &quot;With a credential&quot; in Settings › Command line; switch to --home or the credential, and delete the private key file in the cloud afterwards.
+7. Rules: the private key and the recovery words stay out of chats and logs; one place writes a ledger at a time, and to move the writing use hand-over / take-over.</code><button class="cp" type="button" data-copy="ZIKARON quick start (for an AI agent)
+1. Fetch and install: download the latest package from the Releases of https://github.com/kaptonia/zikaron, check it against SHA256SUMS.txt, then install. On Linux: sudo DEBIAN_FRONTEND=noninteractive apt-get install -y -o Dpkg::Options::=--force-confold ./zikaron-desk_*_amd64.deb
+2. Read: README.md (networks and contract addresses) and CLI-SCHEMA.md (how to use each command). Once installed, run zikaron contract and go by the subcommands, flags and exit codes it lists.
+3. Get to work:
+   - If the user already runs ZIKARON Desk on their own computer, prefer --home or &quot;With a credential&quot;, so the private key stays on the user&#x27;s computer.
+   - Otherwise: generate a key with zikaron keygen, save it in a file with mode 600 and keep it out of sight; ask the user whether they want a copy of the key file to keep; if so, hand it over as a file, never pasted into the chat, and remind them to store it offline; then create a ledger with zikaron init; ask the user to send a little ETH to the address for gas.
+4. Every day: record with history --file → put on chain with anchor → check with scan, then audit; to share, export a record kit with kit-export, which the other side checks with kit-verify. Gather several records and put them on chain together, paying gas for one transaction.
+5. Upgrading: check Releases regularly. For a new version, first read the release notes and the upgrading part of CHANGELOG, check the package against SHA256SUMS.txt, then install it over the old one as in step 1. Command-line ledger folders keep working across versions. If the release notes call for a migration by hand, tell the user first and go ahead once they agree. After upgrading, run zikaron contract to see whether any command changed. At every upgrade, remind the user to download a ledger backup (pack the ledger folder into one file and hand it over), and agree with them on regular backups from then on.
+6. When the user wants the safer desktop app, walk them through it step by step:
+   - Open the download page https://kaptonia.github.io/en/download.html, download for the user&#x27;s system, check the SHA-256, then install. On a Mac, the quarantine mark comes off before the first launch; the download page has the command to copy.
+   - First launch: set a passcode and write the recovery words on paper, kept somewhere offline. The recovery words stay with the user alone; ask them to keep the words to themselves.
+   - Bring the ledger into the desktop, one of two ways:
+     · Hand the private key to the user, who imports it with &quot;Import key&quot; in the desktop app and takes the ledger in with &quot;Adopt existing ledger folder&quot;. After adoption, the desktop writes the original folder&#x27;s ledger.
+     · Write the ledger into a handoff file with hand-over and give it to the user, who takes it on the desktop side with take-over; from then on the ledger is written by turns in the two places.
+   - Then ask the user to turn on &quot;Through the desktop app&quot; or &quot;With a credential&quot; in Settings › Command line; switch to --home or the credential, and delete the private key file in the cloud afterwards.
+7. Rules: the private key and the recovery words stay out of chats and logs; one place writes a ledger at a time, and to move the writing use hand-over / take-over." aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>The details of each way are in <a href="cli.html">Command line</a> and <a href="ai.html">AI Agents and remote operation</a>.</p>
 <h2 id="upgrade">Upgrading from an earlier version</h2>
 <p>This version reads the encrypted form it writes itself and starts from an empty machine folder; the key store, identities, settings and data an earlier version left stay where they are. Bring a Recorder’s ledger across in five steps:</p>
 <ol>
@@ -83,7 +117,7 @@
 <tr><td>Verify, Ledger, Alerts</td><td>Verify, Alerts</td></tr>
 </tbody></table></div>
 <p>Every action that writes to your ledger or the chain first shows a confirmation card saying what will be written and what it costs. The red key on the card writes; “Cancel” leaves everything as it was.</p>
-<div class="pn"><a href="zikaron.html"><span>Previous</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>Next</span>Recording and anchoring</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#install">Install</a><a href="#upgrade">Upgrading from an earlier version</a><a href="#wizard">First launch</a><a href="#first">Your first record</a><a href="#receive">Receiving a grant</a><a href="#window">The window</a></nav></div>
-<script src="../../../site.js?v=8606e8b4" defer></script>
+<div class="pn"><a href="zikaron.html"><span>Previous</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>Next</span>Recording and anchoring</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#install">Install</a><a href="#agent">Using it through an AI Agent</a><a href="#upgrade">Upgrading from an earlier version</a><a href="#wizard">First launch</a><a href="#first">Your first record</a><a href="#receive">Receiving a grant</a><a href="#window">The window</a></nav></div>
+<script src="../../../site.js?v=de5a52c3" defer></script>
 </body>
 </html>
