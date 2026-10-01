@@ -266,6 +266,7 @@ body.doc-page{background:var(--paper)}
 .art dl>div{display:grid;grid-template-columns:120px minmax(0,1fr);gap:20px;padding:14px 0;border-bottom:1px solid var(--line)}
 .art dt{font-weight:600}
 .art dd{margin:0;color:var(--ink2);line-height:1.8}
+.art dd .cl{margin:0}.art dd .cl+.cl{margin-top:10px}.art dd .cl b{font-weight:600;color:var(--ink)}
 .art .kv{margin-top:18px;border-top:1px solid var(--line)}
 .art .kv>div{display:grid;grid-template-columns:170px minmax(0,1fr);gap:18px;padding:12px 0;border-bottom:1px solid var(--line);font-size:14.5px}
 .art .kv .k{color:var(--ink3)}
