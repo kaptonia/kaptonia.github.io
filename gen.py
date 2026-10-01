@@ -414,31 +414,63 @@ def download():
                  f'<code class="pv">{pe}</code>'
                  f'<div class="alt"><a href="#prompt">{t("看全文", "Read it in full")}</a><a href="docs/wiki/ai.html">{t("AI 代理与远程操作", "AI Agents and remote operation")}</a></div>'
                  f'<p class="need">{t("交给有云端电脑的 AI Agent，它会自己装好。", "Give it to an AI Agent with a cloud computer; it sets itself up.")}</p></div>')
+    # 示意的附件:文件、插画、授权码、记录包、入块回执、条目、核验清单;颜色都取页面的色调
+    DOC = '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M4 1.5h5.5L12.5 4.5V14.5H4z"/><path d="M9.5 1.5v3h3"/><path d="M6 8h4.5M6 10.5h4.5"/></svg>'
+    BOX = '<svg viewBox="0 0 16 16" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"><path d="M2 5l6-3 6 3v6.5l-6 3-6-3z"/><path d="M2 5l6 3 6-3M8 8v6.5"/></svg>'
+    TREE = ["........................",
+            "...................sss..",
+            "..........gggg....sssss.",
+            "........gggGGggg..sssss.",
+            ".......ggGGGGGggg.sssss.",
+            "......gggGGGGgggg..sss..",
+            "......ggGGGggGGgg.......",
+            "......gggGgggggGg.......",
+            ".......gggggggggg.......",
+            "........gggtgggg........",
+            "..........tt............",
+            "..........tt............",
+            ".........tttt...........",
+            "dddddddddddddddddddddddd",
+            "DdDdDDdDdDDdDdDdDDdDdDdD",
+            "DDDDDDDDDDDDDDDDDDDDDDDD"]
+    def ill():   # 一棵像素小树:24×16 格,每格 7 像素,同色的横向连成一条
+        px, cls = 7, {"g": "i2", "G": "i5", "t": "i4", "d": "i3", "D": "i6", "s": "i1"}
+        rects = []
+        for y, row in enumerate(TREE):
+            for m in re.finditer(r"([^.])\1*", row):
+                rects.append(f'<rect class="{cls[m.group(1)]}" x="{m.start() * px}" y="{y * px}" width="{len(m.group(0)) * px}" height="{px}"/>')
+        return ('<span class="att img"><svg class="ill" viewBox="0 0 168 112" shape-rendering="crispEdges" role="img" aria-label="' + t("插画", "Illustration") + '">'
+                '<rect class="i0" width="168" height="112"/>' + "".join(rects) + '</svg><span class="cap">' + t("小树.png", "little-tree.png") + '</span></span>')
+    def filechip(icon, name, meta): return f'<span class="att file">{icon}<span><b>{name}</b><i>{meta}</i></span></span>'
+    def gcode(code): return f'<span class="att gcode"><i>{t("授权码", "Grant code")}</i><code>{code}</code></span>'
+    G1 = "zikaron-grant:eyJhdXRob3IiOiIweDNiZTYiLCJib2R5Ijp7Imdy…Q2Rk4xR2VrM3dVc19sQ0"
+    G2 = "zikaron-grant:eyJhdXRob3IiOiIweDkxYzQiLCJib2R5Ijp7Imdy…aHNqVjJ3bU5fZFpQa0E"
     rec = [
-        (t("把这份合同记一条存证。", "Record this contract."), t("📎 采购合同-v3.pdf", "📎 purchase-contract-v3.pdf"),
-         t("记好了：采购合同-v3.pdf 是第 12 条，内容指纹 0x3fa9…c2e1。等你说上链时一起发。", "Done: purchase-contract-v3.pdf is entry 12, content fingerprint 0x3fa9…c2e1. It goes on chain with your next batch.")),
+        (t("把这份合同记一条存证。", "Record this contract."), filechip(DOC, t("采购合同-v3.pdf", "purchase-contract-v3.pdf"), "PDF · 238 KB"),
+         t("记好了：第 12 条，内容指纹 0x3fa9…c2e1。等你说上链时一起发。", "Done: entry 12, content fingerprint 0x3fa9…c2e1. It goes on chain with your next batch."), ""),
         (t("把今天记的几条一起上链。", "Put today’s records on chain together."), "",
-         t("第 12 到 14 条装进一笔交易发出，已经入块，这笔花了不到 0.001 ETH。", "Entries 12 to 14 went out in one transaction and are in a block; it cost under 0.001 ETH.")),
-        (t("有人说我抄了他的图。这张图最早什么时候已经存在？", "Someone says I copied their picture. When did mine already exist?"), "",
-         t("它是你账本的第 3 条，9 月 14 日上的链，那一刻它已经存在。要我导出记录包给对方吗？", "It is entry 3 in your ledger, anchored on 14 September, so it already existed then. Shall I export a record kit for them?")),
+         t("第 12 到 14 条装进一笔交易发出，已经进了第 26,214,903 块。交易 0x8c1e…77a0，费用 0.00041 ETH。", "Entries 12 to 14 went out in one transaction and are in block 26,214,903. Transaction 0x8c1e…77a0, fee 0.00041 ETH."), ""),
+        (t("有人说我抄了他的图。这张图最早什么时候已经存在？", "Someone says I copied their picture. When did mine already exist?"), ill(),
+         t("它是你账本的第 3 条，2026-09-14 08:21 UTC 上的链（第 26,101,377 块），那一刻它已经存在。要导出记录包给对方吗？", "It is entry 3 in your ledger, anchored at 2026-09-14 08:21 UTC (block 26,101,377), so it already existed then. Shall I export a record kit for them?"), ""),
         (t("导出吧。", "Yes, export it."), "",
-         t("好了：kit-3fa9c2e1.zkit。对方用 kit-verify 就能逐条核对，原件和上链时间都在里面。", "Done: kit-3fa9c2e1.zkit. They can check it item by item with kit-verify; the originals and the anchoring times are inside.")),
+         t("好了，对方用 kit-verify 就能逐条核对，原件和上链证明都在里面。", "Here it is. They can check it item by item with kit-verify; the original and the proof of anchoring are inside."),
+         filechip(BOX, "kit-3fa9c2e1.zkit", t("记录包 · 1 件 · 2.4 MB", "Record kit · 1 item · 2.4 MB"))),
     ]
     grt = [
-        (t("这张插画授权给 0x7d2e…19b4 商用，期限一年。", "Grant this illustration to 0x7d2e…19b4 for commercial use, for a year."), "",
-         t("授权签好写进账本了，到明年今天为止。授权码在这里，转给对方就行。", "The grant is signed and in the ledger, valid until this day next year. Here is the grant code to pass on.")),
+        (t("这张插画授权给 0x7d2e…19b4 商用，期限一年。", "Grant this illustration to 0x7d2e…19b4 for commercial use, for a year."), ill(),
+         t("授权签好写进账本了，把下面的授权码转给对方就行。", "The grant is signed and in the ledger. Pass this grant code on."), gcode(G1)),
         (t("这张插画现在授权给了哪些人？", "Who holds grants for this illustration now?"), "",
-         t("两份：0x7d2e…19b4 商用到明年 10 月；0x51ac…e0f3 那份上个月已经到期。", "Two: 0x7d2e…19b4 for commercial use until next October; the one to 0x51ac…e0f3 expired last month.")),
-        (t("对方发来一份授权码，帮我核验一下。", "Someone sent me a grant code. Check it for me."), "",
-         t("六项核验全部通过：签名对得上，没有撤销，还在期限内，链上记录一致。", "All six checks pass: the signature holds, it is unrevoked, within its period, and the chain agrees.")),
+         t("两份：给 0x7d2e…19b4 的商用授权，到 2027-10-21，有效；给 0x51ac…e0f3 的展示授权，9 月 30 日已到期。", "Two: a commercial grant to 0x7d2e…19b4, valid until 2027-10-21; a display grant to 0x51ac…e0f3, which expired on 30 September."), ""),
+        (t("对方发来一份授权码，帮我核验一下。", "Someone sent me a grant code. Check it for me."), gcode(G2),
+         t("六项核验全部通过：签名对得上，签发者账本完整，授权在他的账本里，已上链，在有效期内，没有撤销。可以放心用。", "All six checks pass: the signature holds, the issuer’s ledger is intact, the grant is in it, it is on chain, within its period and unrevoked. It is good to use."), ""),
         (t("撤销给 0x7d2e…19b4 的那份授权。", "Revoke the grant to 0x7d2e…19b4."), "",
-         t("已撤销，撤销是第 15 条，下次上链一起发。对方再核验时会看到这份授权已撤销。", "Revoked. The revocation is entry 15 and goes on chain with the next batch; the next check on their side shows the grant as revoked.")),
+         t("已撤销，撤销是第 15 条，下次上链一起发。对方再核验时会看到这份授权已撤销。", "Revoked. The revocation is entry 15 and goes on chain with the next batch; the next check on their side shows the grant as revoked."), ""),
     ]
     import json as _json
-    def bub(u, f, r): return (f'<div class="msg me in"><p>{u}</p>{f"<span class=att>{f}</span>" if f else ""}</div>'
-                              f'<div class="msg ai in"><span class="who">AI Agent</span><p>{r}</p></div>')
+    def bub(u, ua, r, ra): return (f'<div class="msg me in"><p>{u}</p>{ua}</div>'
+                                   f'<div class="msg ai in"><span class="who">AI Agent</span><p>{r}</p>{ra}</div>')
     def win(name, cv, on):
-        d = html.escape(_json.dumps([[u, f, r] for u, f, r in cv], ensure_ascii=False), quote=True)
+        d = html.escape(_json.dumps([list(x) for x in cv], ensure_ascii=False), quote=True)
         return (f'<div class="chatw{" on" if on else ""}" tabindex="0" role="button" aria-pressed="{"true" if on else "false"}"><div class="chat-top"><span class="dot"></span><b>{name}</b><span class="eg"><span class="e1">{t("示例", "Example")}</span><span class="e2">{t("点一下播放", "Tap to play")}</span></span></div>'
                 f'<div class="chat" data-convo="{d}" aria-live="off"><div class="stream">{"".join(bub(*x) for x in cv[:2])}</div></div></div>')
     chatbox = f'<div class="chat2">{win(t("存证", "Record"), rec, True)}{win(t("授权", "Grant"), grt, False)}</div>'
@@ -778,9 +810,9 @@ function play(w){var box=w.querySelector('.chat'),st=box.querySelector('.stream'
 function nap(ms){return new Promise(function(r){setTimeout(function(){gate.push({w:w,r:r});flush()},ms)})}
 function el(cls,h){var d=document.createElement('div');d.className='msg '+cls;d.innerHTML=h;st.appendChild(d);void d.offsetWidth;d.classList.add('in');while(st.children.length>9)st.removeChild(st.firstElementChild);return d}
 (async function(){await nap(400);for(;;){st.classList.add('out');await nap(500);st.innerHTML='';st.classList.remove('out');await nap(500);
-for(var i=0;i<cv.length;i++){var u=cv[i];el('me','<p>'+esc(u[0])+'</p>'+(u[1]?'<span class="att">'+esc(u[1])+'</span>':''));await nap(900);
-var ty=el('ai typing','<span class="who">AI Agent</span><p><i></i><i></i><i></i></p>');await nap(1100+Math.min(1400,u[2].length*18));
-ty.innerHTML='<span class="who">AI Agent</span><p>'+esc(u[2])+'</p>';ty.classList.remove('typing');await nap(1700+Math.min(1600,u[2].length*22))}
+for(var i=0;i<cv.length;i++){var u=cv[i];el('me','<p>'+esc(u[0])+'</p>'+u[1]);await nap(900);
+var ty=el('ai typing','<span class="who">AI Agent</span><p><i></i><i></i><i></i></p>');await nap(1100+Math.min(1400,(u[2].length+u[3].length/12)*18));
+ty.innerHTML='<span class="who">AI Agent</span><p>'+esc(u[2])+'</p>'+u[3];ty.classList.remove('typing');await nap(2000+Math.min(1800,(u[2].length+u[3].length/10)*22))}
 await nap(1800)}})()}
 function pick(w){ws.forEach(function(x){var on=x===w;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});flush()}
 var narrow=matchMedia('(max-width:860px)');window.__chatPick=pick;

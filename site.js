@@ -167,9 +167,9 @@ function play(w){var box=w.querySelector('.chat'),st=box.querySelector('.stream'
 function nap(ms){return new Promise(function(r){setTimeout(function(){gate.push({w:w,r:r});flush()},ms)})}
 function el(cls,h){var d=document.createElement('div');d.className='msg '+cls;d.innerHTML=h;st.appendChild(d);void d.offsetWidth;d.classList.add('in');while(st.children.length>9)st.removeChild(st.firstElementChild);return d}
 (async function(){await nap(400);for(;;){st.classList.add('out');await nap(500);st.innerHTML='';st.classList.remove('out');await nap(500);
-for(var i=0;i<cv.length;i++){var u=cv[i];el('me','<p>'+esc(u[0])+'</p>'+(u[1]?'<span class="att">'+esc(u[1])+'</span>':''));await nap(900);
-var ty=el('ai typing','<span class="who">AI Agent</span><p><i></i><i></i><i></i></p>');await nap(1100+Math.min(1400,u[2].length*18));
-ty.innerHTML='<span class="who">AI Agent</span><p>'+esc(u[2])+'</p>';ty.classList.remove('typing');await nap(1700+Math.min(1600,u[2].length*22))}
+for(var i=0;i<cv.length;i++){var u=cv[i];el('me','<p>'+esc(u[0])+'</p>'+u[1]);await nap(900);
+var ty=el('ai typing','<span class="who">AI Agent</span><p><i></i><i></i><i></i></p>');await nap(1100+Math.min(1400,(u[2].length+u[3].length/12)*18));
+ty.innerHTML='<span class="who">AI Agent</span><p>'+esc(u[2])+'</p>'+u[3];ty.classList.remove('typing');await nap(2000+Math.min(1800,(u[2].length+u[3].length/10)*22))}
 await nap(1800)}})()}
 function pick(w){ws.forEach(function(x){var on=x===w;x.classList.toggle('on',on);x.setAttribute('aria-pressed',on)});flush()}
 var narrow=matchMedia('(max-width:860px)');window.__chatPick=pick;
