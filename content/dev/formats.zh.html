@@ -17,25 +17,29 @@ title: 文件与格式
 </tbody></table></div>
 <p>条目编号是它全部字节的 SHA-256。规范格式：紧凑书写，成员按字节序排列，整数按十进制书写，十六进制一律小写。详见法 §3 与 §4。</p>
 <h2 id="ledgerdir">命令行的账本目录</h2>
-<p>一个明文文件夹，每条条目一个文件，文件名为条目编号的 64 位十六进制加 <code>.entry</code>。<code>zikaron</code> 写的就是这种目录；读的子命令另外也收账本镜像与记录包，见<a href="cli.html#sealed">命令行</a>。严格读取时，长度为零的条目文件具名报出。</p>
+<p>一个明文文件夹，每条条目一个文件，文件名为条目编号的 64 位十六进制加 <code>.entry</code>，从建起就只有本人能读写。<code>zikaron</code> 写的就是这种目录；读的子命令另外也收桌面数据目录里的账本(经凭据)、账本镜像与记录包(<code>.zkit</code> 文件或文件夹)，见<a href="cli.html#sealed">命令行</a>。严格读取时，长度为零的条目文件具名报出。</p>
 <h2 id="machine">机器目录</h2>
-<p>每台机器一个。在 macOS 与 Linux 上，默认位置是 <code>~/.zikaron-desk.d/</code>，指针文件 <code>~/.zikaron-desk</code> 可以把它指到别处：一行绝对路径，以一个换行结尾，只本人可读写；macOS 上没有指针而 <code>~/Library/Application Support/ZIKARON</code> 存在时，应用沿用它。在 Windows 上，指针文件与默认机器目录都在 <code>%LOCALAPPDATA%\ZIKARON\</code> 里：<code>.zikaron-desk</code> 与 <code>.zikaron-desk.d\</code>。应用每次启动时把指针写成所用的机器目录，已指向它时原样留着；命令行按同样的次序找机器目录。</p>
+<p>每台机器一个。在 macOS 与 Linux 上，默认位置是 <code>~/.zikaron-desk.d/</code>，指针文件 <code>~/.zikaron-desk</code> 可以把它指到别处：一行绝对路径，以一个换行结尾，只本人可读写。在 Windows 上，指针文件与默认机器目录都在 <code>%LOCALAPPDATA%\ZIKARON\</code> 里：<code>.zikaron-desk</code> 与 <code>.zikaron-desk.d\</code>。应用每次启动时把指针写成所用的机器目录，已指向它时原样留着。机器目录只在这两处找：先看指针，再看默认位置；命令行按同样的次序找。</p>
 <div class="tw"><table>
 <thead><tr><th>文件</th><th>内容</th></tr></thead>
 <tbody>
 <tr><td><code>keys-anchor.json</code></td><td>密钥库，格式 <code>zikaron-desk/keybox/3</code>，只本人可读写；错误次数也记在这里</td></tr>
 <tr><td><code>identities-anchor.json</code></td><td>身份登记，加密；每个身份选的网络也记在这里</td></tr>
-<tr><td><code>machine.json</code></td><td>机器设置，格式 <code>zikaron-desk/machine/1</code>，明文，开锁前要读；其中的 <code>network</code> 只决定新建身份时默认选中哪一项，另有代理 <code>proxy</code>(<code>system</code>、<code>none</code> 或一个代理地址)、命令行上链 <code>cli_anchor</code>(<code>queue</code> 为仅加入队列，缺省即自动发送)、上次整机备份 <code>backup</code> 与上次备份失败的时刻 <code>backup_failed</code>；其余成员原样保留</td></tr>
+<tr><td><code>machine.json</code></td><td>机器设置，格式 <code>zikaron-desk/machine/1</code>，明文，开锁前要读，只有语言 <code>lang</code> 与外观 <code>appearance</code> 两项；别的成员不读，下次保存即去掉</td></tr>
+<tr><td><code>machine-anchor.sealed</code></td><td>加密的机器设置(种类 <code>machine-sealed</code>，格式 <code>zikaron-desk/machine/1</code>)，开锁后才读：自动锁定、新建身份时默认选中的网络 <code>network</code>、代理 <code>proxy</code>(<code>system</code>、<code>none</code> 或一处代理地址，连同用户名与密码)、命令行上链 <code>cli_anchor</code>(<code>queue</code> 为仅加入队列，缺省即自动发送)、经桌面 App 操作 <code>cli_desktop</code>(缺省开)、经凭据操作 <code>cli_alone</code>(凭据的有效秒数或 <code>never</code>，缺省关)、用过的数据目录 <code>homes</code>、上次整机备份 <code>backup</code> 与上次备份失败的时刻 <code>backup_failed</code>；其余成员原样保留</td></tr>
 <tr><td><code>machine-mark</code></td><td>本机的机器标，32 位小写十六进制加一个换行，明文，首次用到时生成；数据目录的写者标拿它比对</td></tr>
 <tr><td><code>read-networks.json</code></td><td>只读网络，格式 <code>zikaron.read-networks/1</code>，明文，所有身份共用，一个也没有时不留文件</td></tr>
 <tr><td><code>checked/facts.json</code></td><td>已核对事实，格式 <code>zikaron.checked-facts/1</code>，加密，不进任何镜像、备份或导出件</td></tr>
 <tr><td><code>kits/index.json</code></td><td>记录包索引，明文，见下文</td></tr>
 <tr><td><code>kits/links.json</code></td><td>手填的记录包取处，加密</td></tr>
 <tr><td><code>kits/verified/</code></td><td>核验结果档，明文，见下文</td></tr>
-<tr><td><code>records/index.json</code></td><td>签入时的文件名与位置，加密</td></tr>
+<tr><td><code>records/index.json</code></td><td>签入时的文件名与位置，加密；命令行经凭据 <code>history --file</code> 写进来的文件也记在这里</td></tr>
 <tr><td><code>backup/index.json</code></td><td>上次整机备份收了哪些条目与授权，格式 <code>zikaron-desk/backup-index/1</code>，加密；备份灯据它数出备份之后新增的条数；不进备份，恢复时另写一份</td></tr>
 <tr><td><code>cli-sent/</code></td><td>命令行自持私钥运行 <code>anchor</code> 时签过的交易，明文：每次锚定一个文件夹，名为链号、发送账户、去处(登记合约，自转账时即发送账户本身)与调用数据合起来的 SHA-256 前 16 字节(32 位十六进制)；里面按 <code>0</code>、<code>1</code>、<code>2</code> 编号，每个文件是 <code>{"nonce","tx"}</code>，或标记作废的 <code>{"void"}</code>；只记 nonce 与交易哈希，文件只增</td></tr>
-<tr><td><code>zikaron-door-0x…</code></td><td>桌面应用为打开的数据目录开的本机通道，名字取机器目录与数据目录两条规范路径的 SHA-256 前 8 字节(<code>0x</code> 加 16 位十六进制)；macOS 与 Linux 上是机器目录里的本机套接字文件，只本人可读写；Windows 上是命名管道 <code>\\.\pipe\zikaron-door-0x…</code>，只本用户可连、拒收别的机器；锁定、关闭数据目录或退出时关上</td></tr>
+<tr><td><code>cli-credential-anchor.json</code></td><td>命令行的凭据，「经凭据操作」开着时才有，只本人可读写；规范 JSON，恰有四个成员：<code>expires</code>(到期的 Unix 秒，不过期为 <code>null</code>)、<code>issued</code>(签发的 Unix 秒)、<code>key</code>(一把随机的 32 字节钥)、<code>master</code>(随机数加以这把钥经 XChaCha20-Poly1305 封起来的主钥，附加数据 <code>zikaron/cli-credential/1</code>)；有效期一分钟到一年或不过期，每次用都核期限；关掉开关、到期、换主钥即删，改口令照用，不进备份</td></tr>
+<tr><td><code>adopted-salt</code>、<code>adopted-list</code></td><td>收编清单，明文：盐文件是 64 位小写十六进制加一个换行；清单每本收编的账一行，内容是盐加根条目号的 SHA-256，不含账本名、路径或条目号；命令行写明文账本目录之前据它判 <code>E_ADOPTED</code></td></tr>
+<tr><td><code>handed-pens</code></td><td>交接清单，明文：每本交出或收下的账一行，以同一把盐盲化的根条目号为键；命令行与桌面写之前都先读它</td></tr>
+<tr><td><code>zikaron-door-0x…</code></td><td>桌面应用为打开的数据目录开的本机通道，名字取机器目录与数据目录两条规范路径的 SHA-256 前 8 字节(<code>0x</code> 加 16 位十六进制)；macOS 与 Linux 上是机器目录里的本机套接字文件，只本人可读写；Windows 上是命名管道 <code>\\.\pipe\zikaron-door-0x…</code>，只本用户可连、拒收别的机器；锁定、关闭数据目录或退出时关上，「经凭据操作」开着时不开</td></tr>
 <tr><td><code>set-aside/</code></td><td>主钥已失、永久封存的文件，字节原样，按 1、2、3 编号平铺；目录已有时为 <code>set-aside-2</code>、<code>-3</code></td></tr>
 </tbody></table></div>
 <p>在 macOS 与 Linux 上，机器目录从 <code>HOME</code> 算起；在 Windows 上从 <code>USERPROFILE</code> 算起(未设时取系统的用户配置文件夹)：它就是系统的用户配置文件夹时在 <code>%LOCALAPPDATA%\ZIKARON\</code>，否则在它下面的 <code>AppData\Local\ZIKARON\</code>。应用只用自己的密钥库，系统钥匙串保持原样。</p>
@@ -45,34 +49,34 @@ title: 文件与格式
 <div><dt><code>ledger/</code></dt><dd>账本，每条条目一个加密文件。</dd></div>
 <div><dt><code>kits/</code></dt><dd>导出的记录包、授权文件、凭证、快照，以及签发时留存的条款文件(<code>kits/terms/</code>)。</dd></div>
 <div><dt><code>grants-held/</code></dt><dd>收到的授权，每份附上次复核的结论；收下的授权文件在 <code>grants-held/files/</code>。</dd></div>
-<div><dt><code>settings/</code></dt><dd>设置 <code>desk.json</code>(含这个数据目录的网络、自动上链与「隐藏本机删除的条目」)、待上链队列 <code>queue.json</code>、上次账本检查 <code>last-audit.json</code>、加密的目录标签 <code>home-label.json</code>(这个数据目录的随机编号，以及它属于哪个身份的哪种角色)、明文的写者标 <code>writer-mark</code>(一行，写着由哪台机器写入)，以及只让一个窗口写入的锁 <code>writer.lock</code>。</dd></div>
+<div><dt><code>settings/</code></dt><dd>设置 <code>desk.json</code>(含这个数据目录的网络、自动上链与「隐藏本机删除的条目」)、待上链队列 <code>queue.json</code>、上次账本检查 <code>last-audit.json</code>、加密的目录标签 <code>home-label.json</code>(这个数据目录的随机编号，以及它属于哪个身份的哪种角色)、明文的写者标 <code>writer-mark</code>(一行，写着由哪台机器写入)，以及只让一处写入的锁 <code>writer.lock</code>(「经凭据操作」开着时，桌面与命令行每写一笔各拿一次，写完即放)。</dd></div>
 </dl>
 <p>数据目录的文件夹名和账本里的文件名，都由一把本机名钥转写，地址与条目编号由此从文件名上隐去；内容逐文件加密。要给别的工具读，导出账本镜像。</p>
-<p>写入锁由系统内核持有，进程一结束即放开，断电与强行结束也一样；它只归应用自己的进程，从应用里启动的程序另起自己的进程。内核锁只管一台机器，所以另有写者标：打开一个数据目录时，写者标写着别台机器，或这一版读不成，这个窗口就只读，等你选「改由本机写」才改写写者标并接管。打开时还先读目录标签，标签属于别的身份或角色即拒，这个数据目录原样留着；旧版留下的数据目录，由第一个以写者身份打开它的窗口补上标签。</p>
+<p>写入锁由系统内核持有，进程一结束即放开，断电与强行结束也一样；它只归应用自己的进程，从应用里启动的程序另起自己的进程。内核锁只管一台机器，所以另有写者标：打开一个数据目录时，写者标写着别台机器，或这一版读不成，这个窗口就只读，等你选「改由本机写」才改写写者标并接管。打开时还先读目录标签，标签属于别的身份或角色即拒，这个数据目录原样留着。数据目录的标签由第一个以写者打开或写进它的窗口写下，只读打开不写。</p>
 <h2 id="local">本机数据的加密</h2>
 <p>本机数据钥由主钥经 HKDF-SHA256 派生(信息串 <code>zikaron/local/v1</code>)，文件名钥另用信息串 <code>zikaron/names/v1</code>。每个文件以 XChaCha20-Poly1305 单独加密，每次封装都用新的随机数。完整的规格与测试向量在源码的 <code>crates/app/local-data-standard.md</code>。</p>
 {{code:
 "zikaron-local/2\n" · 算法(1 字节) · 种类长度(1 字节) · 种类 · 版本(u16 大端) · 身份摘要(16 字节) · 随机数(24 字节) · 密文与标签
 }}
 <dl>
-<div><dt>算法</dt><dd><code>2</code> 为现行写法：身份摘要的后半由钥算出。<code>1</code> 的后半是不带钥的摘要，留作读取。</dd></div>
+<div><dt>算法</dt><dd>只认 <code>2</code>：身份摘要的后半由钥算出。低于 <code>2</code> 的算法号与魔数 <code>zikaron-local/1</code> 读作 <code>not-sealed</code>，高于 <code>2</code> 的读作 <code>newer-version</code>。</dd></div>
 <div><dt>身份摘要</dt><dd>一个文件的身份是它的主人与位置。机器目录里的文件主人是 <code>machine</code>；数据目录里的文件主人是这个目录的随机编号，记在它的目录标签里。位置是种类加上文件在目录里的逻辑名(哪一格、哪个名字)，与磁盘上的路径和文件名分开，所以挪动数据目录、换主钥后整批改名、恢复到别台机器之后，每个文件照旧打开。前 8 字节是 <code>sha256("zikaron-local/owner" ‖ 0 ‖ 主人)</code> 的开头；后 8 字节是 <code>HMAC-SHA256(K, "zikaron-local/place" ‖ 0 ‖ 逻辑名)</code> 的开头，<code>K</code> 由本机数据钥经 HKDF-SHA256 以信息串 <code>zikaron-local/place-key</code> 派生。这样，文件头与条目编号、授权编号之间的对应，只有持钥的人算得出。</dd></div>
 <div><dt>附加数据</dt><dd>整个文件头，连同随机数。头里任一字节改动，或文件被挪到别的位置、别的数据目录，都打不开。明文里再写一遍主人与逻辑名，打开后逐项核对。</dd></div>
 </dl>
-<p>旧封装 <code>"zikaron-local/1\n"</code>(只把种类与版本作为附加数据)永久可读，读后原样留着。写入只用现行一版，迁移随写入逐个发生：一个文件下次被写到时换成新封装，账本条目写下后保持原样。所以本版写过的文件，要用本版或更新的版本来读，更早的版本读不了；升级之后，请一直用新版打开同一份数据。</p>
-<p>读不成的文件统一报 <code>LOCAL_SEAL</code>，详情写明六种原因之一：<code>not-sealed</code>(缺魔数)、<code>truncated</code>(头或标签被截断)、<code>other-kind</code>(封的是别的种类)、<code>newer-version</code>(更新的版本或算法写的)、<code>swapped</code>(别的文件：摘要与所求的不符，或数据目录缺标签)、<code>unopenable</code>(别的钥，或有字节被改)。读不成的文件原样留着：写到它时具名拒绝，把它挪开，下次写入即重建。只写一次的文件(收到的授权、留存的授权文件、条款文件与签发记录、账本条目)只要已在，一律拒写。</p>
-<p>写入时先封装，再经临时文件改名到位，权限 0600；改名在 Windows 上遇到别的程序一时占着文件，在一秒内重试。在 FAT 与 exFAT 卷上也能落条目。同一文件的较早副本放回原处，封装认不出来；账本有自己的签名链。</p>
+<p>读与写都只用现行这一种封装：明文文件与别的封装读作 <code>not-sealed</code>，点名原样留着，不转换。本版写的本机加密文件，早先版本读不了；早先版本的数据怎样带过来，见<a href="compat.html#upgrade">兼容与演进</a>。</p>
+<p>读不成的文件统一报 <code>LOCAL_SEAL</code>，详情写明六种原因之一：<code>not-sealed</code>(缺魔数，或别的封装、算法号)、<code>truncated</code>(头或标签被截断)、<code>other-kind</code>(封的是别的种类)、<code>newer-version</code>(更新的版本或算法写的)、<code>swapped</code>(别的文件：摘要与所求的不符，或数据目录缺标签)、<code>unopenable</code>(别的钥，或有字节被改)。读不成的文件原样留着：写到它时具名拒绝，把它挪开，下次写入即重建。只写一次的文件(收到的授权、留存的授权文件、条款文件与签发记录、账本条目)只要已在，一律拒写。</p>
+<p>写入时先封装，再经临时文件改名到位，权限 0600；改名在 Windows 上遇到别的程序一时占着文件，在一秒内重试。在 FAT 与 exFAT 卷上也能落条目。写不成的写入随即删掉自己的临时文件，写者打开数据目录时扫掉残留的，残留的临时文件不挡读账本。同一文件的较早副本放回原处，封装认不出来；账本有自己的签名链。</p>
 <h2 id="keybox">密钥库</h2>
 <p>主钥与各身份的密钥封在 <code>keys-anchor.json</code> 里：口令经 scrypt(N=262144、r=8、p=1)派生密钥，以 AES-128-CTR 加密，keccak MAC 校验。口令为 8 位 ASCII 字母或数字，连错 5 次锁定，只能走恢复。</p>
 <h2 id="backup">整机备份</h2>
 <p>文件名 <code>zikaron-backup-YYYY-MM-DD.zikaron</code>(UTC 日期)，同一天再导出编号为 <code>-2</code>、<code>-3</code>。第一行为 <code>zikaron-backup/1</code>，第二行是规范 JSON 文件头：<code>app</code>、<code>created</code>、<code>format</code>、<code>kdf</code>(scrypt 的 N、r、p 与 32 字节盐)、<code>nonce</code>。正文用 scrypt(N=262144、r=8、p=1)从备份密码派生密钥，以 XChaCha20-Poly1305 加密，两行文件头作为附加数据。</p>
-<p>备份里有：身份登记、每个身份的密钥、每一份加密的本机文件(解开后放入)、主身份的记录、<code>machine.json</code> 与只读网络列表(成员 <code>readNetworks</code>)。主钥、口令与错误次数留在本机；已核对事实、备份索引、已删除身份的数据目录，以及明文的导出件(记录包、索引、核验结果档、凭证、授权文件、镜像、密钥文件)也在备份之外。</p>
-<p>备份只写进空着的名字：要用的名字已被占用时，顺延取下一个编号。写出后读回并打开，才算备份成功；失败时 <code>machine.json</code> 记下 <code>backup_failed</code>。恢复时逐个检查成员的路径，带路径穿越的成员一概拒收；恢复生成新的主钥；备份带着只读网络列表时，替换本机的列表；旧版的备份缺这一项，本机的列表保持原样。</p>
+<p>备份里有：身份登记、每个身份的密钥、每一份加密的本机文件(解开后放入)、主身份的记录、机器设置(<code>machine.json</code> 与加密的机器设置合成一份)与只读网络列表(成员 <code>readNetworks</code>)。命令行的凭据不进备份，恢复之后「经凭据操作」是关的。主钥、口令与错误次数留在本机；已核对事实、备份索引、已删除身份的数据目录，以及明文的导出件(记录包、索引、核验结果档、凭证、授权文件、镜像、密钥文件)也在备份之外。</p>
+<p>备份只写进空着的名字：要用的名字已被占用时，顺延取下一个编号。写出后读回并打开，才算备份成功；任何一步失败，加密的机器设置都记下 <code>backup_failed</code>，直到下一次备份成功。恢复时逐个检查成员的路径，带路径穿越的成员一概拒收；恢复生成新的主钥；备份带着只读网络列表时，替换本机的列表；旧版的备份缺这一项，本机的列表保持原样。</p>
 <h2 id="keyfile">密钥文件</h2>
 <p>标准以太坊 keystore(V3)：scrypt(N=262144、r=8、p=1)、aes-128-ctr，文件名为 <code>UTC--&lt;时间&gt;--&lt;40 位十六进制地址&gt;</code>，权限 0600，以导出时设定的文件密码(至少 8 位)加密。写出后应用读回核对格式与地址，相符才算导出成功。</p>
 <p>导入时两种派生都认：scrypt，以及 pbkdf2(hmac-sha256，轮数 1 至 2<sup>24</sup>)。scrypt 参数须在界内：内存 128·r·N 至多 2<sup>30</sup> 字节，p 为 1 至 16，总工作量 128·r·N·p 至多 2<sup>32</sup> 字节；密钥库与整机备份读参数时用同一组界限。坏的或超界的文件在派生之前即拒。</p>
 <h2 id="kit">记录包</h2>
-<p>一个文件夹，格式由 zikaron.kit/1 §7 规定：</p>
+<p>格式由 zikaron.kit/1 §7 规定。导出缺省是一个 <code>.zkit</code> 文件，要发布到网址时导出为文件夹；核验时两种都收。展开后是：</p>
 {{code:
 kit-3fa9c2e1/
   manifest.json            清单
@@ -82,7 +86,7 @@ kit-3fa9c2e1/
   proofs/<路径>             上链证明
 }}
 <p>清单列出每个条目的编号，每个文件的路径、大小与 SHA-256，以及每份证明对应的交易；包里出现清单之外的文件，核验即失败。记录包编号是清单字节的 SHA-256。包内路径只用 <code>a-z</code>、<code>0-9</code>、<code>.</code>、<code>_</code>、<code>-</code>；有附件改过名时，<code>files/zikaron-names.json</code> 记下原名与包内名的对照，改名规则为 <code>&lt;转写名&gt;-&lt;原名 SHA-256 前八位&gt;.&lt;扩展名&gt;</code>。</p>
-<p>导出的文件夹名为 <code>kit-</code> 加所选里序号最小的那件记录的内容指纹前八位；所选只含其他条目时为 <code>kit</code>，同名已有即编号为 <code>-2</code>、<code>-3</code>。</p>
+<p>导出的记录包名为 <code>kit-</code> 加所选里序号最小的那件记录的内容指纹前八位，单个文件再加 <code>.zkit</code>；所选只含其他条目时为 <code>kit</code>，同名已有即编号为 <code>-2</code>、<code>-3</code>。</p>
 <p>导出时，清单里附言 <code>note_md</code> 的末尾自动加一行，写明锚在哪条链：</p>
 {{code:
 anchored-on: eip155:<链号> · registry <小写合约地址> · from <起始区块>
@@ -121,12 +125,14 @@ anchored-on: eip155:<链号> · registry <小写合约地址> · from <起始区
 <p>文本 <code>zikaron-grant:</code> 后接一段或多段，段间以 <code>.</code> 连接。每段是一条授权条目的规范字节，经 base64url 编码(省去填充)；多段时，从最初作者的授权依次排到当前这一份。全长上限 2,953 字节，恰为一个二维码的容量(版本 40、字节模式、纠错等级 L)。格式见 zikaron.kit/1 §6。粘贴进来的授权码，先去掉换行、空格与看不见的字符(零宽字符、软连字符、字节序标记)，再判形：形不对的具名拒收。</p>
 <p>凭证文件夹名为 <code>badge-</code> 加授权编号前十位，里面的 <code>badge.txt</code> 是原样的文本，<code>badge.svg</code> 是它的二维码。</p>
 <h2 id="zkgrant">授权文件</h2>
-<p>扩展名 <code>.zkgrant</code>，文件名为 <code>grant-</code> 加授权编号前十位。它是一个容器：第一行 <code>zikaron-kit-file/1</code>，之后每一项写成「包内路径、换行、十进制长度、换行、字节、换行」，清单在前，其余按字节序。长度只认编码器的写法：十进制数字，零写作 <code>0</code>，其余以 1 至 9 开头。上限为总长 64 MiB、4096 项。它的读法只有一处（<code>zikaron_glue::grantfile</code>），应用与命令行的 <code>check-grant</code> 共用。里面装着：</p>
+<p>扩展名 <code>.zkgrant</code>，文件名为 <code>grant-</code> 加授权编号前十位。它是一个容器：第一行 <code>zikaron-kit-file/1</code>，之后每一项写成「包内路径、换行、十进制长度、换行、字节、换行」，清单在前，其余按字节序。长度只认编码器的写法：十进制数字，零写作 <code>0</code>，其余以 1 至 9 开头。读进内存的读法(授权文件、从发布地址取来的记录包)上限为总长 64 MiB、4096 项；记录包文件逐项写、逐项读，总长不设上限。它的读法只有一处（<code>zikaron_glue::grantfile</code>），应用与命令行的 <code>check-grant</code> 共用。里面装着：</p>
 <ul>
 <li><code>manifest.json</code>；</li>
 <li><code>entries/*.zk1</code>：授权链各跳的条目，授权在本角色账本里时，连同签发者账本；</li>
 <li><code>files/zikaron-grant.txt</code>(授权码)、<code>files/terms/…</code>(条款文件)、<code>files/verify.md</code>，以及可选的 <code>files/publish.txt</code>(导出这份授权文件的数据目录所设的发布地址)。</li>
 </ul>
+<h2 id="zkhand">交接件</h2>
+<p>扩展名 <code>.zkhand</code>，由 <code>hand-over</code> 写出：与授权文件同一个容器的单文件记录包，装着整本账的条目与 <code>files/zikaron-handoff.txt</code>。后者三行：<code>handoff/1</code>、<code>id</code> 加 32 位十六进制的交接编号、<code>after</code> 加交出方当初收下这本账所凭的那份交接件的编号(一直自己持有时写 <code>-</code>)。<code>take-over</code> 先按记录包的法核一遍，再读其中任何一项。</p>
 <h2 id="mirror">账本镜像</h2>
 {{code:
 <所选文件夹>/ZIKARON-backup/<40 位十六进制地址>/<author|grantee>/
@@ -134,7 +140,7 @@ anchored-on: eip155:<链号> · registry <小写合约地址> · from <起始区
   entries/<64 位十六进制>     条目原文,文件名只有编号
   held/<路径>               收到的授权等
 }}
-<p>同一文件夹里已有较早的镜像时，只补上新增的条目。命令行读的子命令可以直接指向含 <code>mirror.json</code> 的那一层；要给写的子命令当 <code>--ledger</code> 目录，把 <code>entries/</code> 里的文件复制到空文件夹，并在文件名后加 <code>.entry</code>。</p>
+<p>同一文件夹里已有较早的镜像时，只补上新增的条目。命令行读的子命令可以直接指向含 <code>mirror.json</code> 的那一层。镜像里的 <code>author</code> 文件夹可以在桌面上用「收编已有账本目录」「原位收编」收进数据目录。</p>
 <h2 id="derive">派生路径</h2>
 <div class="kv"><div><span class="k">记录者</span><span class="hash">m/44'/60'/0'/0/0</span></div><div><span class="k">使用方</span><span class="hash">m/44'/60'/0'/0/1</span></div></div>
 <h2 id="conv">约定的字面量</h2>

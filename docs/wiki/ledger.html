@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/ledger.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3e49c4f3">
+<link rel="stylesheet" href="../../style.css?v=4188f64f">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -49,10 +49,11 @@
 <li>卡上写着这一批的条数和 Gas 费上限。</li>
 <li>按「确认上链」。几分钟后，状态变成「已确认」。</li>
 </ol>
-<p>一批记录装在同一笔交易里，只付一笔的费用，所以攒几条一起发更省。可以关掉应用，下次打开会接着等结果。</p>
+<p>一批记录装在同一笔交易里，只付一笔的费用，所以攒几条一起发更省。可以关掉应用，下次打开会接着等结果。待上链跟着账本与链走：链上已有的条目移出队列、记为已上链；账本里链上还没有的条目（例如收编进来的），在下一趟账本检查之后排进队列。</p>
 <ul>
 <li><b>余额不够时</b>，页顶的提示写着需要多少、现有多少，按提示上的「复制地址」去转一点 ETH。</li>
 <li><b>一批迟迟不入块时</b>，「账本」页顶上会出现「加价重发」，按它以更高的费用重发；同一批只付一次费。</li>
+<li><b>这一批里有存证已在链上时</b>（例如命令行已把它送上链），应用一笔不发，提示「这一批里有存证已在链上，这一次一笔也没有发。」；等账本检查把那几条移出待上链，再发其余的。</li>
 <li><b>想每次写完就上链</b>，打开「设置 › 网络」的「自动上链」。</li>
 </ul>
 <p>上链越勤，时间越精确：每天上链一次，记录的时间就精确到一天。</p>
@@ -66,12 +67,12 @@
 <tr><td>已确认</td><td>应用对着链核对过，完成</td></tr>
 <tr><td>已回滚、未发出</td><td>这一次没成，记录还在队里，可以再发</td></tr>
 </tbody></table></div>
-<p>「账本」页顶上有一行账本状态，写「正常」或「异常」。应用每隔几分钟把账本和链对一遍；写「异常」时，点开看是哪一项。</p>
+<p>「账本」页顶上有一行账本状态，写「正常」或「异常」。应用每隔几分钟把账本和链对一遍；写「异常」时，点开看是哪一项。「账本」页的「未确认」列出链上还没确认的每一条；还没有账本时，表下有蓝色的「创建账本」。</p>
 <h2 id="fix">写错了怎么办</h2>
 <p>账本只往后添。已经写下的记录，用下面两种办法处理：</p>
 <ul>
-<li><b>补充说明：</b>「账本」页「更多」里的「添加注记…」，给那一条加一段说明。</li>
-<li><b>删除存证：</b>在记录详情底部按「删除存证…」。这件记录划掉显示，从可授权的记录里撤下；原来那一条和已发出的授权照旧保留。</li>
+<li><b>补充说明：</b>「账本」页「更多」里的「添加注记」，给那一条加一段说明。</li>
+<li><b>删除存证：</b>在记录详情底部按「删除存证」。这件记录划掉显示，从可授权的记录里撤下；原来那一条和已发出的授权照旧保留。</li>
 </ul>
 <h2 id="networks">网络</h2>
 <p>每个身份用一个网络，它的记录都发到这条链上：</p>
@@ -82,20 +83,21 @@
 <tr><td>Arbitrum One、OP Mainnet</td><td>费用通常只有主网的零头</td></tr>
 <tr><td>Sepolia 测试网</td><td>免费试用，用的是测试币</td></tr>
 </tbody></table></div>
-<p>新建身份时在「网络」一格里选。应用自带公共节点；想用自己的节点，到「设置 › 网络」按「编辑节点…」。核验别人锚在其他链上的记录，把那条链加进「设置 › 网络」的「只读网络」。</p>
+<p>新建身份时在「网络」一格里选。应用自带公共节点；想用自己的节点，到「设置 › 网络」按「编辑节点」。核验别人锚在其他链上的记录，把那条链加进「设置 › 网络」的「只读网络」。</p>
 <p><b>VPN 与代理。</b>「设置 › 网络」的「代理」决定应用连节点时从哪里出去，这台电脑上所有身份共用：</p>
 <dl>
-<div><dt>跟随系统代理</dt><dd>默认。照系统的代理设置走；系统用的是自动配置脚本（PAC）时，应用直连。</dd></div>
+<div><dt>跟随系统代理</dt><dd>默认。照系统的代理设置走：系统填了自动配置脚本（PAC）地址时照脚本走，再是系统里手填的代理。脚本要在 https 地址上或本机上；在别的机器上、走 http 的脚本，改填「自定义代理」，或让网管改用 https 地址。</dd></div>
 <div><dt>关闭代理</dt><dd>一律直连。</dd></div>
-<div><dt>自定义代理</dt><dd>填 <code>http://主机:端口</code> 或 <code>socks5://主机:端口</code>，按「保存」。代理要免用户名和口令。</dd></div>
+<div><dt>自定义代理</dt><dd>选代理类型（HTTP、HTTPS、SOCKS5 或 SOCKS4），填「主机」「端口」；代理要验身时再填「用户名」和密码（SOCKS4 只有「用户 ID」），按「保存」。从代理软件抄来的整段地址可以直接粘进「主机」格，应用把它拆进各格。密码加密存在本机，保存后显示「已设密码」。</dd></div>
 </dl>
-<p>本机上的节点一律直连。下面一行「此刻新连接：…」写着现在是直连，还是经哪个代理；改了设置，下一次连接就照新的走。</p>
+<p>本机上的节点一律直连；用自定义代理时，私网、链路本地与 <code>.local</code> 的节点也直连。下面一行「此刻新连接：…」写着现在是直连，还是经哪个代理；改了设置，下一次连接就照新的走。</p>
 <ul>
 <li>全局模式、接管全部流量的 VPN：保持「跟随系统代理」即可。</li>
 <li>只设了系统代理的 VPN：用「跟随系统代理」。</li>
-<li>还是连不上节点：在 VPN 软件里找到它的 HTTP 或 SOCKS5 代理地址，填进「自定义代理」。</li>
+<li>还是连不上节点：在 VPN 软件里找到它的代理地址（HTTP、HTTPS、SOCKS5 或 SOCKS4，带用户名与密码的也行），填进「自定义代理」。</li>
+<li>提示「连不上代理。」时，核对代理地址；提示「代理要用户名与密码。」或「代理不收所给的用户名与密码。」时，在「自定义代理」里填对用户名与密码。</li>
 </ul>
-<p>命令行经桌面做事时，用的也是这里的设置。</p>
+<p>命令行经桌面 App 操作或经凭据上链时，用的也是这里的设置。纯命令行的 <code>--proxy system</code>（默认）先照终端的 <code>https_proxy</code>、<code>http_proxy</code>、<code>all_proxy</code>、<code>no_proxy</code> 走，这几项都没设才照系统的代理设置。</p>
 <div class="pn"><a href="start.html"><span>上一页</span>上手</a><a class="nx" href="grants.html"><span>下一页</span>授权</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#history">存证</a><a href="#anchor">上链</a><a href="#states">状态</a><a href="#fix">写错了怎么办</a><a href="#networks">网络</a></nav></div>
 <script src="../../site.js?v=8606e8b4" defer></script>
 </body>

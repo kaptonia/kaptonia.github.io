@@ -9,17 +9,28 @@ title: Getting started
 <li><b>Windows</b>: on first launch Windows says “Windows protected your PC”; click “More info”, then “Run anyway”. On Windows 11 with Smart App Control on, turn it off first as the download page shows.</li>
 <li><b>Linux</b>: install the <code>.deb</code>, or make the AppImage executable and run it.</li>
 </ul>
-<p>To upgrade, install the new version; your data opens as before. After upgrading, keep opening the same data with the new version.</p>
+<p>When you upgrade from an earlier version, bring your ledger across first as <a href="#upgrade">Upgrading from an earlier version</a> below describes.</p>
+<h2 id="upgrade">Upgrading from an earlier version</h2>
+<p>This version reads the encrypted form it writes itself and starts from an empty machine folder; the key store, identities, settings and data an earlier version left stay where they are. Bring a Recorder’s ledger across in five steps:</p>
+<ol>
+<li>In 0.1.2, open Settings › Local data, press “Export ledger mirror”, save it to a folder outside the machine folder, then quit.</li>
+<li>Move the earlier machine folder aside together with its pointer file. On a Mac and on Linux the pointer file is <code>.zikaron-desk</code> in your home folder and the machine folder is <code>.zikaron-desk.d</code> by default; on Windows both are in <code>%LOCALAPPDATA%\ZIKARON\</code>.</li>
+<li>Open the new version, set a passcode, and at “Create an identity” press “Import an existing key” and import with the same recovery words.</li>
+<li>At “Create the ledger”, click “Adopt existing ledger folder”, choose the mirror’s <code>ZIKARON-backup/&lt;address&gt;/author</code> folder and press “Adopt in place”. Every entry is checked again and the ledger is checked against the records on chain; that completes the step.</li>
+<li>Run a ledger check on the Ledger page and see it read “OK”.</li>
+</ol>
+<p>Other identities go the same way: import each with “Import key” from the identity chip, then take its mirror with “Adopt existing ledger folder” under “Advanced options” in Settings › Local data. Add received grants again in “My grants”, and set the network and other settings again. After upgrading, keep opening the data with the new version: earlier versions cannot read the files it writes.</p>
 <h2 id="wizard">First launch</h2>
 <p>A wizard opens, with six steps down the left:</p>
 <ol>
 <li><b>Set a passcode.</b> 8 letters or digits, asked for each time the app opens.</li>
 <li><b>Create an identity.</b> The app generates 12 recovery words; write them on paper, then fill three of them back in when asked. You can also import a key you already have, or restore from a whole-machine backup.</li>
-<li><b>Network.</b> Choose “Ethereum mainnet”; the app comes with public nodes. To try it free first, choose “Custom”, then in Settings › Network press “Edit nodes…”, pick “Sepolia testnet” under “Preset”, and press “Save nodes” and “Save chain settings”.</li>
-<li><b>Create the ledger.</b> Write a line of description (or leave it empty) and press “Create the ledger”. Free.</li>
-<li><b>Add gas.</b> Send a little ETH to the address on the page and press “I have sent it”. You can choose “Later”.</li>
+<li><b>Network.</b> Choose “Ethereum mainnet”; the app comes with public nodes. To try it free first, choose “Custom”, then in Settings › Network press “Edit nodes”, pick “Sepolia testnet” under “Preset”, and press “Save nodes” and “Save chain settings”.</li>
+<li><b>Create the ledger.</b> Write a line of description (or leave it empty) and press “Create the ledger”. Free. With a ledger already at hand (a ledger folder, or a mirror “Export ledger mirror” wrote), click “Adopt existing ledger folder” beside it, choose it under “Ledger folder” and press “Adopt in place”.</li>
+<li><b>Add gas.</b> Send a little ETH to the address on the page, or scan the payment QR code with your wallet (it names the chosen network), and press “I have sent it”. You can choose “Later”.</li>
 <li><b>Whole-machine backup.</b> Export a password-protected backup file. You can do it later; the sooner the better.</li>
 </ol>
+<p>“中文” | “English” at the bottom left switches the language from the first step. “Back” returns to the previous page; on the page that checks the recovery words it returns to the same twelve words. Once the passcode and the identity are set, “Exit setup” (or Esc) is at the bottom left.</p>
 <p>Keep the recovery words on paper, somewhere only you can reach. They bring back your keys; ledgers and settings come back from a whole-machine backup.</p>
 <h2 id="first">Your first record</h2>
 <p>Choose “Recorder” at the top of the sidebar.</p>

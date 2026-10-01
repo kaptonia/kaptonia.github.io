@@ -5,7 +5,7 @@ title: 从源码构建
 <h2 id="need">环境要求</h2>
 <dl>
 <div><dt>Rust</dt><dd>1.97.1，2024 edition。版本由仓库根的 <code>rust-toolchain.toml</code> 钉定，本地、持续集成与发布构建同用这一版；装好 <a href="https://rustup.rs">rustup</a>，进入仓库它即自动取用。</dd></div>
-<div><dt>C 工具链</dt><dd>TLS 用到的加密库 <code>ring</code> 要为本机编译一段 C 代码。在 macOS 上装 Xcode 的命令行工具；在 Windows 上用 MSVC 工具链（目标 <code>x86_64-pc-windows-msvc</code>）。</dd></div>
+<div><dt>C 工具链</dt><dd>TLS 用到的加密库 <code>ring</code> 与代理脚本引擎 QuickJS 都要为本机编译一段 C 代码。在 macOS 上装 Xcode 的命令行工具；在 Windows 上用 MSVC 工具链（目标 <code>x86_64-pc-windows-msvc</code>）。</dd></div>
 <div><dt>Linux 的系统库</dt><dd>窗口、键盘与文件对话框所需的开发包，见下文。</dd></div>
 <div><dt>Python 3</dt><dd>运行法的冻结核与一致性比对，只用标准库。</dd></div>
 <div><dt>Foundry</dt><dd>测试登记合约、重算代码哈希时使用。</dd></div>
@@ -17,13 +17,13 @@ sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 
   xdg-desktop-portal xdg-desktop-portal-gtk
 }}
 <p>Linux 上的系统文件对话框走桌面门户，所以运行时要有 <code>xdg-desktop-portal</code> 和一个后端；缺少门户时，把文件直接拖进窗口即可。拖放经 X11：有 X 显示时（包括 Wayland 桌面上的 XWayland）窗口走 X11，拖放要在有 X 显示的会话里用。</p>
-<p>构建时，<code>crates/app/build.rs</code> 用 <code>cargo metadata --locked --offline</code> 按目标平台从 <code>Cargo.lock</code> 现生成第三方许可清单，随应用一起带着；清单生成不了，构建即失败。依赖增删之后，清单自动跟着变。测试要按发布级的参数跑 scrypt 派生，所以开发构建里 scrypt、salsa20、pbkdf2、sha2、hmac 几个 crate 照样开最高优化。</p>
+<p>构建时，<code>crates/app/build.rs</code> 用 <code>cargo metadata --locked --offline</code> 按目标平台从 <code>Cargo.lock</code> 现生成第三方许可清单，随应用一起带着；清单生成不了，构建即失败。依赖增删之后，清单自动跟着变。工作区的发布构建开着整数溢出检查，溢出即具名停下；测试与持续集成都用发布构建跑，测的就是发出去的那一份。</p>
 <h2 id="build">构建与测试</h2>
 {{code:
 tar -xzf zikaron-{{VER}}-src.tar.gz
 cd zikaron-{{VER}}
 cargo build --release --locked
-cargo test --workspace
+cargo test --workspace --release --locked
 }}
 <p><code>--locked</code> 让构建严格使用 <code>Cargo.lock</code> 锁定的依赖版本，发布包也这样构建。产物：</p>
 <div class="tw"><table>
@@ -34,7 +34,7 @@ cargo test --workspace
 <tr><td><code>zk1</code>、<code>zkk</code>、<code>zks</code>、<code>zka</code>、<code>zkg</code></td><td>供测试与一致性比对用的辅助程序</td></tr>
 <tr><td><code>zikaron-pack</code></td><td>打包工具：生成第三方许可清单（<code>notices</code>），去掉包里的构建机信息（<code>hfs-owners</code>、<code>dmg-names</code>、<code>elf-comment</code>），给出路径映射并复核产物里只有中性的路径名（<code>rustflags</code>、<code>no-paths</code>），核对钉定的 AppImage 运行时（<code>appimage-runtime</code>），排出 Windows 包（<code>windows</code>）</td></tr>
 </tbody></table></div>
-<p>每次推到 <code>main</code> 和每个合并请求，仓库的 <code>.github/workflows/test.yml</code> 都在 macOS、Linux 与 Windows 上跑 <code>cargo build --workspace --locked</code> 和 <code>cargo test --workspace --locked --no-fail-fast</code>；macOS 与 Linux 两格必须通过，Windows 一格在 Windows 实机上走通之后才列为必过。macOS 与 Linux 两格另做一步：按打包脚本的路径映射做一次发布构建，再用 <code>zikaron-pack no-paths</code> 复核产物里只有中性的路径名。</p>
+<p>每次推到 <code>main</code> 和每个合并请求，仓库的 <code>.github/workflows/test.yml</code> 都在 macOS、Linux 与 Windows 上跑 <code>cargo build --workspace --locked --release</code> 和 <code>cargo test --workspace --locked --no-fail-fast --release</code>；macOS 与 Linux 两格必须通过，Windows 一格在 Windows 实机上走通之后才列为必过。macOS 与 Linux 两格另做一步：按打包脚本的路径映射做一次发布构建，再用 <code>zikaron-pack no-paths</code> 复核产物里只有中性的路径名。</p>
 <h2 id="package">打包</h2>
 <div class="tw"><table>
 <thead><tr><th>脚本或命令</th><th>产出</th></tr></thead>
@@ -64,7 +64,7 @@ cd base/zikaron-conformance
 T=$(mktemp -d)
 HOME=$T ./target/release/app
 }}
-<p>Windows 上先读 <code>USERPROFILE</code>：把它指向一个空目录后启动，机器数据落在其中的 <code>AppData\Local\ZIKARON\</code>，同样与日常数据隔离。带 <code>--home</code> 的命令行按同一规则找机器目录，隔离试用时给它同一个 <code>HOME</code> 或 <code>USERPROFILE</code>。「启用命令行」写入的位置，可以用环境变量 <code>ZIKARON_CLI_LINK_DIR</code> 改到别处。</p>
-<p>试用时，在向导里选「自定义」，再到「设置 › 网络 › 编辑节点…」的「预设」里选 Sepolia 测试网；或用「新建身份…」，在「网络」里选「Sepolia 测试网」，见 Wiki 的<a href="../wiki/ledger.html#networks">网络</a>。测试用的密钥用 <code>zikaron keygen</code> 现场生成，用后即弃。</p>
+<p>Windows 上先读 <code>USERPROFILE</code>：把它指向一个空目录后启动，机器数据落在其中的 <code>AppData\Local\ZIKARON\</code>，同样与日常数据隔离。命令行按同一规则找机器目录(<code>--home</code>、凭据、收编与交接清单、<code>cli-sent/</code> 都在那里)，隔离试用时给它同一个 <code>HOME</code> 或 <code>USERPROFILE</code>。「启用 zikaron 命令」写入的位置，可以用环境变量 <code>ZIKARON_CLI_LINK_DIR</code> 改到别处。</p>
+<p>试用时，在向导里选「自定义」，再到「设置 › 网络 › 编辑节点」的「预设」里选 Sepolia 测试网；或用「新建身份」，在「网络」里选「Sepolia 测试网」，见 Wiki 的<a href="../wiki/ledger.html#networks">网络</a>。测试用的密钥用 <code>zikaron keygen</code> 现场生成，用后即弃。</p>
 <h2 id="fonts">内嵌字体</h2>
 <p>界面的西文字体 Inter 与等宽字体 JetBrains Mono 内嵌于应用。中文在 macOS 上取自系统的苹方，在 Windows 上取自系统的微软雅黑（Microsoft YaHei UI，加粗用它的粗体），找不到时用内嵌的 Noto Sans SC，在 Linux 上用内嵌的 Noto Sans SC；所以 Noto Sans SC 只随 Windows 与 Linux 的构建内嵌。内嵌字体都以 SIL OFL 1.1 发布，许可文本在 <code>crates/zikaron-ui/fonts/</code>。</p>

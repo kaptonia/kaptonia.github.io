@@ -23,15 +23,24 @@ title: Compatibility and evolution
 <h2 id="formats">Versions of local files</h2>
 <p>Every kind of local file carries a format version. When the software is upgraded, it follows these rules:</p>
 <ol>
-<li>A new version reads every old format and leaves a file as it is after reading it.</li>
-<li>Migration happens one write at a time: a file takes the present format the next time it is written; a ledger entry stays as it was first written.</li>
-<li>A file that does not read is left as it is: the software names the file and which of six reasons applies. Members a newer version wrote into a settings file are carried back as they are.</li>
-<li>Upgrades go one way: local encrypted files this version writes are read by this version and later ones, and earlier versions cannot read them. After upgrading, keep opening the data with the new version.</li>
+<li>This version’s own forms alone are read and written: local encrypted files in the present envelope, the key store as <code>zikaron-desk/keybox/3</code>, <code>machine.json</code> for the language and appearance. Plain files, other envelopes and other key store forms are left unread and unconverted: the reason is named and the file left as it is.</li>
+<li>A file that does not read is left as it is: the software names the file and which of six reasons applies; a write to it is refused by name, and once it is moved aside the next write makes it anew.</li>
+<li>Members this version does not know, in the encrypted machine settings and a data folder’s settings, are carried back as they are.</li>
+<li>Local encrypted files this version writes are unreadable to earlier versions.</li>
 <li>A sealed file whose master key is gone, closed for good, is moved byte for byte into <code>set-aside</code> in the machine folder, numbered flat.</li>
 <li>When a backup comes from a newer version, the software says plainly to update the app first; for any other unreadable file, it names the file.</li>
 </ol>
 <p>A change made in bulk (renaming and resealing everything under a new master key, for one) writes its plan and its new files alongside first, reads them back and compares, and switches in one step once they match: after a power cut, the next launch finds either the complete old state or the complete new one; when any comparison fails, it stops and leaves the originals as they are.</p>
-<p>When a new version opens old data, it fills in what is missing and leaves values a user set as they are: an identity made by an earlier version, which lacks a network, gets the preset network this machine chose in the wizard recorded once, the first time its data folder opens (when this machine chose a preset network in the wizard and the data folder’s chain settings match it or are still empty); a data folder opened as the writer whose nodes match an earlier preset pair letter for letter and in order moves to the present pair and is saved once, and nodes a user changed stay as they are; a data folder an older version left gets its folder label and writer mark from the first window that opens it as the writer. Filling in is the writer’s job.</p>
+<p>A data folder’s label and writer mark are written by the first window that opens it as the writer or writes into it; a reader writes neither.</p>
+<h3 id="upgrade">Upgrading from an earlier version</h3>
+<p>0.1.3 starts from an empty machine folder: an earlier version’s machine folder (key store, identity registry, settings) and data folders are left unread. A recorder’s ledger comes across through a ledger mirror, one step by hand:</p>
+<ol>
+<li>In 0.1.2, “Export ledger mirror” to a folder outside the machine folder, then quit.</li>
+<li>Move the earlier version’s machine folder aside together with its pointer file (where both are: <a href="formats.html#machine">The machine folder</a>).</li>
+<li>Start this version, set a passcode and import the identity with the same recovery phrase.</li>
+<li>When the wizard reaches “Create the ledger”, click “Adopt existing ledger folder”, choose the mirror’s <code>author</code> folder and press “Adopt in place”: every entry is checked again and the ledger is checked against this key’s records on chain, and the step is done. Adoption takes one whole ledger, with exactly one creation entry; a data folder that has its own ledger takes that same ledger alone.</li>
+<li>Run the ledger check on the Ledger page and see it answer “OK”.</li>
+</ol>
 <h2 id="cli">Command-line output</h2>
 <p>The output keys and the refusal reasons each form a closed table, and the exit codes are five fixed values; scripts depend on them. So the meanings of keys and exit codes stay stable, and new information comes as new keys; added refusals and changes to what a refusal covers are written into <code>CLI-SCHEMA.md</code> at the same time and listed in the change log; tests check that document against the code item by item. The first line of standard error, <code>&lt;REASON&gt; &lt;subject&gt;</code>, is part of the contract; the lines for people after it follow the system’s language, stay outside the contract, and their wording can improve at any time. <code>zikaron contract</code> prints this contract.</p>
 <h2 id="words">Verdict tokens stay as written</h2>
@@ -39,6 +48,6 @@ title: Compatibility and evolution
 <h2 id="time">Time</h2>
 <p>Deadlines and validity are judged by chain time, or by a moment the caller states explicitly. The interface displays time in the user’s chosen time zone; entries and output always hold seconds.</p>
 <h2 id="deprecate">Retiring a feature</h2>
-<p>Reading features are kept for good: new versions have to read old entries, old record kits and old backups. Writing features may be retired; when one is, the release notes say so and give users another way to do the same thing.</p>
+<p>Entries are read by zikaron/1 and record kits by zikaron.kit/1, for good; ledger mirrors and the command line’s ledger folders carry a ledger across versions. Local encrypted files, the machine folder and data folders are read in this version’s own form, and when that form changes, the change log and the manual say how data comes across. Writing features may be retired; when one is, the release notes say so and give users another way to do the same thing.</p>
 <h2 id="tools">Keeping the tooling layer light</h2>
 <p>Tests, gauges, scripts, directory divisions and this document all belong to the tooling layer and serve the law and the user: a fault found is fixed the same day, and what is out of date is replaced. Two things bear the load: the frozen law, and the bytes users have already written.</p>

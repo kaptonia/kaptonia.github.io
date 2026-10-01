@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/glossary.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
+<link rel="stylesheet" href="../../../style.css?v=4188f64f">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -39,6 +39,9 @@
 <div><dt>Content fingerprint</dt><dd>A number worked out from a file’s content. The same file always gives the same one; one changed byte gives a wholly different one.</dd></div>
 <div><dt>Note</dt><dd>An entry that adds an explanation to an earlier one.</dd></div>
 <div><dt>Deleting a record</dt><dd>Marks a record as deleted; the original entry stays as it was.</dd></div>
+<div><dt>Ledger mirror</dt><dd>A copy of a ledger written by “Export ledger mirror”, for other tools to read and for bringing a ledger to a new version.</dd></div>
+<div><dt>Adopt in place</dt><dd>Checks a ledger’s folder or mirror entry by entry and seals it into a desktop data folder; the folder itself stays as it was.</dd></div>
+<div><dt>Handoff file</dt><dd>The <code>.zkhand</code> file <code>hand-over</code> writes: the whole ledger, passing the writing of it from one place to another.</dd></div>
 </dl>
 <h2 id="chain">On chain</h2>
 <dl>
@@ -62,20 +65,21 @@
 </dl>
 <h2 id="verify">Presenting and verifying</h2>
 <dl>
-<div><dt>Record kit</dt><dd>A folder exported from a ledger, with the chosen records, their original files and their on-chain proofs, for someone else to verify.</dd></div>
+<div><dt>Record kit</dt><dd>One <code>.zkit</code> file (or a folder) exported from a ledger, with the chosen records, their original files and their on-chain proofs, for someone else to verify.</dd></div>
 <div><dt>The six checks</dt><dd>What verifying a grant checks: signature, issuer ledger intact, in the issuer’s ledger, on chain, within validity, not revoked.</dd></div>
 <div><dt>All passed, Has gaps, Failed</dt><dd>The three verdicts on a grant; on the Verify page a pass reads “All six checks passed”. “Has gaps” means some checks have not come through yet, for example confirmation on chain is pending or the issuer’s ledger is missing.</dd></div>
-<div><dt>Published address</dt><dd>The https address where you place a record kit online.</dd></div>
+<div><dt>Published address</dt><dd>The https address where you place a record kit in folder form online.</dd></div>
 </dl>
 <h2 id="key">Identities and backups</h2>
 <dl>
 <div><dt>Identity</dt><dd>A set of signing keys, with the ledgers and settings that go with them. A computer can hold several.</dd></div>
 <div><dt>Recorder, User</dt><dd>The two roles of an identity, each with its own key, address and ledger.</dd></div>
-<div><dt>Primary identity</dt><dd>The identity whose recovery words set a new passcode when you forget yours. By default the first one made on this computer; change it in Settings › Identity key.</dd></div>
+<div><dt>Primary identity</dt><dd>The identity whose recovery words, or a key file it exported, set a new passcode when you forget yours. By default the first one made on this computer; change it in Settings › Identity key.</dd></div>
 <div><dt>Recovery words</dt><dd>12 English words that recreate your keys. Keep them on paper.</dd></div>
 <div><dt>Passcode</dt><dd>8 letters or digits that open the keys and data on this computer.</dd></div>
 <div><dt>Key file</dt><dd>One key exported with a file password, readable by other wallets too.</dd></div>
 <div><dt>Whole-machine backup</dt><dd>One encrypted file with every identity, ledger and setting, opened with the backup password.</dd></div>
+<div><dt>Command-line credential</dt><dd>A time-limited file the desktop writes in the machine folder when “With a credential” is turned on; with it the command line writes this computer’s sealed ledgers and sends their pending queues. It ends when the switch goes off, it expires, or the master key changes.</dd></div>
 </dl>
 </section></div>
 <div class="pn"><a href="faq.html"><span>Previous</span>Common questions</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#ledger" data-p=zikaron>Records</a><a href="#chain" data-p=zikaron>On chain</a><a href="#grant" data-p=zikaron>Grants</a><a href="#verify" data-p=zikaron>Presenting and verifying</a><a href="#key" data-p=zikaron>Identities and backups</a></nav></div>

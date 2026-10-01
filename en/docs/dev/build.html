@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/dev/build.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
+<link rel="stylesheet" href="../../../style.css?v=4188f64f">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -33,7 +33,7 @@
 <h2 id="need">Requirements</h2>
 <dl>
 <div><dt>Rust</dt><dd>1.97.1, 2024 edition. The version is pinned by <code>rust-toolchain.toml</code> at the repository root, and local builds, continuous integration and release builds all use it; with <a href="https://rustup.rs">rustup</a> installed, it is picked up as you enter the repository.</dd></div>
-<div><dt>A C toolchain</dt><dd>The cryptography library <code>ring</code>, used by TLS, compiles some C code for the host. On macOS, the Xcode command line tools are enough; on Windows, use the MSVC toolchain (target <code>x86_64-pc-windows-msvc</code>).</dd></div>
+<div><dt>A C toolchain</dt><dd>The cryptography library <code>ring</code>, used by TLS, and the proxy script engine QuickJS compile some C code for the host. On macOS, the Xcode command line tools are enough; on Windows, use the MSVC toolchain (target <code>x86_64-pc-windows-msvc</code>).</dd></div>
 <div><dt>Linux system libraries</dt><dd>Development packages for windows, keyboards and file dialogs; see below.</dd></div>
 <div><dt>Python 3</dt><dd>Runs the law’s frozen cores and the conformance comparisons, with the standard library alone.</dd></div>
 <div><dt>Foundry</dt><dd>Used to test the registry contract and recompute its code hash.</dd></div>
@@ -45,15 +45,15 @@
   libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
   xdg-desktop-portal xdg-desktop-portal-gtk" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
 <p>On Linux the system file dialog goes through the desktop portal, so at run time <code>xdg-desktop-portal</code> and a backend are needed; without a portal, drag files straight into the window. Dropping goes through X11: with an X display (XWayland on a Wayland desktop included) the window runs on X11, so dropping files needs a session with an X display.</p>
-<p>At build time, <code>crates/app/build.rs</code> runs <code>cargo metadata --locked --offline</code> to generate the third-party licence list for the target platform from <code>Cargo.lock</code>, and the app carries it; if the list cannot be generated, the build fails. When dependencies change, the list follows by itself. Tests derive scrypt keys at release-grade parameters, so the scrypt, salsa20, pbkdf2, sha2 and hmac crates are fully optimised in development builds too.</p>
+<p>At build time, <code>crates/app/build.rs</code> runs <code>cargo metadata --locked --offline</code> to generate the third-party licence list for the target platform from <code>Cargo.lock</code>, and the app carries it; if the list cannot be generated, the build fails. When dependencies change, the list follows by itself. The workspace’s release profile checks integer overflow, stopping by name on one; tests and continuous integration run release builds, so what is tested is what ships.</p>
 <h2 id="build">Build and test</h2>
-<div class="cmd block"><code>tar -xzf zikaron-0.1.2-src.tar.gz
-cd zikaron-0.1.2
+<div class="cmd block"><code>tar -xzf zikaron-0.1.3-src.tar.gz
+cd zikaron-0.1.3
 cargo build --release --locked
-cargo test --workspace</code><button class="cp" type="button" data-copy="tar -xzf zikaron-0.1.2-src.tar.gz
-cd zikaron-0.1.2
+cargo test --workspace --release --locked</code><button class="cp" type="button" data-copy="tar -xzf zikaron-0.1.3-src.tar.gz
+cd zikaron-0.1.3
 cargo build --release --locked
-cargo test --workspace" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+cargo test --workspace --release --locked" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
 <p><code>--locked</code> makes the build use exactly the dependency versions pinned in <code>Cargo.lock</code>, as the release packages do. The outputs:</p>
 <div class="tw"><table>
 <thead><tr><th>Program</th><th>What it is</th></tr></thead>
@@ -63,7 +63,7 @@ cargo test --workspace" aria-label="Copy" title="Copy"><svg width="14" height="1
 <tr><td><code>zk1</code>, <code>zkk</code>, <code>zks</code>, <code>zka</code>, <code>zkg</code></td><td>Helper programs for testing and conformance comparison</td></tr>
 <tr><td><code>zikaron-pack</code></td><td>The packaging tool: generates the third-party licence list (<code>notices</code>), strips the build machine’s details from packages (<code>hfs-owners</code>, <code>dmg-names</code>, <code>elf-comment</code>), gives the path mapping and checks the output carries neutral path names alone (<code>rustflags</code>, <code>no-paths</code>), checks the pinned AppImage runtime (<code>appimage-runtime</code>), and lays out the Windows package (<code>windows</code>)</td></tr>
 </tbody></table></div>
-<p>On every push to <code>main</code> and every pull request, the repository’s <code>.github/workflows/test.yml</code> runs <code>cargo build --workspace --locked</code> and <code>cargo test --workspace --locked --no-fail-fast</code> on macOS, Linux and Windows; the macOS and Linux cells must pass, and the Windows cell becomes required once it has passed on a Windows machine. The macOS and Linux cells take one more step: a release build with the packaging scripts’ path mapping, then <code>zikaron-pack no-paths</code> to check the output carries neutral path names alone.</p>
+<p>On every push to <code>main</code> and every pull request, the repository’s <code>.github/workflows/test.yml</code> runs <code>cargo build --workspace --locked --release</code> and <code>cargo test --workspace --locked --no-fail-fast --release</code> on macOS, Linux and Windows; the macOS and Linux cells must pass, and the Windows cell becomes required once it has passed on a Windows machine. The macOS and Linux cells take one more step: a release build with the packaging scripts’ path mapping, then <code>zikaron-pack no-paths</code> to check the output carries neutral path names alone.</p>
 <h2 id="package">Packaging</h2>
 <div class="tw"><table>
 <thead><tr><th>Script or command</th><th>Output</th></tr></thead>
@@ -91,8 +91,8 @@ forge test" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="
 <div class="cmd block"><code>T=$(mktemp -d)
 HOME=$T ./target/release/app</code><button class="cp" type="button" data-copy="T=$(mktemp -d)
 HOME=$T ./target/release/app" aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
-<p>On Windows <code>USERPROFILE</code> is read first: point it at an empty folder and start the app, and machine data lands in its <code>AppData\Local\ZIKARON\</code>, kept apart in the same way. The command line with <code>--home</code> finds the machine folder by the same rule, so give it the same <code>HOME</code> or <code>USERPROFILE</code> for a trial. The environment variable <code>ZIKARON_CLI_LINK_DIR</code> moves where “Enable command line” writes.</p>
-<p>For a trial, choose “Custom” in the wizard and pick Sepolia testnet under “Preset” in Settings › Network › Edit nodes…; or use “New identity…” and choose “Sepolia testnet” under “Network”; see <a href="../wiki/ledger.html#networks">Networks</a> in the Wiki. Generate test keys on the spot with <code>zikaron keygen</code> and discard them afterwards.</p>
+<p>On Windows <code>USERPROFILE</code> is read first: point it at an empty folder and start the app, and machine data lands in its <code>AppData\Local\ZIKARON\</code>, kept apart in the same way. The command line finds the machine folder by the same rule (for <code>--home</code>, the credential, the adoption and handoff lists and <code>cli-sent/</code>), so give it the same <code>HOME</code> or <code>USERPROFILE</code> for a trial. The environment variable <code>ZIKARON_CLI_LINK_DIR</code> moves where “Enable the zikaron command” writes.</p>
+<p>For a trial, choose “Custom” in the wizard and pick Sepolia testnet under “Preset” in Settings › Network › Edit nodes; or use “New identity” and choose “Sepolia testnet” under “Network”; see <a href="../wiki/ledger.html#networks">Networks</a> in the Wiki. Generate test keys on the spot with <code>zikaron keygen</code> and discard them afterwards.</p>
 <h2 id="fonts">Embedded fonts</h2>
 <p>The interface’s Latin face, Inter, and the monospace face, JetBrains Mono, are embedded in the app. Chinese uses the system’s PingFang on macOS; on Windows, the system’s Microsoft YaHei UI (with its own bold), falling back to the embedded Noto Sans SC; and on Linux the embedded Noto Sans SC; so Noto Sans SC is embedded in the Windows and Linux builds alone. The embedded fonts are all released under the SIL OFL 1.1, with the licence texts in <code>crates/zikaron-ui/fonts/</code>.</p>
 <div class="pn"><a href="verify.html"><span>Previous</span>Checksums</a><a class="nx" href="layout.html"><span>Next</span>Repository layout and layers</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#need">Requirements</a><a href="#build">Build and test</a><a href="#package">Packaging</a><a href="#contract">Contract tests</a><a href="#law">The law’s cores</a><a href="#safe">Trying it with separate data</a><a href="#fonts">Embedded fonts</a></nav></div>

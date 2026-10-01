@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/dev/contributing.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
+<link rel="stylesheet" href="../../../style.css?v=4188f64f">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -54,7 +54,7 @@
 </ol>
 <h2 id="check">Checks before submitting</h2>
 <ul class="chk">
-<li>The toolchain is pinned at Rust 1.97.1 by <code>rust-toolchain.toml</code>. <code>cargo test --workspace --locked --no-fail-fast</code> passes; continuous integration on the pull request runs on macOS, Linux and Windows, and the macOS and Linux cells must pass; those two cells also build both programs the way a release does and run <code>zikaron-pack no-paths</code> to confirm the binaries carry neutral path names alone.</li>
+<li>The toolchain is pinned at Rust 1.97.1 by <code>rust-toolchain.toml</code>. <code>cargo test --workspace --locked --no-fail-fast --release</code> passes; continuous integration on the pull request builds and tests release builds on macOS, Linux and Windows, and the macOS and Linux cells must pass; those two cells also build both programs the way a release does and run <code>zikaron-pack no-paths</code> to confirm the binaries carry neutral path names alone.</li>
 <li><code>cargo build --release --locked</code> passes; when dependencies are added or removed, commit <code>Cargo.lock</code> with the change, and the third-party licence list regenerates with the build.</li>
 <li>If <code>zikaron</code> or <code>zikaron-kit</code> changed: the comparer shows zero divergences on corpora from at least three seeds, generated in a copy outside the repository.</li>
 <li>If <code>zikaron-anchor</code> changed: every chain-facing recording replays identically.</li>
@@ -75,7 +75,7 @@
 </dl>
 <h2 id="ui">Interface conventions</h2>
 <ul>
-<li>An action that writes to the ledger or the chain first opens a confirmation card listing where it writes, what it writes and the cost; the solid red key that actually writes appears on the confirmation card alone. A request through the desktop (<code>--home</code>) comes from the command line’s side, and the desktop carries it out directly, putting on chain as the setting “Putting on chain from the command line” says.</li>
+<li>An action that writes to the ledger or the chain first opens a confirmation card listing where it writes, what it writes and the cost; the solid red key that actually writes appears on the confirmation card alone. A request through the desktop (<code>--home</code>) comes from the command line’s side, and the desktop carries it out directly, putting on chain as the setting “Putting on chain from the command line” says. Turning on “With a credential” asks for the passcode and a validity, and its card says that while putting on chain from the command line sends automatically, the command line can spend this identity’s gas.</li>
 <li>A screen holds at most one blue primary button.</li>
 <li>The front of the interface uses plain language; addresses, hashes, type names and verdict tokens go under “Details”.</li>
 <li>Every failure says two things: what happened, and what to do next.</li>

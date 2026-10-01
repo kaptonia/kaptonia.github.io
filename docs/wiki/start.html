@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/start.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3e49c4f3">
+<link rel="stylesheet" href="../../style.css?v=4188f64f">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -37,17 +37,28 @@
 <li><b>Windows</b>：第一次打开时出现「Windows 已保护你的电脑」，按「更多信息」，再按「仍要运行」。Windows 11 开着「智能应用控制」时，先照下载页把它关掉。</li>
 <li><b>Linux</b>：用 <code>.deb</code> 安装，或给 AppImage 加上可执行权限后直接运行。</li>
 </ul>
-<p>升级时装上新版即可，数据照常打开。升级之后，请一直用新版打开这份数据。</p>
+<p>从早先版本升级时，先照下面的<a href="#upgrade">从早先版本升级</a>把账本带过来。</p>
+<h2 id="upgrade">从早先版本升级</h2>
+<p>这一版只读它自己写的加密形式，从一个空的机器目录起步；早先版本留下的密钥库、身份、设置和数据原样留在原处。记录者的账本照下面五步带过来：</p>
+<ol>
+<li>在 0.1.2 里打开「设置 › 本机数据」，按「导出账本镜像」，存到机器目录之外的一个文件夹，然后退出。</li>
+<li>把早先版本的机器目录连同它的指针文件挪到别处。Mac 与 Linux 上，指针文件是主目录里的 <code>.zikaron-desk</code>，机器目录默认是 <code>.zikaron-desk.d</code>；Windows 上两样都在 <code>%LOCALAPPDATA%\ZIKARON\</code> 里。</li>
+<li>打开新版，设口令，在「创建身份」一步按「导入已有密钥」，用同一组助记词导入。</li>
+<li>到「创建账本」一步，点「收编已有账本目录」，选镜像里 <code>ZIKARON-backup/&lt;地址&gt;/author</code> 那个文件夹，按「原位收编」。条目逐条重新核验，再与链上的上链记录核对，这一步即算完成。</li>
+<li>到「账本」页跑一趟账本检查，看它写「正常」。</li>
+</ol>
+<p>别的身份照样：从身份牌的「导入密钥」导入，再在「设置 › 本机数据」「高级选项」里用「收编已有账本目录」收它的镜像。收到的授权在「我的授权」里重新添加，网络等设置重新设一遍。升级之后，请一直用新版打开这份数据：新版写的文件，早先版本读不了。</p>
 <h2 id="wizard">第一次打开</h2>
 <p>应用会弹出一个向导，左边六步，一步一步做：</p>
 <ol>
 <li><b>设置口令。</b>8 位字母或数字，以后每次打开应用都要输入。</li>
 <li><b>创建身份。</b>应用生成 12 个助记词，抄在纸上，再按提示填回其中三个。已有密钥的，也可以导入，或从整机备份恢复。</li>
-<li><b>网络。</b>选「以太坊主网」即可，应用自带公共节点。想先免费试一试，选「自定义」，再到「设置 › 网络」按「编辑节点…」，在「预设」里选「Sepolia 测试网」，按「保存节点」和「保存链设置」。</li>
-<li><b>创建账本。</b>写一句说明（可以空着），按「创建账本」。免费。</li>
-<li><b>充值 gas。</b>往页面上的地址转一点 ETH，按「我已转账」。可以「以后再说」。</li>
+<li><b>网络。</b>选「以太坊主网」即可，应用自带公共节点。想先免费试一试，选「自定义」，再到「设置 › 网络」按「编辑节点」，在「预设」里选「Sepolia 测试网」，按「保存节点」和「保存链设置」。</li>
+<li><b>创建账本。</b>写一句说明（可以空着），按「创建账本」。免费。已有一本账（账本文件夹，或「导出账本镜像」写出的镜像）时，点旁边的「收编已有账本目录」，在「账本文件夹」里选它，按「原位收编」。</li>
+<li><b>充值 gas。</b>往页面上的地址转一点 ETH，或用钱包扫页面上的付款二维码（它写明所选的网络），按「我已转账」。可以「以后再说」。</li>
 <li><b>整机备份。</b>导出一个带密码的备份文件。可以以后再做，越早越好。</li>
 </ol>
+<p>左栏左下角的「中文」|「English」从第一步起就能切换语言。「上一步」回到前一页；在核对助记词那一页按它，回到同一组十二个词。设好口令和身份之后，左下角有「退出向导」（Esc 同）。</p>
 <p>助记词抄在纸上，放在只有你拿得到的地方。它能找回你的密钥；账本和设置靠整机备份找回。</p>
 <h2 id="first">第一条记录</h2>
 <p>左栏顶上选「记录者」。</p>
@@ -73,7 +84,7 @@
 <tr><td>核验、账本、提醒</td><td>核验、提醒</td></tr>
 </tbody></table></div>
 <p>凡是写进账本或发到链上的动作，都先出一张确认卡，写明要写什么、费用多少。按卡上红色的键才真正写入，按「取消」即作罢。</p>
-<div class="pn"><a href="zikaron.html"><span>上一页</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>下一页</span>存证与上链</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#install">安装</a><a href="#wizard">第一次打开</a><a href="#first">第一条记录</a><a href="#receive">收到别人的授权</a><a href="#window">窗口</a></nav></div>
+<div class="pn"><a href="zikaron.html"><span>上一页</span><b class="zk">Zikaron</b></a><a class="nx" href="ledger.html"><span>下一页</span>存证与上链</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#install">安装</a><a href="#upgrade">从早先版本升级</a><a href="#wizard">第一次打开</a><a href="#first">第一条记录</a><a href="#receive">收到别人的授权</a><a href="#window">窗口</a></nav></div>
 <script src="../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

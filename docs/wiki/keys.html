@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="en" href="../../en/docs/wiki/keys.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../style.css?v=3e49c4f3">
+<link rel="stylesheet" href="../../style.css?v=4188f64f">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -46,19 +46,19 @@
 <li>按左栏「锁定」，或 ⌘L（Windows 与 Linux 上 Ctrl+L），立即锁上。闲置 15 分钟也会自动锁定，时长在「设置 › 身份密钥」里改。</li>
 </ul>
 <h2 id="forgot">忘了口令</h2>
-<p>在口令门按「忘记口令」，填这台电脑主身份（默认是第一个建的身份）的 12 个助记词，或选它的密钥文件，再设一个新口令。也可以按「从备份恢复…」，用整机备份恢复。</p>
+<p>在口令门按「忘记口令」，填这台电脑主身份（默认是第一个建的身份）的 12 个助记词；也可以展开「用密钥文件恢复」，选主身份任一角色导出的密钥文件，填它的密码。然后设一个新口令。也可以按「从备份恢复」，用整机备份恢复。</p>
 <h2 id="backup">整机备份</h2>
 <ol>
-<li>打开「设置 › 本机数据」，按「导出备份…」。</li>
+<li>打开「设置 › 本机数据」，按「导出备份」。</li>
 <li>输入口令，设一个备份密码（至少 8 位），选保存位置，按「导出」。</li>
 </ol>
 <p>一个文件就能恢复整台机器的身份、账本和设置。应用写完会读回核对一遍，提示「已导出备份」才算成功。备份那盏灯：绿色是最新；黄色是之后又有新记录，写着几条还没备份；灰色是从没备份过；红色是上次失败了，请重新导出。</p>
-<p>恢复时，在「设置 › 本机数据」按「从备份恢复…」，选备份文件，填备份密码和本机口令。恢复之后，这台电脑上的内容换成备份里的。</p>
+<p>恢复时，在「设置 › 本机数据」按「从备份恢复」，选备份文件，填备份密码和本机口令。恢复之后，这台电脑上的内容换成备份里的；「经凭据操作」回到关，要用时重新打开。</p>
 <h2 id="identities">多个身份</h2>
-<p>点左栏顶上的身份牌，打开「切换身份」：可以切换、「新建身份…」或「导入密钥…」。每个身份有自己的密钥、网络和账本。</p>
-<p>在别处用过的密钥导入进来后，先只能读：应用把它在链上的记录和本机账本对一遍，对上了才能写。对不上时，从那台机器的整机备份「取回账本」。</p>
+<p>点左栏顶上的身份牌，打开「切换身份」：可以切换、「新建身份」或「导入密钥」。每个身份有自己的密钥、网络和账本。</p>
+<p>在别处用过的密钥导入进来后，先只能读：应用把它在链上的记录和本机账本对一遍，对上了才能写。对不上时，从那台机器的整机备份「取回账本」，或在「设置 › 本机数据」「高级选项」里用「收编已有账本目录」接管那本账的文件夹或账本镜像。</p>
 <h2 id="handover">换一把新密钥</h2>
-<p>担心密钥泄露，或要把账本交给别人续写，用「账本 › 更多 › 换密钥或移交…」：填新密钥的地址，确认后上链。之后这本账由新密钥接着写，本机只能读。</p>
+<p>担心密钥泄露，或要把账本交给别人续写，用「账本 › 更多 › 换密钥或移交」：填新密钥的地址，确认后上链。之后这本账由新密钥接着写，本机只能读。</p>
 <h2 id="rules">身份密钥怎么用才安全</h2>
 <ul>
 <li>地址里只放够付 gas 的少量 ETH，别的资产放在其他地址。</li>
@@ -66,7 +66,7 @@
 <li>一把密钥只写一本账。</li>
 </ul>
 <h2 id="data">数据放在哪里</h2>
-<p>账本、设置和收到的授权都加密存在你的电脑上，要有口令才读得到；导出的记录包、授权文件和凭证是普通文件，方便交给别人。要把数据搬到别处，用「设置 › 本机数据」「高级选项」里的「迁移到空文件夹」。同一份数据放在同步盘上、两台电脑都开着时，只有一台能写；另一台的页顶有提示，按「改由本机写」即可换过来。</p>
+<p>账本、设置和收到的授权都加密存在你的电脑上，要有口令才读得到；口令门上要用的语言和外观，以及只读网络列表，以明文存在本机；导出的记录包、授权文件和凭证是普通文件，方便交给别人。要把数据搬到别处，用「设置 › 本机数据」「高级选项」里的「迁移到空文件夹」。同一份数据放在同步盘上、两台电脑都开着时，只有一台能写；另一台的页顶有提示，按「改由本机写」即可换过来。</p>
 <div class="pn"><a href="evidence.html"><span>上一页</span>一条记录证明什么</a><a class="nx" href="cli.html"><span>下一页</span>命令行</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#keep">三样东西要保管好</a><a href="#pin">口令与锁定</a><a href="#forgot">忘了口令</a><a href="#backup">整机备份</a><a href="#identities">多个身份</a><a href="#handover">换一把新密钥</a><a href="#rules">身份密钥怎么用才安全</a><a href="#data">数据放在哪里</a></nav></div>
 <script src="../../site.js?v=8606e8b4" defer></script>
 </body>

@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/dev/fork.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
+<link rel="stylesheet" href="../../../style.css?v=4188f64f">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -39,7 +39,7 @@
 <p>Changing the interface, adding features and changing defaults all belong to the tooling layer, and you are free to do them. Please attend to three points:</p>
 <dl>
 <div><dt>Take another name</dt><dd>So that users can tell the two programs apart.</dd></div>
-<div><dt>Take another machine folder</dt><dd>So that the two programs keep their key stores and data apart: on macOS and Linux, change the names <code>~/.zikaron-desk</code> and <code>~/.zikaron-desk.d/</code> (and, on macOS, <code>~/Library/Application Support/ZIKARON</code>, which the app also takes up); on Windows, change the <code>ZIKARON</code> folder name under <code>%LOCALAPPDATA%</code>. The literals to change are all registered in <code>crates/app/family-literals.json</code>, such as the format literals of local encrypted files, the local channel’s name, the link name “Enable command line” places, the <code>User-Agent</code> and the pointer file’s name; left unchanged, the two programs’ local channels and command-line links collide.</dd></div>
+<div><dt>Take another machine folder</dt><dd>So that the two programs keep their key stores and data apart: on macOS and Linux, change the names <code>~/.zikaron-desk</code> and <code>~/.zikaron-desk.d/</code>; on Windows, change the <code>ZIKARON</code> folder name under <code>%LOCALAPPDATA%</code>. The literals to change are all registered in <code>crates/app/family-literals.json</code>, such as the format literals of local encrypted files, the local channel’s name, the link name “Enable the zikaron command” places, the <code>User-Agent</code>, the pointer file’s name, the extensions of record kits and handoff files (<code>zkit</code>, <code>zkhand</code>), the name of a handoff’s note file and the handoff list’s file name; left unchanged, the two programs’ local channels and command-line links collide.</dd></div>
 <div><dt>Stay conforming to the law</dt><dd>The original can read ledgers your fork writes, and your fork can read ledgers the original writes.</dd></div>
 </dl>
 <h2 id="rules">Changing the rules</h2>

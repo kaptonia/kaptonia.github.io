@@ -10,16 +10,16 @@ REPO = "https://github.com/kaptonia/zikaron"
 CORE = "0xbecfb6f0d0f8b71c314f1b2efef414abfb6df74b711ca8f81efdef685d0132fc"
 KIT = "0x3f8368ebc8b5b7c97e4b5c4240f57f6fc06421b4effbd5a7446d128434a20535"
 CODEHASH = "0xfa97a1d9b22fab2b52f4e27c9a965b32734c40001b565ab365d05c887118f57d"
-VER = "0.1.2"
+VER = "0.1.3"
 # 当前版本的发布物,照发布清单 SHA256SUMS.txt 与实物抄录:(文件名, 大小, SHA-256, 种类, 指纹上链的那笔交易)
 # 最后一项是这个版本记入项目的 Zikaron 账本、上链的那笔交易在区块浏览器上的地址;没有时这一格写一道横线
-ANCHOR_TX = "https://etherscan.io/tx/0xc39c5116691387f9ed3d83a2bd682fb0885da0c459f3f39d92e2787c9c8dad2c"   # 这个版本的指纹上链的那笔交易:一笔锚定十条存证
-FILES = [(f"ZIKARON-{VER}-macos-arm64.dmg", "8.2 MB", "5ed5de7e2c6899d15d5867aa6ff9e43a8fd20b8e83089262467e2be6e87054d0", "dmg", ANCHOR_TX),
-         (f"ZIKARON-{VER}-macos-arm64.pkg", "9.1 MB", "75e93876efeaaf80584043eda705821e500e55bb5919def096c3f9e5325ac9ba", "pkg", ANCHOR_TX),
-         (f"ZIKARON-{VER}-windows-x86_64.zip", "15.3 MB", "6a9b9f5f96da91887a03b5c4b64e6b5b2a37fd420c53c4e0f17b8a3ed6200739", "zip", ANCHOR_TX),
-         (f"zikaron-desk_{VER}_amd64.deb", "16.4 MB", "815bf76d91c41d859a5190f7328351557fe3d2242d94507bc943d1dd63a9c4d0", "deb", ANCHOR_TX),
-         (f"ZIKARON-{VER}-x86_64.AppImage", "16.5 MB", "8107b071e9bec0fd70d09f68f13df85a664ceeedb30a20d81866b192f95d68b7", "appimage", ANCHOR_TX),
-         (f"zikaron-{VER}-src.tar.gz", "10.6 MB", "155c43e934a82335aed5ecfe6e48ce9951b87b88dad28ba722857af898486273", "src", ANCHOR_TX)]
+ANCHOR_TX = "https://etherscan.io/tx/0x50e3cd73600c40726bfe28bd568cf9e32d435267ea809fa1add353a11a836c7d"   # 这个版本的指纹上链的那笔交易:一笔锚定十条存证
+FILES = [(f"ZIKARON-{VER}-macos-arm64.dmg", "9.9 MB", "26b106ae293460200d965516a15f73b5814826c71a198a1ff3f29049863ba0b2", "dmg", ANCHOR_TX),
+         (f"ZIKARON-{VER}-macos-arm64.pkg", "11.6 MB", "d846a9568919bf90b463206a6afefb497ab7f5ca38b8199e4e792337dc0ba84c", "pkg", ANCHOR_TX),
+         (f"ZIKARON-{VER}-windows-x86_64.zip", "17.3 MB", "67a70b51bbb5173c0dc68c65291298815f0ac09b4bb35498cba0980afb338384", "zip", ANCHOR_TX),
+         (f"zikaron-desk_{VER}_amd64.deb", "18.1 MB", "0e501e4dc8e7b87ad5519a5e169e5915be2046614b669f3a0201c6071cfb490d", "deb", ANCHOR_TX),
+         (f"ZIKARON-{VER}-x86_64.AppImage", "18.1 MB", "74d77ddc6de69b31957c641526846a440e76e393f20031643f984fa0b82788fe", "appimage", ANCHOR_TX),
+         (f"zikaron-{VER}-src.tar.gz", "10.9 MB", "f3d3cb7d1f7c4a5cf6b0773ad31a8accc52d74ae2b02bf61249dc07d2690ddab", "src", ANCHOR_TX)]
 # 登记合约的已知部署(应用内置,README 与手册附录 A):主网、Arbitrum One、OP Mainnet 同一个地址
 MAINNET = ("0x36Ea8A857a5FE813429d4D9947000C644A88809A", "26087229")
 SEPOLIA = ("0xC29410B882c4C3b77e33659d2f06ac563e7B08a3", "11715660")
@@ -343,7 +343,7 @@ def download():
       {qstep(f["dmg"], t("这一步在打开 dmg 之前做。", "Do this before you open the dmg."))}
       <li><b>{t(f"打开 dmg,把 {APP}.app 拖进「应用程序」,再打开它。", f"Open the dmg, drag {APP}.app to Applications, then open it.")}</b>
         <p class="t">{t("已经先拖进去了的,改为运行这一条:", "If you dragged the app in first, run this instead:")}</p>{cmd(f"xattr -dr com.apple.quarantine /Applications/{APP}.app")}
-        <p class="t">{t(f"命令行 zikaron 在应用包内:{APP}.app/Contents/MacOS/zikaron。要在终端里直接敲 zikaron,打开应用「设置 › 本机数据」的「启用命令行」:它在 /usr/local/bin 放一个链接,需要时 macOS 弹出自己的管理员口令框。", f"The zikaron command line is inside the app bundle: {APP}.app/Contents/MacOS/zikaron. To type zikaron in any terminal, turn on “Enable command line” in the app’s Settings › Local data: it places a link in /usr/local/bin, and macOS asks for an administrator password when needed.")}</p></li>
+        <p class="t">{t(f"命令行 zikaron 在应用包内:{APP}.app/Contents/MacOS/zikaron。要在终端里直接敲 zikaron,打开应用「设置 › 命令行」的「启用 zikaron 命令」:它在 /usr/local/bin 放一个链接,需要时 macOS 弹出自己的管理员口令框。", f"The zikaron command line is inside the app bundle: {APP}.app/Contents/MacOS/zikaron. To type zikaron in any terminal, turn on “Enable the zikaron command” in the app’s Settings › Command line: it places a link in /usr/local/bin, and macOS asks for an administrator password when needed.")}</p></li>
     </ol>"""
             pkg = f"""<ol class="steps">
       {sumstep(f["pkg"])}
@@ -353,7 +353,7 @@ def download():
     </ol>"""
             why = t(f"为什么有这一步:应用由 {SIGNER} 的自签证书签名,在 Apple 公证之外发出。从浏览器下载的文件带着 macOS 的隔离标记,系统会拒绝打开;在较新的 macOS 上,「系统设置 › 隐私与安全性」里的「仍要打开」时常失灵。先核对文件,再去掉隔离标记,就是向系统确认你信任这份核对过的文件。",
                     f"Why this step: the app is signed with {SIGNER}’s self-signed certificate and is outside Apple’s notarization. Files downloaded in a browser carry macOS’s quarantine flag, and macOS refuses to open them; on recent macOS, Open Anyway in System Settings › Privacy & Security works only some of the time. Checking the file and then removing the flag tells the system you trust the file you have checked.")
-            up = t("升级时,用新版覆盖安装即可,原来的账本与本机数据照常打开。新版写过的本机加密文件要用新版来读:升级之后,请一直用新版打开这份数据。", "To upgrade, install the new version over the old one; your ledgers and local data open as before. Encrypted local files a new version writes are read by the new version, so after upgrading, keep opening the same data with the new version.")
+            up = t("升级时,用新版覆盖安装即可。从 0.1.2 或更早的版本升级:本版从一个空的机器目录起步,早先版本的账本照下面几步带过来:先在旧版里「导出账本镜像」到机器目录之外的文件夹,然后退出;把旧的机器目录 ~/.zikaron-desk.d/ 连同指针文件 ~/.zikaron-desk 一起挪开;启动本版,设口令,用同一组助记词导入身份;向导走到「创建账本」时点「收编已有账本目录」,选镜像里的 author 文件夹,按「原位收编」;最后在账本页跑一趟账本检查,看它答「正常」。本版写过的本机加密文件,早先版本读不了。", "To upgrade, install the new version over the old one. Upgrading from 0.1.2 or earlier: this version starts from an empty machine folder, and a ledger from an earlier version comes across in these steps: in the old version, “Export ledger mirror” to a folder outside the machine folder, then quit; move the old machine folder ~/.zikaron-desk.d/ aside together with the pointer file ~/.zikaron-desk; start this version, set a passcode and import the identity with the same recovery words; when the wizard reaches “Create the ledger”, press “Adopt existing ledger folder”, choose the author folder inside the mirror and press “Adopt in place”; last, run a ledger check on the Ledger page and see that it reads “OK”. Encrypted local files this version writes are unreadable to earlier versions.")
             return (seg(p, t("安装包", "Package")) + osp("dmg", dmg, 0) + osp("pkg", pkg, 1)
                     + f'<p class="t path">{path}</p><p class="why">{why}</p><p class="t">{up}</p>')
         if p == "windows":
@@ -366,8 +366,8 @@ def download():
     </ol>"""
             why = t("为什么有这一步:程序没有签名。Windows 11 开着「智能应用控制」时,未签名的程序会被直接拦下,没有「仍要运行」,也不能单独放行这一个程序;要用就先在「Windows 安全中心 › 应用和浏览器控制 › 智能应用控制设置」里把它关掉。",
                     "Why this step: the program is unsigned. On Windows 11 with Smart App Control on, unsigned programs are blocked outright, with no Run anyway and no way to allow this one program; to use it, first turn Smart App Control off under Windows Security › App & browser control › Smart App Control settings.")
-            up = t("升级时,用新版的文件夹替换旧的。本机数据在 %LOCALAPPDATA%\\ZIKARON\\,删掉解压的文件夹不会删掉它。新版写过的本机加密文件要用新版来读:升级之后,请一直用新版打开这份数据。开始菜单项与桌面快捷方式要自己加;要在任何终端里直接敲 zikaron,打开应用「设置 › 本机数据」的「启用命令行」,它把命令行所在的文件夹加进本用户的 PATH。",
-                   "To upgrade, replace the old folder with the new one. Your local data lives in %LOCALAPPDATA%\\ZIKARON\\, so deleting the unzipped folder leaves it in place. Encrypted local files a new version writes are read by the new version, so after upgrading, keep opening the same data with the new version. Start menu entries and desktop shortcuts are up to you; to type zikaron in any terminal, turn on “Enable command line” in the app’s Settings › Local data, which adds the command line’s folder to this user’s PATH.")
+            up = t("本机数据在 %LOCALAPPDATA%\\ZIKARON\\,与解压的文件夹分开存放。开始菜单项与桌面快捷方式要自己加;要在任何终端里直接敲 zikaron,打开应用「设置 › 命令行」的「启用 zikaron 命令」,它把命令行所在的文件夹加进本用户的 PATH。升级时,用新版的文件夹替换旧的。从 0.1.2 或更早的版本升级:本版从一个空的机器目录起步,早先版本的账本照下面几步带过来:先在旧版里「导出账本镜像」到机器目录之外的文件夹,然后退出;把旧的机器目录 %LOCALAPPDATA%\\ZIKARON\\.zikaron-desk.d\\ 连同指针文件 %LOCALAPPDATA%\\ZIKARON\\.zikaron-desk 一起挪开;启动本版,设口令,用同一组助记词导入身份;向导走到「创建账本」时点「收编已有账本目录」,选镜像里的 author 文件夹,按「原位收编」;最后在账本页跑一趟账本检查,看它答「正常」。本版写过的本机加密文件,早先版本读不了。",
+                   "Local data lives in %LOCALAPPDATA%\\ZIKARON\\, apart from the unzipped folder. Start menu entries and desktop shortcuts are up to you; to type zikaron in any terminal, turn on “Enable the zikaron command” in the app’s Settings › Command line, which adds the command line’s folder to this user’s PATH. To upgrade, replace the old folder with the new one. Upgrading from 0.1.2 or earlier: this version starts from an empty machine folder, and a ledger from an earlier version comes across in these steps: in the old version, “Export ledger mirror” to a folder outside the machine folder, then quit; move the old machine folder %LOCALAPPDATA%\\ZIKARON\\.zikaron-desk.d\\ aside together with the pointer file %LOCALAPPDATA%\\ZIKARON\\.zikaron-desk; start this version, set a passcode and import the identity with the same recovery words; when the wizard reaches “Create the ledger”, press “Adopt existing ledger folder”, choose the author folder inside the mirror and press “Adopt in place”; last, run a ledger check on the Ledger page and see that it reads “OK”. Encrypted local files this version writes are unreadable to earlier versions.")
             return steps + f'<p class="t path">{path}</p><p class="why">{why}</p><p class="t">{up}</p>'
         d, a = f["deb"], f["appimage"]
         def sumstep(g): return f'<li><b>{t("核对 SHA-256,结果应与下方「核对」里列出的一致:", "Check the SHA-256; it should match the value listed under Check below:")}</b>{cmd(f"sha256sum ~/Downloads/{g}")}</li>'
@@ -383,7 +383,7 @@ def download():
     </ol>"""
         why = t("两个包都没有签名,以 SHA-256 核对。系统的选档框经由桌面门户,需要装 xdg-desktop-portal 和一个后端,如 xdg-desktop-portal-gtk;没有门户时,可以把文件直接拖进窗口。拖放要经 X11:有 X 显示时(包括 Wayland 桌面上的 XWayland)照常可用,没有 X 显示的纯 Wayland 会话收不到拖进来的文件。",
                 "Neither package is signed; check them by their SHA-256. The system file dialog goes through the desktop portal, so install xdg-desktop-portal and a backend such as xdg-desktop-portal-gtk; without a portal, drag files straight into the window. Dropping files needs X11: with an X display (XWayland on a Wayland desktop included) it works as usual, and a pure Wayland session with no X display receives no dropped files.")
-        upl = t("升级时,装新版即可,原来的账本与本机数据照常打开。新版写过的本机加密文件要用新版来读:升级之后,请一直用新版打开这份数据。", "To upgrade, install the new version; your ledgers and local data open as before. Encrypted local files a new version writes are read by the new version, so after upgrading, keep opening the same data with the new version.")
+        upl = t("升级时,装新版即可。从 0.1.2 或更早的版本升级:本版从一个空的机器目录起步,早先版本的账本照下面几步带过来:先在旧版里「导出账本镜像」到机器目录之外的文件夹,然后退出;把旧的机器目录 ~/.zikaron-desk.d/ 连同指针文件 ~/.zikaron-desk 一起挪开;启动本版,设口令,用同一组助记词导入身份;向导走到「创建账本」时点「收编已有账本目录」,选镜像里的 author 文件夹,按「原位收编」;最后在账本页跑一趟账本检查,看它答「正常」。本版写过的本机加密文件,早先版本读不了。", "To upgrade, install the new version. Upgrading from 0.1.2 or earlier: this version starts from an empty machine folder, and a ledger from an earlier version comes across in these steps: in the old version, “Export ledger mirror” to a folder outside the machine folder, then quit; move the old machine folder ~/.zikaron-desk.d/ aside together with the pointer file ~/.zikaron-desk; start this version, set a passcode and import the identity with the same recovery words; when the wizard reaches “Create the ledger”, press “Adopt existing ledger folder”, choose the author folder inside the mirror and press “Adopt in place”; last, run a ledger check on the Ledger page and see that it reads “OK”. Encrypted local files this version writes are unreadable to earlier versions.")
         other = t('别的架构或发行版:按<a href="docs/dev/build.html">开发者指南 · 从源码构建</a>构建。', 'Other architectures or distributions: build from source; see <a href="docs/dev/build.html">Developer guide · Building from source</a>.')
         return (seg(p, t("安装包", "Package")) + osp("deb", deb, 0) + osp("appimage", app, 1)
                 + f'<p class="t path">{path}</p><p class="why">{why}</p><p class="t">{upl}</p><p class="t">{other}</p>')

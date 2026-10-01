@@ -21,7 +21,7 @@
 <script>document.documentElement.classList.add('js')</script>
 <link rel="alternate" hreflang="zh" href="../../../docs/wiki/keys.html">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
-<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
+<link rel="stylesheet" href="../../../style.css?v=4188f64f">
 <style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
 <body class="doc-page">
 <header class="top dtop"><div class="frame-w">
@@ -46,19 +46,19 @@
 <li>“Lock” in the sidebar, or ⌘L (Ctrl+L on Windows and Linux), locks at once. After 15 idle minutes the app locks on its own; change the time in Settings › Identity key.</li>
 </ul>
 <h2 id="forgot">A forgotten passcode</h2>
-<p>On the passcode gate, press “Forgot passcode”, fill in the 12 recovery words of this computer’s primary identity (by default the first one made here), or choose its key file, and set a new passcode. You can also press “Restore from backup…” and restore from a whole-machine backup.</p>
+<p>On the passcode gate, press “Forgot passcode”, fill in the 12 recovery words of this computer’s primary identity (by default the first one made here); or open “Recover with a key file”, choose a key file exported from either role of the primary identity and enter its password. Then set a new passcode. You can also press “Restore from backup” and restore from a whole-machine backup.</p>
 <h2 id="backup">Whole-machine backup</h2>
 <ol>
-<li>Open Settings › Local data and press “Export backup…”.</li>
+<li>Open Settings › Local data and press “Export backup”.</li>
 <li>Enter your passcode, set a backup password (at least 8 characters), choose where to save, and press “Export”.</li>
 </ol>
 <p>One file restores the identities, ledgers and settings of the whole computer. The app reads it back once written, and the backup counts once it says “Backup exported”. The backup light is green when up to date, amber when new records have come since (it says how many), grey when there has never been a backup, and red when the last one failed; export again.</p>
-<p>To restore, press “Restore from backup…” in Settings › Local data, choose the backup file, and enter the backup password and this computer’s passcode. Afterwards this computer holds what the backup holds.</p>
+<p>To restore, press “Restore from backup” in Settings › Local data, choose the backup file, and enter the backup password and this computer’s passcode. Afterwards this computer holds what the backup holds, and “With a credential” is off; turn it on again when you need it.</p>
 <h2 id="identities">Several identities</h2>
-<p>Click the identity chip at the top of the sidebar to open “Switch identity”: switch, or use “New identity…” or “Import key…”. Each identity has its own keys, network and ledgers.</p>
-<p>A key used elsewhere starts read-only once imported: the app compares its records on chain with the ledger here, and writing opens once they line up. When they differ, fetch the ledger from that computer’s whole-machine backup with “Fetch ledger”.</p>
+<p>Click the identity chip at the top of the sidebar to open “Switch identity”: switch, or use “New identity” or “Import key”. Each identity has its own keys, network and ledgers.</p>
+<p>A key used elsewhere starts read-only once imported: the app compares its records on chain with the ledger here, and writing opens once they line up. When they differ, fetch the ledger from that computer’s whole-machine backup with “Fetch ledger”, or take over that ledger’s folder or ledger mirror with “Adopt existing ledger folder” under “Advanced options” in Settings › Local data.</p>
 <h2 id="handover">Moving to a new key</h2>
-<p>If you fear a key has leaked, or want someone else to carry on the ledger, use Ledger › More › “Change key or hand over…”: fill in the new key’s address, confirm, and put it on chain. From then on the new key writes this ledger, and this computer reads it.</p>
+<p>If you fear a key has leaked, or want someone else to carry on the ledger, use Ledger › More › “Key handover”: fill in the new key’s address, confirm, and put it on chain. From then on the new key writes this ledger, and this computer reads it.</p>
 <h2 id="rules">Using your identity key safely</h2>
 <ul>
 <li>Keep only a little ETH at its address, enough for gas; keep other assets at other addresses.</li>
@@ -66,7 +66,7 @@
 <li>One key writes one ledger.</li>
 </ul>
 <h2 id="data">Where your data lives</h2>
-<p>Ledgers, settings and received grants are kept encrypted on your computer and open with your passcode; exported record kits, grant files and credentials are ordinary files, ready to hand to others. To move it elsewhere, use “Move to an empty folder” under “Advanced options” in Settings › Local data. When the same data sits on a synced disk with two computers open, one of them writes; the other shows a bar at the top, and “Write from this machine” moves writing to it.</p>
+<p>Ledgers, settings and received grants are kept encrypted on your computer and open with your passcode; the language and appearance the passcode gate needs, and the list of read-only networks, are kept in plain on this computer; exported record kits, grant files and credentials (for showing a grant) are ordinary files, ready to hand to others. To move it elsewhere, use “Move to an empty folder” under “Advanced options” in Settings › Local data. When the same data sits on a synced disk with two computers open, one of them writes; the other shows a bar at the top, and “Write from this machine” moves writing to it.</p>
 <div class="pn"><a href="evidence.html"><span>Previous</span>What a record proves</a><a class="nx" href="cli.html"><span>Next</span>Command line</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#keep">Three things to keep safe</a><a href="#pin">Passcode and locking</a><a href="#forgot">A forgotten passcode</a><a href="#backup">Whole-machine backup</a><a href="#identities">Several identities</a><a href="#handover">Moving to a new key</a><a href="#rules">Using your identity key safely</a><a href="#data">Where your data lives</a></nav></div>
 <script src="../../../site.js?v=8606e8b4" defer></script>
 </body>
