@@ -738,7 +738,7 @@ pick();
 // 最后一页就是页面的底;拖滚动条停在两页之间的,落到最近的一页
 // 页与页之间可以夹一段照常滚动的正文(.flow):翻进来停在它的上沿(从下面翻回来停在下沿),在里面照常滚,滚到上下两头即停;下一次手势先让它淡出,再翻到相邻的一页
 var th=document.querySelector('.theater');if(th)(function(){
-var R=document.documentElement,bs=[].slice.call(th.children).filter(function(b){return b.classList.contains('beat')}),fl=th.querySelector('.flow'),F=null,FI=-1,out=0,wasIn=false,tT=0,turnAt=-1e9,stops=null,cur=0,prevY=scrollY,gT=0,used=false,acc=0,peak=0,tail=1e9,last=0,t0=null,tDir=0,tMode=0,st=null;
+var R=document.documentElement,bs=[].slice.call(th.children).filter(function(b){return b.classList.contains('beat')}),fl=th.querySelector('.flow'),F=null,FI=-1,out=0,wasIn=false,tT=0,turnAt=-1e9,stops=null,cur=0,prevY=scrollY,gT=0,used=false,acc=0,peak=0,tail=1e9,last=0,t0=null,tDir=0,tMode=0,st=null,pT=-1e9,pDt=1e9;
 if(!bs.length)return;
 function on(){return R.classList.contains('sand-on')}
 function S(){if(!stops){var y=scrollY;stops=bs.map(function(b,k){return k?Math.round(b.getBoundingClientRect().top+y):0});
@@ -756,11 +756,15 @@ function inside(d){var y=scrollY,l=L();if(inF(y))return d>0?y>=F[1]-2:y<=F[0]+2;
 function edge(y,dy){if(!inF(y))return null;if(dy>0&&y<F[1]-2&&y+dy>F[1])return F[1];if(dy<0&&y>F[0]+2&&y+dy<F[0])return F[0];return null}
 addEventListener('wheel',function(e){
 if(!on()||e.ctrlKey)return;var dy=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?innerHeight:1);if(!dy)return;
-// 新的一次手势:停了 0.18 秒以上;或惯性已衰减下去,滚动量又突然回升(惯性里再划一下)。
-// 翻页那一刻沙画要备下一幕,事件会被拖后:翻页后 0.7 秒内、以及 1.6 秒内比这次峰值弱一截的,都算这次手势的惯性
-var now=performance.now(),a=Math.abs(dy),tailing=used&&(now-turnAt<700||(now-turnAt<1600&&a<peak*.6));
-if((now-gT>180&&!tailing)||(used&&tail<peak*.35&&a>12&&a>tail*4&&a>last*1.5)){used=false;acc=0;peak=0;tail=1e9}
-gT=now;peak=Math.max(peak,a);if(a<peak*.35)tail=Math.min(tail,a);last=a;
+// 新的一次手势:真停了一下;或惯性已衰减下去,滚动量又突然回升(惯性里再划一下)。
+// 时刻取事件自己的时间戳(手指与滚轮实际动的那一刻),强弱按速度算(位移除以与上一个事件相隔的时间)。
+// 翻页时沙画备下一幕,主线程忙,浏览器把这段时间的事件并成一个、位移相加:隔得久,速度却接着上一个;真停下来的,隔得久且速度掉下去。
+// 所以「停了」要隔 0.18 秒以上、且速度不到上一个的一半;隔一秒以上的、或事件本来就稀疏的(鼠标滚轮一格一格拨,上一个也是隔了好久才来)一律算停。并起来的事件因此仍算这次手势的惯性
+// 翻页后 0.7 秒内、以及 1.6 秒内比这次峰值弱一截的,也都算这次手势的惯性
+var now=e.timeStamp||performance.now(),dt=now-pT,a=Math.abs(dy)*16/Math.max(8,dt);pT=now;
+var paused=dt>180&&(dt>1000||a<last*.5||pDt>100),tailing=used&&(now-turnAt<700||(now-turnAt<1600&&a<peak*.6));
+if((paused&&!tailing)||(used&&tail<peak*.35&&a>12&&a>tail*4&&a>last*1.5)){used=false;acc=0;peak=0;tail=1e9}
+gT=now;pDt=dt;peak=Math.max(peak,a);if(a<peak*.35)tail=Math.min(tail,a);last=a;
 // 正文一段淡出、还没翻过去:这次手势照样记着,余下的惯性吞掉,翻过去以后也不会再翻一页
 if(out){e.preventDefault();used=true;return}
 var y=scrollY,l=L(),cross=dy<0&&y>l+2&&y+dy<l,ed=edge(y,dy);
