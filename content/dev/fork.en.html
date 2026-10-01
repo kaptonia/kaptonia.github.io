@@ -11,7 +11,7 @@ title: Forks and independent implementations
 <p>Changing the interface, adding features and changing defaults all belong to the tooling layer, and you are free to do them. Please attend to three points:</p>
 <dl>
 <div><dt>Take another name</dt><dd>So that users can tell the two programs apart.</dd></div>
-<div><dt>Take another machine folder</dt><dd>So that the two programs keep their key stores and data apart: on macOS and Linux, change the names <code>~/.zikaron-desk</code> and <code>~/.zikaron-desk.d/</code> (and, on macOS, <code>~/Library/Application Support/ZIKARON</code>, which the app also takes up); on Windows, change the <code>ZIKARON</code> folder name under <code>%LOCALAPPDATA%</code>.</dd></div>
+<div><dt>Take another machine folder</dt><dd>So that the two programs keep their key stores and data apart: on macOS and Linux, change the names <code>~/.zikaron-desk</code> and <code>~/.zikaron-desk.d/</code> (and, on macOS, <code>~/Library/Application Support/ZIKARON</code>, which the app also takes up); on Windows, change the <code>ZIKARON</code> folder name under <code>%LOCALAPPDATA%</code>. The literals to change are all registered in <code>crates/app/family-literals.json</code>, such as the format literals of local encrypted files, the local channel’s name, the link name “Enable command line” places, the <code>User-Agent</code> and the pointer file’s name; left unchanged, the two programs’ local channels and command-line links collide.</dd></div>
 <div><dt>Stay conforming to the law</dt><dd>The original can read ledgers your fork writes, and your fork can read ledgers the original writes.</dd></div>
 </dl>
 <h2 id="rules">Changing the rules</h2>
@@ -22,7 +22,7 @@ title: Forks and independent implementations
 <li>Write ledgers under the new rules with a new key.</li>
 </ul>
 <h2 id="registry">The registry contract</h2>
-<p>The contract is shared by everyone. Anyone can deploy the same bytes on any EVM chain that has passed the Shanghai upgrade and get the same code hash. A verifier states in its scan range which addresses it accepts; a contract you deploy and one someone else deploys stand equal before the law. ZIKARON Desk’s read-only networks accept the one pinned code hash alone; a contract built separately can serve in it only as an identity’s main network.</p>
+<p>The contract is shared by everyone. Anyone can deploy the same bytes on any EVM chain that has passed the Shanghai upgrade and get the same code hash. A verifier states in its scan range which addresses it accepts; a contract you deploy and one someone else deploys stand equal before the law. ZIKARON Desk accepts the one pinned code hash alone, checking it before reading a read-only network and when the main network’s chain settings are saved, so everything in it runs on that one pinned code.</p>
 <h2 id="govern">Who decides</h2>
 <dl>
 <div><dt>The law</dt><dd>The frozen core decides. Maintainers, like everyone else, can only start a new version.</dd></div>

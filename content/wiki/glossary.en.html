@@ -1,69 +1,52 @@
 <!--
 title: Glossary
 -->
-<p class="lede">Common words in the interface and these documents, grouped by use; the term used in the law texts and on the command line is in brackets.</p>
+<p class="lede">Common words in the app, each in a sentence or two.</p>
 <div class="proj"><section data-p="zikaron">
-<h2 id="ledger">The ledger</h2>
+<h2 id="ledger">Records</h2>
 <dl>
-<div><dt>Ledger</dt><dd>A chain of signed entries written in order, which can only be appended to; after a handover, a new key continues it. One for each role. (ledger)</dd></div>
-<div><dt>Entry</dt><dd>One item of a ledger, carrying its author’s signature and the ID of the entry before it. (entry)</dd></div>
-<div><dt>Content fingerprint</dt><dd>A 32-byte digest computed from a run of bytes; change one byte of the content and the fingerprint changes beyond recognition. (digest, SHA-256)</dd></div>
-<div><dt>Create the ledger</dt><dd>The root of the ledger, its first entry. (genesis)</dd></div>
-<div><dt>Anchored record</dt><dd>An entry that records the content fingerprint of one record. (history)</dd></div>
-<div><dt>Note on entry</dt><dd>An entry that adds a note to an earlier entry. (annotation)</dd></div>
-<div><dt>Adoption</dt><dd>An entry that brings anchors this key put on chain earlier into the ledger. (adoption)</dd></div>
-<div><dt>Key change or handover</dt><dd>An entry that hands the ledger to a new key. (succession)</dd></div>
-<div><dt>Deletion</dt><dd>An entry that marks a record as deleted; a reading convention of this app. (retraction)</dd></div>
-<div><dt>Recorded for</dt><dd>The app, their identity, their reference and their role, optionally filled in when recording and written into the entry as they are.</dd></div>
+<div><dt>Ledger</dt><dd>A record book of your own, written one entry after another, with every entry kept as written. The Recorder and the User each have one.</dd></div>
+<div><dt>Entry</dt><dd>One item in a ledger, carrying your signature.</dd></div>
+<div><dt>Record</dt><dd>The kind of entry that holds a file’s content fingerprint.</dd></div>
+<div><dt>Content fingerprint</dt><dd>A number worked out from a file’s content. The same file always gives the same one; one changed byte gives a wholly different one.</dd></div>
+<div><dt>Note</dt><dd>An entry that adds an explanation to an earlier one.</dd></div>
+<div><dt>Deleting a record</dt><dd>Marks a record as deleted; the original entry stays as it was.</dd></div>
 </dl>
-<h2 id="chain">Anchoring</h2>
+<h2 id="chain">On chain</h2>
 <dl>
-<div><dt>Put on chain (anchor)</dt><dd>Send entries in a transaction on the network this identity chose. (anchor)</dd></div>
-<div><dt>Registry contract</dt><dd>A small contract on chain that emits an event for every 32-byte hash it receives, shared by everyone; the app sends entry IDs. (registry)</dd></div>
-<div><dt>Pending</dt><dd>Entries written to the ledger and queued to be sent.</dd></div>
-<div><dt>First anchor block time</dt><dd>The time of the block in which an entry first went on chain.</dd></div>
-<div><dt>Ledger check</dt><dd>The result of comparing every local entry with the anchors on chain; “Confirmed” rests on it. (audit)</dd></div>
-<div><dt>Auto put on chain</dt><dd>A setting that, when on, opens the “Put on chain” card right after writing.</dd></div>
-<div><dt>Network</dt><dd>Four things together: chain ID, registry contract, start block and nodes. Each identity keeps its own network, shared by both roles; the presets are Ethereum mainnet, Sepolia testnet, Arbitrum One and OP Mainnet.</dd></div>
-<div><dt>Read-only network</dt><dd>A network used only to check other people’s material, never to send transactions; the code fingerprint of its registry is checked before each read.</dd></div>
-<div><dt>Gas limit</dt><dd>The gas a transaction carries: one and a half times the nodes’ estimate, at most 200,000.</dd></div>
+<div><dt>Putting on chain</dt><dd>Sending new entries in a transaction on a blockchain. From then on anyone can check that they existed by that moment.</dd></div>
+<div><dt>Pending</dt><dd>Entries written to your ledger and waiting for you to send them.</dd></div>
+<div><dt>Gas</dt><dd>The fee a chain charges for a transaction, paid in ETH.</dd></div>
+<div><dt>Network</dt><dd>The chain your records go to: Ethereum mainnet, Arbitrum One, OP Mainnet or the Sepolia testnet.</dd></div>
+<div><dt>Node</dt><dd>A server the app uses to read the chain and send transactions. The app comes with public ones.</dd></div>
+<div><dt>Read-only network</dt><dd>Another chain, added only to verify other people’s records.</dd></div>
+<div><dt>Ledger check</dt><dd>The app’s regular comparison of your ledger with the chain; “Confirmed” rests on it.</dd></div>
 </dl>
 <h2 id="grant">Grants</h2>
 <dl>
-<div><dt>Grant</dt><dd>An entry that lets an address use a record for a period of time, with the fingerprint of a terms file. (grant)</dd></div>
-<div><dt>Revocation</dt><dd>An entry that revokes a grant. (revocation)</dd></div>
-<div><dt>Terms file</dt><dd>The file that sets out what a grant means; the grant records its fingerprint. (terms)</dd></div>
-<div><dt>Grant code</dt><dd>A line of text starting with <code>zikaron-grant:</code>, enough to verify the signature and validity.</dd></div>
-<div><dt>Grant file</dt><dd>A <code>.zkgrant</code> file carrying the issuer’s ledger, enough for the full check.</dd></div>
-<div><dt>Sublicense</dt><dd>A grant a User writes in their own ledger on the strength of a grant they hold, passing it on to someone else.</dd></div>
-<div><dt>Credential</dt><dd>Proof of a grant for a third party: a text file and a QR code. (badge)</dd></div>
-<div><dt>Revocation watch</dt><dd>The check after each re-verification for grants revoked and issuer ledgers handed over.</dd></div>
+<div><dt>Grant</dt><dd>An entry that lets an address use a work for a period of time, with a terms file attached.</dd></div>
+<div><dt>Terms file</dt><dd>The file that says what a grant means: exclusivity, use, price, breach.</dd></div>
+<div><dt>Grant file</dt><dd>A <code>.zkgrant</code> file carrying the issuer’s ledger, for the full check.</dd></div>
+<div><dt>Grant code</dt><dd>A line of text starting with <code>zikaron-grant:</code>, for checking the signature and the validity.</dd></div>
+<div><dt>Revocation</dt><dd>An entry that takes a grant back, for good.</dd></div>
+<div><dt>Sublicense</dt><dd>A grant a User passes on to someone else on the strength of one they hold.</dd></div>
+<div><dt>Credential</dt><dd>Proof of a grant for a third party: a line of text and a QR code.</dd></div>
 </dl>
 <h2 id="verify">Presenting and verifying</h2>
 <dl>
-<div><dt>Record kit</dt><dd>A folder exported from a ledger, holding the chosen entries, the original files and the on-chain proofs. (disclosure kit)</dd></div>
-<div><dt>Six checks</dt><dd>The six items checked one by one when verifying a grant: grant signature, issuer ledger intact, in the issuer’s ledger, confirmed on chain, within validity, not revoked.</dd></div>
-<div><dt>All passed, Has gaps, Failed</dt><dd>The three verdicts of a check. (GREEN, PARTIAL, FAIL)</dd></div>
-<div><dt>Depth readings</dt><dd>Three numbers: first recorded, max depth and continuity. (depth)</dd></div>
-<div><dt>Published address</dt><dd>The https address where you put record kits online.</dd></div>
-<div><dt>Verification result file</dt><dd>A result written under <code>kits/verified/</code> in the machine folder after a record kit is verified, for other apps to read. (zikaron.kit-verification/1)</dd></div>
-<div><dt>Due diligence</dt><dd>Before taking a grant, checking whether active grants already in the other side’s ledger overlap the period you need.</dd></div>
+<div><dt>Record kit</dt><dd>A folder exported from a ledger, with the chosen records, their original files and their on-chain proofs, for someone else to verify.</dd></div>
+<div><dt>The six checks</dt><dd>What verifying a grant checks: signature, issuer ledger intact, in the issuer’s ledger, on chain, within validity, not revoked.</dd></div>
+<div><dt>All passed, Has gaps, Failed</dt><dd>The three verdicts on a grant; on the Verify page a pass reads “All six checks passed”. “Has gaps” means some checks have not come through yet, for example confirmation on chain is pending or the issuer’s ledger is missing.</dd></div>
+<div><dt>Published address</dt><dd>The https address where you place a record kit online.</dd></div>
 </dl>
-<h2 id="key">Identities and data</h2>
+<h2 id="key">Identities and backups</h2>
 <dl>
-<div><dt>Identity</dt><dd>A set of signing keys and the data under it. Either a recovery-phrase identity or a local-key identity.</dd></div>
-<div><dt>Role</dt><dd>Recorder or User, each with its own key, address and ledger.</dd></div>
-<div><dt>Identity chip</dt><dd>The card at the top of the sidebar showing the current identity; click it to switch, create or import identities.</dd></div>
-<div><dt>Recovery phrase</dt><dd>12 words that derive a recovery-phrase identity’s two keys again.</dd></div>
-<div><dt>Primary identity</dt><dd>The identity whose credentials can reset a forgotten passcode.</dd></div>
-<div><dt>Passcode</dt><dd>8 letters or digits that open this machine’s key store.</dd></div>
-<div><dt>Master key</dt><dd>The key that encrypts all local data, opened by the passcode.</dd></div>
-<div><dt>Key store</dt><dd>The encrypted file on this machine that holds the keys.</dd></div>
-<div><dt>Key file</dt><dd>One exported key in the standard keystore format, with a file password.</dd></div>
-<div><dt>Whole-machine backup</dt><dd>One encrypted file holding every identity, key, data and setting, with the extension <code>.zikaron</code>.</dd></div>
-<div><dt>Ledger mirror</dt><dd>A copy of the ledger exported for other tools to read.</dd></div>
-<div><dt>Machine folder</dt><dd>Where the key store, the identity registry and the machine settings live; one per machine.</dd></div>
-<div><dt>Checked facts</dt><dd>Anchors several nodes confirmed alike, kept on this machine with their block time and verdict so that later syncs stop asking about them one by one.</dd></div>
-<div><dt>Data folder</dt><dd>Where one role of one identity keeps its ledger and settings.</dd></div>
+<div><dt>Identity</dt><dd>A set of signing keys, with the ledgers and settings that go with them. A computer can hold several.</dd></div>
+<div><dt>Recorder, User</dt><dd>The two roles of an identity, each with its own key, address and ledger.</dd></div>
+<div><dt>Primary identity</dt><dd>The identity whose recovery words set a new passcode when you forget yours. By default the first one made on this computer; change it in Settings › Identity key.</dd></div>
+<div><dt>Recovery words</dt><dd>12 English words that recreate your keys. Keep them on paper.</dd></div>
+<div><dt>Passcode</dt><dd>8 letters or digits that open the keys and data on this computer.</dd></div>
+<div><dt>Key file</dt><dd>One key exported with a file password, readable by other wallets too.</dd></div>
+<div><dt>Whole-machine backup</dt><dd>One encrypted file with every identity, ledger and setting, opened with the backup password.</dd></div>
 </dl>
 </section></div><!--/proj-->

@@ -3,10 +3,10 @@ title: 发布
 -->
 <p class="lede">发布物须能由任何人逐字节核对：校验值、签名，以及源码包与标签的一致。本页是维护者发布版本的步骤。</p>
 <h2 id="version">版本号</h2>
-<p>采用 <code>主.次.修订</code> 三段。每个版本的变化都列进更新记录：新增、变更与修复，文件格式与命令行输出的变化，升级时用户要做的事。旧版本写下的账本、记录包与数据目录，新版本照常读写。法的版本写在法的规格名中，与软件版本相互独立。</p>
+<p>采用 <code>主.次.修订</code> 三段。每个版本的变化都列进更新记录：新增、变更与修复，文件格式与命令行输出的变化，升级时用户要做的事。旧版本写下的账本、记录包与数据目录，新版本照常读写；本机加密文件的格式升了一版时，新版写过的文件要用新版来读，更新记录与发布说明写明升级之后一直用新版打开同一份数据。法的版本写在法的规格名中，与软件版本相互独立。</p>
 <h2 id="before">发布前</h2>
 <ul class="chk">
-<li>主干全部测试通过：持续集成在 macOS、Linux 与 Windows 上构建并测试，各平台的包再到真机上装一次、开一次。</li>
+<li>主干全部测试通过：持续集成在 macOS、Linux 与 Windows 上构建并测试，macOS 与 Linux 两格还按发布的方式构建并核对二进制里只有中性的路径名；各平台的包再到真机上装一次、开一次。</li>
 <li>两部法的摘要重算相符。</li>
 <li>核与冻结核比对零分歧；链面录制全部回放一致。</li>
 <li>合约代码哈希重算无误。</li>
@@ -19,15 +19,15 @@ title: 发布
 <p>发布包从打了标签的那次提交构建，三个系统各用自己的工具：</p>
 {{cmd:git tag v{{VER}}}}
 <dl>
-<div><dt>macOS</dt><dd>{{cmd:packaging/macos/build.sh --identity Kaptonia}}脚本以 <code>--locked</code> 构建应用与命令行，把窗口程序 <code>zikaron-desk</code>、命令行 <code>zikaron</code> 和第三方许可装进 <code>ZIKARON.app</code>，逐个签名并校验，再做成 <code>dist/ZIKARON-&lt;版本&gt;-macos-&lt;架构&gt;.dmg</code>(带一个指向「应用程序」的链接)与 <code>.pkg</code>(应用进 <code>/Applications</code>，命令行进 <code>/usr/local/bin</code>)，并写出 <code>SHA256SUMS-macos-&lt;架构&gt;.txt</code>。包里去掉扩展属性，dmg 里的属主、日期与分区名、pkg 里的属主与日期都中性化。</dd></div>
-<div><dt>Linux</dt><dd>{{cmd:packaging/linux/build.sh}}在别的主机上改用 <code>cross-build.sh</code>，以 glibc 2.31 为目标。打出 <code>.deb</code> 与 AppImage，第三方许可放在 <code>/usr/share/doc/zikaron-desk/</code>，二进制的 <code>.comment</code> 段清空。</dd></div>
+<div><dt>macOS</dt><dd>{{cmd:packaging/macos/build.sh --identity Kaptonia}}脚本先构建 <code>zikaron-pack</code>，由它给出路径映射的编译参数(<code>zikaron-pack rustflags</code>)，再以 <code>--locked</code> 构建应用与命令行，用 <code>zikaron-pack no-paths</code> 核对二进制里只有中性的路径名，有残留即停在出包之前；然后把窗口程序 <code>zikaron-desk</code>、命令行 <code>zikaron</code> 和第三方许可装进 <code>ZIKARON.app</code>，逐个签名并校验，再做成 <code>dist/ZIKARON-&lt;版本&gt;-macos-&lt;架构&gt;.dmg</code>(带一个指向「应用程序」的链接)与 <code>.pkg</code>(应用进 <code>/Applications</code>，命令行进 <code>/usr/local/bin</code>)，并写出 <code>SHA256SUMS-macos-&lt;架构&gt;.txt</code>。包里去掉扩展属性，dmg 里的属主、日期与分区名、pkg 里的属主与日期都中性化。</dd></div>
+<div><dt>Linux</dt><dd>{{cmd:packaging/linux/build.sh}}在 Linux 本机上构建，路径映射与路径核对同 macOS；在别的主机上改用 <code>cross-build.sh</code>，以 glibc 2.31 为目标。<code>build.sh</code> 用 <code>dpkg-deb</code> 打出 <code>.deb</code>，<code>cross-build.sh</code> 用 <code>packaging/linux/make_deb.py</code> 写出；AppImage 就是钉定的 AppImage 运行时接上 <code>mksquashfs</code> 做的镜像，只用这两样。运行时按字节钉定(x86_64 为 type2-runtime 8f39b89)，下载来的不符即停，这时把钉定的文件经 <code>APPIMAGE_RUNTIME</code> 交给脚本；aarch64 尚待钉定运行时，只出 <code>.deb</code>。第三方许可放在 <code>/usr/share/doc/zikaron-desk/</code>，二进制的 <code>.comment</code> 段清空。</dd></div>
 <div><dt>Windows</dt><dd>{{cmd:cargo run --release --locked -p zikaron-pack -- windows --out dist}}在 Windows 上用 MSVC 排出 <code>dist/ZIKARON-&lt;版本&gt;-windows-x86_64/</code> 文件夹，再压成发布页上的 zip。</dd></div>
 </dl>
-<p>二进制去除符号表；家目录、源码目录与构建目录的路径在编译时映射掉，包里的日期一律取 <code>SOURCE_DATE_EPOCH</code>(默认为提交时刻)，产物独立于构建机器。</p>
+<p>二进制去除符号表；家目录、Cargo 与 rustup 的目录、源码目录与构建目录的路径在编译时映射掉，三个系统共用 <code>zikaron-pack</code> 里的同一张映射表，包里的日期一律取 <code>SOURCE_DATE_EPOCH</code>(默认为提交时刻)，产物独立于构建机器。</p>
 <h2 id="sums">校验值与 {{Z}} 证明</h2>
 <ol>
-<li>为每个发布物(各平台的包与源码包)计算 SHA-256，合成一份发布清单 <code>SHA256SUMS.txt</code>；三个平台的第三方许可单独发布。</li>
-<li>发布之前用项目的 Zikaron 账本记下这次提交和各发布物的指纹，一并上链；交易、区块、记录者地址与各项指纹写在<a href="verify.html#anchored">校验</a>页。</li>
+<li>为每个发布物(各平台的包与源码包)计算 SHA-256，合成一份发布清单 <code>SHA256SUMS.txt</code>；三个平台的第三方许可单独发布。发布页上共十个文件：六个包、发布清单与三份许可。</li>
+<li>发布之前用项目的 Zikaron 账本记下十条存证，一并上链：六个包、Windows 包里的两个程序、发布清单，以及这次提交；交易、区块、记录者地址与各项指纹写在<a href="verify.html#anchored">校验</a>页。</li>
 <li>发布页、网站下载页与清单三处的校验值一致；下载页的「Zikaron 证明」一栏填入各文件的上链交易。</li>
 </ol>
 <p>用户的核对方法见<a href="verify.html">校验</a>。</p>
@@ -37,13 +37,13 @@ title: 发布
 <h2 id="notes">发布说明</h2>
 <p>每个版本写明：新增、变更与修复；文件格式与命令行输出的变化；升级时用户需要做的事；已知限制。仓库里的 <code>CHANGELOG.md</code> 与 <code>CHANGELOG.en.md</code> 逐版记下，发布说明链到它们与这一版的手册。</p>
 <h2 id="contract">合约与网络</h2>
-<p>应用内置一张已知部署表，现有四行(以太坊主网、Sepolia 测试网、Arbitrum One、OP Mainnet)，每行写链号、登记合约地址、起始区块与两个预置节点。新增一行之前：</p>
+<p>应用内置一张已知部署表，共四行(以太坊主网、Sepolia 测试网、Arbitrum One、OP Mainnet)，每行写链号、登记合约地址、起始区块与两个预置节点。新增一行之前：</p>
 <ol>
 <li>读取链上代码，核对代码哈希。</li>
 <li>确认起始区块早于该合约上的第一条上链记录。</li>
 <li>预置节点选两个来源相异的，均支持 TLS、返回的链号正确，实测保有起始区块以来的完整日志，两者逐条一致，查询范围太大时以明确的文字拒答；只给最近一段窗口的、要付费的、限流的节点不选。</li>
 </ol>
-<p>一行发布之后，链号、登记合约与起始区块保持原样，旧账本依靠它们继续核验。预置节点不再保有完整日志时可以换：数据目录里的节点若仍是原来那一对、一字未改，打开时自动换成新的一对；用户改过的不动。</p>
+<p>一行发布之后，链号、登记合约与起始区块保持原样，旧账本依靠它们继续核验。预置节点的日志变得残缺时可以换，部署表为每一行留着早先的各对：以写者打开数据目录时，节点若与某一对早先预置的一字不差、次序相同，即换成现行的一对；用户改过的保持原样。</p>
 <h2 id="site">网站</h2>
 <p>网站随版本更新下载页的文件名、大小、校验值与 Zikaron 证明。页面由仓库中的脚本生成，生成结果一并提交。</p>
 <h2 id="after">发布后</h2>

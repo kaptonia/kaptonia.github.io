@@ -1,61 +1,37 @@
 <!--
 title: Grants
 -->
-<p class="lede">A grant is an entry in the ledger: it names the grantee, the record, the validity period and the fingerprint of the terms file. Once issued it can only be revoked; its content stays final.</p>
-<h2 id="draft">Drafting</h2>
-<p>Open “Grant” and press “New grant”, or press “Grant to someone” on a record’s detail page or “Use for grant” on an entry’s detail page (that record is filled in). The form’s fields:</p>
-<dl>
-<div><dt>Grantee</dt><dd>Paste a <code>0x…</code> address; “Recent addresses” on the right opens a floating card with a search field, listing the address book and earlier grantees. Whether the address stands for a person, a company or a contract is for the two sides to agree.</dd></div>
-<div><dt>Which record</dt><dd>Press “Choose a record” for a large floating card, one row per record with its entry number, record name and first anchor block time; search it, or filter by first anchor date. Only records confirmed on chain can be chosen; the rest are greyed out with the reason: “Grant after it is on chain”, “Going on chain, please wait”, “Waiting for this check” or “Deleted”.</dd></div>
-<div><dt>Terms file</dt><dd>Required; drop it in or click to choose it. Its SHA-256 fills “Terms file fingerprint”. When the grant is signed, a copy of the file is kept in the data folder; it later goes to the grantee with the grant file and record kits, so they can recompute the fingerprint and check it themselves.</dd></div>
-<div><dt>Validity</dt><dd>“7 days”, “30 days” (the default) or “90 days”, counted from chain time; or “Custom”, with start and end in Unix seconds. While chain time is still missing, sync once first, or use Custom.</dd></div>
-<div><dt>Exclusivity, sublicense and scope</dt><dd>The “Exclusive grant” switch, “Upstream grant (sublicense only)” and “Scope”.</dd></div>
-</dl>
-<p>Addresses and hashes in the grantee, terms file fingerprint and upstream fields are written all in lowercase; with a capital letter the sign button stays disabled. The overlap light beside them, “Overlapping live grants: N”, counts grants on the same record that are marked exclusive on this machine, overlap in time and are not revoked.</p>
-<h2 id="terms">The meaning lives in the terms</h2>
-<p>The ledger knows form alone: an address, a fingerprint, a span of time. Whether the grant is exclusive, where the work may be used, what it costs and what happens on breach are all written in the terms file. When the grantee recomputes the terms file’s fingerprint and it matches the one in the grant, they know it is the very file attached at signing.</p>
-<p>The “Exclusive grant” switch is recorded on your own machine: when the same record already has an exclusive grant with an overlapping period, the app shows “Exclusive grant conflict” and holds back the new one. Exclusivity that binds others belongs in the terms file.</p>
-<h2 id="issue">Issuing</h2>
+<p class="lede">A grant is a record in your ledger: who it is for, which work, for how long, with a terms file attached. Whoever receives it can verify it on their own.</p>
+<h2 id="issue">Issuing a grant</h2>
 <ol>
-<li>With grantee, record and terms file fingerprint all filled in, press “Add to ledger” (“Send to chain now” when “Auto put on chain” is on).</li>
-<li>The “Sign grant” confirmation card shows the record, validity, terms file and cost; the grantee and the fingerprints are under “Details”. Press again on the card to issue.</li>
-<li>The grant is written to the ledger and joins the pending queue; put it on chain as described under <a href="anchoring.html#queue">The pending queue</a>.</li>
+<li>Open “Grant” and press “New grant”, or press “Grant to someone” on a record’s detail page.</li>
+<li>Fill in the grantee: the other side’s <code>0x…</code> address. “Recent addresses” beside it lists addresses you have used.</li>
+<li>Press “Choose a record” and pick a work that is on chain.</li>
+<li>Drop in the terms file and choose the validity: 7, 30 or 90 days, or Custom.</li>
+<li>Press “Add to ledger”, press again on the confirmation card, then <a href="ledger.html#anchor">put it on chain</a> as with a record.</li>
 </ol>
-<p>The “Before signing” side column of the New grant page is a two-step checklist, “Fill in terms” and “Draft your first grant”, with the key’s balance shown below; each step can be marked done.</p>
-<h2 id="hand">Handing it over</h2>
+<h2 id="terms">What the terms say</h2>
+<p>The ledger records the address, the work, the period and the terms file’s fingerprint. Whether the grant is exclusive, where the work may be used, the price and what happens on breach all go in the terms file. When the grantee recomputes the terms file’s fingerprint and it matches the one in the grant, they know it is the very file attached at signing.</p>
+<h2 id="hand">Sending it</h2>
+<p>On the grant’s detail page, pick one way to send it:</p>
 <dl>
-<div><dt>Grant code</dt><dd>A line of text starting with <code>zikaron-grant:</code>; press “Copy grant code” on the grant’s detail page. It lets the receiver verify the signature and the validity period. A sublicense’s code carries every hop up to the root, the same text as in that grant’s credential and grant file.</dd></div>
-<div><dt>Grant file</dt><dd>“Export grant file…” writes a <code>grant-&lt;first ten hex characters of the grant’s entry ID&gt;.zkgrant</code> file holding the entries of every hop in the grant chain, the issuer’s ledger, the terms files and the grant code, so the receiver can run the full check. The app reads the chain once before exporting, and exports once the chain reads and holds no record this machine lacks (otherwise “Ledger is not up to date”).</dd></div>
+<div><dt>Grant file</dt><dd>Press “Export grant file…” for a <code>.zkgrant</code> file. It carries your ledger, so the grantee can run the full check. This is the one to prefer.</dd></div>
+<div><dt>Grant code</dt><dd>Press “Copy grant code” for a line of text starting with <code>zikaron-grant:</code>, easy to paste into a chat. It lets the grantee check the signature and the validity.</dd></div>
 </dl>
-<p>The list on the Grant page can be searched by grantee, record or state, and “Start date” and “End date” filter it by the block time the grant entry was anchored at; the state is judged by chain time: “Active”, “Expired”, “Not yet active”, “Revoked” or “Unknown”.</p>
 <h2 id="revoke">Revoking</h2>
-<p>Press “Revoke grant…” at the bottom of the grant’s detail page. The card shows the record and the original validity, and under “Details” you can fill in the fingerprint of a ruling file. Press “Revoke” to write the revocation entry, which joins the pending queue. A revocation is final, and every sublicense derived from that grant ends with it. Once it is on chain, the re-verification in the grantee’s My grants reads the issuer ledger on their machine and in their vault: on the same machine the revocation shows at once; when the vault holds an older copy of your ledger, the extra entry on chain makes that grant show “Has gaps”, and checking it in Verify › Verify grant with the updated record kit at your publish address shows the revocation.</p>
+<p>Press “Revoke grant…” at the bottom of the grant’s detail page, confirm, and put it on chain as well. A revocation is final, and every grant passed on from this one ends with it.</p>
 <h2 id="library">Receiving a grant</h2>
-<p>A User keeps the grants received in “My grants”. Press “Add grant”, paste the grant code or drop in the grant file, and press “Verify and add”:</p>
-<ul>
-<li>The app checks signatures and format first, and adds the grants once all of them pass.</li>
-<li>When a grant code carries a sublicense chain, every hop in it is added.</li>
-<li>A copy of the grant file is kept in the data folder, and the issuer ledger inside it is used for later checks.</li>
-<li>A grant code alone allows checking the signature and validity; for the full check, ask the issuer to export a grant file.</li>
-<li>“Grant name” and “Issuer name” are optional and kept on this machine alone, for the grant this addition is for (the last hop of a sublicense chain) and its issuer.</li>
-</ul>
-<p>Each grant has a card: its verdict, record name, issuer, validity and the time it went on chain in its issuer’s ledger. Above the cards you can search by record, issuer or verdict, and filter by the date it went on chain. There are four verdicts:</p>
-<dl>
-<div><dt>All passed</dt><dd>All six checks passed.</dd></div>
-<div><dt>Has gaps</dt><dd>Some checks still await a result, for example the issuer ledger is missing or the grant awaits confirmation on chain. Wait until the result is settled before relying on the grant.</dd></div>
-<div><dt>Failed</dt><dd>At least one check found a problem.</dd></div>
-<div><dt>Revoked by issuer</dt><dd>The issuer has revoked this grant.</dd></div>
-</dl>
-<p>“Verify again” re-verifies the whole vault grant by grant: it looks for the issuer’s ledger on this machine first, then in the vault, then scans the chain. Re-verification also runs on the interval in Settings › Notifications, 600 seconds out of the box. “By issuer” in the toolbar groups the grants by issuer, with problem groups first.</p>
-<p>Re-verification reads the main network alone. A grant anchored on a read-only network stays “Has gaps” in My grants and sits outside the revocation watch; check such a grant in Verify › Verify grant, which reads the read-only networks too.</p>
+<p>As a User, open “My grants”, press “Add grant”, paste the grant code or drop in the grant file, and press “Verify and add”. Each grant gets a card showing its verdict:</p>
+<div class="tw"><table>
+<thead><tr><th>Verdict</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>All passed</td><td>All six checks passed; you can rely on it</td></tr>
+<tr><td>Has gaps</td><td>Some checks have not come through: confirmation on chain is pending, or the issuer’s ledger is missing (when you added a grant code alone). Check again later, or ask for the grant file</td></tr>
+<tr><td>Failed</td><td>A check found a problem</td></tr>
+<tr><td>Revoked by issuer</td><td>The issuer has revoked the grant</td></tr>
+</tbody></table></div>
+<p>The app re-verifies the whole collection on its own from time to time. When a grant is about to expire, gets revoked, or its issuer hands the ledger to a new key, the Alerts page tells you.</p>
 <h2 id="badge">Credentials</h2>
-<p>A credential is proof of a grant for a third party, such as your customers: a text file and a QR code. Press “Create credential” on the credential card of a grant’s detail page: the app reads the chain once, follows the grant chain back to its root, and creates a <code>badge-&lt;first ten characters of the grant ID&gt;</code> folder at the save location holding <code>badge.txt</code> and the QR code <code>badge.svg</code>. The other party pastes the text into Verify › Verify grant to check it.</p>
+<p>To show a grant to your customers, open it in “My grants” and press “Create credential” for a line of text and a QR code. Anyone can paste the text into Verify › Verify grant to check it.</p>
 <h2 id="sub">Sublicensing</h2>
-<p>A grant that this session’s re-verification has passed on all six checks has “Sublicense to others” on its detail page. Pressing it first shows the “Sublicense” confirmation card; “Draft…” then opens the sublicense page. The upper half shows the upstream grant; the lower half is the same form as drafting a grant, with the record fixed to the upstream grant’s record.</p>
-<ul>
-<li>The sublicense is written to your own (User) ledger and goes into your own pending queue. A User needs a signing key and a ledger; the page leads you to “Create key…” or “Set up ledger…”.</li>
-<li>A sublicense lives within its upstream grant: when the upstream is revoked or expires, the sublicense ends with it. You set the validity yourself; set it within the upstream validity.</li>
-<li>When a sublicense is verified, each hop gets its own six checks, and each pair of adjacent hops is checked to link up.</li>
-</ul>
-<h2 id="watch">Revocation watch</h2>
-<p>After each re-verification of the whole vault, the app checks two things: has an issuer revoked a grant you hold, and has an issuer’s ledger been handed over to a new key. When either has happened, the window asks the system for attention once (on macOS the Dock icon bounces), an alert toast appears, and a red row is added at the end of the Alerts page. Each event alerts once.</p>
+<p>A grant that passed all six checks has “Sublicense to others” on its detail page, for granting it on to someone else. The sublicense goes into your own ledger and ends when the upstream grant expires or is revoked, so set its validity within the upstream’s.</p>

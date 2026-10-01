@@ -1,62 +1,41 @@
 <!--
-title: Identities and keys
+title: Keys and backups
 -->
-<p class="lede">An identity is a set of signing keys, generated on your machine or imported by you, kept in this machine’s key store and opened by the passcode. The app uses its own key store alone and leaves the system keychain as it is.</p>
-<h2 id="kinds">Two kinds of identity</h2>
-<dl>
-<div><dt>Recovery-phrase identity</dt><dd>Derived from 12 recovery words, with two keys at once, one for each role: the Recorder at <code>m/44'/60'/0'/0/0</code>, the User at <code>m/44'/60'/0'/0/1</code>. The two addresses differ, and each needs a little gas.</dd></div>
-<div><dt>Local-key identity</dt><dd>An existing private key or key file you import. It fills the one role chosen at import, and the other role stays empty.</dd></div>
-</dl>
-<p>A machine can hold several identities, switched with the identity chip at the top of the sidebar, whose menu opens with a search field, “Find by identity name or address”. Each role of each identity has its own key, address and data folder; each identity also keeps its own network, shared by both roles, see <a href="anchoring.html#networks">Networks</a>.</p>
-<h2 id="pin">The passcode</h2>
-<p>The passcode is 8 letters or digits, case-sensitive. A machine with a passcode opens with the passcode gate every time; the eighth character submits it.</p>
+<p class="lede">Your identity is a set of keys, kept encrypted on this computer together with your ledgers and settings, and opened with your passcode. How much you can bring back after changing or losing a computer depends on the backups you made beforehand.</p>
+<h2 id="keep">Three things to keep safe</h2>
+<div class="tw"><table>
+<thead><tr><th>Keep</th><th>It brings back</th></tr></thead>
+<tbody>
+<tr><td>The 12 recovery words (on paper)</td><td>Your keys, and a new passcode when you forget yours</td></tr>
+<tr><td>The whole-machine backup file and its password</td><td>Every identity, ledger, received grant and setting</td></tr>
+<tr><td>The original files</td><td>Proof when you need to show it; the ledger holds their fingerprints</td></tr>
+</tbody></table></div>
+<p>Keep the recovery words away from the computer, the backup file on another disk, and the backup password written down somewhere else.</p>
+<h2 id="pin">Passcode and locking</h2>
 <ul>
-<li>After 5 wrong tries in a row the gate becomes “Locked”, and recovery is the way on. The count is kept on disk and survives restarting the app.</li>
-<li>A passcode that is too simple is refused on the spot: eight identical characters, or digits that run in sequence or read as a date. When the current passcode is digits only, Settings suggests adding letters.</li>
-<li>The try limit stops someone sitting at the machine from guessing. Against someone who copies the key store file away, the protection is the passcode itself and the encryption work every try has to repeat; so mix letters and digits.</li>
-<li>If the key store’s encryption settings are below this machine’s standard (someone lowered them, say), the gate says “Encryption settings are below this machine's standard.”; that try is not counted as wrong, and the correct passcode re-encrypts the store at this machine’s standard.</li>
-<li>If the key store file cannot be read at start, the passcode side shows “The key store cannot be read” with the reason and the file’s path; the app leaves the file as it is, and once you repair or move it, reopening the app carries on.</li>
+<li>The passcode is 8 letters or digits, case-sensitive. One that is too simple (eight identical characters, a run of digits, something like a date) is refused.</li>
+<li>After 5 wrong tries in a row the passcode gate locks, and the way on is “Recover”: with the primary identity’s recovery words or key file, or a whole-machine backup.</li>
+<li>“Lock” in the sidebar, or ⌘L (Ctrl+L on Windows and Linux), locks at once. After 15 idle minutes the app locks on its own; change the time in Settings › Identity key.</li>
 </ul>
-<h2 id="lock">Locking</h2>
-<p>“Lock” in the sidebar, or the shortcut (⌘L on macOS, Ctrl+L on Windows and Linux), locks at once: the master key is wiped from memory, the data folder is closed and everything shown from it is cleared; no new ledger check, grant re-verification, revocation watch or send starts, and a send, receipt wait or write already under way finishes first, then the master key is wiped. While locked, actions that need a key say “The key store is locked.”. After unlocking, the data folder reopens, anything due runs, and the pending queue goes back to waiting for its receipts.</p>
-<p>“Auto-lock” in Settings › Identity key is on out of the box: after the “Idle time” (1, 5, 15, 30 or 60 minutes; 15 by default) passes idle, the app locks itself, and any key press or mouse movement restarts the clock. Transactions already sent complete as usual.</p>
-<h2 id="primary">The primary identity</h2>
-<p>The first identity on a machine is its primary identity by default; another can be made primary later in Settings › Identity key. When the passcode is forgotten, the primary identity’s credentials alone can reset it:</p>
-<ul>
-<li>A recovery-phrase primary: its 12 recovery words.</li>
-<li>A local-key primary: the key file exported from it, with the file password.</li>
-</ul>
-<p>“Set as primary…” asks for this machine’s passcode. The old primary becomes a secondary identity, and every key and all local data are re-encrypted under a new master key; the passcode stays the same. The change happens completely or leaves everything as it was. A local-key identity imported from a raw private key exports its key file first, and can then become primary. While a data folder is away from its place (an external disk not plugged in) or a background write is running, try again a little later.</p>
 <h2 id="forgot">A forgotten passcode</h2>
-<p>On the passcode gate, press “Forgot passcode” to reach “Recover”: fill in the primary identity’s 12 recovery words, or choose the primary’s key file and enter the file password, then set a new passcode. On success the wrong-try count is cleared and the old passcode stops working. A secondary identity’s credentials are refused; use the primary’s, or restore from a backup.</p>
-<p>At the bottom of the recovery card is “Restore from backup…”: choose a whole-machine backup file, enter the backup password, confirm “Replace this machine with the backup?” and set a new passcode. The machine’s identities, keys and data are replaced whole by the backup’s, re-encrypted under the new passcode.</p>
-<h2 id="backup">Backing up keys</h2>
-<dl>
-<div><dt>Recovery phrase</dt><dd>Written on paper. After entering the passcode in Settings › Identity key, “Show recovery phrase…” shows it once more.</dd></div>
-<div><dt>Key file</dt><dd>“Export key file…” writes a standard keystore file that other wallets can read too. The file password is at least 8 characters, and the file can be read by you alone; the app reads it back to check it, and the backup counts once it passes. For a local-key primary, it is also how the passcode is recovered.</dd></div>
-<div><dt>Whole-machine backup</dt><dd>Backs up every identity, ledger and setting together; see <a href="data.html#backup">Whole-machine backup</a>.</dd></div>
-</dl>
-<p>“Backup status” on the Identity key page says how far this identity is backed up: “Recovery phrase confirmed, key file exported”, “Recovery phrase confirmed”, “Key file exported” or “Not backed up”.</p>
-<h2 id="manage">Changing identity</h2>
-<dl>
-<div><dt>Switch identity…</dt><dd>Lists every identity; click a row to see both roles’ full addresses, and press “Switch” to change to it.</dd></div>
-<div><dt>New identity…</dt><dd>An optional “Label”, then under “Network” the network this identity uses (the four presets or “Custom”, with the one this machine last chose in the wizard selected first), then generate, write down and check 12 words, as in wizard step 2.</dd></div>
-<div><dt>Import key…</dt><dd>Three tabs: “Recovery phrase”, “Private key” (64 hexadecimal digits, with or without 0x) and “Key file”, with “Network” as for a new identity. For a private key or key file, choose “Import as which identity”: “Recorder” or “User”. On a machine with no identity yet, the imported one becomes primary, and a private key then exports its key file as it is imported. An identity already on this machine is imported once; missing keys are put back.</dd></div>
-<div><dt>Rename…</dt><dd>Changes an identity’s label, which serves to tell identities apart.</dd></div>
-</dl>
-<p>New and imported identities are secondary; the first identity created on a machine becomes its primary. When an identity is imported from its recovery phrase, private key or key file, its ledger stays on the original machine and in its backups, so it starts read-only: once a network is set, the app checks this key’s records on chain against the ledger here, and when every record on chain is in the ledger (a new key with nothing on chain counts as matching too), writing opens. When they differ, see <a href="data.html#retrieve">Fetching the ledger</a>.</p>
-<h2 id="rules">Rules for the identity key</h2>
-<p>Every word an identity key signs may one day be checked. It is used in {{Z}} alone: it signs ledger entries and claim co-signatures, and it sends anchoring transactions.</p>
-<dl>
-<div><dt>Gas only</dt><dd>Keep assets at another address. The identity key’s address is public, and it needs just enough for gas.</dd></div>
-<div><dt>Signed by {{Z}} alone</dt><dd>Answer signing requests from other apps and web pages with another key. A ledger entry’s signature is a few dozen bytes; an ordinary-looking text handed to you for signing may be an entry someone else drafted in your name.</dd></div>
-<div><dt>A plain address</dt><dd>The identity key’s address stays a plain address; code and delegation belong to other addresses. Once an address carries code or a delegation, every anchor it sends in that time is void.</dd></div>
-<div><dt>One key, one ledger</dt><dd>A key serves this one ledger alone.</dd></div>
-</dl>
-<h2 id="delete">Deleting an identity</h2>
-<p>“Delete identity…” at the bottom of the Identity key page: after this machine’s passcode, it removes the keys from the key store and the identity’s registration, and keeps the data folders.</p>
+<p>On the passcode gate, press “Forgot passcode”, fill in the 12 recovery words of this computer’s primary identity (by default the first one made here), or choose its key file, and set a new passcode. You can also press “Restore from backup…” and restore from a whole-machine backup.</p>
+<h2 id="backup">Whole-machine backup</h2>
+<ol>
+<li>Open Settings › Local data and press “Export backup…”.</li>
+<li>Enter your passcode, set a backup password (at least 8 characters), choose where to save, and press “Export”.</li>
+</ol>
+<p>One file restores the identities, ledgers and settings of the whole computer. The app reads it back once written, and the backup counts once it says “Backup exported”. The backup light is green when up to date, amber when new records have come since (it says how many), grey when there has never been a backup, and red when the last one failed; export again.</p>
+<p>To restore, press “Restore from backup…” in Settings › Local data, choose the backup file, and enter the backup password and this computer’s passcode. Afterwards this computer holds what the backup holds.</p>
+<h2 id="identities">Several identities</h2>
+<p>Click the identity chip at the top of the sidebar to open “Switch identity”: switch, or use “New identity…” or “Import key…”. Each identity has its own keys, network and ledgers.</p>
+<p>A key used elsewhere starts read-only once imported: the app compares its records on chain with the ledger here, and writing opens once they line up. When they differ, fetch the ledger from that computer’s whole-machine backup with “Fetch ledger”.</p>
+<h2 id="handover">Moving to a new key</h2>
+<p>If you fear a key has leaked, or want someone else to carry on the ledger, use Ledger › More › “Change key or hand over…”: fill in the new key’s address, confirm, and put it on chain. From then on the new key writes this ledger, and this computer reads it.</p>
+<h2 id="rules">Using your identity key safely</h2>
 <ul>
-<li>A primary identity first passes the primary role to another identity, and can then be deleted.</li>
-<li>An identity first backs up its key or confirms its recovery phrase, and can then be deleted.</li>
-<li>A Recorder records a handover before deleting, so a new key can continue the ledger; see <a href="ledger.html#handover">Handing over a ledger</a>.</li>
+<li>Keep only a little ETH at its address, enough for gas; keep other assets at other addresses.</li>
+<li>Sign with it in Zikaron alone. Signing requests from other websites or apps belong to another wallet.</li>
+<li>One key writes one ledger.</li>
 </ul>
+<h2 id="data">Where your data lives</h2>
+<p>Ledgers, settings and received grants are kept encrypted on your computer and open with your passcode; exported record kits, grant files and credentials are ordinary files, ready to hand to others. To move it elsewhere, use “Move to an empty folder” under “Advanced options” in Settings › Local data. When the same data sits on a synced disk with two computers open, one of them writes; the other shows a bar at the top, and “Write from this machine” moves writing to it.</p>

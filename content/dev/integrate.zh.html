@@ -1,9 +1,9 @@
 <!--
 title: 接入
 -->
-<p class="lede">让你的应用读取 {{Z}} 的记录：核验授权、读取记录包，或在业务流程中提示用户留证。</p>
+<p class="lede">让你的应用读取 {{Z}} 的记录：核验授权、读取记录包、请用户的桌面应用代写条目，或在业务流程中提示用户留证。</p>
 <h2 id="shape">接入方式</h2>
-<p>你的应用是读者。账本始终由用户在 {{Z}} 中亲自写入；读者拿到的是用户导出的成品：授权码、授权文件、记录包。这样一本账本始终只有一个写入者，密钥也始终只在一处。</p>
+<p>接入有两条路。多数应用是读者：读者拿到的是用户导出的成品，授权码、授权文件、记录包。要在业务流程里替用户留证的应用，可以经桌面写入：以 <code>--home</code> 调用 <code>zikaron</code>，由用户正在运行的 {{Z}} 在它的数据目录里代写条目或上链，见<a href="#desk">经桌面写入</a>。两条路下，一本账本都只有一个写入者，密钥也只在一处。</p>
 <h2 id="cli">用命令行核验</h2>
 <p>最简便的接入方式是以子进程调用 <code>zikaron</code>，读取其退出码与标准输出。</p>
 {{code:
@@ -16,18 +16,34 @@ zikaron check-grant --grant grant.entry --ledger ./issuer-ledger \
 <tr><td>0</td><td>放行</td></tr>
 <tr><td>1</td><td>拒绝。核验失败时列出失败的项；授权文件拆不开(<code>E_GRANT_FILE</code>)、账本或输入有误时显示原因</td></tr>
 <tr><td>3</td><td>暂缓。告知用户哪一项尚待结果，稍后重试</td></tr>
-<tr><td>4</td><td>答案缺席：<code>scan</code> 与 <code>anchor</code> 读链失败，或 <code>keygen</code> 取随机数失败；重试，或更换节点</td></tr>
-<tr><td>2</td><td>调用有误，请检查参数</td></tr>
+<tr><td>4</td><td>答案缺席：节点不通、各节点答得不一致、扫描被拒，或取不到随机数；经桌面时桌面缺席。重试，或更换节点</td></tr>
+<tr><td>2</td><td>调用有误，请检查参数。标准输出为空；标准错误的第一行是 <code>&lt;原因&gt; &lt;对象&gt;</code>，只认这一行，第二行起是给人看的话，随系统语言显示中文或英文</td></tr>
 </tbody></table></div>
-<p><code>--grant</code> 收一个授权条目文件，也收用户导出的授权文件 <code>.zkgrant</code>：命令行按应用的同一读法拆开，核的是这份文件为之而立的那一跳。授权码的每一段是条目字节的 base64url 编码(省去填充)，解码后存为文件即可；多段的授权码(转授权链)用 <code>chain-check --hop</code> 逐跳核验。<code>--ledger</code> 可以直接指向用户导出的账本镜像或记录包，见<a href="cli.html#sealed">命令行</a>。节点地址可以是 <code>http://</code> 或 <code>https://</code>。</p>
+<p><code>--grant</code> 收一个授权条目文件，也收用户导出的授权文件 <code>.zkgrant</code>：命令行按应用的同一读法拆开，核的是这份文件为之而立的那一跳。授权码的每一段是条目字节的 base64url 编码(省去填充)，解码后存为文件即可；多段的授权码(转授权链)用 <code>chain-check --hop</code> 逐跳核验。<code>--ledger</code> 可以直接指向用户导出的账本镜像或记录包，见<a href="cli.html#sealed">命令行</a>。节点地址可以是 <code>http://</code> 或 <code>https://</code>；连节点的 <code>scan</code> 与 <code>anchor</code> 收 <code>--proxy</code>(<code>system</code>、<code>none</code> 或一个代理地址)，缺省跟随系统代理，本机上的节点一律直连。</p>
+<p>要核对你的调用与所装版本是否对得上，跑 <code>zikaron contract</code>：它把动词、参数、退出码与拒因输出成一个 JSON 值，由代码里的同一张表生成。</p>
 <p>请把 3 作为独立的一档处理：「暂无结果」「通过」「失败」是三种状态，界面上也以三种样式呈现。</p>
+<h2 id="desk">经桌面写入</h2>
+<p>给 <code>--home &lt;桌面的数据目录&gt;</code> 时，十一个写入动词(<code>init</code>、<code>history</code>、<code>grant</code>、<code>revoke</code>、<code>adopt</code>、<code>attest</code>、<code>succeed</code>、<code>annotate</code>、<code>retract</code>、<code>anchor</code>、<code>kit-export</code>)交给正在运行、已解锁、并以写者打开这个数据目录的 {{Z}} 去做：条目以用户的身份写进用户的账本，窗口里随即可见。私钥与口令都留在桌面里。</p>
+{{code:
+zikaron history --home "$DESK_HOME" --file ./delivery.pdf --note "交付第一版"
+}}
+<div class="tw"><table>
+<thead><tr><th>答复</th><th>应用的处理</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>写成。输出带 <code>entryId</code> 与 <code>seq</code>，存下编号以便日后指向这条记录</td></tr>
+<tr><td><code>E_DESKTOP</code>(4)</td><td>以写者打开这个数据目录的桌面此刻缺席：已退出、已锁定，或开着别的数据目录。请用户打开并解锁 {{Z}} 后重试</td></tr>
+<tr><td><code>E_QUEUED</code>(3)</td><td><code>anchor</code> 时用户把「命令行上链」设成了「仅加入队列」：条目已排进队列，等用户在桌面上发出</td></tr>
+<tr><td><code>E_DESKTOP_REFUSED</code>(1 或 4)</td><td>桌面具名拒绝，<code>token</code> 是它的代码；网络方面的拒绝为 4</td></tr>
+<tr><td><code>E_ON_DESKTOP</code>(1)</td><td><code>attest</code> 要口令，只能在桌面上做</td></tr>
+</tbody></table></div>
+<p>这条路只通本机本用户：通道是机器目录里只本人可读写的套接字文件，或只本用户可连的命名管道，两端各自向系统核对对方是谁。桌面锁定、关闭数据目录或退出，通道即关。各动词带 <code>--home</code> 时收哪些参数，见<a href="cli.html#home">命令行 · 经桌面</a>。</p>
 <h2 id="lib">直接调用核</h2>
 <p>Rust 项目可依赖 <code>zikaron</code> 与 <code>zikaron-kit</code> 两个 crate。它们只做判断：链由你的代码去读，再把字节交给核；记录包目录可以交给 <code>zikaron_kit::kitdir::verify_kit</code> 直接从盘上读取核验。其他语言请依据法文自行实现，并用一致性套件验收，见<a href="law.html#run">测试一份实现</a>。</p>
 <h2 id="kits">读取用户导出的记录包</h2>
 <p>同一台机器上的应用可以列出用户已导出的记录包，供用户选择递交。机器目录按应用自己的顺序找：</p>
 <ol>
 <li>用户在你的应用设置中手动指定的目录。</li>
-<li>指针文件中写明的路径：macOS 与 Linux 上是 <code>~/.zikaron-desk</code>，Windows 上是 <code>%LOCALAPPDATA%\ZIKARON\.zikaron-desk</code>。指针存在时以它为准：目标读取失败，请明确告知用户「{{Z}} 的数据已迁移」，并请其重新指定。</li>
+<li>指针文件中写明的路径：macOS 与 Linux 上是 <code>~/.zikaron-desk</code>，Windows 上是 <code>%LOCALAPPDATA%\ZIKARON\.zikaron-desk</code>(环境变量 <code>USERPROFILE</code> 指向别的文件夹时，改为它下面的 <code>AppData\Local\ZIKARON\.zikaron-desk</code>)。指针存在时以它为准：目标读取失败，请明确告知用户「{{Z}} 的数据已迁移」，并请其重新指定。</li>
 <li>指针缺席时：macOS 上先看 <code>~/Library/Application Support/ZIKARON</code>(存在时)；其次是默认位置，macOS 与 Linux 上 <code>~/.zikaron-desk.d/</code>，Windows 上 <code>%LOCALAPPDATA%\ZIKARON\.zikaron-desk.d\</code>。</li>
 </ol>
 <p>「有效」的唯一标准：该处的 <code>kits/index.json</code> 可读，且格式名为 <code>zikaron.kits-index/1</code>。</p>

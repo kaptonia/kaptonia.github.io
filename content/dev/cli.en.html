@@ -1,49 +1,49 @@
 <!--
 title: Command line
 -->
-<p class="lede"><code>zikaron</code> offers the same ledger operations as the window, one subcommand per action. It is built for scripts: the output is a single JSON value, and the verdict is in the exit code. The full output shapes, exit codes, refusal reasons and flags are in <code>CLI-SCHEMA.md</code> in the source.</p>
+<p class="lede"><code>zikaron</code> offers the same ledger operations as the window, one subcommand per action. It is built for scripts: the output is a single JSON value, and the verdict is in the exit code. The full output shapes, exit codes, refusal reasons and flags are in <code>CLI-SCHEMA.md</code> in the source; <code>zikaron contract</code> also prints that contract as one value, made from the same tables in the code.</p>
 <h2 id="where">Where it is</h2>
 <dl>
-<div><dt>Installed from the dmg</dt><dd><code>/Applications/ZIKARON.app/Contents/MacOS/zikaron</code></dd></div>
-<div><dt>Installed from the pkg</dt><dd><code>/usr/local/bin/zikaron</code></dd></div>
-<div><dt>Installed from the deb</dt><dd><code>/usr/bin/zikaron</code>; the AppImage carries the command line too, but it cannot be called directly</dd></div>
-<div><dt>Windows</dt><dd><code>zikaron.exe</code> in the unpacked folder; to call it from anywhere, add that folder to <code>PATH</code> yourself</dd></div>
-<div><dt>Built from source</dt><dd><code>target/release/zikaron</code></dd></div>
+<div><dt>Installed from the dmg</dt><dd><code>/Applications/ZIKARON.app/Contents/MacOS/zikaron</code>. Turn on “Enable command line” in the app’s Settings › Local data and it places a link at <code>/usr/local/bin/zikaron</code>, with macOS asking for an administrator password when needed; turn it on in the app once it is in Applications.</dd></div>
+<div><dt>Installed from the pkg</dt><dd><code>/usr/local/bin/zikaron</code>, ready right after installing; “Enable command line” shows “Taken by another install”, and you can leave it as it is.</dd></div>
+<div><dt>Installed from the deb</dt><dd><code>/usr/bin/zikaron</code>; “Enable command line” shows “Provided by the installed package”. With the AppImage, install the <code>.deb</code> for the command line; the switch shows “Not supported for this install”.</dd></div>
+<div><dt>Windows</dt><dd><code>zikaron.exe</code> in the unpacked folder, run in a terminal; double-clicked, it only flashes a window. “Enable command line” writes the folder into this user’s <code>Path</code>, and terminals opened afterwards find <code>zikaron</code>.</dd></div>
+<div><dt>Built from source</dt><dd><code>target/release/zikaron</code>; “Enable command line” links it into <code>/usr/local/bin</code> on macOS and <code>~/.local/bin</code> on Linux, a folder that has to be on your <code>PATH</code>.</dd></div>
 </dl>
 <h2 id="contract">Three conventions</h2>
 <dl>
 <div><dt>Standard output is one canonical JSON value</dt><dd>Each call prints one value, ending at the value’s last character. The byte format follows law §3.4: compact, members sorted by bytes.</dd></div>
-<div><dt>Misuse leaves standard output empty</dt><dd>For wrong arguments or an unreadable path, the exit code is 2, standard output has zero bytes, and the first line of standard error reads <code>&lt;reason&gt; &lt;subject&gt;</code>, as in <code>E_UNREADABLE /nowhere/at/all</code>, the subject being only the flag, value or path at fault; a second line explains it for people and is outside the contract. Whether standard output holds any bytes tells a caller an answer from a misuse.</dd></div>
+<div><dt>Misuse leaves standard output empty</dt><dd>For wrong arguments or an unreadable path, the exit code is 2, standard output has zero bytes, and the first line of standard error reads <code>&lt;reason&gt; &lt;subject&gt;</code>. The subject uses the command line’s own names alone: a flag from the flag table is written <code>--name</code>, and any other value or path is named only by where it stands among the arguments and its length, as in <code>E_UNREADABLE #3 (15 bytes)</code>, so a private key or a node address carrying an access key stays with you, and terminals and logs see its place and length alone. A second line explains it for people, in Chinese when the system locale (the first of <code>LC_ALL</code>, <code>LC_MESSAGES</code>, <code>LANG</code> and <code>LANGUAGE</code> that is set) is Chinese and in English otherwise, and is outside the contract. Whether standard output holds any bytes tells a caller an answer from a misuse.</dd></div>
 <div><dt>Status words pass through unchanged</dt><dd><code>GREEN</code>, <code>PARTIAL</code>, <code>FAIL</code>, <code>COMPLETE</code>, <code>GAPS</code> and the like are written by the cores and passed on by the command line as they are.</dd></div>
 </dl>
-<p>When the law refuses an entry being written (<code>E_ENTRY</code> with the <code>token</code> <code>E_BODY_FIELD</code>, exit code 1), standard error carries one more line for people, naming the member and the flag that gives it, for example <code>mode: 缺或不成形,由 --mark 与 --toolchain(或 --file) 给</code>; this line is outside the contract too, and standard output and the exit code are the same with or without it.</p>
+<p>When the law refuses an entry being written (<code>E_ENTRY</code> with the <code>token</code> <code>E_BODY_FIELD</code>, exit code 1), standard error carries one more line for people, naming the member and the flag that gives it, for example <code>statement_md: missing or malformed; given by --statement</code>; this line also follows the system language, is words for people, and leaves standard output and the exit code as they are.</p>
 <p>Files are written one way: <code>--out</code> first writes a whole temporary file alongside, syncs it to disk, then renames it into place; when a file of that name already exists, the write stops and the existing file keeps every byte.</p>
 <h2 id="exit">Exit codes</h2>
 <div class="tw"><table>
 <thead><tr><th>Code</th><th>Meaning</th><th>Example</th></tr></thead>
 <tbody>
 <tr><td>0</td><td>Answered, affirmative</td><td><code>GREEN</code>, <code>COMPLETE</code></td></tr>
-<tr><td>1</td><td>Answered, negative</td><td>The entry was refused, the write would break the ledger (<code>E_WOULD_BREAK</code>), the node says the transaction would fail or estimates it above 200,000 (<code>E_GAS_REFUSED</code>), a grant file does not open (<code>E_GRANT_FILE</code>), a record kit does not hold (<code>E_KIT</code>), or the verdict is <code>FAIL</code>, <code>BROKEN_CHAIN</code> or <code>NO_LABEL</code></td></tr>
-<tr><td>2</td><td>Misuse</td><td>Wrong arguments or an unreadable path; standard output is empty</td></tr>
-<tr><td>3</td><td>Answered, in between</td><td><code>PARTIAL</code>, <code>GAPS</code>, <code>UNAVAILABLE</code></td></tr>
-<tr><td>4</td><td>Answer absent</td><td>Node unreachable, nodes disagreeing, scan refused, no randomness available</td></tr>
+<tr><td>1</td><td>Answered, negative</td><td>The entry was refused, the write would break the ledger (<code>E_WOULD_BREAK</code>), the node refuses the gas estimate for a reason about this transaction or estimates it above 200,000 (<code>E_GAS_REFUSED</code>), the transaction was included but failed (<code>E_TX_STATUS</code>), what was sent before has lapsed (<code>E_TX_VOID</code>), a grant file does not open (<code>E_GRANT_FILE</code>), a record kit does not hold (<code>E_KIT</code>), <code>attest</code> through the desktop (<code>E_ON_DESKTOP</code>), the desktop refused the action (<code>E_DESKTOP_REFUSED</code>, network refusals aside), or the verdict is <code>FAIL</code>, <code>BROKEN_CHAIN</code> or <code>NO_LABEL</code></td></tr>
+<tr><td>2</td><td>Misuse</td><td>Wrong arguments, an unreadable path, <code>--key</code> together with <code>--key-file</code>, a key file others can read, <code>--form registry</code> without <code>--registry</code>, <code>--home</code> with a verb or flag that does not take it; standard output is empty</td></tr>
+<tr><td>3</td><td>Answered, in between</td><td><code>PARTIAL</code>, <code>GAPS</code>, <code>UNAVAILABLE</code>; an <code>anchor</code> through the desktop that was only queued (<code>E_QUEUED</code>)</td></tr>
+<tr><td>4</td><td>Answer absent</td><td>Node unreachable, nodes disagreeing, scan refused, no randomness available, a node refusing the gas estimate for its own reasons (<code>E_UNREACHABLE</code>), no answer from the desktop (<code>E_DESKTOP</code>), a network refusal from the desktop (<code>E_DESKTOP_REFUSED</code>)</td></tr>
 </tbody></table></div>
 <p>The weight of this table is that 3 and 4 each have a code of their own. Fold “not yet on chain” into 0, and a buyer takes an unanchored grant as cleared; fold it into 1, and a passing “not yet known” reads as “forged”. Fold “node unreachable” into 1, and a network fault reads as “this chain is fake”. A failed scan is an absent answer, and the caller retries or changes nodes.</p>
-<h2 id="verbs">Twenty-one subcommands</h2>
+<h2 id="verbs">Twenty-two subcommands</h2>
 <div class="tw"><table>
 <thead><tr><th>Subcommand</th><th>What it does</th></tr></thead>
 <tbody>
 <tr><td><code>keygen</code></td><td>Generate a key and print its address and private key</td></tr>
-<tr><td><code>init</code></td><td>Write the ledger’s creation entry into an empty ledger</td></tr>
-<tr><td><code>history</code></td><td>Append an anchored record (<code>--file</code> records a file by the app’s convention)</td></tr>
-<tr><td><code>grant</code></td><td>Sign a grant and write it to the ledger</td></tr>
-<tr><td><code>revoke</code></td><td>Sign a revocation and write it to the ledger (ruling file digest optional)</td></tr>
-<tr><td><code>adopt</code></td><td>Write an adoption entry</td></tr>
-<tr><td><code>attest</code></td><td>Produce a co-signature with an outside key</td></tr>
-<tr><td><code>succeed</code></td><td>Write a key change or handover entry</td></tr>
-<tr><td><code>annotate</code></td><td>Write a note</td></tr>
-<tr><td><code>retract</code></td><td>Write a deletion entry (the target must be a record in this ledger that is still undeleted)</td></tr>
-<tr><td><code>anchor</code></td><td>Anchor a hash on chain, through the registry contract or as a bare self-transfer; it estimates gas before sending</td></tr>
+<tr><td><code>init</code> ✦</td><td>Write the ledger’s creation entry into an empty ledger</td></tr>
+<tr><td><code>history</code> ✦</td><td>Append a record (<code>--file</code> records a file by the app’s convention)</td></tr>
+<tr><td><code>grant</code> ✦</td><td>Sign a grant and write it to the ledger</td></tr>
+<tr><td><code>revoke</code> ✦</td><td>Sign a revocation and write it to the ledger (ruling file digest optional)</td></tr>
+<tr><td><code>adopt</code> ✦</td><td>Write an adoption entry; a co-signature with only one of its two halves is refused</td></tr>
+<tr><td><code>attest</code> ✦</td><td>Produce a co-signature with an outside key</td></tr>
+<tr><td><code>succeed</code> ✦</td><td>Write a succession entry (a key rotation or a handover)</td></tr>
+<tr><td><code>annotate</code> ✦</td><td>Write a note</td></tr>
+<tr><td><code>retract</code> ✦</td><td>Write a deletion entry (the target must be a record in this ledger that is still undeleted)</td></tr>
+<tr><td><code>anchor</code> ✦</td><td>Anchor a hash on chain, through the registry contract or as a bare self-transfer; it estimates gas before sending and asks first when rerun</td></tr>
 <tr><td><code>scan</code></td><td>Scan for anchors using the chain settings (<code>--endpoint</code> takes http and https)</td></tr>
 <tr><td><code>audit</code></td><td>Audit a ledger against scan results and print a report and verdict (<code>--ledger</code> takes a ledger folder, a ledger mirror or a record kit; <code>--out</code> saves this run’s audit input)</td></tr>
 <tr><td><code>check-grant</code></td><td>Run the six checks on a grant (<code>--grant</code> takes a grant entry file or a <code>.zkgrant</code> grant file)</td></tr>
@@ -52,24 +52,31 @@ title: Command line
 <tr><td><code>fpm-sign</code></td><td>Sign a fingerprint manifest</td></tr>
 <tr><td><code>ack-sign</code></td><td>Sign an acknowledgement</td></tr>
 <tr><td><code>badge</code></td><td>Encode or decode a credential (exactly one of <code>--encode</code> and <code>--decode</code>)</td></tr>
-<tr><td><code>kit-export</code></td><td>Export a record kit, written once it passes its self-check</td></tr>
+<tr><td><code>kit-export</code> ✦</td><td>Export a record kit, written once it passes its self-check</td></tr>
 <tr><td><code>show</code></td><td>Show an entry’s author, ID, type, previous entry, sequence and content</td></tr>
+<tr><td><code>contract</code></td><td>Print the command line’s own contract: verbs, each verb’s flags (and its other table with <code>--home</code>), exit codes and refusal reasons</td></tr>
 </tbody></table></div>
-<p>Any other first word counts as misuse, with exit code 2.</p>
+<p>The eleven marked ✦ take <code>--home</code>; see <a href="#home">Through the desktop</a> below. Any other first word counts as misuse, with exit code 2.</p>
 <h2 id="flags">Flags</h2>
-<p>All fifty-three flags are long flags, and each takes a value; every subcommand has its own table of flags, and a flag outside it counts as misuse. Members the law requires in an entry’s body may all be left off the command line; the core then refuses the entry under the law, and the command line checks the few items it needs for its own work. That way each rule of judgment exists once, in the core. Each subcommand’s flags and the environment variables (the chain-read timeout <code>ZKA_TIMEOUT_SECS</code>, 30 seconds by default; the answer limit <code>ZKA_MAX_ANSWER_BYTES</code>, 64 MiB by default; and so on) are listed in <code>CLI-SCHEMA.md</code>.</p>
+<p>All fifty-six flags are long flags, and each takes a value; every subcommand has its own table of flags, and a flag outside it counts as misuse. Members the law requires in an entry’s body may all be left off the command line; the core then refuses the entry under the law, and the command line checks the few items it needs for its own work. That way each rule of judgment exists once, in the core.</p>
+<dl>
+<div><dt><code>--key-file</code></dt><dd>Reads the private key from a file instead of <code>--key</code>, one or the other; the file must be readable by its owner alone. Every subcommand that takes <code>--key</code> takes it.</dd></div>
+<div><dt><code>--proxy</code></dt><dd>Taken by <code>anchor</code> and <code>scan</code>: <code>system</code> (the default), <code>none</code>, or <code>http://host:port</code> or <code>socks5://host:port</code>. Nodes on this machine are always reached straight. <code>system</code> reads the system settings on macOS and Windows, and <code>https_proxy</code>, <code>http_proxy</code>, <code>all_proxy</code> and <code>no_proxy</code> on Linux; the app’s proxy setting governs the app alone.</dd></div>
+<div><dt><code>--home</code></dt><dd>Hands the work to the running desktop app; see below.</dd></div>
+</dl>
+<p>Each subcommand’s flags and the environment variables (the overall deadline of each exchange with a node <code>ZKA_TIMEOUT_SECS</code>, 30 seconds by default; the answer limit <code>ZKA_MAX_ANSWER_BYTES</code>, 64 MiB by default; and so on) are listed in <code>CLI-SCHEMA.md</code>.</p>
 <h2 id="walk">Example</h2>
 <p>Generate a key, create a ledger, record a file, anchor it, audit:</p>
 {{code:
 zikaron keygen
 # {"address":"0x…","ok":true,"privkey":"0x…"}
 
-zikaron init --ledger ./ledger --key <private key> --statement "Records of my work"
+zikaron init --ledger ./ledger --key-file ./key.txt --statement "Records of my work"
 
-zikaron history --ledger ./ledger --key <private key> --file manuscript.pdf
+zikaron history --ledger ./ledger --key-file ./key.txt --file manuscript.pdf
 # {"entryId":"0x…","ledger":"…","ok":true,"seq":1,"written":true}
 
-zikaron anchor --key <private key> --endpoint <chain-id>=<node> \
+zikaron anchor --key-file ./key.txt --endpoint <chain-id>=<node> \
   --form registry --registry <contract address> --hash <entryId>
 
 zikaron scan --endpoint <chain-id>=<node one> --endpoint <chain-id>=<node two> \
@@ -79,16 +86,28 @@ zikaron audit --ledger ./ledger --fragment fragment.json
 echo $?
 }}
 <p><code>history --file</code> fills the entry by the convention the app uses to record a file: <code>content</code> is the SHA-256 of the file’s bytes, and <code>mode</code> is <code>{"mark":"bytes-sha256/1","toolchain":&lt;the SHA-256 of the text "bytes-sha256/1"&gt;}</code>; for one file, the command line and the app write these two members alike. You can also leave out <code>--file</code> and give <code>--content</code>, <code>--mark</code> and <code>--toolchain</code> yourself; the two ways cannot be mixed.</p>
-<p>Node addresses may be <code>http://</code> or <code>https://</code>, in any case; https checks the certificate chain and host name against the roots compiled into the program, the same transport the app uses. <code>anchor</code> takes exactly one <code>--endpoint</code>: it reads that node’s base fee and the paid tips of the last 20 blocks, sets the fee by the app’s rule, then asks the node to estimate gas for this very transaction and carries one and a half times the estimate, rounded up, at most 200,000; if the node says the transaction would fail or estimates it above 200,000, it refuses with <code>E_GAS_REFUSED</code>, and if the node does not answer, it reports <code>E_UNREACHABLE</code>; either way nothing is sent. Once sent, it asks for the receipt round after round until <code>--wait-secs</code> runs out.</p>
-<p>Each question <code>scan</code> asks names the senders in the scan range, so only their logs come back; when a node declines, the same question is asked again, and only after three refusals is the range split. <code>basis.json</code> states the scan range: which chains, which registry contract, which senders, and the start and end blocks; the format is in law §9.4. The command line keeps no record of facts checked before, and every scan asks about every log.</p>
+<p>Node addresses may be <code>http://</code> or <code>https://</code>, in any case, an IPv6 address in brackets; https checks the certificate chain and host name against the roots compiled into the program, the same transport the app uses. Every question has one 30-second overall deadline, an address that resolves to several IP addresses has each tried, a reading question cut off mid-connection is asked once more on a fresh connection, and a transaction is broadcast once; an access key inside a node address is hidden in all output.</p>
+<p><code>anchor</code> takes exactly one <code>--endpoint</code>: it reads that node’s base fee and the paid tips of the last 20 blocks, sets the fee by the app’s rule (blocks whose median is zero are left out unless all are zero), then asks the node to estimate gas for this very transaction and carries one and a half times the estimate, rounded up, at most 200,000. If the node refuses the estimate for a reason about this transaction (it would revert), or estimates it above 200,000, it refuses with <code>E_GAS_REFUSED</code>; if the node refuses for its own reasons (a rate limit, an unsupported method, credentials needed, a wrong chain and the like) or does not answer, it reports <code>E_UNREACHABLE</code>; either way the command stops before broadcasting. Once sent, it asks for the receipt round after round until <code>--wait-secs</code> runs out.</p>
+<p><b>A rerun asks first.</b> Run with its own key, <code>anchor</code> keeps the nonce and hash of every transaction it signs for one anchoring (the same chain, key, recipient and data) in <code>cli-sent/</code> in the machine folder, before broadcasting, and keeps these two alone. When the same command runs again, it first asks the node where those transactions stand, by their hashes: one already included is answered as included; one still in the pool is waited on; if none is held and their nonce is unused, it signs again at that same nonce, so at most one can ever be included; if their nonce was used by another transaction, it answers <code>E_TX_VOID</code> and stops there, and the next run starts afresh. Running the same command again after it succeeded therefore answers the earlier transaction, and one anchoring is paid for once.</p>
+<p>Each question <code>scan</code> asks names the senders in the scan range, so only their logs come back; when a node declines, the same question is asked again, and only after three refusals is the range split. <code>basis.json</code> states the scan range: which chains, which registry contracts, which senders, and the start and end blocks; the format is in law §9.4. The command line keeps no record of facts checked before, and every scan asks about every log.</p>
 <h2 id="gate">Audited before written</h2>
 <p>Every subcommand that writes an entry (<code>init</code> and <code>retract</code> included) passes through one gate: once the entry is signed, the core audits “this ledger plus this entry” offline, and any chain finding of law §8.3 the ledger did not already have (an old key writing after a key change, a sequence gap, a second entry at one place, a link to the wrong entry) refuses the write with <code>E_WOULD_BREAK</code>, <code>names</code> listing the findings, and not one byte is written. <code>--seq</code> and <code>--prev</code> given by hand pass the same gate. When a ledger holds two roots and no <code>--root</code> is given, every write is refused with <code>E_TIP_FORKED</code>.</p>
+<h2 id="home">Through the desktop</h2>
+<p>With <code>--home &lt;the desktop’s data folder&gt;</code>, the eleven subcommands marked ✦ are handed to the running ZIKARON Desk, unlocked and holding that data folder as its writer: the entry is written into the desktop’s ledger with the desktop’s identity and shows in its window at once; the private keys and the passcode stay in the desktop, and the desktop does all the writing.</p>
+<ul>
+<li>While the desktop holds the data folder, it keeps a local channel open for it: on macOS and Linux a socket file in the machine folder readable and writable by its owner alone, on Windows a named pipe only this user can reach. Once connected, each side asks the system who the other runs as and refuses another user. Locking, closing or switching the data folder, or quitting, closes the channel.</li>
+<li>Arguments are judged for misuse as usual first; with <code>--home</code>, each subcommand has a table of its own, and the desktop decides the ledger, key and sequence itself (<code>history</code> takes <code>--file</code> and <code>--note</code>, and <code>anchor</code> takes <code>--home</code> alone, for example); a flag outside the table is misuse. Requests are done one at a time in the order they arrive, along the same action path in the desktop as a click.</li>
+<li><code>anchor</code> follows “Putting on chain from the command line” in the desktop’s Settings › Network: “Send automatically” sends as the queue page’s “Put all on chain” does; “Queue only” only queues and answers <code>E_QUEUED</code> (exit 3).</li>
+<li><code>attest</code> always answers <code>E_ON_DESKTOP</code>: attesting asks for the passcode, which is given on the desktop alone. <code>kit-export</code> takes <code>--entry</code>, <code>--note</code> and <code>--out</code>; attachments and proof bundles are chosen on the desktop.</li>
+<li>When the desktop is locked, has not opened that data folder or has quit, the answer is <code>E_DESKTOP</code> (exit 4); when the desktop refuses the action, the answer is <code>E_DESKTOP_REFUSED</code>, its <code>token</code> the desktop’s own code.</li>
+</ul>
+<p>The command line with <code>--home</code> finds the machine folder by the desktop’s own rule. The flags each subcommand takes with <code>--home</code> are in section 11 of <code>CLI-SCHEMA.md</code>.</p>
 <h2 id="now">Time is injected by the caller</h2>
 <p>Deadlines and periods are judged by chain time and the moment injected with <code>--now</code>; when <code>--now</code> is left off, chain time alone applies. Every moment comes from the caller, so the same input always reaches the same verdict.</p>
 <h2 id="sealed">Reading the app’s own ledger</h2>
-<p>A ledger in ZIKARON Desk’s data folder is encrypted and the passcode lives in the app, so the command line refuses it as misuse, with exit code 2 and these lines on standard error (the second reads “locked: this is ZIKARON Desk’s sealed local data; the command line does not read it”):</p>
+<p>A ledger in ZIKARON Desk’s data folder is encrypted (its files start with <code>zikaron-local/2</code>, or <code>zikaron-local/1</code> when an earlier version wrote them) and the passcode lives in the app, so the command line refuses it as misuse, with exit code 2:</p>
 {{code:
-E_UNREADABLE <ledger path>
-已锁定:这是 ZIKARON Desk 封存的本机数据,命令行不读
+E_UNREADABLE #3 (40 bytes)
+Locked: this is local data ZIKARON Desk keeps sealed; the command line does not read it
 }}
-<p>To hand a ledger to the command line, export a “Ledger mirror” or a “Record kit” in the app first. The <code>--ledger</code> of <code>audit</code> (and, through it, <code>check-grant</code>, <code>chain-check</code> and <code>depth</code>) and of <code>show --entry</code> can point straight at the mirror folder (the level holding <code>mirror.json</code>) or the kit folder; a kit is first checked under the kit law and refused with <code>E_KIT</code> if it does not hold. The subcommands that write entries, and <code>init</code>, take ledger folders alone: to carry on writing, copy the files in the mirror’s <code>entries/</code> into an empty folder and add <code>.entry</code> to each file name.</p>
+<p>To write into the app’s own ledger, hand the work to the desktop with <code>--home</code>. To let the command line read it, export a “Ledger mirror” or a record kit in the app first: the <code>--ledger</code> of <code>audit</code> (and, through it, <code>check-grant</code>, <code>chain-check</code> and <code>depth</code>) and of <code>show --entry</code> can point straight at the mirror folder (the level holding <code>mirror.json</code>) or the kit folder; a kit is first checked under the kit law and refused with <code>E_KIT</code> if it does not hold. On the command-line side, the subcommands that write entries, and <code>init</code>, take ledger folders alone: to carry on writing on the command-line side, copy the files in the mirror’s <code>entries/</code> into an empty folder and add <code>.entry</code> to each file name.</p>

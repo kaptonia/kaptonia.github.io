@@ -3,20 +3,21 @@ title: 常见问题
 -->
 <div class="proj"><section data-p="zikaron">
 <dl>
-<div><dt>支持哪些电脑?</dt><dd>{{VER}} 提供三个系统的安装包：Apple 芯片的 Mac（macOS 11 或更新）、x86_64 的 Windows 10 与 11、x86_64 的 Linux（glibc 2.31 起），见<a href="../../download.html">下载页</a>。其他平台从源码构建，见<a href="../dev/build.html">从源码构建</a>。</dd></div>
-<div><dt>为什么打开时被系统拦下?</dt><dd>macOS 上，应用用 Kaptonia 的自签证书签名，在 Apple 公证之外发出，从浏览器下载的文件带着隔离标记：先核对 SHA-256，再在终端里去掉隔离标记。Windows 上，程序未签名：在「Windows 已保护你的电脑」里按「更多信息」，再按「仍要运行」；开着「智能应用控制」时要先把它关掉。步骤见<a href="../../download.html#install">下载页 · 安装</a>。</dd></div>
+<div><dt>支持哪些电脑?</dt><dd>Apple 芯片的 Mac(macOS 11 或更新)、Windows 10 与 11、常见的 Linux 发行版，见<a href="../../download.html">下载页</a>。</dd></div>
+<div><dt>为什么打开时被系统拦下?</dt><dd>Mac 版用项目自己的证书签名，未经 Apple 公证；Windows 版未签名。Mac 上，先在「终端」里去掉下载时带上的隔离标记；Windows 上，按「更多信息」，再按「仍要运行」，开着「智能应用控制」时先把它关掉。步骤见<a href="../../download.html#install">下载页 · 安装</a>。</dd></div>
+<div><dt>需要注册吗?</dt><dd>身份是在你电脑上生成的一组密钥，生成即可使用。</dd></div>
+<div><dt>要花多少钱?</dt><dd>应用免费。发到链上要付 gas 费：以太坊主网要花真实的 ETH，Arbitrum One、OP Mainnet 通常只要主网的零头；几条记录一起发，只付一笔。确认卡上会先写明费用上限。想先试用，选 Sepolia 测试网。</dd></div>
 <div><dt>有代币吗?</dt><dd>项目本身零代币。上链只付所在链的 gas。</dd></div>
-<div><dt>由谁运营?</dt><dd>登记合约自行运行，应用运行在你的机器上，运营由每位使用者自行承担。</dd></div>
-<div><dt>需要注册吗?</dt><dd>身份是在本机生成的一组密钥，生成即可使用。</dd></div>
-<div><dt>数据存在哪里?</dt><dd>加密存在你的机器上；链上只有条目 ID 和发送地址。</dd></div>
-<div><dt>上链要花多少钱?</dt><dd>默认网络是以太坊主网，要花真实的 ETH，多少取决于当时的费率；Arbitrum One、OP Mainnet 这两条二层网络通常只要主网的零头。一批条目装进同一笔交易，条数越多，单条越便宜；发送前，应用按链上实际费率估算，在确认卡上显示 Gas 费上限。想先试用，新建身份时选 Sepolia 测试网，见<a href="anchoring.html#networks">网络</a>。</dd></div>
-<div><dt>文件会上传吗?</dt><dd>文件留在本机。指纹在本机算出，发到链上的只有条目 ID(条目的 SHA-256)。</dd></div>
-<div><dt>换电脑或丢了密钥怎么办?</dt><dd>用整机备份文件及其密码可恢复全部身份、账本与设置；原文件由你自己保留。只有 12 个助记词时，能找回密钥和链上读得到的数据，账本本身要从整机备份取回。两者都丢了，本机数据便永远封存。</dd></div>
-<div><dt>忘了口令怎么办?</dt><dd>在口令门按「忘记口令」，用主身份的助记词或密钥文件重设口令，或从整机备份恢复，见<a href="keys.html#forgot">忘记口令</a>。</dd></div>
-<div><dt>存证后发现写错了?</dt><dd>追加一条注记说明，或删除这条存证；原条目在账本里原样保留。</dd></div>
-<div><dt>对方要核验，需要什么?</dt><dd>本应用或命令行 <code>zikaron</code>，两者都开源。核验只做读取，用到的只有公开数据和你交给对方的文件。你锚在哪条链上，对方就要能读那条链：不是对方的主网络时，把它加进「只读网络」即可，记录包也会写明它锚在哪条链。</dd></div>
-<div><dt>能证明我是原创吗?</dt><dd>它证明你的密钥最迟在某一时刻持有这份内容。创作过程记录得越连续，这一证明越有说服力。见<a href="evidence.html">一条记录证明什么</a>。</dd></div>
-<div><dt>可以商用、修改、转载吗?</dt><dd>可以。代码与文字采用 MIT 许可，保留许可文本即可；内嵌字体各按其许可。</dd></div>
+<div><dt>文件会上传吗?</dt><dd>文件留在你的电脑上。发到链上的只有一串编号。</dd></div>
+<div><dt>数据存在哪里?</dt><dd>加密存在你的电脑上，用口令打开。</dd></div>
+<div><dt>换电脑或丢了电脑怎么办?</dt><dd>用整机备份文件和备份密码，恢复全部身份、账本与设置。只剩 12 个助记词时，能找回密钥和链上的记录，账本要从整机备份取回。所以请尽早做一次整机备份，见<a href="keys.html#backup">整机备份</a>。</dd></div>
+<div><dt>忘了口令怎么办?</dt><dd>在口令门按「忘记口令」，用主身份的助记词重设，或从整机备份恢复，见<a href="keys.html#forgot">忘了口令</a>。</dd></div>
+<div><dt>记录写错了?</dt><dd>追加一条注记说明，或删除这条存证；原来那一条照旧保留，见<a href="ledger.html#fix">写错了怎么办</a>。</dd></div>
+<div><dt>对方要核验，需要什么?</dt><dd>对方装上这个应用即可，核验免费。你锚在哪条链上，对方也要读那条链；记录包会写明是哪条链，对方按提示添加就行。</dd></div>
+<div><dt>能证明我是原作者吗?</dt><dd>它证明你的密钥最迟在某个时刻已经有了这份内容。创作过程记得越早越连续，越有说服力，见<a href="evidence.html">一条记录证明什么</a>。</dd></div>
+<div><dt>开着 VPN 或代理，连不上节点?</dt><dd>到「设置 › 网络」的「代理」：一般用「跟随系统代理」；还是连不上，把 VPN 给的代理地址填进「自定义代理」(<code>http://</code> 或 <code>socks5://</code> 开头)，见<a href="ledger.html#networks">网络</a>。</dd></div>
+<div><dt>能在终端里用吗?</dt><dd>应用附带命令行 <code>zikaron</code>。在「设置 › 本机数据」打开「启用命令行」，或用 <code>.pkg</code>、<code>.deb</code> 安装，就能在终端里直接用。它可以与桌面并行，也可以单独使用，见<a href="cli.html">命令行</a>；让 AI 代理来操作，见<a href="ai.html">AI 代理与远程操作</a>。</dd></div>
+<div><dt>可以商用、修改、转载吗?</dt><dd>可以。代码与文字采用 MIT 许可，保留许可文本即可。</dd></div>
 <div><dt>与所在地法律是什么关系?</dt><dd>它是一种可选用的工具，与当地法律并行。请照常遵守所在地法律。</dd></div>
 <div><dt>怎样联系 Kaptonia？</dt><dd><p class="cl"><b>公开的问题与建议：</b>在 GitHub 上<a href="{{REPO}}/issues">提 Issue</a>，或到<a href="{{REPO}}/discussions">讨论区</a>交流。</p><p class="cl"><b>私下联系：</b>发邮件到 <code>kaptonia@tuta.io</code>，或在 Session 上找 <code>05208a1c6901322420185a1f72ef691ac749fb86ca74c129cf65cb5ec8972a5f22</code>。</p><p class="cl"><b>安全漏洞：</b>请发邮件或在 Session 上私下报告，详见<a href="../dev/security.html">开发者指南 · 安全</a>。</p></dd></div>
 </dl>

@@ -7,7 +7,9 @@ title: 参与贡献
 <thead><tr><th>改动内容</th><th>途径</th></tr></thead>
 <tbody>
 <tr><td>界面、文案、交互</td><td>合并请求，修改 <code>crates/app</code> 与 <code>crates/zikaron-ui</code>。</td></tr>
-<tr><td>命令行</td><td>合并请求。输出格式、参数或拒因变化时，同步修改 <code>CLI-SCHEMA.md</code>，测试会逐项对照。</td></tr>
+<tr><td>命令行</td><td>合并请求。输出格式、参数、退出码或拒因变化时，同步修改 <code>CLI-SCHEMA.md</code>，测试会逐项对照；<code>zikaron contract</code> 由代码里的同一张表生成。经桌面的动词表在三处：<code>CLI-SCHEMA.md</code> 第 11 节、桌面的通道表与命令行的动词表，测试互相对照。</td></tr>
+<tr><td>本机数据格式</td><td>合并请求，同步修改 <code>crates/app/local-data-standard.md</code>；测试向量在 <code>crates/app/tests/local_standard.rs</code>，逐字节核对。</td></tr>
+<tr><td>固定字面量</td><td>新增或改动文件魔数、格式名、通道名一类字面量时，登记在 <code>crates/app/family-literals.json</code>，测试双向对照每一项与代码里定义它的那一处。</td></tr>
 <tr><td>打包与持续集成</td><td>合并请求，修改 <code>packaging/</code>、<code>crates/zikaron-pack</code> 或 <code>.github/workflows/</code>。</td></tr>
 <tr><td>核的实现(缺陷、性能)</td><td>合并请求，附一致性比对零分歧的结果。</td></tr>
 <tr><td>新的条目读法</td><td>先在讨论区确定约定，再实现。</td></tr>
@@ -24,7 +26,7 @@ title: 参与贡献
 </ol>
 <h2 id="check">提交前检查</h2>
 <ul class="chk">
-<li><code>cargo test --workspace</code> 全部通过；合并请求上的持续集成在 macOS、Linux 与 Windows 上各跑一遍，macOS 与 Linux 两格必须通过。</li>
+<li>工具链由 <code>rust-toolchain.toml</code> 钉在 Rust 1.97.1。<code>cargo test --workspace --locked --no-fail-fast</code> 全部通过；合并请求上的持续集成在 macOS、Linux 与 Windows 上各跑一遍，macOS 与 Linux 两格必须通过，这两格还按发布的方式构建两个程序，并用 <code>zikaron-pack no-paths</code> 确认二进制里只有中性的路径名。</li>
 <li><code>cargo build --release --locked</code> 通过；依赖有增减时，一并提交 <code>Cargo.lock</code>，第三方许可清单在构建时随之重生成。</li>
 <li>修改了 <code>zikaron</code> 或 <code>zikaron-kit</code>：比对器在至少三个种子的语料上零分歧，语料在仓库之外的副本中生成。</li>
 <li>修改了 <code>zikaron-anchor</code>：全部链面录制回放一致。</li>
@@ -45,7 +47,7 @@ title: 参与贡献
 </dl>
 <h2 id="ui">界面约定</h2>
 <ul>
-<li>写账本、写链的动作先弹出确认卡，列明写到哪里、写什么、花费多少；真正写入的红色实心键只出现在确认卡上。</li>
+<li>写账本、写链的动作先弹出确认卡，列明写到哪里、写什么、花费多少；真正写入的红色实心键只出现在确认卡上。经桌面(<code>--home</code>)的请求由命令行一方发起，桌面直接照做，上链照「命令行上链」的设置。</li>
 <li>每屏至多一个蓝色主按钮。</li>
 <li>前台使用日常用语；地址、哈希、类型名、判定词收在「详细信息」中。</li>
 <li>每次失败都说明两件事：发生了什么，下一步怎么做。</li>

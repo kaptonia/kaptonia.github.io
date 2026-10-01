@@ -4,7 +4,7 @@ title: 从源码构建
 <p class="lede">一个 Rust 工作区：一条命令构建，一条命令测试，各平台用各自的脚本或命令打包。</p>
 <h2 id="need">环境要求</h2>
 <dl>
-<div><dt>Rust</dt><dd>stable 版，2021 edition，用 <a href="https://rustup.rs">rustup</a> 安装。</dd></div>
+<div><dt>Rust</dt><dd>1.97.1，2024 edition。版本由仓库根的 <code>rust-toolchain.toml</code> 钉定，本地、持续集成与发布构建同用这一版；装好 <a href="https://rustup.rs">rustup</a>，进入仓库它即自动取用。</dd></div>
 <div><dt>C 工具链</dt><dd>TLS 用到的加密库 <code>ring</code> 要为本机编译一段 C 代码。在 macOS 上装 Xcode 的命令行工具；在 Windows 上用 MSVC 工具链（目标 <code>x86_64-pc-windows-msvc</code>）。</dd></div>
 <div><dt>Linux 的系统库</dt><dd>窗口、键盘与文件对话框所需的开发包，见下文。</dd></div>
 <div><dt>Python 3</dt><dd>运行法的冻结核与一致性比对，只用标准库。</dd></div>
@@ -16,8 +16,8 @@ sudo apt install build-essential pkg-config libxkbcommon-dev libxkbcommon-x11-0 
   libwayland-dev libx11-dev libxcursor-dev libxrandr-dev libxi-dev libgl1-mesa-dev \
   xdg-desktop-portal xdg-desktop-portal-gtk
 }}
-<p>Linux 上的系统文件对话框走桌面门户，所以运行时要有 <code>xdg-desktop-portal</code> 和一个后端；缺少门户时，把文件直接拖进窗口即可。</p>
-<p>构建时，<code>crates/app/build.rs</code> 用 <code>cargo metadata --locked --offline</code> 按目标平台从 <code>Cargo.lock</code> 现生成第三方许可清单，随应用一起带着；清单生成不了，构建即失败。依赖增删之后，清单自动跟着变。</p>
+<p>Linux 上的系统文件对话框走桌面门户，所以运行时要有 <code>xdg-desktop-portal</code> 和一个后端；缺少门户时，把文件直接拖进窗口即可。拖放经 X11：有 X 显示时（包括 Wayland 桌面上的 XWayland）窗口走 X11，拖放要在有 X 显示的会话里用。</p>
+<p>构建时，<code>crates/app/build.rs</code> 用 <code>cargo metadata --locked --offline</code> 按目标平台从 <code>Cargo.lock</code> 现生成第三方许可清单，随应用一起带着；清单生成不了，构建即失败。依赖增删之后，清单自动跟着变。测试要按发布级的参数跑 scrypt 派生，所以开发构建里 scrypt、salsa20、pbkdf2、sha2、hmac 几个 crate 照样开最高优化。</p>
 <h2 id="build">构建与测试</h2>
 {{code:
 tar -xzf zikaron-{{VER}}-src.tar.gz
@@ -32,19 +32,19 @@ cargo test --workspace
 <tr><td><code>target/release/app</code></td><td>桌面窗口，在 macOS 上打包为 <code>ZIKARON.app</code>，在 Linux 上为 <code>zikaron-desk</code>，在 Windows 上为 <code>zikaron-desk.exe</code></td></tr>
 <tr><td><code>target/release/zikaron</code></td><td>命令行，见<a href="cli.html">命令行</a></td></tr>
 <tr><td><code>zk1</code>、<code>zkk</code>、<code>zks</code>、<code>zka</code>、<code>zkg</code></td><td>供测试与一致性比对用的辅助程序</td></tr>
-<tr><td><code>zikaron-pack</code></td><td>打包工具：生成第三方许可清单，去掉包里的构建机信息，排出 Windows 包</td></tr>
+<tr><td><code>zikaron-pack</code></td><td>打包工具：生成第三方许可清单（<code>notices</code>），去掉包里的构建机信息（<code>hfs-owners</code>、<code>dmg-names</code>、<code>elf-comment</code>），给出路径映射并复核产物里只有中性的路径名（<code>rustflags</code>、<code>no-paths</code>），核对钉定的 AppImage 运行时（<code>appimage-runtime</code>），排出 Windows 包（<code>windows</code>）</td></tr>
 </tbody></table></div>
-<p>每次推到 <code>main</code> 和每个合并请求，仓库的 <code>.github/workflows/test.yml</code> 都在 macOS、Linux 与 Windows 上跑 <code>cargo build --workspace --locked</code> 和 <code>cargo test --workspace --locked</code>；macOS 与 Linux 两格必须通过，Windows 一格在 Windows 实机上走通之后才列为必过。</p>
+<p>每次推到 <code>main</code> 和每个合并请求，仓库的 <code>.github/workflows/test.yml</code> 都在 macOS、Linux 与 Windows 上跑 <code>cargo build --workspace --locked</code> 和 <code>cargo test --workspace --locked --no-fail-fast</code>；macOS 与 Linux 两格必须通过，Windows 一格在 Windows 实机上走通之后才列为必过。macOS 与 Linux 两格另做一步：按打包脚本的路径映射做一次发布构建，再用 <code>zikaron-pack no-paths</code> 复核产物里只有中性的路径名。</p>
 <h2 id="package">打包</h2>
 <div class="tw"><table>
 <thead><tr><th>脚本或命令</th><th>产出</th></tr></thead>
 <tbody>
 <tr><td><code>packaging/macos/build.sh [--identity NAME]</code></td><td><code>ZIKARON.app</code>，装在 <code>.dmg</code> 和 <code>.pkg</code> 里(macOS)</td></tr>
-<tr><td><code>packaging/linux/build.sh</code></td><td><code>.deb</code> 与 AppImage，在 x86_64 或 aarch64 的 Linux 上本机构建；需要 <code>dpkg-deb</code>，以及 <code>appimagetool</code>（或能联网去取）</td></tr>
-<tr><td><code>packaging/linux/cross-build.sh</code></td><td>在别的主机上用 zig 与 <code>cargo-zigbuild</code> 打出同样的 Linux x86_64 包，目标 glibc 2.31；另需 <code>mksquashfs</code>、<code>python3</code>、<code>curl</code></td></tr>
+<tr><td><code>packaging/linux/build.sh</code></td><td>在 Linux 上本机构建：x86_64 出 <code>.deb</code> 与 AppImage；aarch64 只出 <code>.deb</code>，AppImage 一步因为这个架构尚待钉定运行时而具名停下。需要 <code>dpkg-deb</code> 与 <code>mksquashfs</code>，AppImage 的运行时联网去取，或用 <code>APPIMAGE_RUNTIME</code> 指向本地文件，取到后按钉定的字节核对</td></tr>
+<tr><td><code>packaging/linux/cross-build.sh</code></td><td>在别的主机上用 zig 与 <code>cargo-zigbuild</code> 打出同样的 Linux x86_64 包，目标 glibc 2.31；另需 <code>mksquashfs</code>、<code>python3</code>、<code>curl</code>；AppImage 运行时同样按钉定的字节核对</td></tr>
 <tr><td><code>cargo run --release --locked -p zikaron-pack -- windows --out dist</code></td><td>Windows x86_64 包的文件夹 <code>dist/ZIKARON-&lt;版本&gt;-windows-x86_64/</code>：<code>zikaron-desk.exe</code>、<code>zikaron.exe</code>、<code>LICENSE.txt</code>、<code>THIRD-PARTY-LICENSES.txt</code>。在 Windows 上用 MSVC 构建，C 运行库静态链接，用户那边无需另装运行库；<code>.github/workflows/package-windows.yml</code> 手动触发时调的就是这一条。直接 <code>cargo build</code> 出的 Windows 程序动态链接 C 运行库，要另装 VC++ 运行库</td></tr>
 </tbody></table></div>
-<p>macOS 与 Linux 的包落在 <code>dist/</code>，各附一份 <code>SHA256SUMS-&lt;系统&gt;-&lt;架构&gt;.txt</code>；Windows 那一条只排出文件夹，发布页上的 zip 由这个文件夹压成。每个包都带按目标平台现生成的 <code>THIRD-PARTY-LICENSES.txt</code>，包里不带构建机的用户名、属主、主机或系统版本。macOS 脚本省略 <code>--identity</code> 时做临时签名(<code>-</code>)；发布包用 Kaptonia 的证书签名，见<a href="release.html">发布</a>。</p>
+<p>macOS 与 Linux 的包落在 <code>dist/</code>，各附一份 <code>SHA256SUMS-&lt;系统&gt;-&lt;架构&gt;.txt</code>；Windows 那一条只排出文件夹，发布页上的 zip 由这个文件夹压成。每个包都带按目标平台现生成的 <code>THIRD-PARTY-LICENSES.txt</code>，包里的用户名、属主、主机与系统版本都中性化：三个打包脚本都先用 <code>zikaron-pack rustflags</code> 取路径映射（家目录、Cargo 与 rustup 的目录、仓库与构建目录各映射成一个固定的名字），构建后再用 <code>no-paths</code> 复核，有残留即停在出包之前。macOS 脚本省略 <code>--identity</code> 时做临时签名(<code>-</code>)；发布包用 Kaptonia 的证书签名，见<a href="release.html">发布</a>。</p>
 <p>deb 声明的运行依赖：<code>libc6</code>、<code>libdbus-1-3</code>、<code>libgcc-s1</code>、<code>libxkbcommon0</code>、<code>libxkbcommon-x11-0</code>、<code>libwayland-client0</code>、<code>libx11-6</code>、<code>libxcursor1</code>、<code>libxrandr2</code>、<code>libxi6</code>、<code>libgl1</code>；推荐 <code>xdg-desktop-portal</code> 与 <code>xdg-desktop-portal-gtk</code>。</p>
 <h2 id="contract">合约测试</h2>
 {{code:
@@ -64,7 +64,7 @@ cd base/zikaron-conformance
 T=$(mktemp -d)
 HOME=$T ./target/release/app
 }}
-<p>Windows 上的主目录取自系统的用户配置文件，机器数据在 <code>%LOCALAPPDATA%\ZIKARON\</code>；要隔离，换一个 Windows 用户试用。</p>
-<p>试用时，在向导里选「自定义」，再到「设置 › 网络 › 编辑节点…」的「预设」里选 Sepolia 测试网；或用「新建身份…」，在「网络」里选「Sepolia 测试网」，见 Wiki 的<a href="../wiki/anchoring.html#networks">网络</a>。测试用的密钥用 <code>zikaron keygen</code> 现场生成，用后即弃。</p>
+<p>Windows 上先读 <code>USERPROFILE</code>：把它指向一个空目录后启动，机器数据落在其中的 <code>AppData\Local\ZIKARON\</code>，同样与日常数据隔离。带 <code>--home</code> 的命令行按同一规则找机器目录，隔离试用时给它同一个 <code>HOME</code> 或 <code>USERPROFILE</code>。「启用命令行」写入的位置，可以用环境变量 <code>ZIKARON_CLI_LINK_DIR</code> 改到别处。</p>
+<p>试用时，在向导里选「自定义」，再到「设置 › 网络 › 编辑节点…」的「预设」里选 Sepolia 测试网；或用「新建身份…」，在「网络」里选「Sepolia 测试网」，见 Wiki 的<a href="../wiki/ledger.html#networks">网络</a>。测试用的密钥用 <code>zikaron keygen</code> 现场生成，用后即弃。</p>
 <h2 id="fonts">内嵌字体</h2>
 <p>界面的西文字体 Inter 与等宽字体 JetBrains Mono 内嵌于应用。中文在 macOS 上取自系统的苹方，在 Windows 上取自系统的微软雅黑（Microsoft YaHei UI，加粗用它的粗体），找不到时用内嵌的 Noto Sans SC，在 Linux 上用内嵌的 Noto Sans SC；所以 Noto Sans SC 只随 Windows 与 Linux 的构建内嵌。内嵌字体都以 SIL OFL 1.1 发布，许可文本在 <code>crates/zikaron-ui/fonts/</code>。</p>

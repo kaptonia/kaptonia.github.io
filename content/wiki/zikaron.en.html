@@ -2,41 +2,27 @@
 title: Zikaron
 nav: Introduction
 -->
-<p class="lede">Evidence infrastructure. ZIKARON Desk is a desktop application for your own machine: it records your works or files in an append-only ledger, anchors that ledger to Ethereum (or a chosen layer-two network), and lets you issue grants from it. Whoever receives a grant can verify it independently, on any machine.</p>
-<h2 id="name">The name</h2>
-<p>Zikaron (Hebrew <span lang="he" dir="rtl">זִכָּרוֹן</span>) means “memorial”. When Israel crossed the Jordan, Joshua had twelve men each carry a stone out of the river to be set up as a memorial: when the ark of the covenant entered the Jordan, the waters were cut off before it, and the stones were to keep that day in Israel’s memory for ever (Joshua 4:4–7).</p>
-<h2 id="why">Why evidence comes first</h2>
-<p>Ownership, trade and rulings all rest, in the end, on a settled record. A record weighs most when it was made while the outcome still lay ahead, because then everyone is still willing to record things as they are. So evidence is the foundation of everything else, and it is released first.</p>
-<p>One person can keep evidence alone: what you record today has a time today.</p>
-<h2 id="how">How it works</h2>
-<ol>
-<li><b>Record.</b> Drop a file into the app. It computes the file’s content fingerprint and writes it as an anchored record in your ledger, signed by your key. The file stays on your machine.</li>
-<li><b>Put on chain.</b> The entries are sent to the chain this identity chose: Ethereum mainnet, Arbitrum One or OP Mainnet. From then on it can be shown that the content existed by that moment at the latest.</li>
-<li><b>Grant or present.</b> To grant rights in a work, issue a grant; to present evidence, export a record kit.</li>
-<li><b>Verify.</b> With a grant file, the other side checks it themselves, item by item: signature, ledger, anchoring, validity and revocation; with a record kit, signature, ledger and anchoring; with a grant code alone, signature and validity.</li>
-</ol>
-<p>Each step has its own page: <a href="ledger.html">The ledger and its entries</a>, <a href="anchoring.html">Anchoring and networks</a>, <a href="grants.html">Grants</a>, <a href="kits.html">Record kits</a> and <a href="verify.html">Verification</a>.</p>
+<p class="lede">ZIKARON Desk is an app on your computer that keeps records of your works and files that anyone can check: which content, recorded by whose key, and the latest moment it already existed. With these records you can grant others the use of a work, and whoever receives it can check it on their own computer.</p>
+<h2 id="what">Four things</h2>
+<dl>
+<div><dt>Record</dt><dd>Drop a file into the app, add it to your ledger, and put it on chain. From then on, anyone can check that the content existed by that moment. See <a href="ledger.html">Recording and anchoring</a>.</dd></div>
+<div><dt>Grant</dt><dd>Grant a work to an address for a stated period, with terms attached; revoke it when you need to. See <a href="grants.html">Grants</a>.</dd></div>
+<div><dt>Present</dt><dd>Pick the records that bear on a matter and export them as a record kit for the other side or an arbiter. See <a href="kits.html">Presenting records</a>.</dd></div>
+<div><dt>Verify</dt><dd>Receive a grant or a record kit and check it item by item yourself, against the public chain and the files you were given. See <a href="verify.html">Verifying</a>.</dd></div>
+</dl>
 <h2 id="roles">Two roles</h2>
 <dl>
-<div><dt>Recorder</dt><dd>Records their own works, issues grants, puts entries on chain, exports record kits.</dd></div>
-<div><dt>User</dt><dd>Receives other people’s grants and verifies them, checks received files and terms, creates credentials, and can sublicense.</dd></div>
+<div><dt>Recorder</dt><dd>Records your own works, issues grants and exports record kits.</dd></div>
+<div><dt>User</dt><dd>Receives and verifies other people’s grants, and can sublicense them.</dd></div>
 </dl>
-<p>Both roles live in one app, switched at the top of the sidebar. Each role has its own key, address and ledger; see <a href="keys.html">Identities and keys</a>.</p>
-<h2 id="enforce">Who enforces creative rights</h2>
-<p>In the past, a registry certified authorship, grants rested on contracts and notaries, and infringement went to courts and police. Here, who recorded what and when, and what was granted to whom, is visible to all and checkable by all. The enforcers are the users: before buying, using or passing a work on, they check the grant and accept what passes.</p>
-<p>The ledger records facts. Accusing someone of infringement is speech, weighted by the speaker, and it stays outside the ledger; the ledger lets anyone check such a claim within seconds.</p>
-<h2 id="limits">Limits</h2>
-<ul>
-<li>Whether two works are alike, and which is the original, is for an arbiter to decide.</li>
-<li>Payment happens elsewhere; the app handles documents and checks.</li>
-<li>Files stay on your machine and you keep your own keys. The app connects to the nodes you configure, the publish address you enter, and the https addresses you give when verifying or that a grant file carries.</li>
-<li>To look up a ledger you first need its address. Directories, showcases and rankings are left to whoever wants to build them.</li>
-<li>Whether to use a work is always the user’s decision.</li>
-</ul>
-<h2 id="release">Release</h2>
-<dl>
-<div><dt>Current version</dt><dd>ZIKARON Desk {{VER}}.</dd></div>
-<div><dt>Packages</dt><dd>macOS on Apple silicon (11 or later), Windows 10 and 11 on x86_64, and x86_64 Linux (<code>.deb</code> and AppImage); see the <a href="../../download.html">download page</a>. On other platforms, build from source; see <a href="../dev/build.html">Developer guide · Building from source</a>.</dd></div>
-<div><dt>Command line</dt><dd>The <code>zikaron</code> that comes with the app, one verb per action; see <a href="../dev/cli.html">Command line</a>.</dd></div>
-<div><dt>Licence</dt><dd>MIT; the source is public on GitHub.</dd></div>
-</dl>
+<p>Both roles live in the one app; switch between them at the top of the sidebar. Each has its own key and ledger.</p>
+<h2 id="cost">Cost</h2>
+<p>The app is free and its source is open. Adding to your ledger is free; putting entries on chain costs that chain’s gas, paid in ETH. Several records can go together for the price of one transaction. To try it first, use the free Sepolia testnet.</p>
+<h2 id="privacy">Your files</h2>
+<p>Ledgers, settings and received grants are kept encrypted on your computer; your original files stay where they are, and the app records their fingerprints. What goes on chain is a 32-byte number and your sending address. Record names and notes travel with your ledger to whoever you give it to, so write them with care.</p>
+<h2 id="limits">For people to judge</h2>
+<p>Whether two works are alike and who the original author is are for an arbiter to judge, and payment happens elsewhere. The app supplies facts that can be checked; see <a href="evidence.html">What a record proves</a>.</p>
+<h2 id="name">The name</h2>
+<p>Zikaron (Hebrew <span lang="he" dir="rtl">זִכָּרוֹן</span>) means “memorial”. When Israel crossed the Jordan, Joshua had twelve men each take a stone from the riverbed and set them up on the bank as a memorial (Joshua 4:4–7).</p>
+<h2 id="release">Version</h2>
+<p>The current version is ZIKARON Desk {{VER}}, for Macs with Apple silicon, Windows 10 and 11, and Linux; get it from the <a href="../../download.html">download page</a>. The command line that comes with it, and the source, are covered in the <a href="../dev/index.html">developer guide</a>. MIT licence.</p>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>AI 代理与远程操作 · Wiki</title>
+<meta name="description" content="AI 代理能在终端里调用命令行，替你做 Zikaron 的日常操作；把应用放在另一台机器上，还能远程去做。命令行的两种用法，各有一套做法。">
+<meta property="og:title" content="AI 代理与远程操作 · Wiki">
+<meta property="og:description" content="AI 代理能在终端里调用命令行，替你做 Zikaron 的日常操作；把应用放在另一台机器上，还能远程去做。命令行的两种用法，各有一套做法。">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kaptonia.github.io/docs/wiki/ai.html">
+<meta property="og:image" content="https://kaptonia.github.io/ill/og/zikaron.zh.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="去中心化法权基础设施">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../icon.svg?v=e2bb0490" type="image/svg+xml">
+<link rel="icon" href="../../favicon-32.png?v=7645d0f6" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../apple-touch-icon.png?v=c218dafc">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="en" href="../../en/docs/wiki/ai.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../style.css?v=3e49c4f3">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">开发者指南</a></div></div>
+  <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/wiki/ai.html" lang="en" hreflang="en">EN</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>AI 代理与远程操作</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html">上手</a><a href="ledger.html">存证与上链</a><a href="grants.html">授权</a><a href="kits.html">出示</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html">密钥与备份</a><a href="cli.html">命令行</a><a href="ai.html" class=on aria-current=page>AI 代理与远程操作</a><a href="alerts.html">设置与提醒</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="ai" data-prev="cli.html" data-next="alerts.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>AI 代理与远程操作</h1><p class="lede">AI 代理能在终端里调用<a href="cli.html">命令行</a>，替你做 Zikaron 的日常操作；把应用放在另一台机器上，还能远程去做。命令行的两种用法，各有一套做法。</p>
+<h2 id="desk">与桌面并行时</h2>
+<p>AI 代理的命令交给你正在运行的桌面去执行。私钥和口令留在桌面里，AI 代理只递请求，它做的每件事，窗口里马上看得到。</p>
+<ol>
+<li><b>接上终端。</b>在「设置 › 本机数据」打开「启用命令行」。</li>
+<li><b>打开并解锁桌面。</b>左栏顶上选好身份和角色。AI 代理工作期间，桌面要一直开着、保持解锁。</li>
+<li><b>找到数据目录。</b>「设置 › 本机数据」的「详细信息」里，「数据目录」一行就是它的路径，告诉 AI 代理。</li>
+<li><b>选上链模式。</b>「设置 › 网络」的「命令行上链」：选「自动发送」，AI 代理可以从头做到尾，费用从地址里直接付；选「仅加入队列」，AI 代理只管写，每一笔上链由你在桌面上确认。</li>
+<li><b>关掉自动锁定。</b>桌面按你的键盘和鼠标计算闲置时间，AI 代理的请求不算在内；闲置满「闲置时长」桌面就会锁上，通道随之关闭。要让 AI 代理一直工作，到「设置 › 身份密钥」关掉「自动锁定」，或把闲置时长调长。AI 代理做完后，按左栏「锁定」。</li>
+</ol>
+<p>把下面这段交给 AI 代理，换上你的数据目录路径：</p>
+<div class="cmd block"><code>你可以用 ZIKARON 的命令行 zikaron 操作我的 Zikaron。
+先运行 zikaron contract，它列出全部子命令、各自的参数和退出码。
+要写进我账本的操作，每条命令都带 --home &quot;&lt;数据目录&gt;&quot;，交给正在运行的桌面去做。
+每条命令在标准输出给一个 JSON 值，结论看退出码：
+  0 完成；1 被拒或未通过；2 命令写错；3 部分结果，或已加入队列等我在桌面上发；4 没有答案，例如桌面没有作答、连不上节点。</code><button class="cp" type="button" data-copy="你可以用 ZIKARON 的命令行 zikaron 操作我的 Zikaron。
+先运行 zikaron contract，它列出全部子命令、各自的参数和退出码。
+要写进我账本的操作，每条命令都带 --home &quot;&lt;数据目录&gt;&quot;，交给正在运行的桌面去做。
+每条命令在标准输出给一个 JSON 值，结论看退出码：
+  0 完成；1 被拒或未通过；2 命令写错；3 部分结果，或已加入队列等我在桌面上发；4 没有答案，例如桌面没有作答、连不上节点。" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>AI 代理可以先做完好几件事，最后上链一次，让它们装进同一笔交易，只付一笔的费用。</p>
+<h2 id="standalone">纯命令行时</h2>
+<p>AI 代理用一把专用的密钥独立写一本账，用不着桌面；主机重启后照常工作，全程不用你管，地址里的钱不够时再充一点。重要的身份交给桌面托管，这里只用一把专用的钥。</p>
+<ol>
+<li>在你自己的终端里运行 <code>zikaron keygen</code>，把私钥那一串存进一个只有这个用户能读的文件。</li>
+<li>往地址里转一点 ETH，够付 gas 即可。</li>
+<li>建好账本目录（<code>zikaron init</code>），把四样东西告诉 AI 代理：账本目录、私钥文件的路径、节点地址、登记合约地址（以太坊主网上是 <code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code>）。</li>
+</ol>
+<p>把下面这段交给 AI 代理，换上这几样：</p>
+<div class="cmd block"><code>你可以用 ZIKARON 的命令行 zikaron 操作一本专用的 Zikaron 账本。
+先运行 zikaron contract，它列出全部子命令、各自的参数和退出码。
+写账本的命令都带 --ledger &quot;&lt;账本目录&gt;&quot; --key-file &quot;&lt;私钥文件&gt;&quot;。
+上链：zikaron anchor --key-file &quot;&lt;私钥文件&gt;&quot; --endpoint 1=&lt;节点地址&gt; --form registry --registry &lt;登记合约地址&gt; --hash &lt;条目编号&gt;
+  --hash 可以重复，一笔交易锚多条；记下写入时输出的条目编号，攒几条一起发。
+每条命令在标准输出给一个 JSON 值，结论看退出码：0 完成；1 被拒或未通过；2 命令写错；3 部分结果；4 没有答案，例如连不上节点。
+上链被拒时，把原因告诉我；余额不够就请我充值。</code><button class="cp" type="button" data-copy="你可以用 ZIKARON 的命令行 zikaron 操作一本专用的 Zikaron 账本。
+先运行 zikaron contract，它列出全部子命令、各自的参数和退出码。
+写账本的命令都带 --ledger &quot;&lt;账本目录&gt;&quot; --key-file &quot;&lt;私钥文件&gt;&quot;。
+上链：zikaron anchor --key-file &quot;&lt;私钥文件&gt;&quot; --endpoint 1=&lt;节点地址&gt; --form registry --registry &lt;登记合约地址&gt; --hash &lt;条目编号&gt;
+  --hash 可以重复，一笔交易锚多条；记下写入时输出的条目编号，攒几条一起发。
+每条命令在标准输出给一个 JSON 值，结论看退出码：0 完成；1 被拒或未通过；2 命令写错；3 部分结果；4 没有答案，例如连不上节点。
+上链被拒时，把原因告诉我；余额不够就请我充值。" aria-label="复制" title="复制"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>这把钥由 AI 代理使用，风险限于这本专用的账和地址里的 ETH。这本账日后可以用「导入密钥…」和「原位收编」接进桌面。私钥文件的保管办法见<a href="cli.html#plain">明文的文件</a>。</p>
+<h2 id="remote">远程操作</h2>
+<p>把应用放在家里的一台迷你主机，或一台云主机上，AI 代理就能远程替你操作。命令行只和同一台机器上的同一个用户打交道，所以 AI 代理要在那台主机上执行命令：用这个用户经 SSH 登录进去，或者直接装在那台主机上。要处理的文件，也先放到那台主机上。</p>
+<dl>
+<div><dt>与桌面并行</dt><dd>主机要有图形界面：接上显示器，或开远程桌面。应用的窗口要 OpenGL，没有显卡的主机得靠虚拟显示加软件渲染，先实测一次窗口能否打开。你经远程桌面打开应用、输口令、关掉自动锁定，之后日常交给 AI 代理。主机重启或应用退出后，要你再经远程桌面打开并输一次口令；选了「仅加入队列」时，上链的确认也经远程桌面来做。</dd></div>
+<div><dt>纯命令行</dt><dd>主机用不着图形界面，也就省去了解锁与重启后重输口令，一台无界面的 Linux 就够。AI 代理经 SSH 运行命令，私钥文件放在主机上。</dd></div>
+</dl>
+<p><b>放在哪台主机上。</b>与桌面并行时，桌面解锁期间主钥在内存里；纯命令行时，私钥就在主机的文件里。云主机的厂商能从宿主机那一层读到虚拟机的内存与磁盘，放在云上就要信任厂商；家里自己的主机更稳妥。</p>
+<h2 id="safety">安全</h2>
+<ul>
+<li>能以这个用户身份登录主机的人或程序，都能让桌面替你操作，或读到那把专用私钥。SSH 只许密钥登录，主机开启全盘加密。</li>
+<li>与桌面并行时，关掉了自动锁定，就记得在 AI 代理做完、或你离开时按「锁定」。想让每一笔上链都经你确认，用「仅加入队列」。</li>
+<li>重要的身份经桌面托管。纯命令行给 AI 代理的那把钥单独用，地址里只放少量 ETH。</li>
+<li>同一个身份的账本只在一处写：交给远程主机写时，你自己的电脑上只用来看。</li>
+<li>整机备份和私钥文件的副本，放在主机以外的地方。</li>
+</ul>
+<div class="pn"><a href="cli.html"><span>上一页</span>命令行</a><a class="nx" href="alerts.html"><span>下一页</span>设置与提醒</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#desk">与桌面并行时</a><a href="#standalone">纯命令行时</a><a href="#remote">远程操作</a><a href="#safety">安全</a></nav></div>
+<script src="../../site.js?v=8606e8b4" defer></script>
+</body>
+</html>

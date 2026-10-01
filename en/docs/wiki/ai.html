@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>AI Agents and remote operation · Wiki</title>
+<meta name="description" content="An AI Agent can call the command line in a terminal and carry out your everyday Zikaron work; with the app on another machine, it can do so remotely too. Each of the command line’s two ways has its own setup.">
+<meta property="og:title" content="AI Agents and remote operation · Wiki">
+<meta property="og:description" content="An AI Agent can call the command line in a terminal and carry out your everyday Zikaron work; with the app on another machine, it can do so remotely too. Each of the command line’s two ways has its own setup.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kaptonia.github.io/en/docs/wiki/ai.html">
+<meta property="og:image" content="https://kaptonia.github.io/ill/og/zikaron.en.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Decentralized Infrastructure of Right">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../../icon.svg?v=e2bb0490" type="image/svg+xml">
+<link rel="icon" href="../../../favicon-32.png?v=7645d0f6" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../../apple-touch-icon.png?v=c218dafc">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/ai.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/ai.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>AI Agents and remote operation</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">Recording and anchoring</a><a href="grants.html">Grants</a><a href="kits.html">Presenting records</a><a href="verify.html">Verifying</a><a href="evidence.html">What a record proves</a><a href="keys.html">Keys and backups</a><a href="cli.html">Command line</a><a href="ai.html" class=on aria-current=page>AI Agents and remote operation</a><a href="alerts.html">Settings and alerts</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="ai" data-prev="cli.html" data-next="alerts.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>AI Agents and remote operation</h1><p class="lede">An AI Agent can call the <a href="cli.html">command line</a> in a terminal and carry out your everyday Zikaron work; with the app on another machine, it can do so remotely too. Each of the command line’s two ways has its own setup.</p>
+<h2 id="desk">Alongside the desktop</h2>
+<p>The AI Agent’s commands are carried out by your running desktop. The private keys and the passcode stay in the desktop, the AI Agent only hands over requests, and everything it does shows in the window at once.</p>
+<ol>
+<li><b>Put it in the terminal.</b> Turn on “Enable command line” in Settings › Local data.</li>
+<li><b>Open and unlock the desktop.</b> Pick the identity and role at the top of the sidebar. Keep the desktop open and unlocked while the AI Agent works.</li>
+<li><b>Find the data folder.</b> Under “Details” in Settings › Local data, the “Data folder” row gives its path; give it to the AI Agent.</li>
+<li><b>Choose a mode.</b> Under “Putting on chain from the command line” in Settings › Network: with “Send automatically” the AI Agent can see a job through from start to finish, the fee paid straight from the address; with “Queue only” the AI Agent does the writing and you confirm each payment to put entries on chain on the desktop.</li>
+<li><b>Turn off auto-lock.</b> The desktop counts idle time from your keyboard and mouse, and the AI Agent’s requests leave that count running; once it reaches the “Idle time”, the desktop locks and the channel closes. To let the AI Agent keep working, turn off “Auto-lock” in Settings › Identity key, or set a longer idle time. When the AI Agent is done, press “Lock” in the sidebar.</li>
+</ol>
+<p>Hand the AI Agent this text, with your data folder path filled in:</p>
+<div class="cmd block"><code>You can operate my Zikaron with the ZIKARON command line, zikaron.
+Run zikaron contract first: it lists every subcommand, its flags and the exit codes.
+For anything that writes to my ledger, every command carries --home &quot;&lt;data folder&gt;&quot; and is carried out by the running desktop.
+Each command prints one JSON value on standard output; the exit code gives the outcome:
+  0 done; 1 refused or failed; 2 the command is wrong; 3 a partial result, or queued for me to send from the desktop; 4 no answer, such as no answer from the desktop or nodes unreachable.</code><button class="cp" type="button" data-copy="You can operate my Zikaron with the ZIKARON command line, zikaron.
+Run zikaron contract first: it lists every subcommand, its flags and the exit codes.
+For anything that writes to my ledger, every command carries --home &quot;&lt;data folder&gt;&quot; and is carried out by the running desktop.
+Each command prints one JSON value on standard output; the exit code gives the outcome:
+  0 done; 1 refused or failed; 2 the command is wrong; 3 a partial result, or queued for me to send from the desktop; 4 no answer, such as no answer from the desktop or nodes unreachable." aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>The AI Agent can finish several pieces of work first and put them on chain once at the end, so they travel in one transaction for the price of one.</p>
+<h2 id="standalone">With the command line on its own</h2>
+<p>The AI Agent writes a ledger of its own with a dedicated key, with no desktop involved. It keeps working after the machine restarts, so the whole lifecycle runs without you; add a little ETH when the address runs short. Important identities stay with the desktop; this uses a dedicated key alone.</p>
+<ol>
+<li>In your own terminal, run <code>zikaron keygen</code> and save the private key in a file only this user can read.</li>
+<li>Send a little ETH to the address, enough for gas.</li>
+<li>Create the ledger folder (<code>zikaron init</code>) and tell the AI Agent four things: the ledger folder, the path of the key file, a node address, and the registry contract address (on Ethereum mainnet, <code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code>).</li>
+</ol>
+<p>Hand the AI Agent this text, with those filled in:</p>
+<div class="cmd block"><code>You can operate a dedicated Zikaron ledger with the ZIKARON command line, zikaron.
+Run zikaron contract first: it lists every subcommand, its flags and the exit codes.
+Every command that writes to the ledger carries --ledger &quot;&lt;ledger folder&gt;&quot; --key-file &quot;&lt;key file&gt;&quot;.
+Put on chain: zikaron anchor --key-file &quot;&lt;key file&gt;&quot; --endpoint 1=&lt;node address&gt; --form registry --registry &lt;registry contract address&gt; --hash &lt;entry ID&gt;
+  --hash can repeat, so one transaction anchors several; note the entry IDs printed on writing and send a few together.
+Each command prints one JSON value on standard output; the exit code gives the outcome: 0 done; 1 refused or failed; 2 the command is wrong; 3 a partial result; 4 no answer, such as nodes unreachable.
+When putting on chain is refused, tell me why; if the balance is short, ask me to top it up.</code><button class="cp" type="button" data-copy="You can operate a dedicated Zikaron ledger with the ZIKARON command line, zikaron.
+Run zikaron contract first: it lists every subcommand, its flags and the exit codes.
+Every command that writes to the ledger carries --ledger &quot;&lt;ledger folder&gt;&quot; --key-file &quot;&lt;key file&gt;&quot;.
+Put on chain: zikaron anchor --key-file &quot;&lt;key file&gt;&quot; --endpoint 1=&lt;node address&gt; --form registry --registry &lt;registry contract address&gt; --hash &lt;entry ID&gt;
+  --hash can repeat, so one transaction anchors several; note the entry IDs printed on writing and send a few together.
+Each command prints one JSON value on standard output; the exit code gives the outcome: 0 done; 1 refused or failed; 2 the command is wrong; 3 a partial result; 4 no answer, such as nodes unreachable.
+When putting on chain is refused, tell me why; if the balance is short, ask me to top it up." aria-label="Copy" title="Copy"><svg width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5,5 14,5 14,14 5,14 5,5"/><polyline points="2,11 2,2 11,2"/></svg></button></div>
+<p>The AI Agent uses this key, and what is at stake is this dedicated ledger and the ETH at its address. The ledger can join the desktop later through “Import key…” and “Adopt in place”. How to keep the key file is under <a href="cli.html#plain">Plain files</a>.</p>
+<h2 id="remote">Remote operation</h2>
+<p>Put the app on a small computer at home or on a cloud server, and an AI Agent can work for you remotely. The command line deals with the same user on the same machine alone, so the AI Agent runs its commands on that machine: it logs in as that user over SSH, or is installed on the machine itself. Files to work on go to that machine first.</p>
+<dl>
+<div><dt>Alongside the desktop</dt><dd>The machine needs a graphical interface: a display attached, or remote desktop. The app’s window needs OpenGL, so a machine without a graphics card relies on a virtual display with software rendering; check once that the window opens. Over remote desktop you open the app, enter the passcode and turn off auto-lock, and the everyday work goes to the AI Agent. After the machine restarts or the app quits, you open it again over remote desktop and enter the passcode once more; with “Queue only”, you confirm putting entries on chain over remote desktop too.</dd></div>
+<div><dt>The command line on its own</dt><dd>The machine needs no graphical interface, which spares unlocking and entering the passcode again after a restart; a Linux machine with no screen is enough. The AI Agent runs commands over SSH, and the key file lives on the machine.</dd></div>
+</dl>
+<p><b>Which machine.</b> Alongside the desktop, the master key is in memory while the desktop is unlocked; with the command line on its own, the private key sits in a file on the machine. A cloud provider can read a virtual machine’s memory and disk from the host underneath, so a cloud server means trusting the provider; a machine of your own at home is the safer place.</p>
+<h2 id="safety">Safety</h2>
+<ul>
+<li>Anyone or any program that can log in to the machine as this user can have the desktop act for you, or read the dedicated key. Allow SSH logins by key alone, and turn on full-disk encryption on the machine.</li>
+<li>Alongside the desktop with auto-lock off, remember to press “Lock” when the AI Agent is done or you step away. To confirm every payment to put entries on chain yourself, use “Queue only”.</li>
+<li>Keep important identities with the desktop. The key the AI Agent uses on the command line stands on its own, with only a little ETH at its address.</li>
+<li>Write a given identity’s ledger in one place alone: while the remote machine writes it, use your own computer to read.</li>
+<li>Keep whole-machine backups and copies of the key file off the machine.</li>
+</ul>
+<div class="pn"><a href="cli.html"><span>Previous</span>Command line</a><a class="nx" href="alerts.html"><span>Next</span>Settings and alerts</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#desk">Alongside the desktop</a><a href="#standalone">With the command line on its own</a><a href="#remote">Remote operation</a><a href="#safety">Safety</a></nav></div>
+<script src="../../../site.js?v=8606e8b4" defer></script>
+</body>
+</html>

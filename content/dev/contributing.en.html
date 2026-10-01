@@ -7,7 +7,9 @@ title: Contributing
 <thead><tr><th>Change</th><th>Route</th></tr></thead>
 <tbody>
 <tr><td>Interface, wording, interaction</td><td>A pull request, in <code>crates/app</code> and <code>crates/zikaron-ui</code>.</td></tr>
-<tr><td>The command line</td><td>A pull request. When the output format, flags or refusals change, update <code>CLI-SCHEMA.md</code> with it; tests check it item by item.</td></tr>
+<tr><td>The command line</td><td>A pull request. When the output format, flags, exit codes or refusals change, update <code>CLI-SCHEMA.md</code> with it; tests check it item by item, and <code>zikaron contract</code> is made from the same tables in the code. The table of verbs that go through the desktop lives in three places, section 11 of <code>CLI-SCHEMA.md</code>, the desktop’s channel table and the command line’s verb table, and tests hold them to each other.</td></tr>
+<tr><td>Local data formats</td><td>A pull request, updating <code>crates/app/local-data-standard.md</code> with it; its test vectors in <code>crates/app/tests/local_standard.rs</code> are checked byte for byte.</td></tr>
+<tr><td>Fixed literals</td><td>When adding or changing a literal such as a file magic, a format name or a channel name, register it in <code>crates/app/family-literals.json</code>; a test checks each entry against the place in the code that defines it, both ways.</td></tr>
 <tr><td>Packaging and continuous integration</td><td>A pull request, changing <code>packaging/</code>, <code>crates/zikaron-pack</code> or <code>.github/workflows/</code>.</td></tr>
 <tr><td>A core’s implementation (defects, performance)</td><td>A pull request, with the zero-divergence result of the conformance comparison.</td></tr>
 <tr><td>A new reading of entries</td><td>Settle the convention in the discussions first, then implement it.</td></tr>
@@ -24,7 +26,7 @@ title: Contributing
 </ol>
 <h2 id="check">Checks before submitting</h2>
 <ul class="chk">
-<li><code>cargo test --workspace</code> passes; continuous integration on the pull request runs on macOS, Linux and Windows, and the macOS and Linux cells must pass.</li>
+<li>The toolchain is pinned at Rust 1.97.1 by <code>rust-toolchain.toml</code>. <code>cargo test --workspace --locked --no-fail-fast</code> passes; continuous integration on the pull request runs on macOS, Linux and Windows, and the macOS and Linux cells must pass; those two cells also build both programs the way a release does and run <code>zikaron-pack no-paths</code> to confirm the binaries carry neutral path names alone.</li>
 <li><code>cargo build --release --locked</code> passes; when dependencies are added or removed, commit <code>Cargo.lock</code> with the change, and the third-party licence list regenerates with the build.</li>
 <li>If <code>zikaron</code> or <code>zikaron-kit</code> changed: the comparer shows zero divergences on corpora from at least three seeds, generated in a copy outside the repository.</li>
 <li>If <code>zikaron-anchor</code> changed: every chain-facing recording replays identically.</li>
@@ -45,7 +47,7 @@ title: Contributing
 </dl>
 <h2 id="ui">Interface conventions</h2>
 <ul>
-<li>An action that writes to the ledger or the chain first opens a confirmation card listing where it writes, what it writes and the cost; the solid red key that actually writes appears on the confirmation card alone.</li>
+<li>An action that writes to the ledger or the chain first opens a confirmation card listing where it writes, what it writes and the cost; the solid red key that actually writes appears on the confirmation card alone. A request through the desktop (<code>--home</code>) comes from the command line’s side, and the desktop carries it out directly, putting on chain as the setting “Putting on chain from the command line” says.</li>
 <li>A screen holds at most one blue primary button.</li>
 <li>The front of the interface uses plain language; addresses, hashes, type names and verdict tokens go under “Details”.</li>
 <li>Every failure says two things: what happened, and what to do next.</li>

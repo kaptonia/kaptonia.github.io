@@ -4,10 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="color-scheme" content="light dark">
-<title>身份与密钥 · Wiki</title>
-<meta name="description" content="一个身份就是一组签名密钥，在你的机器上生成或由你导入，存在本机的密钥库里，由口令开启。应用只用自己的密钥库，系统钥匙串保持原样。">
-<meta property="og:title" content="身份与密钥 · Wiki">
-<meta property="og:description" content="一个身份就是一组签名密钥，在你的机器上生成或由你导入，存在本机的密钥库里，由口令开启。应用只用自己的密钥库，系统钥匙串保持原样。">
+<title>密钥与备份 · Wiki</title>
+<meta name="description" content="你的身份是一组密钥，和账本、设置一起加密存在本机，用口令打开。换了或丢了电脑之后能找回多少，取决于事先做了哪些备份。">
+<meta property="og:title" content="密钥与备份 · Wiki">
+<meta property="og:description" content="你的身份是一组密钥，和账本、设置一起加密存在本机，用口令打开。换了或丢了电脑之后能找回多少，取决于事先做了哪些备份。">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://kaptonia.github.io/docs/wiki/keys.html">
 <meta property="og:image" content="https://kaptonia.github.io/ill/og/zikaron.zh.jpg">
@@ -28,67 +28,46 @@
   <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">开发者指南</a></div></div>
   <nav class="nav"><a href="../../index.html">回到首页</a><a class="lang" href="../../en/docs/wiki/keys.html" lang="en" hreflang="en">EN</a></nav>
 </div></header>
-<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>身份与密钥</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html">上手</a><a href="ledger.html">账本与条目</a><a href="anchoring.html">上链与网络</a><a href="grants.html">授权</a><a href="kits.html">记录包</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html" class=on aria-current=page>身份与密钥</a><a href="data.html">本机数据与备份</a><a href="alerts.html">提醒与设置</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
-<div class="stream"><article class="art" data-slug="keys" data-prev="evidence.html" data-next="data.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>身份与密钥</h1><p class="lede">一个身份就是一组签名密钥，在你的机器上生成或由你导入，存在本机的密钥库里，由口令开启。应用只用自己的密钥库，系统钥匙串保持原样。</p>
-<h2 id="kinds">两种身份</h2>
-<dl>
-<div><dt>助记词身份</dt><dd>由 12 个助记词派生，同时有记录者与使用方两把密钥：记录者用 <code>m/44'/60'/0'/0/0</code>，使用方用 <code>m/44'/60'/0'/0/1</code>。两把密钥地址各异，各自需要少量 gas。</dd></div>
-<div><dt>本机身份</dt><dd>导入的一把现成私钥或密钥文件，只占导入时选定的那一种角色，另一种空着。</dd></div>
-</dl>
-<p>一台机器上可以有多个身份，在左栏顶上的身份牌里切换，菜单顶上有一格「按身份名称或地址找」。每个身份的每种角色各有自己的密钥、地址和数据目录；每个身份还记着自己的网络，两种角色同用，见<a href="anchoring.html#networks">网络</a>。</p>
-<h2 id="pin">口令</h2>
-<p>口令是 8 位字母或数字，区分大小写。设过口令的机器，每次打开都先出口令门；输满 8 位即自动验证。</p>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>目录</span><b>密钥与备份</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">开始</div><a href="index.html">概览</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">原理<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">导言</a><a href="principles-cost.html">代价高昂的秩序</a><a href="principles-failure.html">当国家不再履行职能</a><a href="principles-apart.html">法权的去中心化</a><a href="principles-now.html">为什么是现在？</a><a href="principles-truth.html">由每个人承担真相的责任</a><a href="principles-river.html">如水一般流动的秩序生态</a><a href="principles-rules.html">不可退让的原则</a><a href="principles-limits.html">秩序的现实边界</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">简介</a><a href="start.html">上手</a><a href="ledger.html">存证与上链</a><a href="grants.html">授权</a><a href="kits.html">出示</a><a href="verify.html">核验</a><a href="evidence.html">一条记录证明什么</a><a href="keys.html" class=on aria-current=page>密钥与备份</a><a href="cli.html">命令行</a><a href="ai.html">AI 代理与远程操作</a><a href="alerts.html">设置与提醒</a></div></div></div></div><div class="sg"><div class="g">参考</div><a href="faq.html">常见问题</a><a href="glossary.html">词汇表</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="keys" data-prev="evidence.html" data-next="cli.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>密钥与备份</h1><p class="lede">你的身份是一组密钥，和账本、设置一起加密存在本机，用口令打开。换了或丢了电脑之后能找回多少，取决于事先做了哪些备份。</p>
+<h2 id="keep">三样东西要保管好</h2>
+<div class="tw"><table>
+<thead><tr><th>保管</th><th>找回什么</th></tr></thead>
+<tbody>
+<tr><td>12 个助记词（抄在纸上）</td><td>你的密钥，以及忘了口令时重设口令</td></tr>
+<tr><td>整机备份文件和它的密码</td><td>全部身份、账本、收到的授权和设置</td></tr>
+<tr><td>原文件</td><td>举证时出示；账本只记它的指纹</td></tr>
+</tbody></table></div>
+<p>助记词与电脑分开存放；备份文件存在另一块磁盘上，备份密码另处记好。</p>
+<h2 id="pin">口令与锁定</h2>
 <ul>
-<li>连错 5 次，口令门变为「已锁定」，只能走恢复。错误次数记在盘上，重开应用照旧累计。</li>
-<li>口令过于简单当场退回：八位全同，或纯数字成连号、像日期。当前口令是纯数字时，设置里建议加入字母。</li>
-<li>这一道限制挡的是坐到机器前随手试的人；对于拷走密钥库文件的人，挡住他的是口令本身，以及每试一次都要跑的加密计算。所以口令宜混用字母和数字。</li>
-<li>密钥库文件的加密参数低于本机标准时（例如被人改低过），开锁时提示「加密参数低于本机标准。」，这一次不计错次，输入正确口令后按本机标准重新加密。</li>
-<li>启动时密钥库文件读不成，口令门那一侧显示「密钥库读不成」，写出原因和那份文件的路径；应用照原样留着它，修好或挪开那份文件后重开应用即可。</li>
+<li>口令是 8 位字母或数字，区分大小写。太简单的（八位相同、连号、像日期）会被退回。</li>
+<li>连错 5 次，口令门锁死，要走「恢复」：用主身份的助记词、密钥文件，或整机备份。</li>
+<li>按左栏「锁定」，或 ⌘L（Windows 与 Linux 上 Ctrl+L），立即锁上。闲置 15 分钟也会自动锁定，时长在「设置 › 身份密钥」里改。</li>
 </ul>
-<h2 id="lock">锁定</h2>
-<p>按左栏「锁定」或快捷键（macOS 上 ⌘L，Windows 与 Linux 上 Ctrl+L）立即锁定：内存里的主钥清掉，数据目录关闭，页面上读出的数据清空；账本检查、授权复核、撤销监测与待上链发送不再新起，正在发送、等收据或写入的任务先做完，主钥随后清掉。锁着时，要用密钥的动作提示「密钥库锁着。」。解锁后，数据目录重新打开，该跑的照跑，待上链队列继续等收据。</p>
-<p>「设置 › 身份密钥」的「自动锁定」出厂开着：空闲满「闲置时长」（1、5、15、30、60 分钟，默认 15 分钟）即自动锁定，键盘或鼠标的任何动作都重新计时。已经发出去的交易照常完成。</p>
-<h2 id="primary">主身份</h2>
-<p>这台机器上第一个身份默认是主身份，之后可在「设置 › 身份密钥」改设。只有主身份的凭据能在忘记口令时重设口令：</p>
+<h2 id="forgot">忘了口令</h2>
+<p>在口令门按「忘记口令」，填这台电脑主身份（默认是第一个建的身份）的 12 个助记词，或选它的密钥文件，再设一个新口令。也可以按「从备份恢复…」，用整机备份恢复。</p>
+<h2 id="backup">整机备份</h2>
+<ol>
+<li>打开「设置 › 本机数据」，按「导出备份…」。</li>
+<li>输入口令，设一个备份密码（至少 8 位），选保存位置，按「导出」。</li>
+</ol>
+<p>一个文件就能恢复整台机器的身份、账本和设置。应用写完会读回核对一遍，提示「已导出备份」才算成功。备份那盏灯：绿色是最新；黄色是之后又有新记录，写着几条还没备份；灰色是从没备份过；红色是上次失败了，请重新导出。</p>
+<p>恢复时，在「设置 › 本机数据」按「从备份恢复…」，选备份文件，填备份密码和本机口令。恢复之后，这台电脑上的内容换成备份里的。</p>
+<h2 id="identities">多个身份</h2>
+<p>点左栏顶上的身份牌，打开「切换身份」：可以切换、「新建身份…」或「导入密钥…」。每个身份有自己的密钥、网络和账本。</p>
+<p>在别处用过的密钥导入进来后，先只能读：应用把它在链上的记录和本机账本对一遍，对上了才能写。对不上时，从那台机器的整机备份「取回账本」。</p>
+<h2 id="handover">换一把新密钥</h2>
+<p>担心密钥泄露，或要把账本交给别人续写，用「账本 › 更多 › 换密钥或移交…」：填新密钥的地址，确认后上链。之后这本账由新密钥接着写，本机只能读。</p>
+<h2 id="rules">身份密钥怎么用才安全</h2>
 <ul>
-<li>主身份是助记词身份：凭它的 12 个助记词。</li>
-<li>主身份是本机身份：凭它导出的密钥文件和文件密码。</li>
+<li>地址里只放够付 gas 的少量 ETH，别的资产放在其他地址。</li>
+<li>只在 Zikaron 里用它签名。别的网页或应用请你签的东西，交给别的钱包处理。</li>
+<li>一把密钥只写一本账。</li>
 </ul>
-<p>「设为主身份…」要输入本机口令；原主身份降为次要身份，所有密钥和本机数据换一枚新主钥重新加密，口令照旧。这一步要么全部完成，要么保持原状。只用私钥导入的本机身份，要先导出密钥文件，才能设为主身份。有数据目录不在原处（外置盘没接），或有后台写入在跑时，稍后再试。</p>
-<h2 id="forgot">忘记口令</h2>
-<p>在口令门按「忘记口令」进入「恢复」：填主身份的 12 个助记词，或选主身份的密钥文件并填文件密码，再设新口令。恢复成功后错误次数清零，旧口令作废。用次要身份的凭据会被拒，请改用主身份的，或从备份恢复。</p>
-<p>恢复卡底部还有「从备份恢复…」：选整机备份文件，填备份密码，确认「以备份替换本机？」后设新口令。本机的身份、密钥和数据整份换成备份里的，用新口令重新加密。</p>
-<h2 id="backup">备份密钥</h2>
-<dl>
-<div><dt>助记词</dt><dd>抄在纸上。在「设置 › 身份密钥」输入口令后可再看一次「显示助记词…」。</dd></div>
-<div><dt>密钥文件</dt><dd>「导出密钥文件…」写出一份标准 keystore 文件，别的钱包也能读。文件密码至少 8 位，文件权限为仅本人可读；写出后应用读回核对，通过才算备份成功。本机身份作为主身份时，也凭它恢复口令。</dd></div>
-<div><dt>整机备份</dt><dd>连同全部身份、账本与设置一起备份，见<a href="data.html#backup">整机备份</a>。</dd></div>
-</dl>
-<p>「身份密钥」页的「备份状态」写明这个身份备份到了哪一步：「已抄录助记词并导出密钥文件」「已抄录助记词」「已导出密钥文件」或「未备份」。</p>
-<h2 id="manage">更换身份</h2>
-<dl>
-<div><dt>切换身份…</dt><dd>列出所有身份，点一行看两种角色的完整地址，按「切换」换过去。</dd></div>
-<div><dt>新建身份…</dt><dd>写可选的「备注」，在「网络」里选这个身份用哪个网络（四个预置网络或「自定义」，默认是这台机器上次在向导里选的那一项），然后生成、抄写并核对 12 个词，方法同向导第 2 步。</dd></div>
-<div><dt>导入密钥…</dt><dd>三个标签：「助记词」「私钥」（64 位十六进制，可带 0x）「密钥文件」，「网络」一格同新建身份。导入私钥或密钥文件时选「导入为哪一身份」：「记录者」或「使用方」。这台机器上还没有身份时，导入的即成主身份，导入私钥要同时导出它的密钥文件。已在本机的身份不重复导入，缺了的密钥会补回来。</dd></div>
-<div><dt>重命名…</dt><dd>给身份改一个备注名，只用于分辨。</dd></div>
-</dl>
-<p>新建和导入的身份都是次要身份；这台机器上第一个建成的身份即是主身份。凭助记词、私钥或密钥文件导入的身份，它的账本留在原来的机器和备份里，所以导入后先只读：配好网络后，应用把这把密钥在链上的上链记录与本机账本核对一次，链上的每一条都在账本里（一把新钥在链上什么也没有，同样算对上），即开放写入。对不上时，见<a href="data.html#retrieve">取回账本</a>。</p>
-<h2 id="rules">身份密钥的使用规范</h2>
-<p>身份密钥签下的每一个字，日后都可能被人核验。它只在 <b class="zk">Zikaron</b> 里用：签署账本条目与认领连署，发送上链交易。</p>
-<dl>
-<div><dt>只存 gas</dt><dd>资产放在其他地址。身份密钥的地址是公开的，存够上链的费用即可。</dd></div>
-<div><dt>只由 <b class="zk">Zikaron</b> 签名</dt><dd>其他应用或网页发来的签名请求，一律交给其他密钥处理。一个账本条目的签名只有几十个字节，别人递来一段看似寻常的文字请你签，签出来的可能正是别人替你拟好的条目。</dd></div>
-<div><dt>保持为普通地址</dt><dd>身份密钥的地址始终保持为普通地址，代码与委托留给其他地址。地址一旦带有代码或委托，期间发出的上链记录全部作废。</dd></div>
-<div><dt>一钥一账</dt><dd>一把密钥只用于这一本账。</dd></div>
-</dl>
-<h2 id="delete">删除身份</h2>
-<p>「身份密钥」页底的「删除身份…」：输入本机口令后，删除密钥库里的密钥和身份登记，数据目录保留。</p>
-<ul>
-<li>主身份要先把主身份的位置让给另一个身份，才能删除。</li>
-<li>身份要先备份密钥或确认助记词，才能删除。</li>
-<li>记录者删除前，先登记移交，新密钥才能续写这本账，见<a href="ledger.html#handover">移交账本</a>。</li>
-</ul>
-<div class="pn"><a href="evidence.html"><span>上一页</span>一条记录证明什么</a><a class="nx" href="data.html"><span>下一页</span>本机数据与备份</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#kinds">两种身份</a><a href="#pin">口令</a><a href="#lock">锁定</a><a href="#primary">主身份</a><a href="#forgot">忘记口令</a><a href="#backup">备份密钥</a><a href="#manage">更换身份</a><a href="#rules">身份密钥的使用规范</a><a href="#delete">删除身份</a></nav></div>
+<h2 id="data">数据放在哪里</h2>
+<p>账本、设置和收到的授权都加密存在你的电脑上，要有口令才读得到；导出的记录包、授权文件和凭证是普通文件，方便交给别人。要把数据搬到别处，用「设置 › 本机数据」「高级选项」里的「迁移到空文件夹」。同一份数据放在同步盘上、两台电脑都开着时，只有一台能写；另一台的页顶有提示，按「改由本机写」即可换过来。</p>
+<div class="pn"><a href="evidence.html"><span>上一页</span>一条记录证明什么</a><a class="nx" href="cli.html"><span>下一页</span>命令行</a></div></article></div><nav class="toc" aria-label="本页"><div class="g">本页</div><a href="#keep">三样东西要保管好</a><a href="#pin">口令与锁定</a><a href="#forgot">忘了口令</a><a href="#backup">整机备份</a><a href="#identities">多个身份</a><a href="#handover">换一把新密钥</a><a href="#rules">身份密钥怎么用才安全</a><a href="#data">数据放在哪里</a></nav></div>
 <script src="../../site.js?v=8606e8b4" defer></script>
 </body>
 </html>

@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<title>Command line · Wiki</title>
+<meta name="description" content="The app comes with a command line, zikaron: one subcommand per operation, each printing one JSON value on standard output, with the outcome in its exit code. It works in two ways: alongside the desktop, or on its own.">
+<meta property="og:title" content="Command line · Wiki">
+<meta property="og:description" content="The app comes with a command line, zikaron: one subcommand per operation, each printing one JSON value on standard output, with the outcome in its exit code. It works in two ways: alongside the desktop, or on its own.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://kaptonia.github.io/en/docs/wiki/cli.html">
+<meta property="og:image" content="https://kaptonia.github.io/ill/og/zikaron.en.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="Decentralized Infrastructure of Right">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../../icon.svg?v=e2bb0490" type="image/svg+xml">
+<link rel="icon" href="../../../favicon-32.png?v=7645d0f6" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="../../../apple-touch-icon.png?v=c218dafc">
+<script>document.documentElement.classList.add('js')</script>
+<link rel="alternate" hreflang="zh" href="../../../docs/wiki/cli.html">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:ital,wght@0,400..700;1,400..700&family=JetBrains+Mono:wght@300;400;500;700&display=swap">
+<link rel="stylesheet" href="../../../style.css?v=3e49c4f3">
+<style>@view-transition{navigation:auto}</style><script>(function(){var R=document.documentElement;R.classList.add('enter','ps-js');setTimeout(function(){if(!R.classList.contains('ps-live'))R.classList.remove('ps-js')},3000);addEventListener('pagereveal',function(e){if(e.viewTransition)R.classList.remove('enter')})})()</script></head>
+<body class="doc-page">
+<header class="top dtop"><div class="frame-w">
+  <div class="dleft"><a class="handle" href="../../index.html">@kaptonia</a><div class="dtabs"><a href="../wiki/index.html" class=on>Wiki</a><a href="../dev/index.html">Developer<span class="xw"> guide</span></a></div></div>
+  <nav class="nav"><a href="../../index.html">Back to home</a><a class="lang" href="../../../docs/wiki/cli.html" lang="zh" hreflang="zh">中文</a></nav>
+</div></header>
+<div class="dwrap"><aside class="side" data-space="wiki"><button class="side-t" type="button" aria-expanded="false" data-side><span>Contents</span><b>Command line</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="side-in"><div class="side-ii"><div class="sg"><div class="g">Start</div><a href="index.html">Overview</a></div><div class="sp fold" data-proj="principles"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-principles">Principles<svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-principles"><div class="sp-c"><div class="sp-i"><a href="principles.html">Introduction</a><a href="principles-cost.html">The high price of order</a><a href="principles-failure.html">When the state no longer does its job</a><a href="principles-apart.html">Decentralizing right</a><a href="principles-now.html">Why now?</a><a href="principles-truth.html">Each person bears the burden of truth</a><a href="principles-river.html">An ecology of order that flows like water</a><a href="principles-rules.html">Non-negotiable principles</a><a href="principles-limits.html">The real-world limits of order</a></div></div></div></div><div class="sp" data-proj="zikaron"><button class="sp-h" type="button" aria-expanded="true" aria-controls="sp-zikaron"><b class="zk">Zikaron</b><svg class="cv" width="14" height="14" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3.5 10.5 8 6 12.5"/></svg></button><div class="sp-b" id="sp-zikaron"><div class="sp-c"><div class="sp-i"><a href="zikaron.html">Introduction</a><a href="start.html">Getting started</a><a href="ledger.html">Recording and anchoring</a><a href="grants.html">Grants</a><a href="kits.html">Presenting records</a><a href="verify.html">Verifying</a><a href="evidence.html">What a record proves</a><a href="keys.html">Keys and backups</a><a href="cli.html" class=on aria-current=page>Command line</a><a href="ai.html">AI Agents and remote operation</a><a href="alerts.html">Settings and alerts</a></div></div></div></div><div class="sg"><div class="g">Reference</div><a href="faq.html">Common questions</a><a href="glossary.html">Glossary</a></div></div></div></aside><script>(function(){try{var s=JSON.parse(localStorage.getItem('side:wiki')||'{}');document.querySelectorAll('.side .sp').forEach(function(g){if(s[g.getAttribute('data-proj')]===0&&!g.querySelector('a.on')){g.classList.add('closed');g.firstChild.setAttribute('aria-expanded','false')}})}catch(e){}})()</script>
+<div class="stream"><article class="art" data-slug="cli" data-prev="keys.html" data-next="ai.html"><div class="kick">Wiki · <b class="zk">Zikaron</b></div><h1>Command line</h1><p class="lede">The app comes with a command line, <code>zikaron</code>: one subcommand per operation, each printing one JSON value on standard output, with the outcome in its exit code. It works in two ways: alongside the desktop, or on its own.</p>
+<h2 id="setup">Putting it in the terminal</h2>
+<p>Turn on “Enable command line” in Settings › Local data, and <code>zikaron</code> works in any terminal. Installed from the <code>.pkg</code> or <code>.deb</code>, it already does; with the AppImage, install the <code>.deb</code> for the command line. On Windows, <code>zikaron.exe</code> runs in a terminal.</p>
+<p>Run <code>zikaron contract</code> for every subcommand, its flags and the exit codes. How to write each command is in <a href="../dev/cli.html">Developer guide · Command line</a>.</p>
+<h2 id="desk">Way one: alongside the desktop</h2>
+<p>While the desktop is open and unlocked, a command carrying your data folder, <code>--home "&lt;data folder&gt;"</code>, is handed to the running ZIKARON Desk. The desktop signs as you and writes to its ledger, along the same path as your own clicks: the same checks, the same messages, the window updating at once. The private keys and the passcode stay in the desktop the whole time; the command line only hands over requests.</p>
+<ul>
+<li><b>Where the data folder is:</b> under “Details” in Settings › Local data, the “Data folder” row gives the path of this role’s data folder for the current identity.</li>
+<li><b>Read-only work:</b> checking other people’s material and other read-only work the command line does directly.</li>
+<li><b>Work on the desktop:</b> setting the passcode, managing keys, whole-machine backups and anything that asks for the passcode are done on the desktop.</li>
+<li><b>When the channel is open:</b> the local channel is open to you on this computer alone, and only while the desktop is unlocked and holding this data folder; locking, closing the data folder or quitting shuts it, and the command line gets exit code 4.</li>
+</ul>
+<p><b>Two modes for putting on chain.</b> When the command line asks the desktop to put entries on chain, “Putting on chain from the command line” in Settings › Network decides:</p>
+<dl>
+<div><dt>Send automatically</dt><dd>The default. The desktop sends everything sendable in the queue as one batch, the way “Put all on chain” does, paying the fee from this identity’s address. In a block within 30 seconds, the command line hands back the block number and transaction hash; while it is still waiting, the command line answers that the transaction is still outside a block (exit code 4), and the desktop keeps waiting for the receipt.</dd></div>
+<div><dt>Queue only</dt><dd>The desktop keeps the entries in the queue, and the command line answers “Queued; waiting for the user to send it from the desktop” (exit code 3). The desktop shows the toast “N records from the command line are queued” and alerts you once; you check them on the desktop and press “Confirm and send”.</dd></div>
+</dl>
+<h2 id="standalone">Way two: the command line on its own</h2>
+<p>The command line can start from nothing by itself, with no desktop and no graphical interface:</p>
+<ol>
+<li><b>Make a key.</b> In your own terminal, run <code>zikaron keygen</code>, which prints a new address and its private key. Save the private key alone in a file, set so only you can read it (<code>chmod 600</code> on macOS and Linux), and point later commands at it with <code>--key-file</code>.</li>
+<li><b>Add gas.</b> Send a little ETH to that address.</li>
+<li><b>Create a ledger.</b> <code>zikaron init --ledger "&lt;ledger folder&gt;" --key-file "&lt;key file&gt;" --statement "&lt;description&gt;"</code>. Later writes, such as records, grants, revocations and notes, carry those two and go into this ledger folder.</li>
+<li><b>Put on chain.</b> <code>anchor</code> takes the node with <code>--endpoint</code>, the registry contract with <code>--registry</code> (on Ethereum mainnet, <code>0x36Ea8A857a5FE813429d4D9947000C644A88809A</code>) and the entry IDs to anchor with <code>--hash</code>, which can repeat, so one transaction anchors several. Running the same command again first asks after the transactions it already signed, so one anchoring is paid for once.</li>
+<li><b>Check and present.</b> <code>scan</code> and <code>audit</code> check the ledger against the chain, <code>kit-export</code> exports a record kit, and <code>check-grant</code> verifies a grant.</li>
+</ol>
+<p>The ledger it writes is the same format the desktop writes, and anyone can verify it with the desktop app or the command line. To bring this ledger into the desktop later, import the private key with “Import key…”, then use “Adopt in place” under “Advanced options” in Settings › Local data.</p>
+<h2 id="plain">Plain files</h2>
+<p>With the command line on its own, these sit on disk as plain files:</p>
+<div class="tw"><table>
+<thead><tr><th>File</th><th>What it holds</th></tr></thead>
+<tbody>
+<tr><td>The key file</td><td>The key itself. Whoever has it can sign any entry as you and spend the ETH at the address</td></tr>
+<tr><td>The ledger folder</td><td>Every entry, content meant to be handed to others for checking anyway; change one byte of an entry and its signature fails</td></tr>
+<tr><td><code>cli-sent/</code></td><td>Hashes of the transactions the command line signed</td></tr>
+</tbody></table></div>
+<p>The key file is what matters. Anyone or any program that can read files as this system account can read it, so keep it this way:</p>
+<ul>
+<li><b>Small funds, a ledger of its own.</b> Use this key for this purpose alone, with only enough ETH at its address for gas, apart from your main identity.</li>
+<li><b>Guard the system account.</b> Turn on the system’s full-disk encryption; allow remote logins by key alone.</li>
+<li><b>Hand the key to the command line by file alone.</b> Give it with <code>--key-file</code>; the command line takes a key file only you can read. Keep the file outside synced folders and automatic backup folders, with one more copy somewhere safe and offline.</li>
+<li><b>Prefer the desktop.</b> Alongside the desktop, the key stays in the desktop’s key store, encrypted under the passcode. Keep the command line on its own for when a machine with no screen is truly needed.</li>
+</ul>
+<h2 id="compare">Which way to use</h2>
+<div class="tw"><table>
+<thead><tr><th></th><th>Alongside the desktop</th><th>On its own</th></tr></thead>
+<tbody>
+<tr><td>Private key</td><td>In the desktop’s key store, encrypted under the passcode, with recovery words and whole-machine backups</td><td>A plain file protected by file permissions alone; the backup is a copy kept elsewhere</td></tr>
+<tr><td>Graphical interface</td><td>Needed: the desktop open and unlocked</td><td>Unneeded</td></tr>
+<tr><td>Putting on chain</td><td>The desktop’s queue, fee estimate and cross-checking across nodes</td><td>You name the node and the entries to anchor, one node per call</td></tr>
+<tr><td>Checks and alerts</td><td>Run regularly by the desktop, with the Alerts page</td><td>You run <code>scan</code> and <code>audit</code></td></tr>
+<tr><td>Handing over a grant</td><td>Grant file, grant code, credential</td><td>Grant code and credential, or a record kit</td></tr>
+<tr><td>Suits</td><td>Everyday use on your own computer</td><td>A dedicated key, a machine with no screen, automation in bulk</td></tr>
+</tbody></table></div>
+<h2 id="answers">What the command line answers</h2>
+<div class="tw"><table>
+<thead><tr><th>Exit code</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Done, or the check passed</td></tr>
+<tr><td>1</td><td>Refused, or the check failed; the reason is in the output</td></tr>
+<tr><td>2</td><td>The command is wrong; standard output is empty</td></tr>
+<tr><td>3</td><td>A partial result (some checks still await an answer), or queued for you to send from the desktop</td></tr>
+<tr><td>4</td><td>No answer: none from the desktop (quit, locked, or holding another data folder), nodes unreachable, or the transaction still outside a block</td></tr>
+</tbody></table></div>
+<div class="pn"><a href="keys.html"><span>Previous</span>Keys and backups</a><a class="nx" href="ai.html"><span>Next</span>AI Agents and remote operation</a></div></article></div><nav class="toc" aria-label="On this page"><div class="g">On this page</div><a href="#setup">Putting it in the terminal</a><a href="#desk">Way one: alongside the desktop</a><a href="#standalone">Way two: the command line on its own</a><a href="#plain">Plain files</a><a href="#compare">Which way to use</a><a href="#answers">What the command line answers</a></nav></div>
+<script src="../../../site.js?v=8606e8b4" defer></script>
+</body>
+</html>

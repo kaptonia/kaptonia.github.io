@@ -1,0 +1,67 @@
+<!--
+title: Command line
+-->
+<p class="lede">The app comes with a command line, <code>zikaron</code>: one subcommand per operation, each printing one JSON value on standard output, with the outcome in its exit code. It works in two ways: alongside the desktop, or on its own.</p>
+<h2 id="setup">Putting it in the terminal</h2>
+<p>Turn on “Enable command line” in Settings › Local data, and <code>zikaron</code> works in any terminal. Installed from the <code>.pkg</code> or <code>.deb</code>, it already does; with the AppImage, install the <code>.deb</code> for the command line. On Windows, <code>zikaron.exe</code> runs in a terminal.</p>
+<p>Run <code>zikaron contract</code> for every subcommand, its flags and the exit codes. How to write each command is in <a href="../dev/cli.html">Developer guide · Command line</a>.</p>
+<h2 id="desk">Way one: alongside the desktop</h2>
+<p>While the desktop is open and unlocked, a command carrying your data folder, <code>--home "&lt;data folder&gt;"</code>, is handed to the running ZIKARON Desk. The desktop signs as you and writes to its ledger, along the same path as your own clicks: the same checks, the same messages, the window updating at once. The private keys and the passcode stay in the desktop the whole time; the command line only hands over requests.</p>
+<ul>
+<li><b>Where the data folder is:</b> under “Details” in Settings › Local data, the “Data folder” row gives the path of this role’s data folder for the current identity.</li>
+<li><b>Read-only work:</b> checking other people’s material and other read-only work the command line does directly.</li>
+<li><b>Work on the desktop:</b> setting the passcode, managing keys, whole-machine backups and anything that asks for the passcode are done on the desktop.</li>
+<li><b>When the channel is open:</b> the local channel is open to you on this computer alone, and only while the desktop is unlocked and holding this data folder; locking, closing the data folder or quitting shuts it, and the command line gets exit code 4.</li>
+</ul>
+<p><b>Two modes for putting on chain.</b> When the command line asks the desktop to put entries on chain, “Putting on chain from the command line” in Settings › Network decides:</p>
+<dl>
+<div><dt>Send automatically</dt><dd>The default. The desktop sends everything sendable in the queue as one batch, the way “Put all on chain” does, paying the fee from this identity’s address. In a block within 30 seconds, the command line hands back the block number and transaction hash; while it is still waiting, the command line answers that the transaction is still outside a block (exit code 4), and the desktop keeps waiting for the receipt.</dd></div>
+<div><dt>Queue only</dt><dd>The desktop keeps the entries in the queue, and the command line answers “Queued; waiting for the user to send it from the desktop” (exit code 3). The desktop shows the toast “N records from the command line are queued” and alerts you once; you check them on the desktop and press “Confirm and send”.</dd></div>
+</dl>
+<h2 id="standalone">Way two: the command line on its own</h2>
+<p>The command line can start from nothing by itself, with no desktop and no graphical interface:</p>
+<ol>
+<li><b>Make a key.</b> In your own terminal, run <code>zikaron keygen</code>, which prints a new address and its private key. Save the private key alone in a file, set so only you can read it (<code>chmod 600</code> on macOS and Linux), and point later commands at it with <code>--key-file</code>.</li>
+<li><b>Add gas.</b> Send a little ETH to that address.</li>
+<li><b>Create a ledger.</b> <code>zikaron init --ledger "&lt;ledger folder&gt;" --key-file "&lt;key file&gt;" --statement "&lt;description&gt;"</code>. Later writes, such as records, grants, revocations and notes, carry those two and go into this ledger folder.</li>
+<li><b>Put on chain.</b> <code>anchor</code> takes the node with <code>--endpoint</code>, the registry contract with <code>--registry</code> (on Ethereum mainnet, <code>{{MAINNET}}</code>) and the entry IDs to anchor with <code>--hash</code>, which can repeat, so one transaction anchors several. Running the same command again first asks after the transactions it already signed, so one anchoring is paid for once.</li>
+<li><b>Check and present.</b> <code>scan</code> and <code>audit</code> check the ledger against the chain, <code>kit-export</code> exports a record kit, and <code>check-grant</code> verifies a grant.</li>
+</ol>
+<p>The ledger it writes is the same format the desktop writes, and anyone can verify it with the desktop app or the command line. To bring this ledger into the desktop later, import the private key with “Import key…”, then use “Adopt in place” under “Advanced options” in Settings › Local data.</p>
+<h2 id="plain">Plain files</h2>
+<p>With the command line on its own, these sit on disk as plain files:</p>
+<div class="tw"><table>
+<thead><tr><th>File</th><th>What it holds</th></tr></thead>
+<tbody>
+<tr><td>The key file</td><td>The key itself. Whoever has it can sign any entry as you and spend the ETH at the address</td></tr>
+<tr><td>The ledger folder</td><td>Every entry, content meant to be handed to others for checking anyway; change one byte of an entry and its signature fails</td></tr>
+<tr><td><code>cli-sent/</code></td><td>Hashes of the transactions the command line signed</td></tr>
+</tbody></table></div>
+<p>The key file is what matters. Anyone or any program that can read files as this system account can read it, so keep it this way:</p>
+<ul>
+<li><b>Small funds, a ledger of its own.</b> Use this key for this purpose alone, with only enough ETH at its address for gas, apart from your main identity.</li>
+<li><b>Guard the system account.</b> Turn on the system’s full-disk encryption; allow remote logins by key alone.</li>
+<li><b>Hand the key to the command line by file alone.</b> Give it with <code>--key-file</code>; the command line takes a key file only you can read. Keep the file outside synced folders and automatic backup folders, with one more copy somewhere safe and offline.</li>
+<li><b>Prefer the desktop.</b> Alongside the desktop, the key stays in the desktop’s key store, encrypted under the passcode. Keep the command line on its own for when a machine with no screen is truly needed.</li>
+</ul>
+<h2 id="compare">Which way to use</h2>
+<div class="tw"><table>
+<thead><tr><th></th><th>Alongside the desktop</th><th>On its own</th></tr></thead>
+<tbody>
+<tr><td>Private key</td><td>In the desktop’s key store, encrypted under the passcode, with recovery words and whole-machine backups</td><td>A plain file protected by file permissions alone; the backup is a copy kept elsewhere</td></tr>
+<tr><td>Graphical interface</td><td>Needed: the desktop open and unlocked</td><td>Unneeded</td></tr>
+<tr><td>Putting on chain</td><td>The desktop’s queue, fee estimate and cross-checking across nodes</td><td>You name the node and the entries to anchor, one node per call</td></tr>
+<tr><td>Checks and alerts</td><td>Run regularly by the desktop, with the Alerts page</td><td>You run <code>scan</code> and <code>audit</code></td></tr>
+<tr><td>Handing over a grant</td><td>Grant file, grant code, credential</td><td>Grant code and credential, or a record kit</td></tr>
+<tr><td>Suits</td><td>Everyday use on your own computer</td><td>A dedicated key, a machine with no screen, automation in bulk</td></tr>
+</tbody></table></div>
+<h2 id="answers">What the command line answers</h2>
+<div class="tw"><table>
+<thead><tr><th>Exit code</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>0</td><td>Done, or the check passed</td></tr>
+<tr><td>1</td><td>Refused, or the check failed; the reason is in the output</td></tr>
+<tr><td>2</td><td>The command is wrong; standard output is empty</td></tr>
+<tr><td>3</td><td>A partial result (some checks still await an answer), or queued for you to send from the desktop</td></tr>
+<tr><td>4</td><td>No answer: none from the desktop (quit, locked, or holding another data folder), nodes unreachable, or the transaction still outside a block</td></tr>
+</tbody></table></div>
